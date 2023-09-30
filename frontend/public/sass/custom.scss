@@ -1,0 +1,16 @@
+// Importação de funções e variáveis
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+
+$theme-colors: (
+	primary: #e7cb0c,
+	secondary: #207e54,
+	info: #47ac5f,
+	warning: #a7ac46,
+	danger: $red,
+);
+
+$prefix: "cw-";
+
+// Importação da biblioteca Bootstrap
+@import "../../node_modules/bootstrap/scss/bootstrap";
