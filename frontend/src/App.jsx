@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 
 // Importações de componentes de página
 import LandingPage from './components/pages/LandingPage';
+import Home from './components/pages/Home';
 import Sobre from './components/pages/Sobre';
 import Contato from './components/pages/Contato';
 import NotFound from './components/pages/NotFound';
