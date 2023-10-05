@@ -5,7 +5,7 @@ import Footer from '../layout/Footer'
     <Header />
     <div className="main">
         <Content>
-
+            
         </Content>
     </div>
 
