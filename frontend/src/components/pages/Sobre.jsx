@@ -11,7 +11,7 @@ const Sobre = () => {
             <Header />
             <div className="main">
                 <Content>
-                    <Container fluid="md">
+                    <Container fluid>
                         <div class="jumbotron text-center">
                             <h1>Sobre o CashWise</h1>
                         </div>
