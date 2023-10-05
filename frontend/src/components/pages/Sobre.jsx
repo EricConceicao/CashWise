@@ -1,17 +1,21 @@
-import Header from '../layout/Header'
-import Footer from '../layout/Footer'
+import Header from '../layouts/Header';
+import Footer from '../layouts/Footer';
+import Content from '../layouts/Content';
 
-<>
-    <Header />
-    <div className="main">
-        <Content>
-            
-        </Content>
-    </div>
+const Sobre = () => {
+    return (
+        <>
+            <Header />
+            <div className="main">
+                <Content>
+                    
+                </Content>
+            </div>
 
-    <Footer />
+            <Footer />
 
-</>
-
+        </>
+    );
+}
 
 export default Sobre

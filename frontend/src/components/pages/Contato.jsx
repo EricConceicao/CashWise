@@ -1,4 +1,4 @@
-import Header from "../layout/Header"
+import Header from "../layouts/Header"
 import Footer from "../layouts/Footer"
 import Container from 'react-bootstrap/Container'
 import Card from 'react-bootstrap/Card'
