@@ -1,7 +1,12 @@
+import Header from './components/layouts/Header';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../public/css/custom.css';
+
 function App() {
   return (
-    <h1 className="display-1 text-center text-primary bg-secondary">CashWise</h1>
-  )
+      <Header />
+  );
 }
 
 export default App
