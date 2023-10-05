@@ -1,8 +1,16 @@
 import Header from '../layouts/Header';
 
+import Container from 'react-bootstrap/esm/Container';
+
 const LandingPage = () => {
     return (
-        <Header />
+        <>
+            <Header />
+
+            <Container className="bg-secondary">
+
+            </Container>
+        </>
     );
 }
 

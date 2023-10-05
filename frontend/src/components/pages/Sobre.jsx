@@ -8,6 +8,9 @@ const Sobre = () => {
             <Header />
             <div className="main">
                 <Content>
+                    <div class="jumbotron text-center">
+                        <h1>Sobre o CashWise</h1>
+                    </div>
                     
                 </Content>
             </div>
@@ -18,4 +21,4 @@ const Sobre = () => {
     );
 }
 
-export default Sobre
+export default Sobre;

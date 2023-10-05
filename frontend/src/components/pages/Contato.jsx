@@ -1,4 +1,4 @@
-import Content from "..layouts/Content"
+import Content from "../layouts/Content"
 import Header from "../layouts/Header"
 import Footer from "../layouts/Footer"
 import Container from 'react-bootstrap/Container'

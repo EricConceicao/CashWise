@@ -6,6 +6,8 @@ import LandingPage from './components/pages/LandingPage';
 import Sobre from './components/pages/Sobre';
 import Contato from './components/pages/Contato';
 import NotFound from './components/pages/NotFound';
+import PrevidenciaAqui from './components/pages/PrevidenciaAqui';
+import BoletimInformativo from './components/pages/BoletimInformativo';
 
 // Importações de Estilos
 import 'bootstrap/dist/css/bootstrap.min.css';
