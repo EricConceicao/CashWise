@@ -3,10 +3,11 @@
 @import "../../node_modules/bootstrap/scss/variables";
 
 $theme-colors: (
-	primary: #e7cb0c,
-	secondary: #207e54,
-	info: #47ac5f,
-	warning: #a7ac46,
+	primary: #5BD992,
+	secondary: #213740,
+	info: #F2F2F2,
+	success: #AEF2C6,
+	warning: $orange,
 	danger: $red,
 );
 
