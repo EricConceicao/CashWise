@@ -1,9 +1,14 @@
- const Footer = () => {
+import './Footer.css';
+
+const Footer = () => {
     return (
-        <footer id="footer">
-            <p>arrumar rodapé</p>
+
+        <footer className='bg-info' id="footer">
+            <p>
+                © 2020 Copyright: <a href="#">CashWise</a>
+            </p>
         </footer>
     )
- }
+}
 
- export default Footer;
+export default Footer;
