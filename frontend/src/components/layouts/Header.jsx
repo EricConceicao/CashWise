@@ -16,12 +16,12 @@ function Header() {
 
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="me-auto">
-                        <NavLink to="/home">Home</NavLink>
-                        <NavLink to="/boletim">Boletim Informativo</NavLink>
-                        <NavLink to="/previdencia">Previdência Aqui</NavLink>
-                        <NavLink to="/sobre">Sobre</NavLink>
-                        <NavLink to="/contato">Contato</NavLink>
+                    <Nav className="gap-2 me-auto" id="header-nav">
+                        <NavLink className="nav-link" to="/home">Home</NavLink>
+                        <NavLink className="nav-link" to="/boletim">Boletim Informativo</NavLink>
+                        <NavLink className="nav-link" to="/previdencia">Previdência Aqui</NavLink>
+                        <NavLink className="nav-link" to="/sobre">Sobre</NavLink>
+                        <NavLink className="nav-link" to="/contato">Contato</NavLink>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
