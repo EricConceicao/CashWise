@@ -1,64 +1,47 @@
-import Content from "../layouts/Content"
-import Header from "../layouts/Header"
-import Footer from "../layouts/Footer"
-import Container from 'react-bootstrap/Container'
-import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Row from 'react-bootstrap/Row';
+import Header from '../layouts/Header';
+import Footer from '../layouts/Footer';
+import React from 'react';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Contato() {
     return (
-        
-        <>
-            <Card className="Feedback bg-dark text-white">
-                <Card.Img src="https://img.freepik.com/vetores-gratis/autor-minusculo-com-escrita-a-lapis-editando-informacoes-mao-segurando-o-livro-de-papel-aberto-para-ilustracao-vetorial-plana-de-estudo-orientacao-conceito-de-educacao-para-banner-design-de-site-ou-pagina-da-web-de-destino_74855-25322.jpg?w=996&t=st=1696529841~exp=1696530441~hmac=798e77c24139dea608735475f9821d63999873f78ae68956b207cdbe5e662050" alt="feedback" />
-                <Card.ImgOverlay>
-                    <Card.Title>Envie um Feedback</Card.Title>
+        <div style={{ backgroundColor: '#213740', color: 'white', padding: '100px', textAlign: 'center' }}>
+            <Container>
+                <Row className="justify-content-center">
+                    <Col md={6}>
+                        <Col md={11} className="mt-5 mb-5">
+                            <img src="../img/correio.jpg" alt="Imagem Estilizada" className="img-fluid" />
+                        </Col>
 
-                </Card.ImgOverlay>
-            </Card>
+                    </Col>
+                    <Col md={6}>
+                        <h2 className="mb-4">Envie seu Feedback</h2>
+                        <Form>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Nome</Form.Label>
+                                <Form.Control type="text" placeholder="Digite seu nome" />
+                            </Form.Group>
 
-            <Form>
-                <Row className="align-items-center">
-                    <Col xs="auto">
-                        <Form.Label htmlFor="inlineFormInput" visuallyHidden>
-                            Nome
-                        </Form.Label>
-                        <Form.Control
-                            className="mb-2"
-                            id="inlineFormInput"
-                            placeholder="Nome"
-                        />
-                    </Col>
-                    <Col xs="auto">
-                        <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
-                            Sobrenome
-                        </Form.Label>
-                        <InputGroup className="mb-2">
-                            <InputGroup.Text>@</InputGroup.Text>
-                            <Form.Control id="inlineFormInputGroup" placeholder="Sobrenome" />
-                        </InputGroup>
-                    </Col>
-                    <Col xs="auto">
-                        <Form.Check
-                            type="checkbox"
-                            id="autoSizingCheck"
-                            className="mb-2"
-                            label="Remember me"
-                        />
-                    </Col>
-                    <Col xs="auto">
-                        <Button type="submit" className="mb-2">
-                            Enviar
-                        </Button>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control type="email" placeholder="Digite seu email" />
+                            </Form.Group>
+
+                            <Form.Group className="mb-3">
+                                <Form.Label>Mensagem</Form.Label>
+                                <Form.Control as="textarea" rows={8} placeholder="Digite sua mensagem" />
+                            </Form.Group>
+
+                            <Button variant="primary" type="submit" style={{ backgroundColor: 'green', borderColor: 'green', color: 'white' }}>
+                                Enviar
+                            </Button>
+
+                        </Form>
                     </Col>
                 </Row>
-            </Form>
-
-        </>
+            </Container>
+        </div>
     );
 }
 
