@@ -4,9 +4,9 @@ import Footer from '../layouts/Footer';
 const Home = () => {
     return (
         <>
-        <Header />
+            <Header />
 
-        <h1>Fazendo</h1>
+            <h1>Fazendo...</h1>
         </>
     );
 }

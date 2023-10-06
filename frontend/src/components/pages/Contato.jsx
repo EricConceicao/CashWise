@@ -1,6 +1,9 @@
+// Importações dos nossos componentes
 import Content from "../layouts/Content"
 import Header from "../layouts/Header"
 import Footer from "../layouts/Footer"
+
+//Importações do Bootstrap
 import Container from 'react-bootstrap/Container'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button';
@@ -13,6 +16,8 @@ function Contato() {
     return (
         
         <>
+            <Header />
+
             <Card className="Feedback bg-dark text-white">
                 <Card.Img src="https://img.freepik.com/vetores-gratis/autor-minusculo-com-escrita-a-lapis-editando-informacoes-mao-segurando-o-livro-de-papel-aberto-para-ilustracao-vetorial-plana-de-estudo-orientacao-conceito-de-educacao-para-banner-design-de-site-ou-pagina-da-web-de-destino_74855-25322.jpg?w=996&t=st=1696529841~exp=1696530441~hmac=798e77c24139dea608735475f9821d63999873f78ae68956b207cdbe5e662050" alt="feedback" />
                 <Card.ImgOverlay>
