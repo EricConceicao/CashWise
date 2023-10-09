@@ -7,7 +7,7 @@ import './Header.css';
 
 function Header() {
     return (
-        <Navbar expand="md" className="position-sticky z-0 top-0 p-0 bg-primary">
+        <Navbar expand="md" className="position-sticky z-1 top-0 p-0 bg-primary">
             <Container>
                 <Navbar.Brand href='#foi'>
                     <img className="rounded-pill" 
