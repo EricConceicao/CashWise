@@ -21,23 +21,23 @@ const Article = ({ children, title, img, alt, dir }) => {
                 {dir === 'right' ? 
                 <Row className="align-items-center">
                     <Col sm={6}>
-                        <p className="fs-3">{children}</p>
+                        <p className="fs-5 mt-2">{children}</p>
                     </Col>
 
                     <Col sm={6} className="p-0">
                         <h2 className="text-uppercase text-success fw-bolder">{title}</h2>
-                        <Image width="75%" src={img} alt={alt} thumbnail />
+                        <Image width="60%" src={img} alt={alt} thumbnail />
                     </Col>
                 </Row>
                 :
                 <Row className="align-items-center">
                     <Col sm={6} className="p-0">
                         <h2 className="text-uppercase text-success fw-bolder">{title}</h2>
-                        <Image width="75%" src={img} alt={alt} thumbnail />
+                        <Image width="60%" src={img} alt={alt} thumbnail />
                     </Col>
 
                     <Col sm={6}>
-                        <p className="fs-3">{children}</p>
+                        <p className="fs-5 mt-2">{children}</p>
                     </Col>
                 </Row>
                 }

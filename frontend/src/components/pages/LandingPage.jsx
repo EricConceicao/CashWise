@@ -7,10 +7,12 @@ import Footer from '../layouts/Footer';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
 import Navbar from 'react-bootstrap/Navbar';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 
+import './LandingPage.css';
 
 const LandingPage = () => {
     return (
@@ -29,8 +31,8 @@ const LandingPage = () => {
                 </Container>
             </header>
             
-            <div className='position-relative bg-light' id="hero">
-                <Image src='/img/banner-landing.svg' style={{ width: "100%", height: "90vh"}}  
+            <div className='position-relative bg-ligth' id="hero">
+                <Image src='/img/banner-landing.svg'  
                 alt="Desenho de aspecto educativo financeiro. Com uma mulher lendo um livro sentada em vários outros livros 
                 gigantes, com dinheiro atrás. E um homem sentado em uma cadeira ao lago com um notebook." />
                 <h1 
@@ -42,17 +44,23 @@ const LandingPage = () => {
             
             <main>
                 <Container fluid className="bg-secondary pt-5">
-                    <Article title="Controle seus gastos" dir="right" img="/img/menino-no-puf.svg" alt="Desenho de uma pessoa sentada em um puf com um notebook">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam minima doloribus aliquam tempore vel itaque minus laudantium, beatae ipsam dolore sequi illum, possimus dolor ab.
-                    </Article>
-
-                    <Article title="Aprenda sobre o que fazer com seu dinheiro" img="/img/cofrinho.svg" alt="Desenho de uma pessoa colocando moedas em um porquinho porta moedas.">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam minima doloribus aliquam tempore vel itaque minus laudantium, beatae ipsam dolore sequi illum, possimus dolor ab.
-                    </Article>
-
-                    <Article title="Planeje o seu futuro" dir="right" img="/img/homi-das-plantas.svg" alt="Desenho de um homem regando plantas dando 'moedas' como frutos.">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam minima doloribus aliquam tempore vel itaque minus laudantium, beatae ipsam dolore sequi illum, possimus dolor ab.
-                    </Article>
+                    <Row>
+                        <Col md="6">
+                            <Article title="Controle seus gastos" img="/img/menino-no-puf.svg" alt="Desenho de uma pessoa sentada em um puf com um notebook">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam minima doloribus aliquam tempore vel itaque minus laudantium, beatae ipsam dolore sequi illum, possimus dolor ab.
+                            </Article>
+                        </Col>
+                        <Col md="6">     
+                            <Article title="Saiba o que fazer com seu dinheiro" img="/img/cofrinho.svg" alt="Desenho de uma pessoa colocando moedas em um porquinho porta moedas.">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam minima doloribus aliquam tempore vel itaque minus laudantium, beatae ipsam dolore sequi illum, possimus dolor ab.
+                            </Article>
+                        </Col>
+                        <Col md="12" lg="12">
+                            <Article title="Planeje o seu futuro" img="/img/homi-das-plantas.svg" alt="Desenho de um homem regando plantas dando 'moedas' como frutos.">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam minima doloribus aliquam tempore vel itaque minus laudantium, beatae ipsam dolore sequi illum, possimus dolor ab.
+                            </Article>
+                        </Col>
+                    </Row>
 
                     <div className="d-grid">
                         <Button className="w-50 mx-auto p-2 my-3 fs-4 fw-bold" size="large" variant="primary">Acesse já!</Button>
