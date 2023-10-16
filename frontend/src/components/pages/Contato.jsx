@@ -1,48 +1,70 @@
-import Header from '../layouts/Header';
-import Footer from '../layouts/Footer';
 import React from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
-function Contato() {
-    return (
-        <div style={{ backgroundColor: '#213740', color: 'white', padding: '100px', textAlign: 'center' }}>
-            <Container>
-                <Row className="justify-content-center">
-                    <Col md={6}>
-                        <Col md={11} className="mt-5 mb-5">
-                            <img src="../img/correio.jpg" alt="Imagem Estilizada" className="img-fluid" />
-                        </Col>
+const Contato = () => {
+  const containerStyle = {
+    backgroundImage: 'linear-gradient(to right, #213740, #5BD992, #AEF2C6)',
+    color: 'white',
+    padding: '50px 0',
+  };
 
-                    </Col>
-                    <Col md={6}>
-                        <h2 className="mb-4">Envie seu Feedback</h2>
-                        <Form>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Nome</Form.Label>
-                                <Form.Control type="text" placeholder="Digite seu nome" />
-                            </Form.Group>
+  const inputStyle = {
+    marginBottom: '20px',
+  };
 
-                            <Form.Group className="mb-3">
-                                <Form.Label>Email</Form.Label>
-                                <Form.Control type="email" placeholder="Digite seu email" />
-                            </Form.Group>
+  const formGroupStyle = {
+    marginBottom: '20px',
+  };
 
-                            <Form.Group className="mb-3">
-                                <Form.Label>Mensagem</Form.Label>
-                                <Form.Control as="textarea" rows={8} placeholder="Digite sua mensagem" />
-                            </Form.Group>
+  const buttonStyle = {
+    backgroundColor: '#213740',
+    borderColor: 'white',
+    color: 'white',
+    margin: '0 auto',
+    display: 'block',
+    transition: 'background-color 0.3s ease',
+  };
 
-                            <Button variant="primary" type="submit" style={{ backgroundColor: 'green', borderColor: 'green', color: 'white' }}>
-                                Enviar
-                            </Button>
-
-                        </Form>
-                    </Col>
-                </Row>
-            </Container>
-        </div>
-    );
-}
+  return (
+    <div style={containerStyle}>
+      <Container>
+        <Row className="justify-content-center align-items-center">
+          <Col md={2}>
+            <img src="../img/logo-cashwise.jpg" alt="Logo" style={{ height: '150px', animation: 'swing 2s linear infinite' }} />
+          </Col>
+          <Col className='justify-content-center' md={6} >
+            <h1>Contato</h1>
+            <h4>Envie um Feedback</h4>
+          </Col>
+        </Row>
+        <Row className="justify-content-center align-items-center">
+          <Col md={6} >
+            <Form>
+              <Form.Group controlId="formNome" style={formGroupStyle}>
+                <Form.Label>Nome</Form.Label>
+                <Form.Control type="text" placeholder="" style={inputStyle} />
+              </Form.Group>
+              <Form.Group controlId="formSobrenome" style={formGroupStyle}>
+                <Form.Label>Sobrenome</Form.Label>
+                <Form.Control type="text" placeholder="" style={inputStyle} />
+              </Form.Group>
+              <Form.Group controlId="formAssunto" style={formGroupStyle}>
+                <Form.Label>Assunto</Form.Label>
+                <Form.Control type="text" placeholder="" style={inputStyle} />
+              </Form.Group>
+            </Form>
+            <Form.Group controlId="formMensagem" style={formGroupStyle}>
+              <Form.Label>Mensagem</Form.Label>
+              <Form.Control as="textarea" rows={4} placeholder="Digite a sua mensagem" style={inputStyle} />
+            </Form.Group>
+            <Button variant="primary" type="submit" style={buttonStyle}>
+              Enviar
+            </Button>
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
+};
 
 export default Contato;
