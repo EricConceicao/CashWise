@@ -3,7 +3,11 @@ import Footer from '../layouts/Footer';
 
 const PrevidenciaAqui = () => {
     return (
-        <h1>Fazendo...</h1>
+        <>
+            <Header />
+
+            <h1>Fazendo...</h1>
+        </>
     );
 }
 

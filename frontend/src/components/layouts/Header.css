@@ -1,0 +1,26 @@
+#header-nav a {
+	position: relative;
+}
+
+#header-nav a.active {
+	border-bottom: solid .2rem;
+}
+
+#header-nav a::after {
+	position: absolute;
+	content: '';
+
+	bottom: 0;
+	left: 0;
+	width: 0%;
+	height: .2rem;
+
+	background-color: var(--cw-info);
+
+	transition: .2s ease-in;
+}
+
+#header-nav a:hover::after,
+#header-nav a:focus::after {
+	width: 100%;
+}

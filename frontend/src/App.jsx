@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 
 // Importações de componentes de página
 import LandingPage from './components/pages/LandingPage';
+import Home from './components/pages/Home';
 import Sobre from './components/pages/Sobre';
 import Contato from './components/pages/Contato';
 import NotFound from './components/pages/NotFound';
@@ -21,9 +22,9 @@ const App = () => {
       <Route path="/" element={<LandingPage />} />
       <Route path="/contato" element={<Contato />} />
       <Route path="/sobre" element={<Sobre />} />
-      <Route path="/landingPage" element={<LandingPage/>}/>
+      <Route path="/Home" element={<Home />}/>
       <Route path="/previdencia" element={<PrevidenciaAqui/>}/>
-      <Route path="/boletimInformativo" element={<BoletimInformativo/>}/>
+      <Route path="/boletim" element={<BoletimInformativo/>}/>
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
