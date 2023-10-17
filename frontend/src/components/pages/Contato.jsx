@@ -50,13 +50,13 @@ function Contato() {
     <>
       <Header />
 
-      <Container className='m-2' style={{ height: "80vh" }}>
+      <Container fluid className='m-2' style={{ height: "80vh" }}>
 
 
         <Row>
-          <Col md="6">
+          <Col md="6" style={{backgroundImage: "/img/correio.svg"}}>
             <Container className='d-flex'>
-              <img className='rounded-pill' width={"30%"} src="../img/correio.jpg" alt="Icone com uma mão segurando um tablete com outra mão saindo de sua tela com uma carta" />
+              <img className='rounded-pill' width={"30%"} src="/img/correio.jpg" alt="Icone com uma mão segurando um tablete com outra mão saindo de sua tela com uma carta" />
               <div className="d-flex justify-content-center flex-column mx-2">
                 <h1>Contate-nos!</h1>
               </div>
@@ -68,10 +68,11 @@ function Contato() {
             <Form noValidate validated={validated} onSubmit={handleSubmit}>
               <fieldset>
                 <legend>Deixe um Feedback!</legend>
-                <Form.Group controlId="validationCustom01">
+                <Form.Group className='p-1 my-3' controlId="validationCustom01">
                   <FloatingLabel label="Nome" controlId='form-name'>
                     <Form.Control
                       type="text"
+                      placeholder='Zezão'
                       value={nome}
                       onChange={(e) => setNome(e.target.value)}
                       required
@@ -81,7 +82,7 @@ function Contato() {
                 </Form.Group>
 
 
-                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Group className='p-1 my-3' controlId="exampleForm.ControlInput1">
                   <FloatingLabel label="E-mail" controlId='form-email'>
                     <Form.Control
                       type="email"
@@ -97,11 +98,11 @@ function Contato() {
                   </FloatingLabel>
                 </Form.Group>
 
-                <Form.Group controlId="formAssunto" >
+                <Form.Group className='p-1 my-3' controlId="formAssunto" >
                   <FloatingLabel label="Assunto da mensagem" controlId='form-assunto'>
                     <Form.Control
                       type="text"
-                      placeholder=""
+                      placeholder="Quero caféee"
                       value={assunto}
                       onChange={(e) => setAssunto(e.target.value)}
                       required
@@ -112,20 +113,20 @@ function Contato() {
                   </FloatingLabel>
                 </Form.Group>
 
-                <Form.Group controlId="formMensagem">
-                  <FloatingLabel label='Mensagem' controlId='form-mensagem'>
-                    <Form.Control
-                      as="textarea"
-                      rows={4}
-                      placeholder="Digite a sua mensagem"
-                      value={mensagem}
-                      onChange={(e) => setMensagem(e.target.value)}
-                      required
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      Por favor, insira a mensagem.
-                    </Form.Control.Feedback>
-                  </FloatingLabel>
+                <Form.Group className='p-1 my-3' controlId="form-mensagem">
+                  <Form.Label>Mensagem</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows='4'
+                    placeholder="Digite a sua mensagem"
+                    value={mensagem}
+                    onChange={(e) => setMensagem(e.target.value)}
+                    required
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor, insira a mensagem.
+                  </Form.Control.Feedback>
+                 
                 </Form.Group>
 
                 <Button variant="primary" type="submit">Enviar</Button>
