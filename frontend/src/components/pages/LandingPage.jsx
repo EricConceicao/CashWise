@@ -12,6 +12,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -38,6 +39,7 @@ const LandingPage = () => {
                     </Navbar.Brand>
 
                     <Button onClick={handleShow} variant="secondary" size="md">Entrar</Button>
+
                 </Container>
             </header>
             
@@ -55,25 +57,36 @@ const LandingPage = () => {
             <main>
                 <Container fluid className="bg-secondary pt-5" id="main-container"
                 style={{backgroundImage: "linear-gradient(40deg, #172a32 45%, #213740 40%)"}}>
+
+                    <p className='text-light fs-3 container text-center mt-5 pb-3 border-bottom'>
+                    <span className="lead text-primary fs-2">Bem-vindo ao nosso Sistema de Educação Financeira!</span> Aqui você encontrará ferramentas e recursos para ajudar jovens e 
+                    adultos a alcançarem um futuro financeiro estável e confortável. 
+                    Nós acreditamos que um <strong>planejamento sólido é a chave</strong> para uma vida 
+                    financeira tranquila. Comece sua jornada hoje mesmo!
+                    </p>
+
                     <Row>
                         <Col md="6">
-                            <Article title="Controle seus gastos" img="/img/menino-no-puf.svg" alt="Desenho de uma pessoa sentada em um puf com um notebook">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam minima doloribus aliquam tempore vel itaque minus laudantium, beatae ipsam dolore sequi illum, possimus dolor ab.
+                            <Article title="Controle orçamentário" img="/img/cofrinho.svg" alt="Desenho de uma pessoa sentada em um puf com um notebook">
+                            Aprenda a administrar suas finanças diárias. Defina metas, categorize seus gastos e acompanhe seu orçamento de forma eficaz.
                             </Article>
                         </Col>
+
                         <Col md="6">     
-                            <Article title="Saiba o que fazer com seu dinheiro" img="/img/cofrinho.svg" alt="Desenho de uma pessoa colocando moedas em um porquinho porta moedas.">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam minima doloribus aliquam tempore vel itaque minus laudantium, beatae ipsam dolore sequi illum, possimus dolor ab.
+                            <Article title="Aprenda sobre investimentos" img="/img/menino-no-puf.svg" alt="Desenho de uma pessoa colocando moedas em um porquinho porta moedas.">
+                            Visualize diferentes cenários de investimentos e renda passiva. Aprenda a tomar decisões acertadas sobre como fazer seu dinheiro crescer ao longo do tempo.
                             </Article>
                         </Col>
+
                         <Col md="6">
-                            <Article title="Planeje o seu futuro" img="/img/homi-das-plantas.svg" alt="Desenho de um homem regando plantas dando 'moedas' como frutos.">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam minima doloribus aliquam tempore vel itaque minus laudantium, beatae ipsam dolore sequi illum, possimus dolor ab.
+                            <Article title="Previdência social" img="/img/homi-das-plantas.svg" alt="Desenho de um homem regando plantas dando 'moedas' como frutos.">
+                            Entenda como o sistema de previdência social funciona e descubra maneiras de otimizar seus benefícios no futuro.
                             </Article>
                         </Col>
+
                         <Col md="6">
-                            <Article title="Aprenda sobre previdência" img="/img/homi-das-plantas.svg" alt="Desenho de um homem regando plantas dando 'moedas' como frutos.">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam minima doloribus aliquam tempore vel itaque minus laudantium, beatae ipsam dolore sequi illum, possimus dolor ab.
+                            <Article title="Tenha controle com sua agenda" img="/img/homi-das-plantas.svg" alt="Desenho de um homem regando plantas dando 'moedas' como frutos.">
+                            Mantenha-se organizado com nossa agenda financeira. Marque datas importantes, prazos de pagamento e lembretes para garantir que suas finanças estejam sempre em dia.
                             </Article>
                         </Col>
                     </Row>

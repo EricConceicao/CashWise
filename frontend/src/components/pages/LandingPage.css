@@ -1,3 +1,7 @@
+#header-nav .nav-link {
+    color: var(--cw-dark);
+}
+
 #hero img{
     width: 100%; 
     height: 30vh;

@@ -1,0 +1,12 @@
+#cards div> div {
+    min-width: 12rem;
+    max-width: 20rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* p {
+    -webkit-text-size-adjust: 100%;
+} */
+  
+  
