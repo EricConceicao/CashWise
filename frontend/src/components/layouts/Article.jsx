@@ -17,27 +17,28 @@ Do contrário, irá para esquerda se omitido.
 const Article = ({ children, title, img, alt, dir }) => {
     return (
         <Container>
-            <article className="text-light text-center py-3">
+            <article className="text-light text-center py-3" id="articles">
                 {dir === 'right' ? 
                 <Row className="align-items-center">
-                    <Col sm={6}>
+                    <Col sm={12}>
+                        <h2 className="h3 mt-2 text-uppercase text-success fw-bolder">{title}</h2>
                         <p className="fs-5 mt-2">{children}</p>
                     </Col>
 
-                    <Col sm={6} className="p-0">
-                        <h2 className="text-uppercase text-success fw-bolder">{title}</h2>
-                        <Image width="60%" src={img} alt={alt} thumbnail />
+                    <Col sm={12} className="p-0">
+                        <Image width="45%" src={img} alt={alt} thumbnail />
                     </Col>
                 </Row>
                 :
                 <Row className="align-items-center">
-                    <Col sm={6} className="p-0">
-                        <h2 className="text-uppercase text-success fw-bolder">{title}</h2>
-                        <Image width="60%" src={img} alt={alt} thumbnail />
+                
+                    <Col sm={12} className="p-0">
+                        <Image width="45%" src={img} alt={alt} thumbnail />
                     </Col>
 
-                    <Col sm={6}>
-                        <p className="fs-5 mt-2">{children}</p>
+                    <Col sm={12}>
+                        <h2 className="h3 mt-2 text-uppercase text-success fw-bolder">{title}</h2>
+                        <p className="mt-2">{children}</p>
                     </Col>
                 </Row>
                 }

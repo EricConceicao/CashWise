@@ -23,8 +23,6 @@ function Header() {
                         <NavLink className="nav-link" to="/home">Home</NavLink>
                         <NavLink className="nav-link" to="/boletim">Boletim Informativo</NavLink>
                         <NavLink className="nav-link" to="/previdencia">Previdência Aqui</NavLink>
-                        <NavLink className="nav-link" to="/sobre">Sobre</NavLink>
-                        <NavLink className="nav-link" to="/contato">Contato</NavLink>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
