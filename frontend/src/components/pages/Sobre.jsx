@@ -28,23 +28,30 @@ const Sobre = () => {
             <Header />
             <div className="container-fluid" id='main' style={containerStyle}>
                 <Content >
-                    <Container fluid className='row' id='main'>
-                        <Col xs={12}>
-                            <div className="jumbotron text-center" id='topo' >
-                                <h1 style={titleStyle}>Sobre o CashWise</h1>
-                            </div>
-                        </Col>
-                        <Col xs={9}>
-                            <p className="lead">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ut, reiciendis! Iusto perspiciatis commodi animi. Quo dicta aliquam magnam iure, placeat recusandae laudantium odio nostrum rerum similique reiciendis consequatur, ipsum doloremque?</p>
-                        </Col>
-                        <Col>
-                            <img src="/img/fintechs-transparente.webp" alt="" className='figure-img img-fluid rounded' />
-                        </Col>
+                    <Container className='container-fluid' id='text'>
+                        <div className="jumbotron text-center" id='title' >
+                            <h1 style={titleStyle}>Sobre o CashWise</h1>
+                        </div>
+                        <div className="clearfix">
+                            <img src="/img/sobre-removebg-preview.png" className="col-md-6 float-md-end mb-3 ms-md-3" alt="..." />
+
+                            <p>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam fugit, sint maxime vitae sequi animi ratione modi nemo nesciunt reprehenderit! Assumenda quis amet impedit aliquid soluta aliquam recusandae suscipit exercitationem.
+                            </p>
+
+                            <p>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, voluptatum est. Eos, dolore rerum eveniet ab ipsam quod. Sed quibusdam, placeat dignissimos eveniet nihil inventore commodi natus maiores ea consequuntur, autem modi facere odit vero.
+                            </p>
+
+                            <p>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit nesciunt veniam obcaecati, nihil nisi adipisci doloribus minima veritatis totam saepe in numquam maiores possimus fugit aliquid illum. Nostrum?
+                            </p>
+                        </div>
+
                     </Container>
 
                     <Container fluid id='cardsAlunos' className='row mb-2 justify-content-around'>
-
-                        <div className="col-lg-2" >
+                        <div className="col-lg-2 col-md-6 " >
                             <Card className="card" style={cardStyle}>
                                 <Card.Img variant="top" src="/img/aguia.jpg" />
                                 <Card.Body>
@@ -57,7 +64,7 @@ const Sobre = () => {
                             </Card>
                         </div>
 
-                        <div className="col-lg-2">
+                        <div className="col-lg-2 col-md-6">
                             <Card className="card" style={cardStyle}>
                                 <Card.Img variant="top" src="/img/aguia.jpg" />
                                 <Card.Body>
@@ -70,7 +77,7 @@ const Sobre = () => {
                             </Card>
                         </div>
 
-                        <div className="col-lg-2">
+                        <div className="col-lg-2 col-md-6">
                             <Card className="card" style={cardStyle}>
                                 <Card.Img variant="top" src="/img/aguia.jpg" />
                                 <Card.Body>
@@ -83,7 +90,7 @@ const Sobre = () => {
                             </Card>
                         </div>
 
-                        <div className="col-lg-2">
+                        <div className="col-lg-2 col-md-6">
                             <Card className="card" style={cardStyle}>
                                 <Card.Img variant="top" src="/img/aguia.jpg" />
                                 <Card.Body>
@@ -96,7 +103,7 @@ const Sobre = () => {
                             </Card>
                         </div>
 
-                        <div className="col-lg-2">
+                        <div className="col-lg-2 col-md-6">
                             <Card className="card" style={cardStyle}>
                                 <Card.Img variant="top" src="/img/aguia.jpg" />
                                 <Card.Body>
