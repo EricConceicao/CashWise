@@ -17,7 +17,7 @@ Do contrário, irá para esquerda se omitido.
 const Article = ({ children, title, img, alt, dir }) => {
     return (
         <Container>
-            <article className="text-light text-center py-3">
+            <article className="text-light text-center py-3" id="articles">
                 {dir === 'right' ? 
                 <Row className="align-items-center">
                     <Col sm={12}>
