@@ -3,6 +3,10 @@
     height: 30vh;
 }
 
+#main-container {
+    clip-path: polygon(50% 2%, 100% 0, 100% 100%, 0 100%, 0 0);
+}
+
 @media screen and (max-width: 480px) {
     #hero .display-1 {
         font-size: 1.6rem;
@@ -13,4 +17,8 @@
     #hero img{
         height: 75vh; 
     } 
+
+    #main-container {
+    clip-path: polygon(50% 5%, 100% 0, 100% 100%, 0 100%, 0 0);
+}
 }

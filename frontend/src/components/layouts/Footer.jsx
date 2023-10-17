@@ -5,7 +5,7 @@ para o botão "Voltar ao topo". Tentem usar 'topo' como id.
 
 const Footer = ({ anchor }) => {
     return (
-        <footer className='d-flex justify-content-between align-items-center bg-dark p-4 text-light'>
+        <footer className='footer bg-dark p-4 text-light'>
             <a className="text-info text-decorarion-underline" href={`#${anchor}`}>Voltar ao Topo</a>
             <p className="m-0 fw-light">
                 &copy; 2023 Copyright <a className="text-primary fw-bold" href="/sobre" title="Sobre nós.">CashWise</a>. Todos os direitos reservados.
