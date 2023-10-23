@@ -66,24 +66,52 @@ const Home = () => {
             <Header />
             <div id="principal">
                 <Content>
-                    <Container fluid className="conteudo bg-secondary p-5">
+                    <Container fluid className="conteudo bg-secondary">
 
-                        <div className=""></div>
+
 
                         <div className="perfil">
-                            <img src="https://img.freepik.com/vetores-gratis/ilustracao-do-conceito-de-cofrinho_114360-5512.jpg?w=826&t=st=1696537956~exp=1696538556~hmac=8fd397ae9a6edbfd847c56551426e904080d6e1aefb5e36a08a0868a70fcd314" alt="Foto de perfil" />
-                            <div className="dados">
-                                <h1>Renato Venícius</h1>
-                                {/*<p>30 anos</p>
-                                <p>Perfil: Investidor de alto risco</p>
-                                <p>WiseCoins: </p>
-                                <p>Nível: </p>
-    <p>Experiência: </p>*/}
-                                <div className="botoes">
+
+                        <div className="botoes">
                                     <Button as="button" className="editar fw-bold" title='Editar perfil' variant="primary" onClick={() => setShowModal(true)}><FiEdit />
                                     </Button>
                                     <Button as="button" className='editar fw-bold' title='Avisos' variant="danger" onClick={() => setShowModal(true)}><AiOutlineAlert className='alerta' /></Button>
                                 </div>
+
+                            <img src="https://img.freepik.com/vetores-gratis/ilustracao-do-conceito-de-cofrinho_114360-5512.jpg?w=826&t=st=1696537956~exp=1696538556~hmac=8fd397ae9a6edbfd847c56551426e904080d6e1aefb5e36a08a0868a70fcd314" alt="Foto de perfil" />
+                            <div className="dados">
+                                <h1>Renato Venícius</h1>
+
+                                <div className="pontuacao">
+
+                                    <div className="dado">
+                                        <p>Anos</p>
+                                        <p className='dado-valor text-warning'>30</p>
+                                    </div>
+
+                                    <div className="dado">
+                                        <p>Perfil</p>
+                                        <p className='dado-valor text-warning'>Investidor de alto risco</p>
+                                    </div>
+
+                                    <div className="dado">
+                                        <p>WiseCoins</p>
+                                        <p className='dado-valor text-warning'>1.700</p>
+                                    </div>
+
+                                    <div className="dado">
+                                        <p>Nível</p>
+                                        <p className='dado-valor text-warning'>01</p>
+                                    </div>
+
+                                    <div className="dado">
+                                        <p>Experiência</p>
+                                        <p className='dado-valor text-warning'>Assaltante</p>
+                                    </div>
+
+                                </div>
+
+                                
                             </div>
                         </div>
                         <Row>
@@ -236,33 +264,33 @@ const Home = () => {
                         <div className='row'>
                             <div className='etiqueta vermelha text-dark'>
                                 <div className="gasto">
-                                <p className='fw-bold fs-5'>Alimentos</p>
-                                <p>R$</p>
-                                <hr />
+                                    <p className='fw-bold fs-5'>Alimentos</p>
+                                    <p>R$</p>
+                                    <hr />
                                 </div>
                                 <span>Detalhar</span>
                             </div>
                             <div className='etiqueta laranja text-dark'>
                                 <div className="gasto">
-                                <p className='fw-bold fs-5'>Sáude</p>
-                                <p>R$</p>
-                                <hr />
+                                    <p className='fw-bold fs-5'>Sáude</p>
+                                    <p>R$</p>
+                                    <hr />
                                 </div>
                                 <span>Detalhar</span>
                             </div>
                             <div className='etiqueta amarela text-dark'>
                                 <div className="gasto">
-                                <p className='fw-bold fs-5'>Lazer</p>
-                                <p>R$</p>
-                                <hr />
+                                    <p className='fw-bold fs-5'>Lazer</p>
+                                    <p>R$</p>
+                                    <hr />
                                 </div>
                                 <span>Detalhar</span>
                             </div>
                             <div className='etiqueta verde text-dark'>
                                 <div className="gasto">
-                                <p className='fw-bold fs-5'>Impostos</p>
-                                <p>R$</p>
-                                <hr />
+                                    <p className='fw-bold fs-5'>Impostos</p>
+                                    <p>R$</p>
+                                    <hr />
                                 </div>
                                 <span>Detalhar</span>
                             </div>
