@@ -13,7 +13,6 @@ import BoletimInformativo from './components/pages/BoletimInformativo';
 // Importações de Estilos
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../public/css/custom.css';
-import './App.css';
 
 
 const App = () => {

@@ -10,15 +10,10 @@ const containerStyle = {
     backgroundImage: 'linear-gradient(to bottom, #213740, #5BD992, #AEF2C6)',
     color: 'white',
 };
-const titleStyle = {
-    padding: '10px',
-    margin: '10px'
-}
 
 const cardStyle = {
     min: '12rem',
     max: '20rem',
-    margin: '1rem',
 };
 
 
@@ -26,14 +21,15 @@ const Sobre = () => {
     return (
         <>
             <Header />
-            <div className="container-fluid" id='main' style={containerStyle}>
-                <Content >
-                    <Container className='container-fluid' id='text'>
+            <main className="container-fluid" id='main' style={containerStyle}>
+                <Content>
+                    <Container className="p-0" id='text'>
                         <div className="jumbotron text-center" id='title' >
-                            <h1 style={titleStyle}>Sobre o CashWise</h1>
+                            <h1 className="p-2">Sobre o CashWise</h1>
                         </div>
-                        <div className="clearfix">
-                            <img src="/img/sobre-removebg-preview.png" className="col-md-6 float-md-end mb-3 ms-md-3" alt="..." />
+
+                        <div className="text-center">
+                            <img src="/img/sobre-removebg-preview.png" className="col-md-6 float-md-end mb-3 ms-md-3" alt="..." width="100%" />
 
                             <p>
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam fugit, sint maxime vitae sequi animi ratione modi nemo nesciunt reprehenderit! Assumenda quis amet impedit aliquid soluta aliquam recusandae suscipit exercitationem.
@@ -50,8 +46,8 @@ const Sobre = () => {
 
                     </Container>
 
-                    <Container fluid id='cardsAlunos' className='row mb-2 justify-content-around'>
-                        <div className="col-lg-2 col-md-6 " >
+                    <Container fluid id='cardsAlunos' className='row justify-content-around'>
+                        <div className="col-sm mb-2">
                             <Card className="card" style={cardStyle}>
                                 <Card.Img variant="top" src="/img/aguia.jpg" />
                                 <Card.Body>
@@ -64,7 +60,7 @@ const Sobre = () => {
                             </Card>
                         </div>
 
-                        <div className="col-lg-2 col-md-6">
+                        <div className="col-sm mb-2">
                             <Card className="card" style={cardStyle}>
                                 <Card.Img variant="top" src="/img/aguia.jpg" />
                                 <Card.Body>
@@ -77,7 +73,7 @@ const Sobre = () => {
                             </Card>
                         </div>
 
-                        <div className="col-lg-2 col-md-6">
+                        <div className="col-sm mb-2">
                             <Card className="card" style={cardStyle}>
                                 <Card.Img variant="top" src="/img/aguia.jpg" />
                                 <Card.Body>
@@ -90,7 +86,7 @@ const Sobre = () => {
                             </Card>
                         </div>
 
-                        <div className="col-lg-2 col-md-6">
+                        <div className="col-sm mb-2">
                             <Card className="card" style={cardStyle}>
                                 <Card.Img variant="top" src="/img/aguia.jpg" />
                                 <Card.Body>
@@ -103,7 +99,7 @@ const Sobre = () => {
                             </Card>
                         </div>
 
-                        <div className="col-lg-2 col-md-6">
+                        <div className="col-sm mb-2">
                             <Card className="card" style={cardStyle}>
                                 <Card.Img variant="top" src="/img/aguia.jpg" />
                                 <Card.Body>
@@ -117,12 +113,10 @@ const Sobre = () => {
                         </div>
 
                     </Container>
-
                 </Content>
-            </div>
+            </main>
 
             <Footer anchor="topo" />
-
         </>
     );
 }
