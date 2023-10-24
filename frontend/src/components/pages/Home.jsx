@@ -72,15 +72,19 @@ const Home = () => {
 
                         <div className="perfil">
 
-                        <div className="botoes">
-                                    <Button as="button" className="editar fw-bold" title='Editar perfil' variant="primary" onClick={() => setShowModal(true)}><FiEdit />
-                                    </Button>
-                                    <Button as="button" className='editar fw-bold' title='Avisos' variant="danger" onClick={() => setShowModal(true)}><AiOutlineAlert className='alerta' /></Button>
-                                </div>
+                            <div className="botoes">
+                                <Button as="button" className="editar fw-bold" title='Editar perfil' variant="primary" onClick={() => setShowModal(true)}><FiEdit />
+                                </Button>
+                                <Button as="button" className='editar fw-bold' title='Avisos' variant="danger" onClick={() => setShowModal(true)}><AiOutlineAlert className='alerta' /></Button>
+                            </div>
 
                             <img src="https://img.freepik.com/vetores-gratis/ilustracao-do-conceito-de-cofrinho_114360-5512.jpg?w=826&t=st=1696537956~exp=1696538556~hmac=8fd397ae9a6edbfd847c56551426e904080d6e1aefb5e36a08a0868a70fcd314" alt="Foto de perfil" />
+
+                            <h1>Renato Venícius</h1>
+
+                            {/*
                             <div className="dados">
-                                <h1>Renato Venícius</h1>
+                                
 
                                 <div className="pontuacao">
 
@@ -111,9 +115,43 @@ const Home = () => {
 
                                 </div>
 
-                                
-                            </div>
+
+    </div>*/}
                         </div>
+
+                        <Row>
+                            <div className="cartoes">
+
+                                <div className="cartao-perfil1">
+                                    <div className="item">
+                                        <h3 className='text-secondary'>Nível</h3>
+                                        <span className='bg-secondary'>1</span>
+                                    </div>
+                                </div>
+
+                                <div className="cartao-perfil1">
+                                    <div className="item">
+                                        <h3 className='text-secondary'>Perfil</h3>
+                                        <span className='bg-secondary'>Investidor de alto risco</span>
+                                    </div>
+                                </div>
+
+                                <div className="cartao-perfil1">
+                                    <div className="item">
+                                        <h3 className='text-secondary'>WiseCoins</h3>
+                                        <span className='bg-secondary'>1.700</span>
+                                    </div>
+                                </div>
+
+                                <div className="cartao-perfil1">
+                                    <div className="item">
+                                        <h3 className='text-secondary'>Experiência</h3>
+                                        <span className='bg-secondary'>Empresário</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </Row>
+
                         <Row>
                             <div className="cartoes">
 

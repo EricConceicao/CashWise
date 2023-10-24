@@ -31,7 +31,7 @@
 }
 
 .perfil img {
-    border: 5px solid orange;
+    /*border: 5px solid #ffc107;*/
 }
 
 .dados {
@@ -47,7 +47,6 @@
 
 .botoes {
     display: flex;
-    
     gap: 10px;
 }
 
@@ -58,7 +57,7 @@
 
 .cartao-perfil {
     width: 350px;
-    border-bottom: 6px solid palegreen;
+    border-bottom: 4px solid palegreen;
     display: flex;
     justify-content: space-between;
     gap: 20px;
@@ -68,6 +67,19 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    
+}
+
+.cartao-perfil1 {
+    width: 350px;
+    border: 3px solid #ffc107;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 10px;
+    margin: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #ffc107;;    
 }
 
 .cartao-usuario img {
@@ -125,7 +137,7 @@
 .item span {
     border-radius: 5px;
     padding: 0 10px;
-    width: 100px;
+    width: auto;
 }
 
 hr {
