@@ -36,6 +36,11 @@ const LandingPage = () => {
         handleShowSign();
     }
 
+    function loginModal() {
+        handleCloseSign();
+        handleShowLogin(); 
+    }
+
     async function createUser(e) {
         e.preventDefault();
 
@@ -50,7 +55,7 @@ const LandingPage = () => {
             password: e.target.password.value,
         }
 
-        const response = await fetch('http://localhost:3000/auth',{
+        const response = await fetch('http://localhost:3000/auth/signup',{
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -60,6 +65,31 @@ const LandingPage = () => {
 
         if (response.ok) {
             const data = await response.json();
+            console.log(data)
+            loginModal();
+        }
+        
+    }
+
+    async function login(e) {
+        e.preventDefault();
+
+        const userInput = {
+            email: e.target.email.value,
+            password: e.target.password.value,
+        }
+
+        const response = await fetch('http://localhost:3000/auth/login',{
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userInput),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data)
         }
         
     }
@@ -141,7 +171,7 @@ const LandingPage = () => {
                 </Modal.Header>
 
                 <Modal.Body>
-                    <Form>
+                    <Form onSubmit={login}>
                         <Row>
                             <fieldset>
                                 <legend className="small text-center">Insira seu E-mail e senha!</legend>
@@ -169,13 +199,13 @@ const LandingPage = () => {
                 </Modal.Body> 
             </Modal>
 
-            <Modal show={showSign} onHide={handleCloseSign} onSubmit={createUser} centered>
+            <Modal show={showSign} onHide={handleCloseSign} centered>
                 <Modal.Header className="border-bottom border-secondary bg-primary" closeButton>
                     <Modal.Title>Se junte ao CashWise!</Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>
-                    <Form>
+                    <Form onSubmit={createUser}>
                         <Row>
                             <fieldset>
                                 <legend className="small text-center">Preencha todos os campos!</legend>
