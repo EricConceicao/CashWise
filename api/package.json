@@ -2,10 +2,11 @@
   "name": "api",
   "version": "0.0.1",
   "description": "Api do nosso projeto CashWise. Feito com express seguindo o modelo MVC com programação modular.",
-  "main": "server.js",
+  "main": "./src/server.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon "
   },
   "keywords": [
     "express",

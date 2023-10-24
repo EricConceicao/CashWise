@@ -14,9 +14,9 @@ model User {
   id            Int       @id @default(autoincrement())
   email         String    @db.VarChar(255) @unique
   name          String    @db.VarChar(255)
-  snome         String    @db.VarChar(255)
+  sname         String    @db.VarChar(255)
   password      String
-  photo         String    @db.Text
+  photo         String?   @db.Text
   wiseCoins     Int       @default(0)
   level         String    @db.VarChar(255) @default("Iniciante")
   exp           Int       @default(0)
