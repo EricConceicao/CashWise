@@ -31,15 +31,21 @@ const LandingPage = () => {
     const handleShowSign = () => setShowSign(true);
     const handleCloseSign = () => setShowSign(false);
 
+    // Isso faz com que quando você para o outro modal, o que você está feche
     function signModal() {
         handleCloseLogin(); 
         handleShowSign();
+        setFeedback('');
     }
 
     function loginModal() {
         handleCloseSign();
         handleShowLogin(); 
+        setFeedback('');
     }
+
+    // Meus handlers para respostas do server no formulário //
+    const [feedback, setFeedback] = useState('');
 
     async function createUser(e) {
         e.preventDefault();
@@ -65,7 +71,8 @@ const LandingPage = () => {
 
         if (response.ok) {
             const data = await response.json();
-            console.log(data)
+
+            setFeedback(data.message);
             loginModal();
         }
         
@@ -87,11 +94,10 @@ const LandingPage = () => {
             body: JSON.stringify(userInput),
         });
 
-        if (response.ok) {
+        if (response) {
             const data = await response.json();
-            console.log(data)
-        }
-        
+            setFeedback(data.message);    
+        }   
     }
 
     return (
@@ -174,7 +180,8 @@ const LandingPage = () => {
                     <Form onSubmit={login}>
                         <Row>
                             <fieldset>
-                                <legend className="small text-center">Insira seu E-mail e senha!</legend>
+                                <legend className="small text-center">Insira seu dados de login!</legend>
+                                <span className="text-danger">{feedback}</span>
                                 <Form.Group as={Col} className="my-4">
                                     <FloatingLabel  label="E-mail" controlId="email-input">
                                         <Form.Control type="email" name="email" placeholder="zezinhoDoPneu@gmail.com" autoComplete="username" />                    
@@ -209,6 +216,7 @@ const LandingPage = () => {
                         <Row>
                             <fieldset>
                                 <legend className="small text-center">Preencha todos os campos!</legend>
+                                <span>{feedback}</span>
                                 <Form.Group as={Col} className="my-4">
                                     <FloatingLabel  label="Nome" controlId="name-input">
                                         <Form.Control type="text" name="name" placeholder="Mister" />                    
