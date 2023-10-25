@@ -15,6 +15,8 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 
+import './Contato.css';
+
 function Contato() {
 
   const [email, setEmail] = useState("");
@@ -50,22 +52,18 @@ function Contato() {
     <>
       <Header />
 
-      <Container fluid className='m-2' style={{ height: "80vh" }}>
-
-
-        <Row>
-          <Col md="6" style={{backgroundImage: "/img/correio.svg"}}>
+      <Container>
+        <Row style={{ minHeight: "80vh" }}>
+          <Col sm="6" md="12" lg="8" id='form-img'>
             <Container className='d-flex'>
-              <img className='rounded-pill' width={"30%"} src="/img/correio.jpg" alt="Icone com uma mão segurando um tablete com outra mão saindo de sua tela com uma carta" />
-              <div className="d-flex justify-content-center flex-column mx-2">
-                <h1>Contate-nos!</h1>
-              </div>
+              
             </Container>
           </Col>
 
-          <Col md="6">
+          <Col sm="6" md="12" lg="4" className='d-flex p-0 align-items-center justify-content-center'>
 
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form className='w-100 p-3 mb-3 rounded-3' noValidate validated={validated} onSubmit={handleSubmit}
+            style={{backgroundImage: 'linear-gradient(180deg, var(--cw-primary) 25%, var(--cw-secondary) 25%)'}}>
               <fieldset>
                 <legend>Deixe um Feedback!</legend>
                 <Form.Group className='p-1 my-3' controlId="validationCustom01">
@@ -92,7 +90,7 @@ function Contato() {
                       isInvalid={!isValidEmail}
                       required
                     />
-                    <Form.Control.Feedback type="invalid">
+                    <Form.Control.Feedback className='text-warning' type="invalid">
                       Por favor, insira um e-mail válido.
                     </Form.Control.Feedback>
                   </FloatingLabel>
@@ -107,13 +105,13 @@ function Contato() {
                       onChange={(e) => setAssunto(e.target.value)}
                       required
                     />
-                    <Form.Control.Feedback type="invalid">
+                    <Form.Control.Feedback className='text-warning' type="invalid">
                       Por favor, insira o assunto.
                     </Form.Control.Feedback>
                   </FloatingLabel>
                 </Form.Group>
 
-                <Form.Group className='p-1 my-3' controlId="form-mensagem">
+                <Form.Group className='p-1 my-3 text-white' controlId="form-mensagem">
                   <Form.Label>Mensagem</Form.Label>
                   <Form.Control
                     as="textarea"
@@ -123,7 +121,7 @@ function Contato() {
                     onChange={(e) => setMensagem(e.target.value)}
                     required
                   />
-                  <Form.Control.Feedback type="invalid">
+                  <Form.Control.Feedback className='text-warning' type="invalid">
                     Por favor, insira a mensagem.
                   </Form.Control.Feedback>
                  

@@ -1,9 +1,9 @@
 
 const Content = ({children}) => {
     return (
-        <div id="content">
+        <section id="content">
             {children}
-        </div>
+        </section>
     )
 };
 

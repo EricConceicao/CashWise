@@ -21,10 +21,84 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import './LandingPage.css';
 
 const LandingPage = () => {
-    const [show, setShow] = useState(false);
+    // Controles dos modais de login e cadastro //
+    const [showLogin, setShowLogin] = useState(false);
+    const [showSign, setShowSign] = useState(false);
+    
+    const handleShowLogin= () => setShowLogin(true);
+    const handleCloseLogin = () => setShowLogin(false);
 
-    const handleShow = () => setShow(true);
-    const handleClose = () => setShow(false);
+    const handleShowSign = () => setShowSign(true);
+    const handleCloseSign = () => setShowSign(false);
+
+    // Isso faz com que quando você para o outro modal, o que você está feche
+    function signModal() {
+        handleCloseLogin(); 
+        handleShowSign();
+        setFeedback('');
+    }
+
+    function loginModal() {
+        handleCloseSign();
+        handleShowLogin(); 
+        setFeedback('');
+    }
+
+    // Meus handlers para respostas do server no formulário //
+    const [feedback, setFeedback] = useState('');
+
+    async function createUser(e) {
+        e.preventDefault();
+
+        if (e.target.password.value !== e.target.confirm.value) {
+            return alert('Senhas diferentes');
+        }
+
+        const userInput = {
+            name: e.target.name.value,
+            sname: e.target.sname.value,
+            email: e.target.email.value,
+            password: e.target.password.value,
+        }
+
+        const response = await fetch('http://localhost:3000/auth/signup',{
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userInput),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+
+            setFeedback(data.message);
+            loginModal();
+        }
+        
+    }
+
+    async function login(e) {
+        e.preventDefault();
+
+        const userInput = {
+            email: e.target.email.value,
+            password: e.target.password.value,
+        }
+
+        const response = await fetch('http://localhost:3000/auth/login',{
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userInput),
+        });
+
+        if (response) {
+            const data = await response.json();
+            setFeedback(data.message);    
+        }   
+    }
 
     return (
         <>
@@ -38,7 +112,7 @@ const LandingPage = () => {
                         width="50%" />
                     </Navbar.Brand>
 
-                    <Button onClick={handleShow} variant="secondary" size="md">Entrar</Button>
+                    <Button onClick={handleShowLogin} variant="secondary" size="md">Entrar</Button>
 
                 </Container>
             </header>
@@ -92,38 +166,90 @@ const LandingPage = () => {
                     </Row>
 
                     <div className="d-grid">
-                        <Button onClick={handleShow} className="w-50 mx-auto p-2 my-3 fs-4 fw-bold" size="large" variant="primary">Acesse já!</Button>
+                        <Button onClick={handleShowLogin} className="w-50 mx-auto p-2 my-3 fs-4 fw-bold" size="large" variant="primary">Acesse já!</Button>
                     </div>
                 </Container>
             </main>
 
-            <Modal show={show} onHide={handleClose} centered>
+            <Modal show={showLogin} onHide={handleCloseLogin} centered>
                 <Modal.Header className="border-bottom border-secondary bg-primary" closeButton>
                     <Modal.Title>Bem-vindo!</Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>
-                    <Form>
+                    <Form onSubmit={login}>
                         <Row>
                             <fieldset>
-                                <legend className="small text-center">Insira seu E-mail e senha!</legend>
+                                <legend className="small text-center">Insira seu dados de login!</legend>
+                                <span className="text-danger">{feedback}</span>
                                 <Form.Group as={Col} className="my-4">
                                     <FloatingLabel  label="E-mail" controlId="email-input">
-                                        <Form.Control type="email" name="email" placeholder="zezinhoDoPneu@gmail.com" />                    
+                                        <Form.Control type="email" name="email" placeholder="zezinhoDoPneu@gmail.com" autoComplete="username" />                    
                                     </FloatingLabel>
                                     <Form.Switch className="my-2" label="Lembrar E-mail?" type="checkbox" name="lembrar" id="lembrar-email" /> 
                                 </Form.Group>
 
                                 <Form.Group as={Col} className="my-2">
                                     <FloatingLabel  label="Senha" controlId="password-input">
-                                        <Form.Control type="password" name="password" placeholder="*****" /> 
+                                        <Form.Control type="password" name="password" placeholder="*****" autoComplete="current-password" /> 
                                     </FloatingLabel>
                                     <p className="small text-muted">Não compartilhe sua senha com ninguem. Shhh.</p>
                                 </Form.Group>
 
                                 <div className="d-flex justify-content-between">
-                                    <Button type="submit" variant="outline-dark" className="text-decoration-underline">Não tem uma conta?</Button>
+                                    <Button className="text-decoration-underline" variant="outline-dark" onClick={signModal}>Não tem uma conta?</Button>
                                     <Button type="submit">Acessar</Button>
+                                </div>
+                            </fieldset>
+                        </Row>
+                    </Form>
+                </Modal.Body> 
+            </Modal>
+
+            <Modal show={showSign} onHide={handleCloseSign} centered>
+                <Modal.Header className="border-bottom border-secondary bg-primary" closeButton>
+                    <Modal.Title>Se junte ao CashWise!</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <Form onSubmit={createUser}>
+                        <Row>
+                            <fieldset>
+                                <legend className="small text-center">Preencha todos os campos!</legend>
+                                <span>{feedback}</span>
+                                <Form.Group as={Col} className="my-4">
+                                    <FloatingLabel  label="Nome" controlId="name-input">
+                                        <Form.Control type="text" name="name" placeholder="Mister" />                    
+                                    </FloatingLabel>
+                                 </Form.Group>
+
+                                <Form.Group as={Col} className="my-4">
+                                    <FloatingLabel  label='Sobrenome' controlId="sname-input">
+                                        <Form.Control type="text" name="sname" placeholder="Senhor" />                    
+                                    </FloatingLabel>
+                                </Form.Group>
+
+                                <Form.Group as={Col} className="my-4">
+                                    <FloatingLabel  label="E-mail" controlId="email-input">
+                                        <Form.Control type="email" name="email" placeholder="zezinhoDoPneu@gmail.com" />                    
+                                    </FloatingLabel>
+                                </Form.Group>
+
+                                <Form.Group as={Col} className="my-2">
+                                    <FloatingLabel  label="Senha" controlId="password-input">
+                                        <Form.Control type="password" name="password" placeholder="*****" autoComplete="new-password"/> 
+                                    </FloatingLabel>
+                                    <p className="small text-muted">Não compartilhe sua senha com ninguem. Shhh.</p>
+                                </Form.Group>
+
+                                <Form.Group as={Col} className="my-2">
+                                    <FloatingLabel  label="Confirme sua senha" controlId="confirm-input">
+                                        <Form.Control type="password" name="confirm" placeholder="*****" /> 
+                                    </FloatingLabel>
+                                </Form.Group>
+
+                                <div className="d-flex justify-content-center mt-3">
+                                    <Button className="w-50" type="submit">Criar!</Button>
                                 </div>
                             </fieldset>
                         </Row>

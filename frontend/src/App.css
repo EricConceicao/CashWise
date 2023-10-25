@@ -1,0 +1,228 @@
+/* Início para estilo da Home */
+
+#principal {
+    display: flex;
+    gap: 20px;
+    margin: 0 auto;
+}
+
+#principal img {
+    width: 200px;
+    border-radius: 50%;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.conteudo {
+    width: 100vw;    
+    color: #fff;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    gap: 50px;
+}
+
+.perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 30px 40px;
+    border-radius: 5px;
+}
+
+.perfil img {
+    /*border: 5px solid #ffc107;*/
+}
+
+.dados {
+    display: flex;
+    flex-direction: column;
+}
+
+.editar {
+    width: 40px;
+}
+
+.perfil .botoes {
+    display: flex;
+    gap: 10px;
+    justify-self: end;
+}
+
+.cartoes {
+    display: flex;
+}
+
+.cartao-perfil {
+    width: 350px;
+    border-bottom: 4px solid palegreen;    
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 10px;
+    margin: 10px;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    
+}
+
+.cartao-perfil1 {
+    width: 350px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 10px;
+    margin: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #6eb8f5;   
+    border-bottom: 4px solid orange; 
+    color: #fff;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+}
+
+.cartao-usuario img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+}
+
+.cartao-usuario div h3 {
+    margin: 0 0 5px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+}
+
+.painel {
+    border-top: 2px solid #fff;
+    color: #fff;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.controle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.etiqueta {
+    width: 250px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 10px;
+    color: #fff;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    /*border-left: 8px solid #ff0066;*/
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    background: #fff;
+}
+
+.etiqueta span {
+    font-size: 15px;
+    color: #a9a9a9;
+    font-weight: bold;
+}
+
+.item span {
+    border-radius: 5px;
+    padding: 0 10px;
+    width: auto;
+}
+
+hr {
+    color: #8e8d8d;
+}
+
+h1 {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.etiqueta.vermelha {
+    border-left: 3px solid #FF0000;
+}
+
+.etiqueta.laranja {
+    border-left: 3px solid #FFA500;
+}
+
+.etiqueta.amarela {
+    border-left: 3px solid #DAA520;
+}
+
+.etiqueta.verde {
+    border-left: 3px solid #008000;
+}
+
+.etiqueta.azul {
+    border-left: 3px solid #000080;
+}
+
+.etiqueta.violeta {
+    border-left: 3px solid #9400D3;
+}
+
+.etiqueta.rosa {
+    border-left: 3px solid #FF69B4;
+}
+
+.etiqueta.marron {
+    border-left: 3px solid #A52A2A;
+}
+
+.etiqueta.cinza {
+    border-left: 3px solid #808080;
+}
+
+.etiqueta.prata {
+    border-left: 3px solid #C0C0C0;
+}
+
+.etiqueta.ouro {
+    border-left: 3px solid #FFD700;
+}
+
+.etiqueta.ciano {
+    border-left: 3px solid #00FFFF;
+}
+
+.investimentos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pontuacao {
+    display: flex;  
+    border-radius: 30px;
+    gap: 50px;
+    padding: 5px 30px;
+}
+
+.dado {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+}
+
+.dado-valor {
+    font-size: 35px;
+}
+
+
+/* Fim para estilo da Home */

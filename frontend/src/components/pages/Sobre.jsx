@@ -26,11 +26,11 @@ const Sobre = () => {
     return (
         <>
             <Header />
-            <div className="container-fluid" id='main' style={containerStyle}>
-                <Content >
-                    <Container className='container-fluid' id='text'>
+            <main className="container-fluid" id='main' style={containerStyle}>
+                <Content>
+                    <Container className="p-0" id='text'>
                         <div className="jumbotron text-center" id='title' >
-                            <h1 style={titleStyle}>Sobre o CashWise</h1>
+                            <h1 className="p-2">Sobre o CashWise</h1>
                         </div>
                         <div className="clearfix">
                             <Image src="/img/sobre-removebg-preview.png" className="col-md-6 float-md-end mb-3 ms-md-3 " alt="..." fluid />
@@ -117,12 +117,10 @@ const Sobre = () => {
                         </div>
 
                     </Container>
-
                 </Content>
-            </div>
+            </main>
 
             <Footer anchor="topo" />
-
         </>
     );
 }
