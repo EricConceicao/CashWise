@@ -36,15 +36,15 @@ const Sobre = () => {
                             <Image src="/img/sobre-removebg-preview.png" className="col-md-6 float-md-end mb-3 ms-md-3 " alt="..." fluid />
 
                             <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam fugit, sint maxime vitae sequi animi ratione modi nemo nesciunt reprehenderit! Assumenda quis amet impedit aliquid soluta aliquam recusandae suscipit exercitationem.
+                                A Educação financeira é mais do que guardar dinheiro, é sobre saber usá-lo. Buscando um presente consciente e um futuro tranquilo. A CashWise fornece uma plataforma de educação financeira de aprendizado simples e direta para controlar seus gastos, aprender sobre investimentos.
                             </p>
 
                             <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, voluptatum est. Eos, dolore rerum eveniet ab ipsam quod. Sed quibusdam, placeat dignissimos eveniet nihil inventore commodi natus maiores ea consequuntur, autem modi facere odit vero.
+                                É buscar uma melhor qualidade de vida tanto hoje quanto no futuro, proporcionando a segurança material necessária para aproveitar os prazeres da vida e ao mesmo tempo obter uma garantia para eventuais imprevistos.
                             </p>
 
                             <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit nesciunt veniam obcaecati, nihil nisi adipisci doloribus minima veritatis totam saepe in numquam maiores possimus fugit aliquid illum. Nostrum?
+                                O nosso objetivo aqui é mostrar que pequenas mudanças e escolhas conscientes trarão equilíbrio na sua vida financeira. Passo a passo, com perseverança e sem esperar milagres se tornará o dono do seu futuro.
                             </p>
                         </div>
 
