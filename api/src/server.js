@@ -12,9 +12,11 @@ api.use(bodyParser.json());
 // Rotas //
 // Importações
 import authRouter from './routes/auth.routes.js';
+import contactRouter from './routes/contact.routes.js';
 
 // Atribuições
 api.use('/auth', authRouter);
+api.use('/contact', contactRouter);
 
 
 api.use('/', (req, res) => {
