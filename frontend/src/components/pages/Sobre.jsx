@@ -5,15 +5,20 @@ import Container from 'react-bootstrap/esm/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
+import Image from 'react-bootstrap/Image';
 
 const containerStyle = {
     backgroundImage: 'linear-gradient(to bottom, #213740, #5BD992, #AEF2C6)',
     color: 'white',
 };
+const titleStyle = {
+    padding: '10px',
+}
 
 const cardStyle = {
     min: '12rem',
     max: '20rem',
+    margin: '.3rem 0',
 };
 
 
@@ -27,9 +32,8 @@ const Sobre = () => {
                         <div className="jumbotron text-center" id='title' >
                             <h1 className="p-2">Sobre o CashWise</h1>
                         </div>
-
-                        <div className="text-center">
-                            <img src="/img/sobre-removebg-preview.png" className="col-md-6 float-md-end mb-3 ms-md-3" alt="..." width="100%" />
+                        <div className="clearfix">
+                            <Image src="/img/sobre-removebg-preview.png" className="col-md-6 float-md-end mb-3 ms-md-3 " alt="..." fluid />
 
                             <p>
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam fugit, sint maxime vitae sequi animi ratione modi nemo nesciunt reprehenderit! Assumenda quis amet impedit aliquid soluta aliquam recusandae suscipit exercitationem.
@@ -46,8 +50,8 @@ const Sobre = () => {
 
                     </Container>
 
-                    <Container fluid id='cardsAlunos' className='row justify-content-around'>
-                        <div className="col-sm mb-2">
+                    <Container fluid id='cardsAlunos' className='row pb-2 justify-content-around'>
+                        <div className="col-sm col-md-4 col-lg" >
                             <Card className="card" style={cardStyle}>
                                 <Card.Img variant="top" src="/img/aguia.jpg" />
                                 <Card.Body>
@@ -60,7 +64,7 @@ const Sobre = () => {
                             </Card>
                         </div>
 
-                        <div className="col-sm mb-2">
+                        <div className="col-sm col-md-4 col-lg">
                             <Card className="card" style={cardStyle}>
                                 <Card.Img variant="top" src="/img/aguia.jpg" />
                                 <Card.Body>
@@ -73,7 +77,7 @@ const Sobre = () => {
                             </Card>
                         </div>
 
-                        <div className="col-sm mb-2">
+                        <div className="col-sm col-md-4 col-lg">
                             <Card className="card" style={cardStyle}>
                                 <Card.Img variant="top" src="/img/aguia.jpg" />
                                 <Card.Body>
@@ -86,7 +90,7 @@ const Sobre = () => {
                             </Card>
                         </div>
 
-                        <div className="col-sm mb-2">
+                        <div className="col-sm col-md-4 col-lg">
                             <Card className="card" style={cardStyle}>
                                 <Card.Img variant="top" src="/img/aguia.jpg" />
                                 <Card.Body>
@@ -99,7 +103,7 @@ const Sobre = () => {
                             </Card>
                         </div>
 
-                        <div className="col-sm mb-2">
+                        <div className="col-sm col-md-4 col-lg">
                             <Card className="card" style={cardStyle}>
                                 <Card.Img variant="top" src="/img/aguia.jpg" />
                                 <Card.Body>
