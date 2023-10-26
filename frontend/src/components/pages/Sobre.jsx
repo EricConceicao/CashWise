@@ -2,8 +2,6 @@ import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
 import Content from '../layouts/Content';
 import Container from 'react-bootstrap/esm/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 
@@ -119,7 +117,6 @@ const Sobre = () => {
                     </Container>
                 </Content>
             </main>
-
             <Footer anchor="topo" />
         </>
     );
