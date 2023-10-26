@@ -47,6 +47,8 @@ const LandingPage = () => {
     // Meus handlers para respostas do server no formulário //
     const [feedback, setFeedback] = useState('');
 
+    const [validated, setValidated] = useState(false);
+
     async function createUser(e) {
         e.preventDefault();
 
@@ -177,21 +179,24 @@ const LandingPage = () => {
                 </Modal.Header>
 
                 <Modal.Body>
-                    <Form onSubmit={login}>
+                    <Form noValidate validated={false} onSubmit={login}>
                         <Row>
                             <fieldset>
                                 <legend className="small text-center">Insira seu dados de login!</legend>
                                 <span className="text-danger">{feedback}</span>
+
                                 <Form.Group as={Col} className="my-4">
-                                    <FloatingLabel  label="E-mail" controlId="email-input">
-                                        <Form.Control type="email" name="email" placeholder="zezinhoDoPneu@gmail.com" autoComplete="username" />                    
+                                    <FloatingLabel label="E-mail" controlId="email-input">
+                                        <Form.Control type="email" name="email" placeholder="zezinhoDoPneu@gmail.com" autoComplete="username" required />                    
+                                        <Form.Control.Feedback>Certinho</Form.Control.Feedback>
+                                        <Form.Control.Feedback type="invalid">Insira um E-mail válido</Form.Control.Feedback>
                                     </FloatingLabel>
                                     <Form.Switch className="my-2" label="Lembrar E-mail?" type="checkbox" name="lembrar" id="lembrar-email" /> 
                                 </Form.Group>
 
                                 <Form.Group as={Col} className="my-2">
                                     <FloatingLabel  label="Senha" controlId="password-input">
-                                        <Form.Control type="password" name="password" placeholder="*****" autoComplete="current-password" /> 
+                                        <Form.Control type="password" name="password" placeholder="*****" autoComplete="current-password" required /> 
                                     </FloatingLabel>
                                     <p className="small text-muted">Não compartilhe sua senha com ninguem. Shhh.</p>
                                 </Form.Group>
