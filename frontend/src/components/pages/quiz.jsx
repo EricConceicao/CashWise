@@ -3,12 +3,12 @@ import { MdOutlineQuiz } from 'react-icons/md';
 import { Form } from 'react-bootstrap';
 
 //componente - ícone
-const QuizIcon = () => {
-    return <MdOutlineQuiz size={15} />;
+const QuizIcon = ({ onClick }) => {
+    return <MdOutlineQuiz size={15} onClick={onClick} />;
 };
 
 // formulário - perguntas do quiz
-const QuizForm = () => {
+const QuizForm = ({ onSubmit }) => {
     const [answers, setAnswers] = useState({});
 
     const handleQuizSubmit = async (e) => {
@@ -28,7 +28,7 @@ const QuizForm = () => {
     };
 
     return (
-        <Form onSubmit={handleQuizSubmit}>
+        <Form onSubmit={onSubmit}>
             <Form.Group controlId="question1">
                 <Form.Label>Question 1</Form.Label>
                 <Form.Check
@@ -55,10 +55,23 @@ const QuizForm = () => {
     );
 };
 
-return (
-    <>
-        <QuizForm onSubmit={handleQuizSubmit} />
-    </>
-)
+const Quiz = () => {
+    const [showForm, setShowForm] = useState(false);
 
-export default { QuizIcon, QuizForm };
+    const handleQuizIconClick = () => {
+        setShowForm(true);
+    };
+
+    const handleQuizSubmit = (e) => {
+        setShowForm(false);
+    };
+
+    return (
+        <>
+            <QuizIcon onClick={handleQuizIconClick} />
+            {showForm && <QuizForm onSubmit={handleQuizSubmit} />}
+        </>
+    )
+};
+
+export default Quiz;
