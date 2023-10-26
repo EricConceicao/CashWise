@@ -12,15 +12,15 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import InputGroup from 'react-bootstrap/InputGroup';
 
 // Icones //
-import { AiFillEye as Eye } from 'react-icons/ai';
+import {BiLogIn as LoginIco} from 'react-icons/bi';
+import {FaArrowRight as ArrowIco} from 'react-icons/fa6';
+import {RiAccountBoxFill as AccountIco} from 'react-icons/ri';
 
 import './LandingPage.css';
 
@@ -151,7 +151,7 @@ const LandingPage = () => {
 							width="50%" />
 					</Navbar.Brand>
 
-					<Button onClick={handleShowLogin} variant="secondary" size="md">Entrar</Button>
+					<Button onClick={handleShowLogin} variant="secondary" size="md"><LoginIco className='me-2' size={28} /> Entrar</Button>
 
 				</Container>
 			</header>
@@ -252,7 +252,7 @@ const LandingPage = () => {
 
 								<div className="d-flex justify-content-between">
 									<Button className="text-decoration-underline" variant="outline-dark" onClick={signModal}>Não tem uma conta?</Button>
-									<Button type="submit">Acessar</Button>
+									<Button type="submit"><ArrowIco className='me-2' size={28} />Acessar</Button>
 								</div>
 							</fieldset>
 						</Row>
@@ -264,7 +264,7 @@ const LandingPage = () => {
 				<Modal.Header className="border-bottom border-primary bg-primary" closeButton>
 					<Modal.Title className='text-center bg-primary'>Se junte ao CashWise!</Modal.Title>
 				</Modal.Header>
-				
+
 				<Modal.Body>
 					<Form noValidate validated={validated} onSubmit={createUser}>
 						<Row>
@@ -304,12 +304,19 @@ const LandingPage = () => {
 													required
 												/>
 												<Form.Control.Feedback type="invalid">Insira uma senha válida</Form.Control.Feedback>
-												<Form.Check className='mx-1' label="Mostrar senha?" onClick={() => setViewC(!viewC)} />
 											</FloatingLabel>
+											<Form.Check className='mx-1' label="Mostrar senha?" onClick={() => setViewC(!viewC)} />
 										</Col>
 										<Col>
 											<FloatingLabel label="Confirme sua senha" controlId="confirm-input">
-												<Form.Control type={viewC ? "text" : "password"} name="confirm" placeholder="*****" value={confirm} onChange={(e) => setConfirm(e.target.value)} required />
+												<Form.Control 
+													type={viewC ? "text" : "password"} 
+													name="confirm" 
+													placeholder="*****" 
+													value={confirm} 
+													onChange={(e) => setConfirm(e.target.value)} 
+													required 
+												/>
 												<Form.Control.Feedback type="invalid">Confirme sua senha</Form.Control.Feedback>
 											</FloatingLabel>
 										</Col>
@@ -319,7 +326,7 @@ const LandingPage = () => {
 
 
 								<div className="d-flex justify-content-center mt-3">
-									<Button className="w-50" type="submit">Criar!</Button>
+									<Button className="w-50" type="submit"><AccountIco className='me-2' size={28} />Criar Conta!</Button>
 								</div>
 							</fieldset>
 						</Row>
