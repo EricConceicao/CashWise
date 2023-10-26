@@ -1,4 +1,4 @@
-# CashWise
+# CashWise 
 
 Nosso projeto para o PI3. Consiste em uma plataforma web 
 que visa ensinar a educação financeira, e à ajudar no 
@@ -13,3 +13,6 @@ Faz a migração do schema para o dialeto do MYSQL
 ```
 npx prisma migrate dev --name init
 ```
+
+### Referência dos comandos
+`https://www.prisma.io/docs/guides/migrate/developing-with-prisma-migrate/troubleshooting-development`
