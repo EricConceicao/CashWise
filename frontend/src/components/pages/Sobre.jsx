@@ -2,8 +2,6 @@ import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
 import Content from '../layouts/Content';
 import Container from 'react-bootstrap/esm/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 
@@ -26,8 +24,9 @@ const Sobre = () => {
     return (
         <>
             <Header />
+            
             <main className="container-fluid" id='main' style={containerStyle}>
-                <Content>
+                <Content>                    
                     <Container className="p-0" id='text'>
                         <div className="jumbotron text-center" id='title' >
                             <h1 className="p-2">Sobre o CashWise</h1>
@@ -119,7 +118,6 @@ const Sobre = () => {
                     </Container>
                 </Content>
             </main>
-
             <Footer anchor="topo" />
         </>
     );
