@@ -26,10 +26,19 @@ const LandingPage = () => {
 	const [showSign, setShowSign] = useState(false);
 
 	const handleShowLogin = () => setShowLogin(true);
-	const handleCloseLogin = () => setShowLogin(false);
+	const handleCloseLogin = () => {
+    setShowLogin(false);
+    setFeedback('');
+    setValidated(false);
+  }
 
 	const handleShowSign = () => setShowSign(true);
-	const handleCloseSign = () => setShowSign(false);
+	const handleCloseSign = () => {
+    setShowSign(false);
+    setFeedback('');
+    setValidated(false);
+  }
+
 
 	// Isso faz com que quando você para o outro modal, o que você está feche
 	function signModal() {
@@ -45,21 +54,27 @@ const LandingPage = () => {
 	// Meus handlers para respostas no formulário //
 	const [feedback, setFeedback] = useState('');
 	const [success, setSuccess] = useState(true);
+  const [validated, setValidated] = useState(false);
 	// Valor do campo confirmar senha
 	const [confirm, setConfirm] = useState('');
+  
 
+  async function createUser(e) {
+    e.preventDefault();
 
-	async function createUser(e) {
-		e.preventDefault();
-		if (e.target.checkValidity() === false) return
-
-
+    if (e.target.checkValidity() === false) {
+      setValidated(true);
+      return
+    }
+    
 		if (e.target.password.value !== e.target.confirm.value) {
-			return (
-				setFeedback('Senhas diferentes. Confirme sua senha corretamente'),
-				setConfirm('')
-			)
+			setFeedback('Senhas diferentes. Confirme sua senha corretamente');
+			setConfirm('');
+      setSuccess(false);
+      return
+			
 		}
+    setValidated(true);
 
 		const userInput = {
 			name: e.target.name.value,
@@ -87,7 +102,14 @@ const LandingPage = () => {
 	}
 
 	async function login(e) {
-		e.preventDefault();
+    const form = e.currentTarget;
+    e.preventDefault();
+
+    if (form.checkValidity() === false) {
+      setValidated(true);
+      return
+    }
+    setValidated(true);
 
 		const userInput = {
 			email: e.target.email.value,
@@ -186,21 +208,34 @@ const LandingPage = () => {
 				</Modal.Header>
 
 				<Modal.Body>
-					<Form noValidate onSubmit={login}>
+					<Form noValidate validated={validated} onSubmit={login}>
 						<Row>
 							<fieldset>
 								<legend className="small text-center">Insira seu dados de login!</legend>
 								<span className="text-danger">{feedback}</span>
-								<Form.Group as={Col} className="my-4">
-									<FloatingLabel label="E-mail" controlId="email-input">
-										<Form.Control type="email" name="email" placeholder="zezinhoDoPneu@gmail.com" autoComplete="username" />
-									</FloatingLabel>
-									<Form.Switch className="my-2" label="Lembrar E-mail?" type="checkbox" name="lembrar" id="lembrar-email" />
-								</Form.Group>
 
-								<Form.Group as={Col} className="my-2">
-									<FloatingLabel label="Senha" controlId="password-input">
-										<Form.Control type="password" name="password" placeholder="*****" autoComplete="current-password" />
+								<Form.Group as={Col} className="my-4" controlId="email-input">
+									<FloatingLabel label="E-mail">
+										<Form.Control 
+                      type="email" 
+                      name="email"
+                      placeholder="zezinhoDoPneu@gmail.com" 
+                      autoComplete="username"
+                      required 
+                    />
+                    <Form.Control.Feedback type="invalid">Insira seu E-mail</Form.Control.Feedback>
+									</FloatingLabel>
+                 </Form.Group>
+
+								<Form.Group as={Col} className="my-2" controlId="password-input">
+									<FloatingLabel label="Senha" >
+										<Form.Control 
+                    type="password" 
+                    name="password" 
+                    placeholder="*****" 
+                    autoComplete="current-password"
+                    required 
+                    />
 										<Form.Control.Feedback>Preencha sua senha</Form.Control.Feedback>
 										<Form.Control.Feedback type='invalid'>Preencha sua senha</Form.Control.Feedback>
 									</FloatingLabel>
@@ -223,41 +258,46 @@ const LandingPage = () => {
 				</Modal.Header>
 
 				<Modal.Body>
-					<Form onSubmit={createUser}>
+					<Form noValidate validated={validated} onSubmit={createUser}>
 						<Row>
 							<fieldset>
 								<legend className="small text-center">Preencha todos os campos!</legend>
 								<span className={success ? "text-primary" : "text-danger"}>{feedback}</span>
 								<Form.Group as={Col} className="my-4">
 									<FloatingLabel label="Nome" controlId="name-input">
-										<Form.Control type="text" name="name" placeholder="Mister" />
-									</FloatingLabel>
-								</Form.Group>
+										<Form.Control type="text" name="name" placeholder="Mister" required />
+								    <Form.Control.Feedback type="invalid">Digite seu nome</Form.Control.Feedback>
+                  </FloatingLabel>
+                  </Form.Group>
 
 								<Form.Group as={Col} className="my-4">
 									<FloatingLabel label='Sobrenome' controlId="sname-input">
-										<Form.Control type="text" name="sname" placeholder="Senhor" />
-									</FloatingLabel>
-								</Form.Group>
+										<Form.Control type="text" name="sname" placeholder="Senhor" required />
+                    <Form.Control.Feedback type="invalid">Digite seu sobrenome</Form.Control.Feedback>
+								  </FloatingLabel>
+                </Form.Group>
 
 								<Form.Group as={Col} className="my-4">
 									<FloatingLabel label="E-mail" controlId="email-input">
-										<Form.Control type="email" name="email" placeholder="zezinhoDoPneu@gmail.com" />
-									</FloatingLabel>
+										<Form.Control type="email" name="email" placeholder="zezinhoDoPneu@gmail.com" required />
+                    <Form.Control.Feedback type="invalid">Insira seu E-mail</Form.Control.Feedback>
+                  </FloatingLabel>
 								</Form.Group>
 
 								<Form.Group as={Col} className="my-2">
 									<FloatingLabel label="Senha" controlId="password-input">
-										<Form.Control type="password" name="password" placeholder="*****" autoComplete="new-password" />
+										<Form.Control type="password" name="password" placeholder="*****" autoComplete="new-password" required />
+                    <Form.Control.Feedback type="invalid">Insira uma senha válida</Form.Control.Feedback>
 									</FloatingLabel>
-									<p className="small text-muted">Não compartilhe sua senha com ninguem. Shhh.</p>
+                  <p className="small text-muted">Não compartilhe sua senha com ninguem. Shhh.</p>
 								</Form.Group>
 
 								<Form.Group as={Col} className="my-2">
 									<FloatingLabel label="Confirme sua senha" controlId="confirm-input">
-										<Form.Control type="password" name="confirm" placeholder="*****" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
-									</FloatingLabel>
-								</Form.Group>
+								    <Form.Control type="password" name="confirm" placeholder="*****" value={confirm} onChange={(e) => setConfirm(e.target.value)} required />
+								    <Form.Control.Feedback type="invalid">Confirme sua senha</Form.Control.Feedback>
+                  </FloatingLabel>
+                 </Form.Group>
 
 								<div className="d-flex justify-content-center mt-3">
 									<Button className="w-50" type="submit">Criar!</Button>
