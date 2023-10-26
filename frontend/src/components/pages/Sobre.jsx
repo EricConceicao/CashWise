@@ -4,7 +4,6 @@ import Content from '../layouts/Content';
 import Container from 'react-bootstrap/esm/Container';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
-import Quiz from './quiz';
 
 const containerStyle = {
     backgroundImage: 'linear-gradient(to bottom, #213740, #5BD992, #AEF2C6)',
