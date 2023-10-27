@@ -24,17 +24,50 @@
 }
 
 .perfil {
+    gap: 20px;
+}
+
+.perfil1 {
     display: flex;
     flex-direction: column;
     align-items: center;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     padding: 30px 40px;
-    border-radius: 5px;
+    border-bottom: 4px solid #fff;
+    border-radius: 10px;
 }
 
-.perfil img {
+.perfil2 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 30px 40px;
+    border-bottom: 4px solid #fff;
+    border-radius: 10px;
+    
+}
+
+.perfil1 h1 {
+    text-align: center;
+}
+
+.perfil1 img {
     /*border: 5px solid #ffc107;*/
+}
+
+.moeda {
+    color: orange;
+    width: 25px;
+    height: 25px;
+}
+
+h3 {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .dados {
@@ -46,7 +79,7 @@
     width: 40px;
 }
 
-.perfil .botoes {
+.perfil1 .botoes {
     display: flex;
     gap: 10px;
     justify-self: end;
@@ -73,18 +106,13 @@
 }
 
 .cartao-perfil1 {
-    width: 350px;
     border-radius: 10px;
     display: flex;
-    justify-content: space-between;
     gap: 20px;
     padding: 10px;
     margin: 10px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #6eb8f5;   
-    border-bottom: 4px solid orange; 
-    color: #fff;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    color: #fff;    
 }
 
 .cartao-usuario img {

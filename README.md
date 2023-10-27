@@ -16,3 +16,39 @@ npx prisma migrate dev --name init
 
 ### Referência dos comandos
 `https://www.prisma.io/docs/guides/migrate/developing-with-prisma-migrate/troubleshooting-development`
+
+{/*
+
+                            <Row>
+                                <div className="cartoes">
+
+                                    <div className="cartao-perfil1">
+                                        <div className="item">
+                                            <h3 className=''>Nível</h3>
+                                            <span className='bg-secondary'>1</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="cartao-perfil1">
+                                        <div className="item">
+                                            <h3 className=''>Perfil</h3>
+                                            <span className='bg-secondary'>Investidor de alto risco</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="cartao-perfil1">
+                                        <div className="item">
+                                            <h3 className=''>WiseCoins <BsCoin /></h3>
+                                            <span className='bg-secondary'>1.700</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="cartao-perfil1">
+                                        <div className="item">
+                                            <h3 className=''>Experiência</h3>
+                                            <span className='bg-secondary'>Empresário</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Row>
+                            */
