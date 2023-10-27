@@ -70,15 +70,14 @@ const Home = () => {
                 <Content>
                     <Container fluid className="conteudo bg-secondary p-5">
 
+                        <h1>Meu perfil</h1>
+                        <div className='perfil'>
 
-                        <Row className='perfil'>
-                            <div className="perfil1 col">
-
-
+                            <div className="perfil1">
 
                                 <img className='mb-5' src="https://avatars.githubusercontent.com/u/4259630?v=4" alt="Foto de perfil" />
 
-                                <h1 className='mb-5'>Renan Cavichi</h1>
+                                <h1 className='mb-5 text-primary'><i>Renan Cavichi</i></h1>
 
 
                                 <div className="botoes">
@@ -89,39 +88,44 @@ const Home = () => {
 
                             </div>
 
-                            <div className="perfil2 col">
+                            <div className="perfil2">
                                 <div className="cartao-perfil1">
                                     <div className="item">
-                                        <h3 className=''><HiOutlineCake className='moeda'/> Idade</h3>
+                                        <h3 className=''>Idade</h3>
                                         <span className='bg-secondary'>30 anos</span>
                                     </div>
+                                    <HiOutlineCake className='moeda' />
                                 </div>
 
                                 <div className="cartao-perfil1">
                                     <div className="item">
-                                        <h3 className=''><MdOutlineEmojiPeople className='moeda'/> Perfil</h3>
+                                        <h3 className=''>Perfil</h3>
                                         <span className='bg-secondary'>Investidor de alto risco</span>
                                     </div>
+                                    <MdOutlineEmojiPeople className='moeda' />
                                 </div>
 
                                 <div className="cartao-perfil1">
                                     <div className="item">
-                                        <h3 className=''><BsCoin className='moeda'/> WiseCoins</h3>
+                                        <h3 className=''> WiseCoins</h3>
                                         <span className='bg-secondary'>1.700</span>
                                     </div>
+                                    <BsCoin className='moeda' />
                                 </div>
 
                                 <div className="cartao-perfil1">
                                     <div className="item">
-                                        <h3 className=''><BsStars className='moeda'/> Experiência</h3>
+                                        <h3 className=''>Experiência</h3>
                                         <span className='bg-secondary'>Empresário</span>
                                     </div>
+                                    <BsStars className='moeda' />
                                 </div>
 
                             </div>
 
-                        </Row>
-
+                        </div>
+                        <hr />
+                        <h1>Controle financeiro mensal</h1>
                         <Row>
 
 
@@ -268,14 +272,14 @@ const Home = () => {
 
                     </Container>
 
-                    <Container className='painel bg-light text-secondary m-5 p-5 border'>
+                    <div className='container bg-light text-secondary mt-5 mb-5 p-5 border'>
                         <h1>Agenda Financeira</h1>
                         <div className="row">
-                            <div className="col border">segunda</div>
-                            <div className="col border">terça</div>
-                            <div className="col border">quarta</div>
+                            <div className="linha col border">08/11/23</div>
+                            <div className="linha col border">terça</div>
+                            <div className="linha col border">quarta</div>
                         </div>
-                    </Container>
+                    </div>
 
                     <Container fluid className='controle bg-info p-5'>
                         <h1 className='m-5'>Minhas despesas</h1>
