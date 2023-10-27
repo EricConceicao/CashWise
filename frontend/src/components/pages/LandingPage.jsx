@@ -12,11 +12,15 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
+
+// Icones //
+import {BiLogIn as LoginIco} from 'react-icons/bi';
+import {FaArrowRight as ArrowIco} from 'react-icons/fa6';
+import {RiAccountBoxFill as AccountIco} from 'react-icons/ri';
 
 import './LandingPage.css';
 
@@ -26,10 +30,19 @@ const LandingPage = () => {
 	const [showSign, setShowSign] = useState(false);
 
 	const handleShowLogin = () => setShowLogin(true);
-	const handleCloseLogin = () => setShowLogin(false);
+	const handleCloseLogin = () => {
+		setShowLogin(false);
+		setFeedback('');
+		setValidated(false);
+	}
 
 	const handleShowSign = () => setShowSign(true);
-	const handleCloseSign = () => setShowSign(false);
+	const handleCloseSign = () => {
+		setShowSign(false);
+		setFeedback('');
+		setValidated(false);
+	}
+
 
 	// Isso faz com que quando você para o outro modal, o que você está feche
 	function signModal() {
@@ -45,21 +58,31 @@ const LandingPage = () => {
 	// Meus handlers para respostas no formulário //
 	const [feedback, setFeedback] = useState('');
 	const [success, setSuccess] = useState(true);
+	const [validated, setValidated] = useState(false);
 	// Valor do campo confirmar senha
 	const [confirm, setConfirm] = useState('');
-
+	// Alternar visibilidade das senhas //
+	// No login
+	const [viewL, setViewL] = useState(false);
+	// No Cadastro
+	const [viewC, setViewC] = useState(false);
 
 	async function createUser(e) {
 		e.preventDefault();
-		if (e.target.checkValidity() === false) return
 
+		if (e.target.checkValidity() === false) {
+			setValidated(true);
+			return
+		}
 
 		if (e.target.password.value !== e.target.confirm.value) {
-			return (
-				setFeedback('Senhas diferentes. Confirme sua senha corretamente'),
-				setConfirm('')
-			)
+			setFeedback('Senhas diferentes. Confirme sua senha corretamente');
+			setConfirm('');
+			setSuccess(false);
+			return
+
 		}
+		setValidated(true);
 
 		const userInput = {
 			name: e.target.name.value,
@@ -87,7 +110,14 @@ const LandingPage = () => {
 	}
 
 	async function login(e) {
+		const form = e.currentTarget;
 		e.preventDefault();
+
+		if (form.checkValidity() === false) {
+			setValidated(true);
+			return
+		}
+		setValidated(true);
 
 		const userInput = {
 			email: e.target.email.value,
@@ -121,7 +151,7 @@ const LandingPage = () => {
 							width="50%" />
 					</Navbar.Brand>
 
-					<Button onClick={handleShowLogin} variant="secondary" size="md">Entrar</Button>
+					<Button onClick={handleShowLogin} variant="secondary" size="md"><LoginIco className='me-2' size={28} /> Entrar</Button>
 
 				</Container>
 			</header>
@@ -186,30 +216,43 @@ const LandingPage = () => {
 				</Modal.Header>
 
 				<Modal.Body>
-					<Form noValidate onSubmit={login}>
+					<Form noValidate validated={validated} onSubmit={login}>
 						<Row>
 							<fieldset>
 								<legend className="small text-center">Insira seu dados de login!</legend>
 								<span className="text-danger">{feedback}</span>
-								<Form.Group as={Col} className="my-4">
-									<FloatingLabel label="E-mail" controlId="email-input">
-										<Form.Control type="email" name="email" placeholder="zezinhoDoPneu@gmail.com" autoComplete="username" />
+
+								<Form.Group as={Col} className="my-4" controlId="email-input">
+									<FloatingLabel label="E-mail">
+										<Form.Control
+											type="email"
+											name="email"
+											placeholder="zezinhoDoPneu@gmail.com"
+											autoComplete="username"
+											required
+										/>
+										<Form.Control.Feedback type="invalid">Insira seu E-mail</Form.Control.Feedback>
 									</FloatingLabel>
-									<Form.Switch className="my-2" label="Lembrar E-mail?" type="checkbox" name="lembrar" id="lembrar-email" />
 								</Form.Group>
 
-								<Form.Group as={Col} className="my-2">
-									<FloatingLabel label="Senha" controlId="password-input">
-										<Form.Control type="password" name="password" placeholder="*****" autoComplete="current-password" />
-										<Form.Control.Feedback>Preencha sua senha</Form.Control.Feedback>
+								<Form.Group as={Col} className="my-2" controlId="password-input">
+									<FloatingLabel label="Senha">
+										<Form.Control
+											type={viewL ? "text" : "password"}
+											name="password"
+											placeholder="***"
+											autoComplete="current-password"
+											required
+										/>
 										<Form.Control.Feedback type='invalid'>Preencha sua senha</Form.Control.Feedback>
 									</FloatingLabel>
-									<p className="small text-muted"><span className="fs-3">&#129323;</span>Não compartilhe sua senha com ninguem.</p>
+									<Form.Check className='mx-1' label="Mostrar senha?" onClick={() => setViewL(!viewL)} />
+									<Form.Text className="small text-muted"><span className="fs-3">&#129323;</span>Não compartilhe sua senha com ninguem.</Form.Text>
 								</Form.Group>
 
 								<div className="d-flex justify-content-between">
 									<Button className="text-decoration-underline" variant="outline-dark" onClick={signModal}>Não tem uma conta?</Button>
-									<Button type="submit">Acessar</Button>
+									<Button type="submit"><ArrowIco className='me-2' size={28} />Acessar</Button>
 								</div>
 							</fieldset>
 						</Row>
@@ -218,49 +261,72 @@ const LandingPage = () => {
 			</Modal>
 
 			<Modal show={showSign} onHide={handleCloseSign} centered>
-				<Modal.Header className="border-bottom border-secondary bg-primary" closeButton>
-					<Modal.Title>Se junte ao CashWise!</Modal.Title>
+				<Modal.Header className="border-bottom border-primary bg-primary" closeButton>
+					<Modal.Title className='text-center bg-primary'>Se junte ao CashWise!</Modal.Title>
 				</Modal.Header>
 
 				<Modal.Body>
-					<Form onSubmit={createUser}>
+					<Form noValidate validated={validated} onSubmit={createUser}>
 						<Row>
 							<fieldset>
 								<legend className="small text-center">Preencha todos os campos!</legend>
 								<span className={success ? "text-primary" : "text-danger"}>{feedback}</span>
 								<Form.Group as={Col} className="my-4">
 									<FloatingLabel label="Nome" controlId="name-input">
-										<Form.Control type="text" name="name" placeholder="Mister" />
+										<Form.Control type="text" name="name" placeholder="Mister" required />
+										<Form.Control.Feedback type="invalid">Digite seu nome</Form.Control.Feedback>
 									</FloatingLabel>
 								</Form.Group>
 
 								<Form.Group as={Col} className="my-4">
 									<FloatingLabel label='Sobrenome' controlId="sname-input">
-										<Form.Control type="text" name="sname" placeholder="Senhor" />
+										<Form.Control type="text" name="sname" placeholder="Senhor" required />
+										<Form.Control.Feedback type="invalid">Digite seu sobrenome</Form.Control.Feedback>
 									</FloatingLabel>
 								</Form.Group>
 
 								<Form.Group as={Col} className="my-4">
 									<FloatingLabel label="E-mail" controlId="email-input">
-										<Form.Control type="email" name="email" placeholder="zezinhoDoPneu@gmail.com" />
+										<Form.Control type="email" name="email" placeholder="zezinhoDoPneu@gmail.com" required />
+										<Form.Control.Feedback type="invalid">Insira seu E-mail</Form.Control.Feedback>
 									</FloatingLabel>
 								</Form.Group>
 
 								<Form.Group as={Col} className="my-2">
-									<FloatingLabel label="Senha" controlId="password-input">
-										<Form.Control type="password" name="password" placeholder="*****" autoComplete="new-password" />
-									</FloatingLabel>
-									<p className="small text-muted">Não compartilhe sua senha com ninguem. Shhh.</p>
+									<Row>
+										<Col>
+											<FloatingLabel label="Senha" controlId="password-input">
+												<Form.Control
+													type={viewC ? "text" : "password"}
+													name="password"
+													placeholder="*****"
+													autoComplete="new-password"
+													required
+												/>
+												<Form.Control.Feedback type="invalid">Insira uma senha válida</Form.Control.Feedback>
+											</FloatingLabel>
+											<Form.Check className='mx-1' label="Mostrar senha?" onClick={() => setViewC(!viewC)} />
+										</Col>
+										<Col>
+											<FloatingLabel label="Confirme sua senha" controlId="confirm-input">
+												<Form.Control 
+													type={viewC ? "text" : "password"} 
+													name="confirm" 
+													placeholder="*****" 
+													value={confirm} 
+													onChange={(e) => setConfirm(e.target.value)} 
+													required 
+												/>
+												<Form.Control.Feedback type="invalid">Confirme sua senha</Form.Control.Feedback>
+											</FloatingLabel>
+										</Col>
+										<Form.Text className="small text-muted"><span className="fs-3">&#129323;</span>Não compartilhe sua senha com ninguem. Shhh.</Form.Text>
+									</Row>
 								</Form.Group>
 
-								<Form.Group as={Col} className="my-2">
-									<FloatingLabel label="Confirme sua senha" controlId="confirm-input">
-										<Form.Control type="password" name="confirm" placeholder="*****" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
-									</FloatingLabel>
-								</Form.Group>
 
 								<div className="d-flex justify-content-center mt-3">
-									<Button className="w-50" type="submit">Criar!</Button>
+									<Button className="w-50" type="submit"><AccountIco className='me-2' size={28} />Criar Conta!</Button>
 								</div>
 							</fieldset>
 						</Row>

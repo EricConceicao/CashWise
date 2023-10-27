@@ -36,7 +36,9 @@ function Contato() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setValidated(true);
+    if (e.target.checkValidity() === false) {
+      return
+    }  
 
     const userInput = {
       name: e.target.name.value,
@@ -77,6 +79,7 @@ function Contato() {
               <fieldset>
                 <legend>Deixe um Feedback!</legend>
                 <span>{showMensagem}</span>
+                
                 <Form.Group className='p-1 my-3' controlId="validationCustom01">
                   <FloatingLabel label="Nome" controlId='form-name'>
                     <Form.Control
