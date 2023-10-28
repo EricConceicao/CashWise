@@ -15,7 +15,9 @@ import { BsCoin } from 'react-icons/bs';
 import { HiOutlineCake } from 'react-icons/hi';
 import { MdOutlineEmojiPeople } from 'react-icons/md';
 import { BsStars } from 'react-icons/bs';
-
+import { AiOutlineSchedule } from 'react-icons/ai';
+import { BsArrowUpLeft } from 'react-icons/bs'
+import { BsArrowDownRight } from 'react-icons/bs'
 
 const Home = () => {
 
@@ -272,13 +274,49 @@ const Home = () => {
 
                     </Container>
 
-                    <div className='container bg-light text-secondary mt-5 mb-5 p-5 border'>
-                        <h1>Agenda Financeira</h1>
-                        <div className="row">
-                            <div className="linha col border">08/11/23</div>
-                            <div className="linha col border">terça</div>
-                            <div className="linha col border">quarta</div>
+                    <div className='container painel bg-light text-secondary mt-5 mb-5 p-5 border'>
+                        <h1 className='mb-5'>Agenda Financeira <AiOutlineSchedule/></h1>
+
+                        <div className="row mb-4">
+                        <div className="col"></div>
+                            <div className="linha col mb-4">Data</div>
+                            <div className="linha col mb-4">Descrição</div>
+                            <div className="linha col mb-4">Ação</div>
+                            <div className="linha col mb-4">Valor</div>
+                            <div className="col mb-4"></div>
+                            
                         </div>
+
+                        <div className="row mb-5 pt-1 pb-1 border">
+                        <div className="col"><BsArrowUpLeft className='text-danger'/></div>
+                            <div className="col">08/11/23</div>
+                            <div className="col fw-bold">Financiamento</div>
+                            <div className="col">Pagar</div>
+                            <div className="col">R$ 1200,00</div>
+                            <div className="col excluir bg-danger text-light">Excluir</div>
+                            
+                        </div>
+
+                        <div className="row mb-5 pt-1 pb-1 border">
+                        <div className="col"><BsArrowDownRight className='text-primary'/></div>
+                            <div className="col">10/11/23</div>
+                            <div className="col fw-bold">Salário</div>
+                            <div className="col">Receber</div>
+                            <div className="col">R$ 5000,00</div>
+                            <div className="col excluir bg-danger text-light">Excluir</div>
+                            
+                        </div>
+
+                        <div className="row mb-5 pt-1 pb-1 border">
+                        <div className="col"><BsArrowUpLeft className='text-danger'/></div>
+                            <div className="col">11/11/23</div>
+                            <div className="col fw-bold">Cartão de crédito</div>
+                            <div className="col">Pagar</div>
+                            <div className="col">R$ 1200,00</div>
+                            <div className="col excluir bg-danger text-light">Excluir</div>
+                            
+                        </div>
+
                     </div>
 
                     <Container fluid className='controle bg-info p-5'>

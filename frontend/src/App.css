@@ -132,6 +132,11 @@ h3 {
     align-items: center;
 }
 
+.painel {
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
 .etiqueta {
     width: 250px;
     display: flex;
@@ -239,6 +244,26 @@ h1 {
 }
 
 .linha {
+    border-radius: 10px;
+    font-size: large;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    margin-right: 10px;
+}
+
+.linha-vermelha {
+    border-bottom: 2px solid red;
+    border-radius: 0px;
+    font-size: large;
+}
+
+.linha-verde {
+    border-bottom: 2px solid green;
+    border-radius: 0px;
+    font-size: large;
+}
+
+.excluir {
     border-radius: 10px;
 }
 
