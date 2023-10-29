@@ -5,22 +5,20 @@ import { useState } from 'react';
 import Header from '../layouts/Header';
 import Article from '../layouts/Article';
 import Footer from '../layouts/Footer';
+import LoginModal from '../layouts/LoginModal';
+import SignupModal from '../layouts/SignupModal';
 
 // Importações de componentes do BS //
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Modal from 'react-bootstrap/Modal';
 import Navbar from 'react-bootstrap/Navbar';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 // Icones //
 import {BiLogIn as LoginIco} from 'react-icons/bi';
-import {FaArrowRight as ArrowIco} from 'react-icons/fa6';
-import {RiAccountBoxFill as AccountIco} from 'react-icons/ri';
+
 
 import './LandingPage.css';
 
@@ -46,6 +44,7 @@ const LandingPage = () => {
 
 	// Isso faz com que quando você para o outro modal, o que você está feche
 	function signModal() {
+		console.log('ué', showSign, showLogin)
 		handleCloseLogin();
 		handleShowSign();
 	}
@@ -59,86 +58,7 @@ const LandingPage = () => {
 	const [feedback, setFeedback] = useState('');
 	const [success, setSuccess] = useState(true);
 	const [validated, setValidated] = useState(false);
-	// Valor do campo confirmar senha
-	const [confirm, setConfirm] = useState('');
-	// Alternar visibilidade das senhas //
-	// No login
-	const [viewL, setViewL] = useState(false);
-	// No Cadastro
-	const [viewC, setViewC] = useState(false);
-
-	async function createUser(e) {
-		e.preventDefault();
-
-		if (e.target.checkValidity() === false) {
-			setValidated(true);
-			return
-		}
-
-		if (e.target.password.value !== e.target.confirm.value) {
-			setFeedback('Senhas diferentes. Confirme sua senha corretamente');
-			setConfirm('');
-			setSuccess(false);
-			return
-
-		}
-		setValidated(true);
-
-		const userInput = {
-			name: e.target.name.value,
-			sname: e.target.sname.value,
-			email: e.target.email.value,
-			password: e.target.password.value,
-		}
-
-		const response = await fetch('http://localhost:3000/auth/signup', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(userInput),
-		});
-
-		if (response.ok) {
-			const data = await response.json();
-
-			setSuccess(data.success);
-			setFeedback(data.message);
-			loginModal();
-		}
-
-	}
-
-	async function login(e) {
-		const form = e.currentTarget;
-		e.preventDefault();
-
-		if (form.checkValidity() === false) {
-			setValidated(true);
-			return
-		}
-		setValidated(true);
-
-		const userInput = {
-			email: e.target.email.value,
-			password: e.target.password.value,
-		}
-
-		const response = await fetch('http://localhost:3000/auth/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(userInput),
-		});
-
-		if (response) {
-			const data = await response.json();
-			setSuccess(data.success);
-			setFeedback(data.message);
-		}
-	}
-
+	
 	return (
 		<>
 			<header className="position-sticky z-1 top-0 p-0 bg-primary">
@@ -210,129 +130,8 @@ const LandingPage = () => {
 				</Container>
 			</main>
 
-			<Modal show={showLogin} onHide={handleCloseLogin} centered>
-				<Modal.Header className="border-bottom border-secondary bg-primary" closeButton>
-					<Modal.Title>Bem-vindo!</Modal.Title>
-				</Modal.Header>
-
-				<Modal.Body>
-					<Form noValidate validated={validated} onSubmit={login}>
-						<Row>
-							<fieldset>
-								<legend className="small text-center">Insira seu dados de login!</legend>
-								<span className="text-danger">{feedback}</span>
-
-								<Form.Group as={Col} className="my-4" controlId="email-input">
-									<FloatingLabel label="E-mail">
-										<Form.Control
-											type="email"
-											name="email"
-											placeholder="zezinhoDoPneu@gmail.com"
-											autoComplete="username"
-											required
-										/>
-										<Form.Control.Feedback type="invalid">Insira seu E-mail</Form.Control.Feedback>
-									</FloatingLabel>
-								</Form.Group>
-
-								<Form.Group as={Col} className="my-2" controlId="password-input">
-									<FloatingLabel label="Senha">
-										<Form.Control
-											type={viewL ? "text" : "password"}
-											name="password"
-											placeholder="***"
-											autoComplete="current-password"
-											required
-										/>
-										<Form.Control.Feedback type='invalid'>Preencha sua senha</Form.Control.Feedback>
-									</FloatingLabel>
-									<Form.Check className='mx-1' label="Mostrar senha?" onClick={() => setViewL(!viewL)} />
-									<Form.Text className="small text-muted"><span className="fs-3">&#129323;</span>Não compartilhe sua senha com ninguem.</Form.Text>
-								</Form.Group>
-
-								<div className="d-flex justify-content-between">
-									<Button className="text-decoration-underline" variant="outline-dark" onClick={signModal}>Não tem uma conta?</Button>
-									<Button type="submit"><ArrowIco className='me-2' size={28} />Acessar</Button>
-								</div>
-							</fieldset>
-						</Row>
-					</Form>
-				</Modal.Body>
-			</Modal>
-
-			<Modal show={showSign} onHide={handleCloseSign} centered>
-				<Modal.Header className="border-bottom border-primary bg-primary" closeButton>
-					<Modal.Title className='text-center bg-primary'>Se junte ao CashWise!</Modal.Title>
-				</Modal.Header>
-
-				<Modal.Body>
-					<Form noValidate validated={validated} onSubmit={createUser}>
-						<Row>
-							<fieldset>
-								<legend className="small text-center">Preencha todos os campos!</legend>
-								<span className={success ? "text-primary" : "text-danger"}>{feedback}</span>
-								<Form.Group as={Col} className="my-4">
-									<FloatingLabel label="Nome" controlId="name-input">
-										<Form.Control type="text" name="name" placeholder="Mister" required />
-										<Form.Control.Feedback type="invalid">Digite seu nome</Form.Control.Feedback>
-									</FloatingLabel>
-								</Form.Group>
-
-								<Form.Group as={Col} className="my-4">
-									<FloatingLabel label='Sobrenome' controlId="sname-input">
-										<Form.Control type="text" name="sname" placeholder="Senhor" required />
-										<Form.Control.Feedback type="invalid">Digite seu sobrenome</Form.Control.Feedback>
-									</FloatingLabel>
-								</Form.Group>
-
-								<Form.Group as={Col} className="my-4">
-									<FloatingLabel label="E-mail" controlId="email-input">
-										<Form.Control type="email" name="email" placeholder="zezinhoDoPneu@gmail.com" required />
-										<Form.Control.Feedback type="invalid">Insira seu E-mail</Form.Control.Feedback>
-									</FloatingLabel>
-								</Form.Group>
-
-								<Form.Group as={Col} className="my-2">
-									<Row>
-										<Col>
-											<FloatingLabel label="Senha" controlId="password-input">
-												<Form.Control
-													type={viewC ? "text" : "password"}
-													name="password"
-													placeholder="*****"
-													autoComplete="new-password"
-													required
-												/>
-												<Form.Control.Feedback type="invalid">Insira uma senha válida</Form.Control.Feedback>
-											</FloatingLabel>
-											<Form.Check className='mx-1' label="Mostrar senha?" onClick={() => setViewC(!viewC)} />
-										</Col>
-										<Col>
-											<FloatingLabel label="Confirme sua senha" controlId="confirm-input">
-												<Form.Control 
-													type={viewC ? "text" : "password"} 
-													name="confirm" 
-													placeholder="*****" 
-													value={confirm} 
-													onChange={(e) => setConfirm(e.target.value)} 
-													required 
-												/>
-												<Form.Control.Feedback type="invalid">Confirme sua senha</Form.Control.Feedback>
-											</FloatingLabel>
-										</Col>
-										<Form.Text className="small text-muted"><span className="fs-3">&#129323;</span>Não compartilhe sua senha com ninguem. Shhh.</Form.Text>
-									</Row>
-								</Form.Group>
-
-
-								<div className="d-flex justify-content-center mt-3">
-									<Button className="w-50" type="submit"><AccountIco className='me-2' size={28} />Criar Conta!</Button>
-								</div>
-							</fieldset>
-						</Row>
-					</Form>
-				</Modal.Body>
-			</Modal>
+			<LoginModal changeModal={signModal} feedback={feedback} validated={validated} success={success} showLogin={showLogin} handleShowLogin={handleShowLogin} handleCloseLogin={handleCloseLogin}/>
+			<SignupModal feedback={feedback} validated={validated} success={success} showSign={showSign} handleShowSign={handleShowSign}  handleCloseSign={handleCloseSign} />
 
 			<Footer anchor="hero" />
 		</>
