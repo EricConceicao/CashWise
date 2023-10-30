@@ -143,44 +143,44 @@ const Home = () => {
                             </div>
 
 
-                            
-                                
-                                <Row>
-                                    <div className="cartao-perfil1">
-                                        <div className="item">
-                                            <h3 className=''>Idade</h3>
-                                            <span className='bg-secondary'>30 anos</span>
-                                        </div>
-                                        <HiOutlineCake className='moeda' />
-                                    </div>
 
-                                    <div className="cartao-perfil1">
-                                        <div className="item">
-                                            <h3 className=''>Perfil</h3>
-                                            <span className='bg-secondary'>Investidor de alto risco</span>
-                                        </div>
-                                        <MdOutlineEmojiPeople className='moeda' />
-                                    </div>
 
-                                    <div className="cartao-perfil1">
-                                        <div className="item">
-                                            <h3 className=''> WiseCoins</h3>
-                                            <span className='bg-secondary'>1.700</span>
-                                        </div>
-                                        <BsCoin className='moeda' />
+                            <Row>
+                                <div className="cartao-perfil1">
+                                    <div className="item">
+                                        <h3 className=''>Idade</h3>
+                                        <span className='bg-secondary'>30 anos</span>
                                     </div>
+                                    <HiOutlineCake className='moeda' />
+                                </div>
 
-                                    <div className="cartao-perfil1">
-                                        <div className="item">
-                                            <h3 className=''>Experiência</h3>
-                                            <span className='bg-secondary'>Empresário</span>
-                                        </div>
-                                        <BsStars className='moeda' />
+                                <div className="cartao-perfil1">
+                                    <div className="item">
+                                        <h3 className=''>Perfil</h3>
+                                        <span className='bg-secondary'>Investidor de alto risco</span>
                                     </div>
+                                    <MdOutlineEmojiPeople className='moeda' />
+                                </div>
 
-                                    </Row>
-                                
-                            
+                                <div className="cartao-perfil1">
+                                    <div className="item">
+                                        <h3 className=''> WiseCoins</h3>
+                                        <span className='bg-secondary'>1.700</span>
+                                    </div>
+                                    <BsCoin className='moeda' />
+                                </div>
+
+                                <div className="cartao-perfil1">
+                                    <div className="item">
+                                        <h3 className=''>Experiência</h3>
+                                        <span className='bg-secondary'>Empresário</span>
+                                    </div>
+                                    <BsStars className='moeda' />
+                                </div>
+
+                            </Row>
+
+
 
                         </div>
 
@@ -339,47 +339,53 @@ const Home = () => {
 
                     </Container>
 
-                    <div className='container painel bg-light text-secondary mt-5 mb-5 p-5 border'>
+                    <div className='container painel  text-secondary mt-5 mb-5 p-5'>
                         <h1 className='mb-5'>Agenda Financeira {/*<AiOutlineSchedule />*/}</h1>
 
-                        <div className="row mb-4">
-                            <div className="col"></div>
-                            <div className="linha col mb-4">Data</div>
-                            <div className="linha col mb-4">Descrição</div>
-                            <div className="linha col mb-4">Ação</div>
-                            <div className="linha col mb-4">Valor</div>
-                            <div className="col mb-4"></div>
+                        <div className="tabela p-4">
+                            <div className="titulo row mb-4">
+                                <div className="col"></div>
+                                <div className="linha col mb-4">Data</div>
+                                <div className="linha col mb-4">Descrição</div>
+                                <div className="linha col mb-4">Ação</div>
+                                <div className="linha col mb-4">Valor</div>
+                                <div className="linha col mb-4">Status</div>
+                                <div className="col mb-4"></div>
 
-                        </div>
+                            </div>
 
-                        <div className="row mb-5 pt-1 pb-1 border">
-                            <div className="col"><BsArrowUpLeft className='text-danger' /></div>
-                            <div className="col">08/11/23</div>
-                            <div className="col fw-bold">Financiamento</div>
-                            <div className="col">Pagar</div>
-                            <div className="col">R$ 1200,00</div>
-                            <div className="col excluir bg-danger text-light">Excluir</div>
+                            <div className="pagar row mb-5 pt-1 pb-1">
+                                <div className="col"><BsArrowUpLeft className='seta text-danger' /></div>
+                                <div className="col">08/11/23</div>
+                                <div className="col fw-bold"><i>Financiamento</i></div>
+                                <div className="col">Pagar</div>
+                                <div className="col">R$ 1200,00</div>
+                                <div className="col">Valor</div>
+                                <div className="col text-danger">Excluir</div>
 
-                        </div>
+                            </div>
 
-                        <div className="row mb-5 pt-1 pb-1 border">
-                            <div className="col"><BsArrowDownRight className='text-primary' /></div>
-                            <div className="col">10/11/23</div>
-                            <div className="col fw-bold">Salário</div>
-                            <div className="col">Receber</div>
-                            <div className="col">R$ 5000,00</div>
-                            <div className="col excluir bg-danger text-light">Excluir</div>
+                            <div className="receber row mb-5 pt-1 pb-1">
+                                <div className="col"><BsArrowDownRight className='seta text-primary' /></div>
+                                <div className="col">10/11/23</div>
+                                <div className="col fw-bold"><i>Salário</i></div>
+                                <div className="col">Receber</div>
+                                <div className="col">R$ 5000,00</div>
+                                <div className="col">Valor</div>
+                                <div className="col text-danger">Excluir</div>
 
-                        </div>
+                            </div>
 
-                        <div className="row mb-5 pt-1 pb-1 border">
-                            <div className="col"><BsArrowUpLeft className='text-danger' /></div>
-                            <div className="col">11/11/23</div>
-                            <div className="col fw-bold">Cartão de crédito</div>
-                            <div className="col">Pagar</div>
-                            <div className="col">R$ 1200,00</div>
-                            <div className="col excluir bg-danger text-light">Excluir</div>
+                            <div className="pagar row mb-5 pt-1 pb-1">
+                                <div className="col"><BsArrowUpLeft className='seta text-danger' /></div>
+                                <div className="col">11/11/23</div>
+                                <div className="col fw-bold"><i>Cartão de crédito</i></div>
+                                <div className="col">Pagar</div>
+                                <div className="col">R$ 1200,00</div>
+                                <div className="col">Valor</div>
+                                <div className="col text-danger">Excluir</div>
 
+                            </div>
                         </div>
 
                     </div>
