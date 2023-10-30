@@ -21,9 +21,61 @@ import { BsArrowDownRight } from 'react-icons/bs'
 
 const Home = () => {
 
+    // Obtenha a data atual
+    const currentDate = new Date();
+
+    // Mapeie o número do mês para o nome do mês
+    const months = [
+        'jan', 'fev', 'mar', 'abr', 'mai', 'jun',
+        'jul', 'ago', 'set', 'Out', 'nov', 'dez'
+    ];
+
+    const currentMonth = months[currentDate.getMonth()];
+
+    // Obtenha o ano atual
+    const currentYear = currentDate.getFullYear();
+
+    const [valorRecebido, setValorRecebido] = useState(0);
+    const [valorGasto, setValorGasto] = useState(0);
+
+    const saldoAtual = (valorRecebido - valorGasto).toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+    });
+
+    const Recebido = valorRecebido.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+    });
+
+    const Gasto = valorGasto.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+    });
+
+    const [showModal5, setShowModal5] = useState(false);
+
+    const handleValorRecebidoChange = (event) => {
+        setValorRecebido(parseFloat(event.target.value));
+    }
+
+    const handleAdicionarNovoValor = () => {
+        setValorRecebido(valorRecebido + novoValor); // Incrementa o valor recebido
+    };
+
+
+
+    const handleValorGastoChange = (event) => {
+        setValorGasto(parseFloat(event.target.value));
+    }
+
+    const [novoValor, setNovoValor] = useState(0);
+
+
     const [users, setUsers] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [showModal1, setShowModal1] = useState(false)
+
 
     useEffect(() => {
 
@@ -90,84 +142,84 @@ const Home = () => {
 
                             </div>
 
-                            <div className="perfil2">
-                                <div className="cartao-perfil1">
-                                    <div className="item">
-                                        <h3 className=''>Idade</h3>
-                                        <span className='bg-secondary'>30 anos</span>
-                                    </div>
-                                    <HiOutlineCake className='moeda' />
-                                </div>
 
-                                <div className="cartao-perfil1">
-                                    <div className="item">
-                                        <h3 className=''>Perfil</h3>
-                                        <span className='bg-secondary'>Investidor de alto risco</span>
+                            
+                                
+                                <Row>
+                                    <div className="cartao-perfil1">
+                                        <div className="item">
+                                            <h3 className=''>Idade</h3>
+                                            <span className='bg-secondary'>30 anos</span>
+                                        </div>
+                                        <HiOutlineCake className='moeda' />
                                     </div>
-                                    <MdOutlineEmojiPeople className='moeda' />
-                                </div>
 
-                                <div className="cartao-perfil1">
-                                    <div className="item">
-                                        <h3 className=''> WiseCoins</h3>
-                                        <span className='bg-secondary'>1.700</span>
+                                    <div className="cartao-perfil1">
+                                        <div className="item">
+                                            <h3 className=''>Perfil</h3>
+                                            <span className='bg-secondary'>Investidor de alto risco</span>
+                                        </div>
+                                        <MdOutlineEmojiPeople className='moeda' />
                                     </div>
-                                    <BsCoin className='moeda' />
-                                </div>
 
-                                <div className="cartao-perfil1">
-                                    <div className="item">
-                                        <h3 className=''>Experiência</h3>
-                                        <span className='bg-secondary'>Empresário</span>
+                                    <div className="cartao-perfil1">
+                                        <div className="item">
+                                            <h3 className=''> WiseCoins</h3>
+                                            <span className='bg-secondary'>1.700</span>
+                                        </div>
+                                        <BsCoin className='moeda' />
                                     </div>
-                                    <BsStars className='moeda' />
-                                </div>
 
-                            </div>
+                                    <div className="cartao-perfil1">
+                                        <div className="item">
+                                            <h3 className=''>Experiência</h3>
+                                            <span className='bg-secondary'>Empresário</span>
+                                        </div>
+                                        <BsStars className='moeda' />
+                                    </div>
+
+                                    </Row>
+                                
+                            
 
                         </div>
+
                         <hr />
+
                         <h1>Controle financeiro mensal</h1>
                         <Row>
-
-
 
                             <div className="cartao-perfil col">
                                 <div className='item'>
                                     <h3>Mês / Ano</h3>
-                                    <span className='bg-secondary'>dez / 2023</span>
+                                    <span className='bg-secondary'>{currentMonth} / {currentYear}</span>
                                 </div>
                             </div>
-
-
 
                             <div className="cartao-perfil col">
                                 <div className="item">
                                     <h3>Valor Recebido</h3>
-                                    <span className='bg-secondary'>R$</span>
+                                    <span className='bg-secondary'>{Recebido}</span>
                                 </div>
 
                                 <div className="botao">
-                                    <Button as="button" variant="outline-primary" onClick={() => setShowModal(true)}>Novo</Button>
+                                    <Button as="button" variant="outline-primary" onClick={() => setShowModal5(true)}>Novo</Button>
                                 </div>
 
                             </div>
 
-
                             <Modal
-                                show={showModal}
-                                onHide={() => setShowModal(false)}
-                                size="lg"
+                                show={showModal5}
+                                onHide={() => setShowModal5(false)}
+                                size="md"
                                 aria-labelledby="contained-modal-title-vcenter"
                                 centered
                             >
                                 <Modal.Header closeButton>
-                                    <Modal.Title id="contained-modal-title-vcenter">
-                                        Adicionar Ganho
-                                    </Modal.Title>
+                                    <Modal.Title id="contained-modal-title-vcenter">Adicionar Novo Valor</Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
-                                    <Form onSubmit={handleSubmit}>
+                                    <Form>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Descrição</Form.Label>
                                             <Form.Control type="text" name="name" />
@@ -190,22 +242,35 @@ const Home = () => {
                                             <Form.Label>Data</Form.Label>
                                             <Form.Control type="date" name="email" />
                                         </Form.Group>
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>Valor</Form.Label>
-                                            <Form.Control type="number" name="pass" />
+                                        <Form.Group>
+                                            <Form.Label>Valor a ser adicionado</Form.Label>
+                                            <div className="input-group">
+                                                <span className="input-group-text">R$</span>
+                                                <Form.Control
+                                                    type="number"
+                                                    step="0.01"  // Permita valores fracionados com duas casas decimais
+                                                    value={novoValor}
+                                                    onChange={(event) => setNovoValor(parseFloat(event.target.value))}
+                                                />
+                                            </div>
                                         </Form.Group>
-                                        <Button variant="primary" type="submit">Adicionar</Button>
                                     </Form>
                                 </Modal.Body>
                                 <Modal.Footer>
-                                    <Button onClick={() => setShowModal(false)}>Fechar</Button>
+                                    <Button as='button' variant="outline-secondary" onClick={handleAdicionarNovoValor}>
+                                        Adicionar
+                                    </Button>
+
+                                    <Button variant='outline-secondary' onClick={() => setShowModal5(false)}>Fechar</Button>
                                 </Modal.Footer>
                             </Modal>
+
+
 
                             <div className="cartao-perfil col">
                                 <div className="item">
                                     <h3>Valor Gasto</h3>
-                                    <span className='bg-secondary'>R$</span>
+                                    <span className='bg-secondary'>{Gasto}</span>
                                 </div>
 
                                 <div className="botao">
@@ -216,7 +281,7 @@ const Home = () => {
                             <Modal
                                 show={showModal1}
                                 onHide={() => setShowModal1(false)}
-                                size="lg"
+                                size="md"
                                 aria-labelledby="contained-modal-title-vcenter"
                                 centered
                             >
@@ -265,7 +330,7 @@ const Home = () => {
                             <div className="cartao-perfil col">
                                 <div className='item'>
                                     <h3>Saldo Atual</h3>
-                                    <span className='bg-secondary'>R$</span>
+                                    <span className='bg-secondary'>{saldoAtual}</span>
                                 </div>
                             </div>
 
@@ -275,46 +340,46 @@ const Home = () => {
                     </Container>
 
                     <div className='container painel bg-light text-secondary mt-5 mb-5 p-5 border'>
-                        <h1 className='mb-5'>Agenda Financeira <AiOutlineSchedule/></h1>
+                        <h1 className='mb-5'>Agenda Financeira {/*<AiOutlineSchedule />*/}</h1>
 
                         <div className="row mb-4">
-                        <div className="col"></div>
+                            <div className="col"></div>
                             <div className="linha col mb-4">Data</div>
                             <div className="linha col mb-4">Descrição</div>
                             <div className="linha col mb-4">Ação</div>
                             <div className="linha col mb-4">Valor</div>
                             <div className="col mb-4"></div>
-                            
+
                         </div>
 
                         <div className="row mb-5 pt-1 pb-1 border">
-                        <div className="col"><BsArrowUpLeft className='text-danger'/></div>
+                            <div className="col"><BsArrowUpLeft className='text-danger' /></div>
                             <div className="col">08/11/23</div>
                             <div className="col fw-bold">Financiamento</div>
                             <div className="col">Pagar</div>
                             <div className="col">R$ 1200,00</div>
                             <div className="col excluir bg-danger text-light">Excluir</div>
-                            
+
                         </div>
 
                         <div className="row mb-5 pt-1 pb-1 border">
-                        <div className="col"><BsArrowDownRight className='text-primary'/></div>
+                            <div className="col"><BsArrowDownRight className='text-primary' /></div>
                             <div className="col">10/11/23</div>
                             <div className="col fw-bold">Salário</div>
                             <div className="col">Receber</div>
                             <div className="col">R$ 5000,00</div>
                             <div className="col excluir bg-danger text-light">Excluir</div>
-                            
+
                         </div>
 
                         <div className="row mb-5 pt-1 pb-1 border">
-                        <div className="col"><BsArrowUpLeft className='text-danger'/></div>
+                            <div className="col"><BsArrowUpLeft className='text-danger' /></div>
                             <div className="col">11/11/23</div>
                             <div className="col fw-bold">Cartão de crédito</div>
                             <div className="col">Pagar</div>
                             <div className="col">R$ 1200,00</div>
                             <div className="col excluir bg-danger text-light">Excluir</div>
-                            
+
                         </div>
 
                     </div>
@@ -432,8 +497,8 @@ const Home = () => {
                         <h1>Meus investimentos</h1>
                     </Container>
 
-                </Content>
-            </div>
+                </Content >
+            </div >
             <Footer />
 
         </>
