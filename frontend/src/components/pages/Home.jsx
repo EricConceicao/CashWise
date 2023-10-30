@@ -21,10 +21,10 @@ import { BsArrowDownRight } from 'react-icons/bs'
 
 const Home = () => {
 
-    // Obtenha a data atual
+    // Obter a data atual
     const currentDate = new Date();
 
-    // Mapeie o número do mês para o nome do mês
+    // Mapear o número do mês para o nome do mês
     const months = [
         'jan', 'fev', 'mar', 'abr', 'mai', 'jun',
         'jul', 'ago', 'set', 'Out', 'nov', 'dez'
@@ -54,27 +54,33 @@ const Home = () => {
     });
 
     const [showModal5, setShowModal5] = useState(false);
+    const [showModal6, setShowModal6] = useState(false);
+    const [novoValor, setNovoValor] = useState(0);
+    const [novoValor1, setNovoValor1] = useState(0);
 
     const handleValorRecebidoChange = (event) => {
         setValorRecebido(parseFloat(event.target.value));
     }
 
-    const handleAdicionarNovoValor = () => {
+    const handleAdicionarNovoGanho = () => {
         setValorRecebido(valorRecebido + novoValor); // Incrementa o valor recebido
     };
-
-
 
     const handleValorGastoChange = (event) => {
         setValorGasto(parseFloat(event.target.value));
     }
 
-    const [novoValor, setNovoValor] = useState(0);
+    const handleAdicionarNovoGasto = () => {
+        setValorGasto(valorGasto + novoValor1); // Incrementa o valor recebido
+    };
+
+
 
 
     const [users, setUsers] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [showModal1, setShowModal1] = useState(false)
+    const [showModal2, setShowModal2] = useState(false)
 
 
     useEffect(() => {
@@ -124,7 +130,7 @@ const Home = () => {
                 <Content>
                     <Container fluid className="conteudo bg-secondary p-5">
 
-                        <h1>Meu perfil</h1>
+                        <h1 title='Consulte seu perfil'>Meu perfil</h1>
                         <div className='perfil'>
 
                             <div className="perfil1">
@@ -133,12 +139,76 @@ const Home = () => {
 
                                 <h1 className='mb-5 text-primary'><i>Renan Cavichi</i></h1>
 
-
                                 <div className="botoes">
-                                    <Button as="button" className="editar fw-bold" title='Editar perfil' variant="outline-primary" onClick={() => setShowModal(true)}><FiEdit />
+                                    
+
+                                    {/* Início do botão de Editar perfil */}
+                                    <Button as="button" className="editar fw-bold" title='Editar perfil' variant="outline-primary" onClick={() => setShowModal1(true)}><FiEdit />
                                     </Button>
-                                    <Button as="button" className='editar fw-bold' title='Avisos' variant="outline-danger" onClick={() => setShowModal(true)}><AiOutlineAlert className='alerta' /></Button>
+
+                                    <Modal
+                                        show={showModal1}
+                                        onHide={() => setShowModal1(false)}
+                                        size="md"
+                                        aria-labelledby="contained-modal-title-vcenter"
+                                        centered
+                                    >
+                                        <Modal.Header closeButton>
+                                            <Modal.Title id="contained-modal-title-vcenter">Editar perfil</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                            <Form>
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label>Nome</Form.Label>
+                                                    <Form.Control type="text" name="name" />
+                                                </Form.Group>
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label>Sobrenome</Form.Label>
+                                                    <Form.Control type="text" name="sname" />
+                                                </Form.Group>
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label>E-mail</Form.Label>
+                                                    <Form.Control type="text" name="email" />
+                                                </Form.Group>
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label>Data de nascimento</Form.Label>
+                                                    <Form.Control type="date" name="email" />
+                                                </Form.Group>
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label>Foto</Form.Label>
+                                                    <Form.Control type="file" name="foto" />
+                                                </Form.Group>
+                                            </Form>
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <Button as='button' variant="secondary" onClick={handleAdicionarNovoGanho}>
+                                                Salvar
+                                            </Button>
+                                        </Modal.Footer>
+                                    </Modal>
+                                    {/* Fim do botão de Editar perfil */}
+
+
+                                    {/* Início do botão de Alerta */}
+                                    <Button as="button" className='editar fw-bold' title='Avisos' variant="outline-danger" onClick={() => setShowModal2(true)}><AiOutlineAlert className='alerta' /></Button>
+
+                                    <Modal
+                                        show={showModal2}
+                                        onHide={() => setShowModal2(false)}
+                                        size="lg"
+                                        aria-labelledby="contained-modal-title-vcenter"
+                                        centered
+                                    >
+                                        <Modal.Header closeButton>
+                                            <Modal.Title id="contained-modal-title-vcenter">Avisos</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                        </Modal.Body>
+                                    </Modal>
+                                    {/* Fim do botão de Alerta */}
+
                                 </div>
+
 
                             </div>
 
@@ -216,7 +286,7 @@ const Home = () => {
                                 centered
                             >
                                 <Modal.Header closeButton>
-                                    <Modal.Title id="contained-modal-title-vcenter">Adicionar Novo Valor</Modal.Title>
+                                    <Modal.Title id="contained-modal-title-vcenter">Adicionar Novo Ganho</Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
                                     <Form>
@@ -257,11 +327,9 @@ const Home = () => {
                                     </Form>
                                 </Modal.Body>
                                 <Modal.Footer>
-                                    <Button as='button' variant="outline-secondary" onClick={handleAdicionarNovoValor}>
+                                    <Button as='button' variant="secondary" onClick={handleAdicionarNovoGanho}>
                                         Adicionar
                                     </Button>
-
-                                    <Button variant='outline-secondary' onClick={() => setShowModal5(false)}>Fechar</Button>
                                 </Modal.Footer>
                             </Modal>
 
@@ -274,24 +342,22 @@ const Home = () => {
                                 </div>
 
                                 <div className="botao">
-                                    <Button as="button" variant="outline-primary" onClick={() => setShowModal1(true)}>Novo</Button>
+                                    <Button as="button" variant="outline-primary" onClick={() => setShowModal6(true)}>Novo</Button>
                                 </div>
                             </div>
 
                             <Modal
-                                show={showModal1}
-                                onHide={() => setShowModal1(false)}
+                                show={showModal6}
+                                onHide={() => setShowModal6(false)}
                                 size="md"
                                 aria-labelledby="contained-modal-title-vcenter"
                                 centered
                             >
                                 <Modal.Header closeButton>
-                                    <Modal.Title id="contained-modal-title-vcenter">
-                                        Adicionar Gasto
-                                    </Modal.Title>
+                                    <Modal.Title id="contained-modal-title-vcenter">Adicionar Novo Gasto</Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
-                                    <Form onSubmit={handleSubmit}>
+                                    <Form>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Descrição</Form.Label>
                                             <Form.Control type="text" name="name" />
@@ -314,15 +380,24 @@ const Home = () => {
                                             <Form.Label>Data</Form.Label>
                                             <Form.Control type="date" name="email" />
                                         </Form.Group>
-                                        <Form.Group className="mb-3">
-                                            <Form.Label>Valor</Form.Label>
-                                            <Form.Control type="number" name="pass" />
+                                        <Form.Group>
+                                            <Form.Label>Valor a ser adicionado</Form.Label>
+                                            <div className="input-group">
+                                                <span className="input-group-text">R$</span>
+                                                <Form.Control
+                                                    type="number"
+                                                    step="0.01"  // Permita valores fracionados com duas casas decimais
+                                                    value={novoValor1}
+                                                    onChange={(event) => setNovoValor1(parseFloat(event.target.value))}
+                                                />
+                                            </div>
                                         </Form.Group>
-                                        <Button variant="danger" type="submit">Adicionar</Button>
                                     </Form>
                                 </Modal.Body>
                                 <Modal.Footer>
-                                    <Button onClick={() => setShowModal1(false)}>Fechar</Button>
+                                    <Button as='button' variant="secondary" onClick={handleAdicionarNovoGasto}>
+                                        Adicionar
+                                    </Button>
                                 </Modal.Footer>
                             </Modal>
 
