@@ -1,4 +1,5 @@
-import { useState } from 'react'; 
+import { useState, useEffect } from 'react'; 
+import { useNavigate } from 'react-router-dom';
 
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
@@ -7,21 +8,36 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
+import userStore from '../store/UserStore';
+
 import {FaArrowRight as ArrowIco} from 'react-icons/fa6';
 
-function LoginModal({ changeModal, feedback, validated, success, showLogin, handleShowLogin, handleCloseLogin }) {
+function LoginModal({ changeModal, showLogin, handleShowLogin, handleCloseLogin }) {
+	const userLogin = userStore(state => state.login);
 
+	const navigate = useNavigate();
 	const [view, setView] = useState(false);
+	const [feedback, setFeedback] = useState('');
+
+	const [email, setEmail] = useState('');
+	const [validEmail, setValidEmail] = useState(null); 
+
+	const [pass, setPass] = useState('');
+	const [validPass, setValidPass] = useState(null);
+
+	const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+	const PASS_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+
+	useEffect(() => {
+		setValidEmail(EMAIL_REGEX.test(email));
+	}, [email]);
+
+	useEffect(() => {
+		setValidPass(PASS_REGEX.test(pass));
+	}, [pass]);
 
 	async function login(e) {
-		const form = e.currentTarget;
 		e.preventDefault();
-
-		if (form.checkValidity() === false) {
-			setValidated(true);
-			return
-		}
-		setValidated(true);
 
 		const userInput = {
 			email: e.target.email.value,
@@ -38,8 +54,14 @@ function LoginModal({ changeModal, feedback, validated, success, showLogin, hand
 
 		if (response) {
 			const data = await response.json();
-			setSuccess(data.success);
 			setFeedback(data.message);
+
+			if (data.success) {
+				setFeedback(data.message);
+				console.log(data.user)
+				userLogin(data.user);
+				navigate('/home');
+			}
 		}
 	}
 
@@ -50,7 +72,7 @@ function LoginModal({ changeModal, feedback, validated, success, showLogin, hand
 			</Modal.Header>
 
 			<Modal.Body>
-				<Form noValidate validated={validated} onSubmit={login}>
+				<Form noValidate onSubmit={login}>
 					<Row>
 						<fieldset>
 							<legend className="small text-center">Insira seu dados de login!</legend>
@@ -62,6 +84,9 @@ function LoginModal({ changeModal, feedback, validated, success, showLogin, hand
 										type="email"
 										name="email"
 										placeholder="zezinhoDoPneu@gmail.com"
+										value={email}
+										onChange={(e) => setEmail(e.target.value)}
+										isValid={validEmail && email}
 										autoComplete="username"
 										required
 									/>
@@ -75,6 +100,9 @@ function LoginModal({ changeModal, feedback, validated, success, showLogin, hand
 										type={view ? "text" : "password"}
 										name="password"
 										placeholder="***"
+										value={pass}
+										onChange={(e) => setPass(e.target.value)}
+										isValid={validPass && pass}
 										autoComplete="current-password"
 										required
 									/>

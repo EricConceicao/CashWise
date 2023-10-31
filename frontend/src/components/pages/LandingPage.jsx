@@ -30,21 +30,14 @@ const LandingPage = () => {
 	const handleShowLogin = () => setShowLogin(true);
 	const handleCloseLogin = () => {
 		setShowLogin(false);
-		setFeedback('');
-		setValidated(false);
 	}
 
 	const handleShowSign = () => setShowSign(true);
 	const handleCloseSign = () => {
 		setShowSign(false);
-		setFeedback('');
-		setValidated(false);
 	}
 
-
-	// Isso faz com que quando você para o outro modal, o que você está feche
 	function signModal() {
-		console.log('ué', showSign, showLogin)
 		handleCloseLogin();
 		handleShowSign();
 	}
@@ -53,11 +46,6 @@ const LandingPage = () => {
 		handleCloseSign();
 		handleShowLogin();
 	}
-
-	// Meus handlers para respostas no formulário //
-	const [feedback, setFeedback] = useState('');
-	const [success, setSuccess] = useState(true);
-	const [validated, setValidated] = useState(false);
 	
 	return (
 		<>
@@ -130,8 +118,8 @@ const LandingPage = () => {
 				</Container>
 			</main>
 
-			<LoginModal changeModal={signModal} feedback={feedback} validated={validated} success={success} showLogin={showLogin} handleShowLogin={handleShowLogin} handleCloseLogin={handleCloseLogin}/>
-			<SignupModal feedback={feedback} validated={validated} success={success} showSign={showSign} handleShowSign={handleShowSign}  handleCloseSign={handleCloseSign} />
+			<LoginModal changeModal={signModal} showLogin={showLogin} handleShowLogin={handleShowLogin} handleCloseLogin={handleCloseLogin}/>
+			<SignupModal loginModal={loginModal} showSign={showSign} handleShowSign={handleShowSign}  handleCloseSign={handleCloseSign} />
 
 			<Footer anchor="hero" />
 		</>

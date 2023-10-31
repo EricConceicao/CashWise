@@ -8,11 +8,12 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 
-import {RiAccountBoxFill as AccountIco} from 'react-icons/ri';
+import { RiAccountBoxFill as AccountIco } from 'react-icons/ri';
 
-function SignupModal({ feedback, validated, success, showSign, handleShowSign, handleCloseSign }) {
+function SignupModal({ loginModal, showSign, handleShowSign, handleCloseSign }) {
 
 	const [view, setView] = useState(false);
+	const [feedback, setFeedback] = useState('');
 
 	// Hooks para validação //
 	const [name, setName] = useState('');
@@ -50,31 +51,12 @@ function SignupModal({ feedback, validated, success, showSign, handleShowSign, h
 
 	useEffect(() => {
 		setValidPass(PASS_REGEX.test(pass));
-
 		setValidMatch(pass === match && pass);
-		console.log(pass);
-		console.log(match)
-		console.log(validPass);
-		console.log(validMatch)
 	}, [pass, match]);
 
 
 	async function createUser(e) {
 		e.preventDefault();
-
-		if (e.target.checkValidity() === false) {
-			setValidated(true);
-			return
-		}
-
-		if (e.target.password.value !== e.target.confirm.value) {
-			setFeedback('Senhas diferentes. Confirme sua senha corretamente');
-			setConfirm('');
-			setSuccess(false);
-			return
-
-		}
-		setValidated(true);
 
 		const userInput = {
 			name: e.target.name.value,
@@ -93,10 +75,14 @@ function SignupModal({ feedback, validated, success, showSign, handleShowSign, h
 
 		if (response.ok) {
 			const data = await response.json();
-
-			setSuccess(data.success);
 			setFeedback(data.message);
 			loginModal();
+			return
+
+		} else if (response) {
+			const data = await response.json();
+			setFeedback(data.message);
+			return
 		}
 	}
 	
@@ -107,11 +93,11 @@ function SignupModal({ feedback, validated, success, showSign, handleShowSign, h
 			</Modal.Header>
 
 			<Modal.Body>
-				<Form noValidate validated={validated} onSubmit={createUser}>
+				<Form noValidate onSubmit={createUser}>
 					<Row>
 						<fieldset>
 							<legend className="small text-center">Preencha todos os campos!</legend>
-							<span className={success ? "text-primary" : "text-danger"}>{feedback}</span>
+							<span className="text-danger">{feedback}</span>
 							<Form.Group as={Col} className="my-4">
 								<FloatingLabel label="Nome" controlId="name-input">
 									<Form.Control 
