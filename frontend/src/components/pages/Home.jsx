@@ -74,6 +74,41 @@ const Home = () => {
         setValorGasto(valorGasto + novoValor1); // Incrementa o valor recebido
     };
 
+    const [showModal7, setShowModal7] = useState(false);
+
+    const [categorias, setCategorias] = useState([
+        "Alimentação",
+        "Saúde",
+        "Lazer",
+        "Impostos",
+        "Investimentos",
+        "Previdência",
+        "Compras",
+        "Contas",
+        "Financiamento",
+        "Aluguel",
+        "Seguro"]);
+
+    const adicionarCategoria = (novaCategoria) => {
+        setCategorias([...categorias, novaCategoria]);
+    };
+
+    const [novaCategoria, setNovaCategoria] = useState('');
+
+    const handleAdicionarNovaCategoria = () => {
+        if (novaCategoria) {
+            adicionarCategoria(novaCategoria);
+            setShowModal7(false); // Fechar o modal após adicionar a categoria
+            setNovaCategoria(''); // Limpar o campo de entrada
+        }
+    };
+
+    const handleExcluirCategoria = (index) => {
+        const novasCategorias = [...categorias];
+        novasCategorias.splice(index, 1);
+        setCategorias(novasCategorias);
+    };
+
 
 
 
@@ -140,7 +175,7 @@ const Home = () => {
                                 <h1 className='mb-5 text-primary'><i>Renan Cavichi</i></h1>
 
                                 <div className="botoes">
-                                    
+
 
                                     {/* Início do botão de Editar perfil */}
                                     <Button as="button" className="editar fw-bold" title='Editar perfil' variant="outline-primary" onClick={() => setShowModal1(true)}><FiEdit />
@@ -414,11 +449,48 @@ const Home = () => {
 
                     </Container>
 
-                    <div className='container painel  text-secondary mt-5 mb-5 p-5'>
+                    <div className='container painel text-secondary mt-5 mb-5 p-5'>
                         <h1 className='mb-5'>Agenda Financeira {/*<AiOutlineSchedule />*/}</h1>
 
+                        <Button as="button" variant="primary" onClick={() => setShowModal7(true)}>Nova despesa</Button>
+                        <Modal
+                            show={showModal7}
+                            onHide={() => setShowModal7(false)}
+                            size="md"
+                            aria-labelledby="contained-modal-title-vcenter"
+                            centered
+                        >
+                            <Modal.Header closeButton>
+                                <Modal.Title id="contained-modal-title-vcenter">Nova despesa</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <Form>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Escolher uma categoria ou adicionar uma nova</Form.Label>
+                                        <Form.Control as="select" name="categoria" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)}>
+                                            <option value="">Escolha uma categoria</option>
+                                            {categorias.map((categoria, index) => (
+                                                <option key={index} value={categoria}>
+                                                    {categoria}
+                                                </option>
+                                            ))}
+                                        </Form.Control>
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Ou adicione uma nova categoria</Form.Label>
+                                        <Form.Control type="text" name="novaCategoria" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)} />
+                                    </Form.Group>
+                                </Form>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button as='button' variant="secondary" onClick={handleAdicionarNovaCategoria}>
+                                    Criar
+                                </Button>
+                            </Modal.Footer>
+                        </Modal>
+
                         <div className="tabela p-4">
-                            <div className="titulo row mb-4">
+                            <div className="titulo row mb-5">
                                 <div className="col"></div>
                                 <div className="linha col mb-4">Data</div>
                                 <div className="linha col mb-4">Descrição</div>
@@ -465,112 +537,25 @@ const Home = () => {
 
                     </div>
 
-                    <Container fluid className='controle bg-info p-5'>
-                        <h1 className='m-5'>Minhas despesas</h1>
-                        <div className='row'>
-                            <div className='etiqueta vermelha text-dark'>
-                                <div className="gasto">
-                                    <p className='fw-bold fs-5'>Alimentos</p>
-                                    <p>R$</p>
-                                    <hr />
-                                </div>
-                                <span>Detalhar</span>
-                            </div>
-                            <div className='etiqueta laranja text-dark'>
-                                <div className="gasto">
-                                    <p className='fw-bold fs-5'>Sáude</p>
-                                    <p>R$</p>
-                                    <hr />
-                                </div>
-                                <span>Detalhar</span>
-                            </div>
-                            <div className='etiqueta amarela text-dark'>
-                                <div className="gasto">
-                                    <p className='fw-bold fs-5'>Lazer</p>
-                                    <p>R$</p>
-                                    <hr />
-                                </div>
-                                <span>Detalhar</span>
-                            </div>
-                            <div className='etiqueta verde text-dark'>
-                                <div className="gasto">
-                                    <p className='fw-bold fs-5'>Impostos</p>
-                                    <p>R$</p>
-                                    <hr />
-                                </div>
-                                <span>Detalhar</span>
-                            </div>
-                        </div>
+                    <Container className='controle p-5 mb-5'>
+                        <h1 className='m-5'>Minhas despesas</h1>                        
 
-                        <div className='row'>
-                            <div className='etiqueta azul text-dark'>
-                                <div className="gasto">
-                                    <p className='fw-bold fs-5'>Investimentos</p>
-                                    <p>R$</p>
-                                    <hr />
+                        <Row md={4}>
+                            {categorias.map((categoria, index) => (
+                                <div className={`etiqueta text-dark col-md-3`} key={index}>
+                                    <div className="gasto">
+                                        <p className="fw-bold fs-5">{categoria}</p>
+                                        <p>R$</p>
+                                        <hr />
+                                    </div>
+                                    <div className="botoes">
+                                        <Button as='button' size='sm' variant='primary' className='botao'>Detalhar</Button>
+                                        <Button as='button' size='sm' variant='secondary' className='botao' onClick={() => handleExcluirCategoria(index)}>Excluir</Button>
+                                        </div>
                                 </div>
-                                <span>Detalhar</span>
-                            </div>
-                            <div className='etiqueta violeta text-dark'>
-                                <div className="gasto">
-                                    <p className='fw-bold fs-5'>Previdência</p>
-                                    <p>R$</p>
-                                    <hr />
-                                </div>
-                                <span>Detalhar</span>
-                            </div>
-                            <div className='etiqueta rosa text-dark'>
-                                <div className="gasto">
-                                    <p className='fw-bold fs-5'>Compras</p>
-                                    <p>R$</p>
-                                    <hr />
-                                </div>
-                                <span>Detalhar</span>
-                            </div>
-                            <div className='etiqueta marron text-dark'>
-                                <div className="gasto">
-                                    <p className='fw-bold fs-5'>Contas</p>
-                                    <p>R$</p>
-                                    <hr />
-                                </div>
-                                <span>Detalhar</span>
-                            </div>
-                        </div>
-
-                        <div className='row'>
-                            <div className='etiqueta cinza text-dark'>
-                                <div className="gasto">
-                                    <p className='fw-bold fs-5'>Financiamento</p>
-                                    <p>R$</p>
-                                    <hr />
-                                </div>
-                                <span>Detalhar</span>
-                            </div>
-                            <div className='etiqueta prata text-dark'>
-                                <div className="gasto">
-                                    <p className='fw-bold fs-5'>Aluguel</p>
-                                    <p>R$</p>
-                                    <hr />
-                                </div>
-                                <span>Detalhar</span>
-                            </div>
-                            <div className='etiqueta ouro text-dark'>
-                                <div className="gasto">
-                                    <p className='fw-bold fs-5'>Seguro</p>
-                                    <p>R$</p>
-                                    <hr />
-                                </div>
-                                <span>Detalhar</span>
-                            </div>
-                            <div className='etiqueta ciano text-dark'>
-                                <div className="gasto">
-                                    <p className='fw-bold fs-5'>Outros gastos</p>
-                                    <p>R$</p>
-                                    <hr />
-                                </div>
-                                <span>Detalhar</span>
-                            </div>
-                        </div>
+                                
+                            ))}
+                        </Row>
 
                     </Container>
 
