@@ -63,16 +63,52 @@ const Home = () => {
     }
 
     const handleAdicionarNovoGanho = () => {
-        setValorRecebido(valorRecebido + novoValor); // Incrementa o valor recebido
+        if (selectedCategoria) {
+            // Adicione o novo ganho com a selectedCategoria
+            // Você pode usar a selectedCategoria para categorizar o ganho.
+            // Exemplo: setValorRecebido(valorRecebido + novoValor, selectedCategoria);
+            setValorRecebido(valorRecebido + novoValor);
+
+            showConfirmationMessage("Novo ganho adicionado com sucesso!");
+        }
+        
     };
+
 
     const handleValorGastoChange = (event) => {
         setValorGasto(parseFloat(event.target.value));
     }
 
     const handleAdicionarNovoGasto = () => {
-        setValorGasto(valorGasto + novoValor1); // Incrementa o valor recebido
+        if (selectedCategoria) {
+            // Adicione o novo gasto com a categoria correspondente
+            const novoGasto = {
+                descricao: "Descrição do gasto", // Substitua pela descrição real do gasto
+                valor: novoValor1,
+            };
+
+            // Crie uma cópia do objeto gastosPorCategoria
+            const novosGastosPorCategoria = { ...gastosPorCategoria };
+
+            // Verifique se já existe um array de gastos para a categoria
+            if (!novosGastosPorCategoria[selectedCategoria]) {
+                novosGastosPorCategoria[selectedCategoria] = [];
+            }
+
+            // Adicione o novo gasto ao array de gastos da categoria
+            novosGastosPorCategoria[selectedCategoria].push(novoGasto);
+
+            // Atualize o estado com os novos gastos por categoria
+            setGastosPorCategoria(novosGastosPorCategoria);
+
+            // Atualize o valor total de gastos (opcional)
+            setValorGasto(valorGasto + novoValor1);
+
+            showConfirmationMessage("Novo gasto adicionado com sucesso!");
+        }
     };
+
+
 
     const [showModal7, setShowModal7] = useState(false);
 
@@ -98,7 +134,7 @@ const Home = () => {
     const handleAdicionarNovaCategoria = () => {
         if (novaCategoria) {
             adicionarCategoria(novaCategoria);
-            setShowModal7(false); // Fechar o modal após adicionar a categoria
+            showConfirmationMessage("Nova categoria criada com sucesso!");
             setNovaCategoria(''); // Limpar o campo de entrada
         }
     };
@@ -108,6 +144,27 @@ const Home = () => {
         novasCategorias.splice(index, 1);
         setCategorias(novasCategorias);
     };
+
+    const [selectedCategoria, setSelectedCategoria] = useState("");
+
+    const [gastosPorCategoria, setGastosPorCategoria] = useState({});
+
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [confirmationMessage, setConfirmationMessage] = useState("");
+
+    const showConfirmationMessage = (message) => {
+        setConfirmationMessage(message);
+        setShowConfirmation(true);
+
+        // Defina um temporizador para ocultar a mensagem após alguns segundos (opcional)
+        setTimeout(() => {
+            setShowConfirmation(false);
+        }, 3000); // A mensagem será ocultada após 3 segundos
+    };
+
+
+
+
 
 
 
@@ -331,18 +388,20 @@ const Home = () => {
                                         </Form.Group>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Categoria</Form.Label>
-                                            <Form.Select name="categoria">
-                                                <option value="selecione">Selecione</option>
-                                                <option value="alimentacao">Alimentação</option>
-                                                <option value="saude">Saúde</option>
-                                                <option value="lazer">Lazer</option>
-                                                <option value="impostos">Impostos</option>
-                                                <option value="investimentos">Investimentos</option>
-                                                <option value="previdencia">Previdência</option>
-                                                <option value="compras">Compras</option>
-                                                <option value="contas">Contas</option>
+                                            <Form.Select
+                                                name="categoria"
+                                                value={selectedCategoria}
+                                                onChange={(e) => setSelectedCategoria(e.target.value)}
+                                            >
+                                                <option value="">Selecione</option>
+                                                {categorias.map((categoria, index) => (
+                                                    <option key={index} value={categoria}>
+                                                        {categoria}
+                                                    </option>
+                                                ))}
                                             </Form.Select>
                                         </Form.Group>
+
                                         <Form.Group className="mb-3">
                                             <Form.Label>Data</Form.Label>
                                             <Form.Control type="date" name="email" />
@@ -366,6 +425,11 @@ const Home = () => {
                                         Adicionar
                                     </Button>
                                 </Modal.Footer>
+                                {showConfirmation && (
+                                    <div className="alert alert-success alert-custom" role="alert">
+                                        {confirmationMessage}
+                                    </div>
+                                )}
                             </Modal>
 
 
@@ -399,18 +463,20 @@ const Home = () => {
                                         </Form.Group>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Categoria</Form.Label>
-                                            <Form.Select name="categoria">
-                                                <option value="selecione">Selecione</option>
-                                                <option value="alimentacao">Alimentação</option>
-                                                <option value="saude">Saúde</option>
-                                                <option value="lazer">Lazer</option>
-                                                <option value="impostos">Impostos</option>
-                                                <option value="investimentos">Investimentos</option>
-                                                <option value="previdencia">Previdência</option>
-                                                <option value="compras">Compras</option>
-                                                <option value="contas">Contas</option>
+                                            <Form.Select
+                                                name="categoria"
+                                                value={selectedCategoria}
+                                                onChange={(e) => setSelectedCategoria(e.target.value)}
+                                            >
+                                                <option value="">Selecione</option>
+                                                {categorias.map((categoria, index) => (
+                                                    <option key={index} value={categoria}>
+                                                        {categoria}
+                                                    </option>
+                                                ))}
                                             </Form.Select>
                                         </Form.Group>
+
                                         <Form.Group className="mb-3">
                                             <Form.Label>Data</Form.Label>
                                             <Form.Control type="date" name="email" />
@@ -434,6 +500,11 @@ const Home = () => {
                                         Adicionar
                                     </Button>
                                 </Modal.Footer>
+                                {showConfirmation && (
+                                    <div className="alert alert-danger alert-custom" role="alert">
+                                        {confirmationMessage}
+                                    </div>
+                                )}
                             </Modal>
 
 
@@ -452,7 +523,7 @@ const Home = () => {
                     <div className='container painel text-secondary mt-5 mb-5 p-5'>
                         <h1 className='mb-5'>Agenda Financeira {/*<AiOutlineSchedule />*/}</h1>
 
-                        <Button as="button" variant="primary" onClick={() => setShowModal7(true)}>Nova despesa</Button>
+                        <Button as="button" variant="primary" onClick={() => setShowModal7(true)}>Criar uma nova categoria</Button>
                         <Modal
                             show={showModal7}
                             onHide={() => setShowModal7(false)}
@@ -461,7 +532,7 @@ const Home = () => {
                             centered
                         >
                             <Modal.Header closeButton>
-                                <Modal.Title id="contained-modal-title-vcenter">Nova despesa</Modal.Title>
+                                <Modal.Title id="contained-modal-title-vcenter">Nova categoria</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 <Form>
@@ -487,6 +558,11 @@ const Home = () => {
                                     Criar
                                 </Button>
                             </Modal.Footer>
+                            {showConfirmation && (
+                                    <div className="alert alert-danger alert-custom" role="alert">
+                                        {confirmationMessage}
+                                    </div>
+                                )}
                         </Modal>
 
                         <div className="tabela p-4">
@@ -538,22 +614,34 @@ const Home = () => {
                     </div>
 
                     <Container className='controle p-5 mb-5'>
-                        <h1 className='m-5'>Minhas despesas</h1>                        
+                        <h1 className='m-5'>Minhas despesas</h1>
 
                         <Row md={4}>
                             {categorias.map((categoria, index) => (
                                 <div className={`etiqueta text-dark col-md-3`} key={index}>
                                     <div className="gasto">
                                         <p className="fw-bold fs-5">{categoria}</p>
-                                        <p>R$</p>
+                                        <p>
+                                            {" "}
+                                            {gastosPorCategoria[categoria]
+                                                ? gastosPorCategoria[categoria].reduce(
+                                                    (total, gasto) => total + gasto.valor,
+                                                    0
+                                                ).toLocaleString('pt-BR', {
+                                                    style: 'currency',
+                                                    currency: 'BRL'
+                                                })
+                                                : 0}
+                                        </p>
+
                                         <hr />
                                     </div>
                                     <div className="botoes">
                                         <Button as='button' size='sm' variant='primary' className='botao'>Detalhar</Button>
                                         <Button as='button' size='sm' variant='secondary' className='botao' onClick={() => handleExcluirCategoria(index)}>Excluir</Button>
-                                        </div>
+                                    </div>
                                 </div>
-                                
+
                             ))}
                         </Row>
 

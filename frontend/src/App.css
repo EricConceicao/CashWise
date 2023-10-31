@@ -289,4 +289,13 @@ h1 {
     
 }
 
+.alert-custom {
+    font-size: 16px;
+    width: 350px;
+    margin-left: 20px;
+    margin-top: 20px;
+    padding: 5px 10px 5px 20px;
+    text-align: center;
+}
+
 /* Fim para estilo da Home */
