@@ -16,7 +16,7 @@ const Footer = ({ anchor }) => {
                     <NavLink className="nav-link text-info" to="/contato">Contate-nos</NavLink>
                 </Nav>
                 <p className="m-0 fw-light">
-                    &copy; 2023 Copyright<a className="text-primary fw-bold" href="/sobre" title="Sobre nós.">CashWise</a>. Todos os direitos reservados.
+                    &copy; 2023 Copyright <a className="text-primary fw-bold" href="/sobre" title="Sobre nós.">CashWise</a>. Todos os direitos reservados.
                 </p>
             </div>
         </footer>

@@ -2,12 +2,12 @@ import { create } from 'zustand';
 
 const useUserStore = create((set) => ({
 	id: null,
-	name: "",
-	sname: "",
+	name: "user",
+	sname: "user",
 	photo: "",
-	level: "",
-	exp: null,
-	wiseCoins: null,
+	level: "none",
+	exp: 0,
+	wiseCoins: 0,
 
 	login: (user) => set({
 		id: user.id,
