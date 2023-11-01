@@ -14,6 +14,19 @@ export async function signup(req, res) {
                 message: 'Campos necessários ausentes.',
             });
         }
+
+        const checkEmail = await prisma.User.findFirst({
+			where: {email: userData.email},
+			select: {email: true},
+		});
+
+        // Checa no banco para ver se o E-mail já está cadastrado
+		if (checkEmail) {
+			return res.status(400).json({
+				success: false,
+				message: "E-mail já cadastrado",
+			})
+		}
 		
 		// Geração de um salt para potencializar a senha, e o hash do mesmo.
 		const salt = await bcrypt.genSalt(10);
@@ -45,6 +58,10 @@ export async function signup(req, res) {
 		
 	} catch (err) {
 		console.error('Erro no controlador do cadastro: ' + err);
+		return res.status(500).json({
+			success: false,
+			message: 'Erro de servidor interno!'
+		})
 	}
 }
 
@@ -61,29 +78,43 @@ export async function login(req, res) {
 		}
 
 		// Query para encontrar o usuário pelo email, e retonar seus dados
-		const user = await prisma.User.findFirst({
-			where: {email: userInput.email},
+		const result = await prisma.User.findFirst({
+			where: {email: userInput.email}
 		});
 
 		// Condição para saber se o usuário foi o não encontrado
-		if (user) {
+		if (result) {
 			// Comparação da senha inserida com a senha no banco
-			const auth = await bcrypt.compare(userInput.password, user.password);
+			const auth = await bcrypt.compare(userInput.password, result.password);
 
 			// Condicional com um true ou false caso a senha tenha batido ou não
 			if (auth) {
+				const user = {
+					id: result.id,
+					name: result.name,
+					sname: result.sname,
+					photo: result.photo,
+					wiseCoins: result.wiseCoins,
+					level: result.level,
+					exp: result.exp,
+				}
+
+				res.cookie("Teste", "olha só", {sameSite: false, httpOnly: true, secure: true});
 				res.status(200).json({
 					success: true,
 					message: 'Logado!',
+					user
 				});
+				
+				return
 			} else {
-				res.status(400).json({
+				return res.status(400).json({
 					success: false,
 					message: 'Senha incorreta!',
 				});
 			}
 		} else {
-			res.status(404).json({
+			return res.status(404).json({
 				success: false,
 				message: 'Email não encontrado!',
 			});
@@ -91,5 +122,9 @@ export async function login(req, res) {
 		
 	} catch (e) {
 		console.error('Erro no controlador de login: ' + e);
+		return res.status(500).json({
+				success: false,
+				message: 'Erro no servidor. Tente mais tarde!',
+			});
 	}
 }
