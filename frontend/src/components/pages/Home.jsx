@@ -201,6 +201,28 @@ const Home = () => {
 
 	const [showModalDetalhes, setShowModalDetalhes] = useState(false);
 
+	const [showModal8, setShowModal8] = useState(false);
+
+	const [descricao, setDescricao] = useState("");
+	const [vencimento, setVencimento] = useState("");
+	const [duracao, setDuracao] = useState("Todos os meses");
+	const [valor, setValor] = useState("");
+	const [mesInicial, setMesInicial] = useState("");
+	const [anoInicial, setAnoInicial] = useState("");
+	const [mesFinal, setMesFinal] = useState("");
+	const [anoFinal, setAnoFinal] = useState("");
+
+	const [contasCadastradas, setContasCadastradas] = useState([]);
+
+	const handleAdicionarNovaConta = (novaConta) => {
+		setContasCadastradas([...contasCadastradas, novaConta]);
+		showConfirmationMessage("Nova conta criada com sucesso!");
+	};
+
+	
+
+
+
 
 
 
@@ -606,7 +628,115 @@ const Home = () => {
 											{confirmationMessage}
 										</div>
 									)}
-								</Modal></div>
+								</Modal>
+							</div>
+
+							<div className="col"><Button as="button" variant="primary" onClick={() => setShowModal8(true)}>Nova conta</Button>
+								<Modal
+									show={showModal8}
+									onHide={() => setShowModal8(false)}
+									size="md"
+									aria-labelledby="contained-modal-title-vcenter"
+									centered
+								>
+									<Modal.Header closeButton>
+										<Modal.Title id="contained-modal-title-vcenter">Nova conta</Modal.Title>
+									</Modal.Header>
+									<Modal.Body>
+										<Form>
+											<Form.Group className="mb-3">
+												<Form.Label>Descrição</Form.Label>
+												<Form.Control
+												type="text" 
+												name="descricao" 
+												value={descricao} 
+												onChange={(e) => setDescricao(e.target.value)}
+													
+												/>
+											</Form.Group>
+											<Form.Group className="mb-3">
+												<Form.Label>Vencimento (dia)</Form.Label>
+												<Form.Control
+													name='vencimento'
+													type="text"
+													value={vencimento}
+													onChange={(e) => setVencimento(e.target.value)}
+												/>
+											</Form.Group>
+											<Form.Group className="mb-3">
+												<Form.Label>Duração</Form.Label>
+												<Form.Select
+												name='duracao'
+													value={duracao}
+													onChange={(e) => setDuracao(e.target.value)}
+												>
+													<option value="Todos os meses">Todos os meses</option>
+													<option value="Por um período">Por um período</option>
+												</Form.Select>
+											</Form.Group>
+											<Form.Group className="mb-3">
+												<Form.Label>Valor</Form.Label>
+												<Form.Control
+													name='valor'
+													type="number"
+													value={valor}
+													onChange={(e) => setValor(e.target.value)}
+												/>
+											</Form.Group>
+											{duracao === "Por um período" && (
+												<>
+													<Form.Group className="mb-3">
+														<Form.Label>Mês Inicial</Form.Label>
+														<Form.Control
+														name='mesInicial'
+															type="text"
+															value={mesInicial}
+															onChange={(e) => setMesInicial(e.target.value)}
+														/>
+													</Form.Group>
+													<Form.Group className="mb-3">
+														<Form.Label>Ano Inicial</Form.Label>
+														<Form.Control
+														name='anoInicial'
+															type="text"
+															value={anoInicial}
+															onChange={(e) => setAnoInicial(e.target.value)}
+														/>
+													</Form.Group>
+													<Form.Group className="mb-3">
+														<Form.Label>Mês Final</Form.Label>
+														<Form.Control
+														name='mesFinal'
+															type="text"
+															value={mesFinal}
+															onChange={(e) => setMesFinal(e.target.value)}
+														/>
+													</Form.Group>
+													<Form.Group className="mb-3">
+														<Form.Label>Ano Final</Form.Label>
+														<Form.Control
+														name='anoFinal'
+															type="text"
+															value={anoFinal}
+															onChange={(e) => setAnoFinal(e.target.value)}
+														/>
+													</Form.Group>
+												</>
+											)}
+										</Form>
+									</Modal.Body>
+									<Modal.Footer>
+										<Button as='button' variant="secondary" onClick={handleAdicionarNovaConta}>
+											Criar
+										</Button>
+									</Modal.Footer>
+									{showConfirmation && (
+										<div className="alert alert-danger alert-custom" role="alert">
+											{confirmationMessage}
+										</div>
+									)}
+								</Modal>
+							</div>
 						</div>
 					</div>
 
@@ -662,6 +792,27 @@ const Home = () => {
 						</div>
 
 					</div>
+
+					<div className="container contas-cadastradas">
+						<h2>Contas Cadastradas</h2>
+						{contasCadastradas.map((conta, index) => (
+							<div key={index} className="conta">
+								<p>Descrição: {conta.descricao}</p>
+								<p>Vencimento: {conta.vencimento}</p>
+								<p>Duração: {conta.duracao}</p>
+								<p>Valor: {conta.valor}</p>
+								{conta.duracao === "Por um período" && (
+									<div>
+										<p>Mês Inicial: {conta.mesInicial}</p>
+										<p>Ano Inicial: {conta.anoInicial}</p>
+										<p>Mês Final: {conta.mesFinal}</p>
+										<p>Ano Final: {conta.anoFinal}</p>
+									</div>
+								)}
+							</div>
+						))}
+					</div>
+
 
 					<Container className='controle p-5 mb-5'>
 						<h1 className='m-5'>Minhas despesas</h1>
