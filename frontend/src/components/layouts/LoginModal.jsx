@@ -12,12 +12,11 @@ import userStore from '../store/UserStore';
 
 import {FaArrowRight as ArrowIco} from 'react-icons/fa6';
 
-function LoginModal({ changeModal, showLogin, handleShowLogin, handleCloseLogin }) {
+function LoginModal({ handleFeedback, feedback, changeModal, showLogin, handleShowLogin, handleCloseLogin }) {
 	const userLogin = userStore(state => state.login);
 
 	const navigate = useNavigate();
 	const [view, setView] = useState(false);
-	const [feedback, setFeedback] = useState('');
 
 	const [email, setEmail] = useState('');
 	const [validEmail, setValidEmail] = useState(null); 
@@ -55,10 +54,10 @@ function LoginModal({ changeModal, showLogin, handleShowLogin, handleCloseLogin 
 
 		if (response) {
 			const data = await response.json();
-			setFeedback(data.message);
+			handleFeedback(data.message);
 
 			if (data.success) {
-				setFeedback(data.message);
+				handleFeedback(data.message);
 				userLogin(data.userData, data.userToken);
 
 				navigate('/home');
@@ -77,7 +76,7 @@ function LoginModal({ changeModal, showLogin, handleShowLogin, handleCloseLogin 
 					<Row>
 						<fieldset>
 							<legend className="small text-center">Insira seu dados de login!</legend>
-							<span className="text-danger">{feedback}</span>
+							<span>{feedback}</span>
 
 							<Form.Group as={Col} className="my-4" controlId="email-input">
 								<FloatingLabel label="E-mail">

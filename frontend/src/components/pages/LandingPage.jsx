@@ -17,17 +17,18 @@ import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 
 // Icones //
-import {BiLogIn as LoginIco} from 'react-icons/bi';
+import { BiLogIn as LoginIco } from 'react-icons/bi';
 
 import useUserStore from '../store/UserStore';
 
 import './LandingPage.css';
 
 const LandingPage = () => {
-
+	const [feedback, setFeedback] = useState('');
 	const name = useUserStore(state => state.name);
 	const sname = useUserStore(state => state.sname);
 	const userToken = useUserStore(state => state.userToken);
+
 	// Controles dos modais de login e cadastro //
 	const [showLogin, setShowLogin] = useState(false);
 	const [showSign, setShowSign] = useState(false);
@@ -50,6 +51,10 @@ const LandingPage = () => {
 	function loginModal() {
 		handleCloseSign();
 		handleShowLogin();
+	}
+
+	function handleFeedback(msg) {
+		return setFeedback(msg);
 	}
 	
 	return (
@@ -109,7 +114,7 @@ const LandingPage = () => {
 						</Col>
 
 						<Col md="6">
-							<Article title="Tenha controle com sua agenda" img="/img/homi-das-plantas.svg" alt="Desenho de um homem regando plantas dando 'moedas' como frutos.">
+							<Article title="Tenha controle com sua agenda" img="/img/agenda.jpg" alt="Desenho de um homem regando plantas dando 'moedas' como frutos.">
 								Mantenha-se organizado com nossa agenda financeira. Marque datas importantes, prazos de pagamento e lembretes para garantir que suas finanças estejam sempre em dia.
 							</Article>
 						</Col>
@@ -121,8 +126,8 @@ const LandingPage = () => {
 				</Container>
 			</main>
 
-			<LoginModal changeModal={signModal} showLogin={showLogin} handleShowLogin={handleShowLogin} handleCloseLogin={handleCloseLogin}/>
-			<SignupModal loginModal={loginModal} showSign={showSign} handleShowSign={handleShowSign}  handleCloseSign={handleCloseSign} />
+			<LoginModal feedback={feedback} handleFeedback={handleFeedback} changeModal={signModal} showLogin={showLogin} handleShowLogin={handleShowLogin} handleCloseLogin={handleCloseLogin}/>
+			<SignupModal feedback={feedback} handleFeedback={handleFeedback} loginModal={loginModal} showSign={showSign} handleShowSign={handleShowSign}  handleCloseSign={handleCloseSign} />
 
 			<Footer anchor="hero" />
 		</>

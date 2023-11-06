@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'; 
+import { useState, useEffect } from 'react';
 
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
@@ -10,10 +10,9 @@ import Button from 'react-bootstrap/Button';
 
 import { RiAccountBoxFill as AccountIco } from 'react-icons/ri';
 
-function SignupModal({ loginModal, showSign, handleShowSign, handleCloseSign }) {
+function SignupModal({ handleFeedback, feedback, loginModal, showSign, handleShowSign, handleCloseSign }) {
 
 	const [view, setView] = useState(false);
-	const [feedback, setFeedback] = useState('');
 
 	// Hooks para validação //
 	const [name, setName] = useState('');
@@ -75,13 +74,13 @@ function SignupModal({ loginModal, showSign, handleShowSign, handleCloseSign }) 
 
 		if (response.ok) {
 			const data = await response.json();
-			setFeedback(data.message);
+			handleFeedback(data.message);
 			loginModal();
 			return
 
 		} else if (response) {
 			const data = await response.json();
-			setFeedback(data.message);
+			handleFeedback(data.message);
 			return
 		}
 	}
@@ -97,7 +96,7 @@ function SignupModal({ loginModal, showSign, handleShowSign, handleCloseSign }) 
 					<Row>
 						<fieldset>
 							<legend className="small text-center">Preencha todos os campos!</legend>
-							<span className="text-danger">{feedback}</span>
+							<span>{feedback}</span>
 							<Form.Group as={Col} className="my-4">
 								<FloatingLabel label="Nome" controlId="name-input">
 									<Form.Control 

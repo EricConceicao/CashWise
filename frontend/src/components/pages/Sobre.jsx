@@ -19,14 +19,12 @@ const cardStyle = {
     margin: '.3rem 0',
 };
 
-
 const Sobre = () => {
     return (
         <>
             <Header />
-            
             <main className="container-fluid" id='main' style={containerStyle}>
-                <Content>                    
+                <Content>
                     <Container className="p-0" id='text'>
                         <div className="jumbotron text-center" id='title' >
                             <h1 className="p-2">Sobre o CashWise</h1>
@@ -52,7 +50,7 @@ const Sobre = () => {
                     <Container fluid id='cardsAlunos' className='row pb-2 justify-content-around'>
                         <div className="col-sm col-md-4 col-lg" >
                             <Card className="card" style={cardStyle}>
-                                <Card.Img variant="top" src="/img/aguia.jpg" />
+                                <Card.Img variant="top" src="/img/redimensionadas/eric!.png" />
                                 <Card.Body>
                                     <Card.Title>Eric</Card.Title>
                                     <Card.Text>
@@ -65,7 +63,7 @@ const Sobre = () => {
 
                         <div className="col-sm col-md-4 col-lg">
                             <Card className="card" style={cardStyle}>
-                                <Card.Img variant="top" src="/img/aguia.jpg" />
+                                <Card.Img variant="top" src="/img/redimensionadas/selma1.jpg" />
                                 <Card.Body>
                                     <Card.Title>Maria Selma</Card.Title>
                                     <Card.Text>
@@ -78,7 +76,7 @@ const Sobre = () => {
 
                         <div className="col-sm col-md-4 col-lg">
                             <Card className="card" style={cardStyle}>
-                                <Card.Img variant="top" src="/img/aguia.jpg" />
+                                <Card.Img variant="top" src="/img/redimensionadas/renato1.jpg" />
                                 <Card.Body>
                                     <Card.Title>Renato</Card.Title>
                                     <Card.Text>
@@ -91,7 +89,7 @@ const Sobre = () => {
 
                         <div className="col-sm col-md-4 col-lg">
                             <Card className="card" style={cardStyle}>
-                                <Card.Img variant="top" src="/img/aguia.jpg" />
+                                <Card.Img variant="top" src="/img/redimensionadas/tatiana.jpg" />
                                 <Card.Body>
                                     <Card.Title>Tatiana</Card.Title>
                                     <Card.Text>
@@ -104,9 +102,9 @@ const Sobre = () => {
 
                         <div className="col-sm col-md-4 col-lg">
                             <Card className="card" style={cardStyle}>
-                                <Card.Img variant="top" src="/img/aguia.jpg" />
+                                <Card.Img variant="top" src="/img/redimensionadas/valdemir.jpg" />
                                 <Card.Body>
-                                    <Card.Title>Valdimir</Card.Title>
+                                    <Card.Title>Valdemir</Card.Title>
                                     <Card.Text>
                                         Some quick example text to build on the card title and make up the
                                         bulk of the card's content.
