@@ -16,7 +16,7 @@ model User {
   name          String    @db.VarChar(255)
   sname         String    @db.VarChar(255)
   password      String
-  photo         String?   @db.Text @default("/img/pfp-padrao.png")
+  photo         String?   @db.Text @default("/img/pfp-padrao.svg")
   wiseCoins     Int       @default(0)
   level         String    @db.VarChar(255) @default("Iniciante")
   exp           Int       @default(0)

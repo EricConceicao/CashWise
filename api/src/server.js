@@ -11,7 +11,7 @@ const api = express();
 
 // Definindo middlewares
 api.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.ORIGIN,
   credentials: true,
 }));
 api.use(express.json());
