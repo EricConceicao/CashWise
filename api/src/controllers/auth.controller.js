@@ -1,4 +1,6 @@
 import bcrypt from 'bcrypt';
+import { createToken } from '../middlewares/jsonwebtoken.js';
+import { createSession, endSession } from '../controllers/session.controller.js'
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
@@ -65,6 +67,8 @@ export async function signup(req, res) {
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export async function login(req, res) {
 	try {
 		const userInput = req.body;
@@ -78,35 +82,41 @@ export async function login(req, res) {
 		}
 
 		// Query para encontrar o usuário pelo email, e retonar seus dados
-		const result = await prisma.User.findFirst({
+		const user = await prisma.User.findFirst({
 			where: {email: userInput.email}
 		});
 
 		// Condição para saber se o usuário foi o não encontrado
-		if (result) {
+		if (user) {
 			// Comparação da senha inserida com a senha no banco
-			const auth = await bcrypt.compare(userInput.password, result.password);
+			const auth = await bcrypt.compare(userInput.password, user.password);
 
 			// Condicional com um true ou false caso a senha tenha batido ou não
 			if (auth) {
-				const user = {
-					id: result.id,
-					name: result.name,
-					sname: result.sname,
-					photo: result.photo,
-					wiseCoins: result.wiseCoins,
-					level: result.level,
-					exp: result.exp,
+				// Formatando o que será enviado para o front
+				const userData = {
+					name: user.name,
+					sname: user.sname,
+					photo: user.photo,
+					wiseCoins: user.wiseCoins,
+					level: user.level,
+					exp: user.exp,
 				}
 
-				res.cookie("Teste", "olha só", {sameSite: false, httpOnly: true, secure: true});
-				res.status(200).json({
-					success: true,
-					message: 'Logado!',
-					user
-				});
-				
-				return
+				// Inicia uma sessão para este usuário, e gera um token de sessão.
+				const sessionToken = await createSession(user.id, req, res);
+
+				if (sessionToken) {
+					// Cria um token passando os dados como argumento
+					const userToken = await createToken(user.id);
+					return res.status(200).json({
+						success: true,
+						message: 'Usuário autenticado com sucesso.',
+						userData,
+						userToken,
+					});
+				}
+
 			} else {
 				return res.status(400).json({
 					success: false,
@@ -126,5 +136,36 @@ export async function login(req, res) {
 				success: false,
 				message: 'Erro no servidor. Tente mais tarde!',
 			});
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function logout(req, res) {
+	try {
+		const sessionToken = req.cookies.session;
+		if (!sessionToken) {
+			return res.status(404).json({
+				success: false,
+				message: "Sessão não encontrada. Faça login novamente"
+			})
+		}
+
+		const result = await endSession(sessionToken, req, res);
+
+		if (result) {
+			return res.status(200).json({
+				success: true,
+				message: "Sessão finalizada com sucesso"
+			})
+		} else {
+			return res.status(500).json({
+				success: false,
+				message: "Erro ao finalizar sessão"
+			})
+		}
+
+	} catch (err) {
+		console.error("Erro ao fazer logout: " + err)
 	}
 }
