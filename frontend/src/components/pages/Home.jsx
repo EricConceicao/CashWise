@@ -19,6 +19,8 @@ import { AiOutlineSchedule } from 'react-icons/ai';
 import { BsArrowUpLeft } from 'react-icons/bs'
 import { BsArrowDownRight } from 'react-icons/bs'
 import useUserStore from '../store/UserStore';
+import { format } from 'date-fns';
+
 
 const Home = () => {
 	// Dados do store após o login do usuário //
@@ -87,12 +89,17 @@ const Home = () => {
 		setValorGasto(parseFloat(event.target.value));
 	}
 
+	const [novoDescricao, setNovoDescricao] = useState('');
+	const [novaData, setNovaData] = useState(""); // Adicione esse estado
+
+
 	const handleAdicionarNovoGasto = () => {
-		if (selectedCategoria) {
+		if (selectedCategoria && novoDescricao && novoValor1) {
 			// Adicione o novo gasto com a categoria correspondente
 			const novoGasto = {
-				descricao: "Descrição do gasto", // Substitua pela descrição real do gasto
+				descricao: novoDescricao, // Substitua pela descrição real do gasto
 				valor: novoValor1,
+				data: novaData,
 			};
 
 			// Crie uma cópia do objeto gastosPorCategoria
@@ -169,6 +176,50 @@ const Home = () => {
 			setShowConfirmation(false);
 		}, 3000); // A mensagem será ocultada após 3 segundos
 	};
+
+	const [gastosDoMesCorrente, setGastosDoMesCorrente] = useState([]);
+	const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
+
+	const filtrarGastosDoMesCorrente = (categoriaSelecionada) => {
+		const gastosCategoria = gastosPorCategoria[categoriaSelecionada] || [];
+		const gastosFiltrados = gastosCategoria.filter((gasto) => {
+			const dataGasto = new Date(gasto.data);
+			return (
+				dataGasto.getMonth() === currentDate.getMonth() &&
+				dataGasto.getFullYear() === currentDate.getFullYear()
+			);
+		});
+		return gastosFiltrados;
+	};
+
+	const mostrarDetalhesCategoria = (categoria) => {
+		setCategoriaSelecionada(categoria);
+		setShowModalDetalhes(true);
+	};
+
+
+
+	const [showModalDetalhes, setShowModalDetalhes] = useState(false);
+
+	const [showModal8, setShowModal8] = useState(false);
+
+	const [descricao, setDescricao] = useState("");
+	const [vencimento, setVencimento] = useState("");
+	const [duracao, setDuracao] = useState("Todos os meses");
+	const [valor, setValor] = useState("");
+	const [mesInicial, setMesInicial] = useState("");
+	const [anoInicial, setAnoInicial] = useState("");
+	const [mesFinal, setMesFinal] = useState("");
+	const [anoFinal, setAnoFinal] = useState("");
+
+	const [contasCadastradas, setContasCadastradas] = useState([]);
+
+	const handleAdicionarNovaConta = (novaConta) => {
+		setContasCadastradas([...contasCadastradas, novaConta]);
+		showConfirmationMessage("Nova conta criada com sucesso!");
+	};
+
+	
 
 
 
@@ -466,10 +517,6 @@ const Home = () => {
 								<Modal.Body>
 									<Form>
 										<Form.Group className="mb-3">
-											<Form.Label>Descrição</Form.Label>
-											<Form.Control type="text" name="name" />
-										</Form.Group>
-										<Form.Group className="mb-3">
 											<Form.Label>Categoria</Form.Label>
 											<Form.Select
 												name="categoria"
@@ -484,10 +531,18 @@ const Home = () => {
 												))}
 											</Form.Select>
 										</Form.Group>
-
+										<Form.Group className="mb-3">
+											<Form.Label>Descrição</Form.Label>
+											<Form.Control type="text" name="descricao" value={novoDescricao} onChange={(e) => setNovoDescricao(e.target.value)} />
+										</Form.Group>
 										<Form.Group className="mb-3">
 											<Form.Label>Data</Form.Label>
-											<Form.Control type="date" name="email" />
+											<Form.Control
+												type="date"
+												name="data"
+												value={novaData}
+												onChange={(e) => setNovaData(e.target.value)}
+											/>
 										</Form.Group>
 										<Form.Group>
 											<Form.Label>Valor a ser adicionado</Form.Label>
@@ -528,50 +583,167 @@ const Home = () => {
 
 					</Container>
 
+					<div className="container p-5 mt-5 mb-5">
+						<div className="row">
+
+						</div>
+						<div className="row">
+							<div className="col"><Button as="button" variant="primary" onClick={() => setShowModal7(true)}>Nova categoria</Button>
+								<Modal
+									show={showModal7}
+									onHide={() => setShowModal7(false)}
+									size="md"
+									aria-labelledby="contained-modal-title-vcenter"
+									centered
+								>
+									<Modal.Header closeButton>
+										<Modal.Title id="contained-modal-title-vcenter">Nova categoria</Modal.Title>
+									</Modal.Header>
+									<Modal.Body>
+										<Form>
+											<Form.Group className="mb-3">
+												<Form.Label>Escolher uma categoria ou adicionar uma nova</Form.Label>
+												<Form.Control as="select" name="categoria" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)}>
+													<option value="">Escolha uma categoria</option>
+													{categorias.map((categoria, index) => (
+														<option key={index} value={categoria}>
+															{categoria}
+														</option>
+													))}
+												</Form.Control>
+											</Form.Group>
+											<Form.Group className="mb-3">
+												<Form.Label>Ou adicione uma nova categoria</Form.Label>
+												<Form.Control type="text" name="novaCategoria" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)} />
+											</Form.Group>
+										</Form>
+									</Modal.Body>
+									<Modal.Footer>
+										<Button as='button' variant="secondary" onClick={handleAdicionarNovaCategoria}>
+											Criar
+										</Button>
+									</Modal.Footer>
+									{showConfirmation && (
+										<div className="alert alert-danger alert-custom" role="alert">
+											{confirmationMessage}
+										</div>
+									)}
+								</Modal>
+							</div>
+
+							<div className="col"><Button as="button" variant="primary" onClick={() => setShowModal8(true)}>Nova conta</Button>
+								<Modal
+									show={showModal8}
+									onHide={() => setShowModal8(false)}
+									size="md"
+									aria-labelledby="contained-modal-title-vcenter"
+									centered
+								>
+									<Modal.Header closeButton>
+										<Modal.Title id="contained-modal-title-vcenter">Nova conta</Modal.Title>
+									</Modal.Header>
+									<Modal.Body>
+										<Form>
+											<Form.Group className="mb-3">
+												<Form.Label>Descrição</Form.Label>
+												<Form.Control
+												type="text" 
+												name="descricao" 
+												value={descricao} 
+												onChange={(e) => setDescricao(e.target.value)}
+													
+												/>
+											</Form.Group>
+											<Form.Group className="mb-3">
+												<Form.Label>Vencimento (dia)</Form.Label>
+												<Form.Control
+													name='vencimento'
+													type="text"
+													value={vencimento}
+													onChange={(e) => setVencimento(e.target.value)}
+												/>
+											</Form.Group>
+											<Form.Group className="mb-3">
+												<Form.Label>Duração</Form.Label>
+												<Form.Select
+												name='duracao'
+													value={duracao}
+													onChange={(e) => setDuracao(e.target.value)}
+												>
+													<option value="Todos os meses">Todos os meses</option>
+													<option value="Por um período">Por um período</option>
+												</Form.Select>
+											</Form.Group>
+											<Form.Group className="mb-3">
+												<Form.Label>Valor</Form.Label>
+												<Form.Control
+													name='valor'
+													type="number"
+													value={valor}
+													onChange={(e) => setValor(e.target.value)}
+												/>
+											</Form.Group>
+											{duracao === "Por um período" && (
+												<>
+													<Form.Group className="mb-3">
+														<Form.Label>Mês Inicial</Form.Label>
+														<Form.Control
+														name='mesInicial'
+															type="text"
+															value={mesInicial}
+															onChange={(e) => setMesInicial(e.target.value)}
+														/>
+													</Form.Group>
+													<Form.Group className="mb-3">
+														<Form.Label>Ano Inicial</Form.Label>
+														<Form.Control
+														name='anoInicial'
+															type="text"
+															value={anoInicial}
+															onChange={(e) => setAnoInicial(e.target.value)}
+														/>
+													</Form.Group>
+													<Form.Group className="mb-3">
+														<Form.Label>Mês Final</Form.Label>
+														<Form.Control
+														name='mesFinal'
+															type="text"
+															value={mesFinal}
+															onChange={(e) => setMesFinal(e.target.value)}
+														/>
+													</Form.Group>
+													<Form.Group className="mb-3">
+														<Form.Label>Ano Final</Form.Label>
+														<Form.Control
+														name='anoFinal'
+															type="text"
+															value={anoFinal}
+															onChange={(e) => setAnoFinal(e.target.value)}
+														/>
+													</Form.Group>
+												</>
+											)}
+										</Form>
+									</Modal.Body>
+									<Modal.Footer>
+										<Button as='button' variant="secondary" onClick={handleAdicionarNovaConta}>
+											Criar
+										</Button>
+									</Modal.Footer>
+									{showConfirmation && (
+										<div className="alert alert-danger alert-custom" role="alert">
+											{confirmationMessage}
+										</div>
+									)}
+								</Modal>
+							</div>
+						</div>
+					</div>
+
 					<div className='container painel text-secondary mt-5 mb-5 p-5'>
 						<h1 className='mb-5'>Agenda Financeira {/*<AiOutlineSchedule />*/}</h1>
 
-						<Button as="button" variant="primary" onClick={() => setShowModal7(true)}>Criar uma nova categoria</Button>
-						<Modal
-							show={showModal7}
-							onHide={() => setShowModal7(false)}
-							size="md"
-							aria-labelledby="contained-modal-title-vcenter"
-							centered
-						>
-							<Modal.Header closeButton>
-								<Modal.Title id="contained-modal-title-vcenter">Nova categoria</Modal.Title>
-							</Modal.Header>
-							<Modal.Body>
-								<Form>
-									<Form.Group className="mb-3">
-										<Form.Label>Escolher uma categoria ou adicionar uma nova</Form.Label>
-										<Form.Control as="select" name="categoria" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)}>
-											<option value="">Escolha uma categoria</option>
-											{categorias.map((categoria, index) => (
-												<option key={index} value={categoria}>
-													{categoria}
-												</option>
-											))}
-										</Form.Control>
-									</Form.Group>
-									<Form.Group className="mb-3">
-										<Form.Label>Ou adicione uma nova categoria</Form.Label>
-										<Form.Control type="text" name="novaCategoria" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)} />
-									</Form.Group>
-								</Form>
-							</Modal.Body>
-							<Modal.Footer>
-								<Button as='button' variant="secondary" onClick={handleAdicionarNovaCategoria}>
-									Criar
-								</Button>
-							</Modal.Footer>
-							{showConfirmation && (
-								<div className="alert alert-danger alert-custom" role="alert">
-									{confirmationMessage}
-								</div>
-							)}
-						</Modal>
+
 
 						<div className="tabela p-4">
 							<div className="titulo row mb-5">
@@ -621,6 +793,27 @@ const Home = () => {
 
 					</div>
 
+					<div className="container contas-cadastradas">
+						<h2>Contas Cadastradas</h2>
+						{contasCadastradas.map((conta, index) => (
+							<div key={index} className="conta">
+								<p>Descrição: {conta.descricao}</p>
+								<p>Vencimento: {conta.vencimento}</p>
+								<p>Duração: {conta.duracao}</p>
+								<p>Valor: {conta.valor}</p>
+								{conta.duracao === "Por um período" && (
+									<div>
+										<p>Mês Inicial: {conta.mesInicial}</p>
+										<p>Ano Inicial: {conta.anoInicial}</p>
+										<p>Mês Final: {conta.mesFinal}</p>
+										<p>Ano Final: {conta.anoFinal}</p>
+									</div>
+								)}
+							</div>
+						))}
+					</div>
+
+
 					<Container className='controle p-5 mb-5'>
 						<h1 className='m-5'>Minhas despesas</h1>
 
@@ -641,17 +834,79 @@ const Home = () => {
 												})
 												: 0}
 										</p>
-
-										<hr />
 									</div>
+
+									<hr />
+
 									<div className="botoes">
-										<Button as='button' size='sm' variant='primary' className='botao'>Detalhar</Button>
-										<Button as='button' size='sm' variant='secondary' className='botao' onClick={() => handleExcluirCategoria(index)}>Excluir</Button>
-									</div>
-								</div>
+										<Button
+											as="button"
+											size="sm"
+											variant="primary"
+											className="botao"
+											onClick={() => mostrarDetalhesCategoria(categoria)
+											}
+										>
+											Detalhar
+										</Button>
 
+
+										<Button
+											as="button"
+											size="sm"
+											variant="secondary"
+											className="botao"
+											onClick={() => handleExcluirCategoria(index)}
+										>
+											Excluir
+										</Button>
+									</div>
+
+								</div>
 							))}
+
 						</Row>
+
+
+						<Modal
+							show={showModalDetalhes}
+							onHide={() => setShowModalDetalhes(false)}
+							size="lg"
+							aria-labelledby="contained-modal-title-vcenter"
+							centered
+						>
+							<Modal.Header closeButton>
+								<Modal.Title id="contained-modal-title-vcenter">
+									Meus gastos com {categoriaSelecionada}
+								</Modal.Title>
+							</Modal.Header>
+							<Modal.Body>
+								<div className="row">
+									<div className="col fw-bold">Descrição</div>
+									<div className="col fw-bold">Data</div>
+									<div className="col fw-bold">Valor</div>
+								</div>
+								<br />
+								{categoriaSelecionada && (
+									<ul>
+										{gastosPorCategoria[categoriaSelecionada]?.map((gasto, index) => (
+											<li key={index} className='row'>
+												<p className='col'>{gasto.descricao}</p>
+												<p className='col'>{gasto.data}</p>
+												<p className='col'>{gasto.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+												<br />
+											</li>
+										))}
+									</ul>
+								)}
+							</Modal.Body>
+							<Modal.Footer>
+								<Button as="button" variant="secondary" onClick={() => setShowModalDetalhes(false)}>
+									Fechar
+								</Button>
+							</Modal.Footer>
+						</Modal>
+
 
 					</Container>
 
