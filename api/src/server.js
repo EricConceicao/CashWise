@@ -1,6 +1,7 @@
 // Importações de bibliotecas e pacotes
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 // Importando as variáveis de ambiente do .env
 import { config } from 'dotenv';
@@ -9,8 +10,12 @@ config();
 const api = express();
 
 // Definindo middlewares
-api.use(cors());
+api.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true,
+}));
 api.use(express.json());
+api.use(cookieParser());
 
 
 // Rotas //

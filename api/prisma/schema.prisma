@@ -21,6 +21,7 @@ model User {
   level         String    @db.VarChar(255) @default("Iniciante")
   exp           Int       @default(0)
   creationDate  DateTime  @default(now())
+  sessions      Session[]
 }
 
 model Contact {
@@ -30,4 +31,11 @@ model Contact {
   subject   String    @db.VarChar(255)
   message   String    @db.Text
   date      DateTime  @default(now())
+}
+
+model Session {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique @db.VarChar(200)
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id])
 }

@@ -32,7 +32,7 @@ function SignupModal({ loginModal, showSign, handleShowSign, handleCloseSign }) 
 	const [validMatch, setValidMatch] = useState(null);
 
 	// Esqueminhas em expressões regulares para checar as entradas //
-	const NAME_REGEX = /^[a-zA-ZÀ-ÿ]{3,30}$/; 
+	const NAME_REGEX = /^[a-zA-ZÀ-ÿ ]{3,30}$/; 
 	const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 	const PASS_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 

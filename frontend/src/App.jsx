@@ -10,6 +10,9 @@ import NotFound from './components/pages/NotFound';
 import PrevidenciaAqui from './components/pages/PrevidenciaAqui';
 import BoletimInformativo from './components/pages/BoletimInformativo';
 
+// Importações de componentes //
+import Loader from './components/utils/Loader';
+
 // Importações de Estilos
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../public/css/custom.css';
@@ -18,6 +21,8 @@ import './App.css';
 
 const App = () => {
   return (
+    <>
+    <Loader />
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/contato" element={<Contato />} />
@@ -27,6 +32,7 @@ const App = () => {
       <Route path="/boletim" element={<BoletimInformativo/>}/>
       <Route path="*" element={<NotFound />} />
     </Routes>
+    </>
   );
 }
 
