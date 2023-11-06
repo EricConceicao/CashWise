@@ -9,7 +9,7 @@ import Contato from './components/pages/Contato';
 import NotFound from './components/pages/NotFound';
 import PrevidenciaAqui from './components/pages/PrevidenciaAqui';
 import BoletimInformativo from './components/pages/BoletimInformativo';
-
+import Poupanca from './components/pages/Poupanca';
 // Importações de componentes //
 import Loader from './components/utils/Loader';
 
@@ -27,9 +27,10 @@ const App = () => {
       <Route path="/" element={<LandingPage />} />
       <Route path="/contato" element={<Contato />} />
       <Route path="/sobre" element={<Sobre />} />
-      <Route path="/Home" element={<Home />}/>
+      <Route path="/home" element={<Home />}/>
       <Route path="/previdencia" element={<PrevidenciaAqui/>}/>
       <Route path="/boletim" element={<BoletimInformativo/>}/>
+      <Route path="/poupanca" element={<Poupanca/>}/>
       <Route path="*" element={<NotFound />} />
     </Routes>
     </>
