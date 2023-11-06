@@ -19,10 +19,15 @@ import Button from 'react-bootstrap/Button';
 // Icones //
 import {BiLogIn as LoginIco} from 'react-icons/bi';
 
+import useUserStore from '../store/UserStore';
 
 import './LandingPage.css';
 
 const LandingPage = () => {
+
+	const name = useUserStore(state => state.name);
+	const sname = useUserStore(state => state.sname);
+	const userToken = useUserStore(state => state.userToken);
 	// Controles dos modais de login e cadastro //
 	const [showLogin, setShowLogin] = useState(false);
 	const [showSign, setShowSign] = useState(false);
@@ -58,9 +63,7 @@ const LandingPage = () => {
 							title="CashWise. Educação Financeira"
 							width="50%" />
 					</Navbar.Brand>
-
-					<Button onClick={handleShowLogin} variant="secondary" size="md"><LoginIco className='me-2' size={28} /> Entrar</Button>
-
+					<Button className="fw-medium" onClick={handleShowLogin} variant="secondary" size="md"><LoginIco className='me-2' size={25} />Entrar</Button>
 				</Container>
 			</header>
 

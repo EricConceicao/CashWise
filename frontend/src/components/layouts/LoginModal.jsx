@@ -49,6 +49,7 @@ function LoginModal({ changeModal, showLogin, handleShowLogin, handleCloseLogin 
 			headers: {
 				'Content-Type': 'application/json'
 			},
+			credentials: "include",
 			body: JSON.stringify(userInput),
 		});
 
@@ -58,8 +59,8 @@ function LoginModal({ changeModal, showLogin, handleShowLogin, handleCloseLogin 
 
 			if (data.success) {
 				setFeedback(data.message);
-				console.log(data.user)
-				userLogin(data.user);
+				userLogin(data.userData, data.userToken);
+
 				navigate('/home');
 			}
 		}
