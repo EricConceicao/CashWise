@@ -73,15 +73,10 @@ const Home = () => {
 	}
 
 	const handleAdicionarNovoGanho = () => {
-		if (selectedCategoria) {
-			// Adicione o novo ganho com a selectedCategoria
-			// Você pode usar a selectedCategoria para categorizar o ganho.
-			// Exemplo: setValorRecebido(valorRecebido + novoValor, selectedCategoria);
-			setValorRecebido(valorRecebido + novoValor);
 
-			showConfirmationMessage("Novo ganho adicionado com sucesso!");
-		}
+		setValorRecebido(valorRecebido + novoValor);
 
+		showConfirmationMessage("Novo ganho adicionado com sucesso!");
 	};
 
 
@@ -411,7 +406,7 @@ const Home = () => {
 
 						<hr />
 
-						<h1>Controle financeiro mensal</h1>
+						<h1>Meu controle mensal</h1>
 						<Row>
 
 							<div className="cartao-perfil col">
@@ -449,22 +444,6 @@ const Home = () => {
 											<Form.Label>Descrição</Form.Label>
 											<Form.Control type="text" name="name" />
 										</Form.Group>
-										<Form.Group className="mb-3">
-											<Form.Label>Categoria</Form.Label>
-											<Form.Select
-												name="categoria"
-												value={selectedCategoria}
-												onChange={(e) => setSelectedCategoria(e.target.value)}
-											>
-												<option value="">Selecione</option>
-												{categorias.map((categoria, index) => (
-													<option key={index} value={categoria}>
-														{categoria}
-													</option>
-												))}
-											</Form.Select>
-										</Form.Group>
-
 										<Form.Group className="mb-3">
 											<Form.Label>Data</Form.Label>
 											<Form.Control type="date" name="email" />
@@ -677,13 +656,18 @@ const Home = () => {
 												</Form.Group>
 												<Form.Group className="mb-3">
 													<Form.Label>Valor</Form.Label>
-													<Form.Control
-														name='valor'
-														type="number"
-														value={valor}
-														onChange={(e) => setValor(e.target.value)}
-													/>
+													<div className="input-group">
+														<span className="input-group-text">R$</span>
+														<Form.Control
+															name='valor'
+															type="number"
+															step="0.01"  // Permita valores fracionados com duas casas decimais
+															value={valor}
+															onChange={(e) => setValor(e.target.value)}
+														/>
+													</div>
 												</Form.Group>
+
 												{duracao === "Por um período" && (
 													<>
 														<Form.Group className="mb-3">
@@ -816,7 +800,7 @@ const Home = () => {
 						<Container className='controle p-5 mb-5'>
 							<h1 className='m-5'>Minhas despesas</h1>
 
-							<Row md={4}>
+							<Row md={3}>
 								{categorias.map((categoria, index) => (
 									<div className={`etiqueta col-md-3`} key={index}>
 										<div className="gasto">
@@ -910,10 +894,10 @@ const Home = () => {
 						</Container>
 
 						<Container className='investimentos p-5'>
-						<h1>Meus investimentos</h1>
+							<h1>Meus investimentos</h1>
+						</Container>
+
 					</Container>
-						
-					</Container>
 
 
 
@@ -924,7 +908,7 @@ const Home = () => {
 
 
 
-					
+
 
 				</Content >
 			</div >
