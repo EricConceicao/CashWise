@@ -34,6 +34,8 @@ export async function createSession(userId, req, res) {
 	}
 }
 
+///////////////////////////////////////////////////////////////////////////////////
+
 export async function checkSession(req, res) {
 	try {
 		const sessionToken = req.cookies.session;
@@ -97,6 +99,7 @@ export async function checkSession(req, res) {
 	}
 }
 
+///////////////////////////////////////////////////////////////////////////
 
 export async function endSession(sessionToken, req, res) {
 	try {
