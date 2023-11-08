@@ -20,10 +20,6 @@ const cardStyle = {
     minHeight:'28rem',
 };
 
-const photoStyle = {
-    height: '80%'
-};
-
 const Sobre = () => {
     return (
         <>
@@ -58,10 +54,6 @@ const Sobre = () => {
                                 <Card.Img style={cardStyle} variant="top" src="/img/redimensionadas/ericArte.jpg"/>
                                 <Card.Body>
                                     <Card.Title>Eric</Card.Title>
-                                    <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>
                                 </Card.Body>
                             </Card>
                         </div>
@@ -71,10 +63,6 @@ const Sobre = () => {
                                 <Card.Img style={cardStyle} variant="top" src="/img/redimensionadas/semaArte.jpg" />
                                 <Card.Body>
                                     <Card.Title>Maria Selma</Card.Title>
-                                    <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>
                                 </Card.Body>
                             </Card>
                         </div>
@@ -84,10 +72,6 @@ const Sobre = () => {
                                 <Card.Img style={cardStyle} variant="top" src="/img/redimensionadas/renatoArte.jpg" />
                                 <Card.Body>
                                     <Card.Title>Renato</Card.Title>
-                                    <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>
                                 </Card.Body>
                             </Card>
                         </div>
@@ -97,10 +81,6 @@ const Sobre = () => {
                                 <Card.Img style={cardStyle} variant="top" src="/img/redimensionadas/tatianaArte.jpg" />
                                 <Card.Body>
                                     <Card.Title>Tatiana</Card.Title>
-                                    <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>
                                 </Card.Body>
                             </Card>
                         </div>
@@ -110,10 +90,6 @@ const Sobre = () => {
                                 <Card.Img style={cardStyle} variant="top" src="/img/redimensionadas/valdemirArte.jpg" />
                                 <Card.Body>
                                     <Card.Title>Valdemir</Card.Title>
-                                    <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>
                                 </Card.Body>
                             </Card>
                         </div>
