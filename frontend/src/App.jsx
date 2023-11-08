@@ -10,6 +10,9 @@ import NotFound from './components/pages/NotFound';
 import PrevidenciaAqui from './components/pages/PrevidenciaAqui';
 import BoletimInformativo from './components/pages/BoletimInformativo';
 import Poupanca from './components/pages/Poupanca';
+import Investimentos from './components/pages/Investimentos';
+import Investodos from './components/pages/Investodos';
+import Prev from './components/pages/Prev';
 // Importações de componentes //
 import Loader from './components/utils/Loader';
 
@@ -31,6 +34,9 @@ const App = () => {
       <Route path="/previdencia" element={<PrevidenciaAqui/>}/>
       <Route path="/boletim" element={<BoletimInformativo/>}/>
       <Route path="/poupanca" element={<Poupanca/>}/>
+      <Route path="/investimentos" element={<Investimentos/>}/>
+      <Route path="/investodos" element={<Investodos/>}/>
+      <Route path="/prev" element={<Prev/>}/>
       <Route path="*" element={<NotFound />} />
     </Routes>
     </>

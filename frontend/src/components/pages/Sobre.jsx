@@ -4,6 +4,7 @@ import Content from '../layouts/Content';
 import Container from 'react-bootstrap/esm/Container';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
+import Quiz from '../layouts/Quiz';
 
 const containerStyle = {
     backgroundImage: 'linear-gradient(to bottom, #213740, #5BD992, #AEF2C6)',
@@ -11,12 +12,12 @@ const containerStyle = {
 };
 const titleStyle = {
     padding: '10px',
-}
+};
 
 const cardStyle = {
     min: '12rem',
     max: '20rem',
-    margin: '.3rem 0',
+    minHeight:'28rem',
 };
 
 const Sobre = () => {
@@ -49,66 +50,46 @@ const Sobre = () => {
 
                     <Container fluid id='cardsAlunos' className='row pb-2 justify-content-around'>
                         <div className="col-sm col-md-4 col-lg" >
-                            <Card className="card" style={cardStyle}>
-                                <Card.Img variant="top" src="/img/redimensionadas/eric!.png" />
+                            <Card className="card my-3">
+                                <Card.Img style={cardStyle} variant="top" src="/img/redimensionadas/ericArte.jpg"/>
                                 <Card.Body>
                                     <Card.Title>Eric</Card.Title>
-                                    <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>
                                 </Card.Body>
                             </Card>
                         </div>
 
                         <div className="col-sm col-md-4 col-lg">
-                            <Card className="card" style={cardStyle}>
-                                <Card.Img variant="top" src="/img/redimensionadas/selma1.jpg" />
+                            <Card className="card my-3">
+                                <Card.Img style={cardStyle} variant="top" src="/img/redimensionadas/semaArte.jpg" />
                                 <Card.Body>
                                     <Card.Title>Maria Selma</Card.Title>
-                                    <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>
                                 </Card.Body>
                             </Card>
                         </div>
 
                         <div className="col-sm col-md-4 col-lg">
-                            <Card className="card" style={cardStyle}>
-                                <Card.Img variant="top" src="/img/redimensionadas/renato1.jpg" />
+                            <Card className="card my-3">
+                                <Card.Img style={cardStyle} variant="top" src="/img/redimensionadas/renatoArte.jpg" />
                                 <Card.Body>
                                     <Card.Title>Renato</Card.Title>
-                                    <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>
                                 </Card.Body>
                             </Card>
                         </div>
 
                         <div className="col-sm col-md-4 col-lg">
-                            <Card className="card" style={cardStyle}>
-                                <Card.Img variant="top" src="/img/redimensionadas/tatiana.jpg" />
+                            <Card className="card my-3">
+                                <Card.Img style={cardStyle} variant="top" src="/img/redimensionadas/tatianaArte.jpg" />
                                 <Card.Body>
                                     <Card.Title>Tatiana</Card.Title>
-                                    <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>
                                 </Card.Body>
                             </Card>
                         </div>
 
                         <div className="col-sm col-md-4 col-lg">
-                            <Card className="card" style={cardStyle}>
-                                <Card.Img variant="top" src="/img/redimensionadas/valdemir.jpg" />
+                            <Card className="card my-3">
+                                <Card.Img style={cardStyle} variant="top" src="/img/redimensionadas/valdemirArte.jpg" />
                                 <Card.Body>
                                     <Card.Title>Valdemir</Card.Title>
-                                    <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card's content.
-                                    </Card.Text>
                                 </Card.Body>
                             </Card>
                         </div>

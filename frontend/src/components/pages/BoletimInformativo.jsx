@@ -4,6 +4,8 @@ import Footer from '../layouts/Footer';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 const BoletimInformativo = () => {
+
+  
   const cardBody = {
     minHeight: "28rem"
   }
@@ -45,7 +47,7 @@ const BoletimInformativo = () => {
                 <Card.Body className={cardBody}>
                   <Card.Title>Principais Tipos de Investimentos</Card.Title>
                   <Card.Text>Os principais investimentos possuem diferentes níveis de risco e retorno.</Card.Text>
-                  <Button variant="primary">Leia Mais</Button>
+                  <Button variant="primary"><Link to="/investimentos">Leia Mais</Link></Button>
                 </Card.Body>
               </Card>
             </Col>
@@ -56,7 +58,18 @@ const BoletimInformativo = () => {
                 <Card.Body className={cardBody}>
                   <Card.Title>Investimentos para Todos</Card.Title>
                   <Card.Text>Desvendando alguns conceitos financeiros.</Card.Text>
-                  <Button variant="primary">Leia Mais</Button>
+                  <Button variant="primary"><Link to="/investodos">Leia Mais</Link></Button>
+                </Card.Body>
+              </Card>
+            </Col>
+
+            <Col lg={4} md={6} className="mb-4">
+              <Card style={cardBody}>
+                <Card.Img style={cardImg} src="/img/previdencia.png" alt="Imagem do artigo investimento para todos" />
+                <Card.Body className={cardBody}>
+                  <Card.Title>Previdência</Card.Title>
+                  <Card.Text>Investindo no seu Amanhã para um futuro financeiramente seguro</Card.Text>
+                  <Button variant="primary"><Link to="/prev">Leia Mais</Link></Button>
                 </Card.Body>
               </Card>
             </Col>
