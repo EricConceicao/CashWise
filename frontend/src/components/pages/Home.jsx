@@ -73,15 +73,10 @@ const Home = () => {
 	}
 
 	const handleAdicionarNovoGanho = () => {
-		if (selectedCategoria) {
-			// Adicione o novo ganho com a selectedCategoria
-			// Você pode usar a selectedCategoria para categorizar o ganho.
-			// Exemplo: setValorRecebido(valorRecebido + novoValor, selectedCategoria);
-			setValorRecebido(valorRecebido + novoValor);
 
-			showConfirmationMessage("Novo ganho adicionado com sucesso!");
-		}
+		setValorRecebido(valorRecebido + novoValor);
 
+		showConfirmationMessage("Novo ganho adicionado com sucesso!");
 	};
 
 
@@ -203,6 +198,8 @@ const Home = () => {
 
 	const [showModal8, setShowModal8] = useState(false);
 
+	const [contasCadastradas, setContasCadastradas] = useState([]);
+
 	const [descricao, setDescricao] = useState("");
 	const [vencimento, setVencimento] = useState("");
 	const [duracao, setDuracao] = useState("Todos os meses");
@@ -212,21 +209,24 @@ const Home = () => {
 	const [mesFinal, setMesFinal] = useState("");
 	const [anoFinal, setAnoFinal] = useState("");
 
-	const [contasCadastradas, setContasCadastradas] = useState([]);
 
-	const handleAdicionarNovaConta = (novaConta) => {
+
+	const handleAdicionarNovaConta = () => {
+
+		const novaConta = {
+			descricao,
+			vencimento,
+			duracao,
+			valor,
+			mesInicial,
+			anoInicial,
+			mesFinal,
+			anoFinal,
+		}
+
 		setContasCadastradas([...contasCadastradas, novaConta]);
 		showConfirmationMessage("Nova conta criada com sucesso!");
 	};
-
-	
-
-
-
-
-
-
-
 
 	const [users, setUsers] = useState([])
 	const [showModal, setShowModal] = useState(false)
@@ -360,7 +360,6 @@ const Home = () => {
 
 								</div>
 
-
 							</div>
 
 
@@ -407,7 +406,7 @@ const Home = () => {
 
 						<hr />
 
-						<h1>Controle financeiro mensal</h1>
+						<h1>Meu controle mensal</h1>
 						<Row>
 
 							<div className="cartao-perfil col">
@@ -445,22 +444,6 @@ const Home = () => {
 											<Form.Label>Descrição</Form.Label>
 											<Form.Control type="text" name="name" />
 										</Form.Group>
-										<Form.Group className="mb-3">
-											<Form.Label>Categoria</Form.Label>
-											<Form.Select
-												name="categoria"
-												value={selectedCategoria}
-												onChange={(e) => setSelectedCategoria(e.target.value)}
-											>
-												<option value="">Selecione</option>
-												{categorias.map((categoria, index) => (
-													<option key={index} value={categoria}>
-														{categoria}
-													</option>
-												))}
-											</Form.Select>
-										</Form.Group>
-
 										<Form.Group className="mb-3">
 											<Form.Label>Data</Form.Label>
 											<Form.Control type="date" name="email" />
@@ -581,338 +564,351 @@ const Home = () => {
 
 						</Row>
 
-					</Container>
+						<div className="container bg-secondary p-5">
 
-					<div className="container p-5 mt-5 mb-5">
-						<div className="row">
+							<div className="row">
+								<h3 className='col'>Em destaque</h3>
+								<div className="col"><Button as="button" variant="outline-primary" onClick={() => setShowModal7(true)}>Nova categoria</Button>
+									<Modal
+										show={showModal7}
+										onHide={() => setShowModal7(false)}
+										size="md"
+										aria-labelledby="contained-modal-title-vcenter"
+										centered
+									>
+										<Modal.Header closeButton>
+											<Modal.Title id="contained-modal-title-vcenter">Nova categoria</Modal.Title>
+										</Modal.Header>
+										<Modal.Body>
+											<Form>
+												<Form.Group className="mb-3">
+													<Form.Label>Escolher uma categoria ou adicionar uma nova</Form.Label>
+													<Form.Control as="select" name="categoria" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)}>
+														<option value="">Escolha uma categoria</option>
+														{categorias.map((categoria, index) => (
+															<option key={index} value={categoria}>
+																{categoria}
+															</option>
+														))}
+													</Form.Control>
+												</Form.Group>
+												<Form.Group className="mb-3">
+													<Form.Label>Ou adicione uma nova categoria</Form.Label>
+													<Form.Control type="text" name="novaCategoria" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)} />
+												</Form.Group>
+											</Form>
+										</Modal.Body>
+										<Modal.Footer>
+											<Button as='button' variant="secondary" onClick={handleAdicionarNovaCategoria}>
+												Criar
+											</Button>
+										</Modal.Footer>
+										{showConfirmation && (
+											<div className="alert alert-danger alert-custom" role="alert">
+												{confirmationMessage}
+											</div>
+										)}
+									</Modal>
+								</div>
+
+								<div className="col"><Button as="button" variant="outline-danger" onClick={() => setShowModal8(true)}>Nova conta</Button>
+									<Modal
+										show={showModal8}
+										onHide={() => setShowModal8(false)}
+										size="md"
+										aria-labelledby="contained-modal-title-vcenter"
+										centered
+									>
+										<Modal.Header closeButton>
+											<Modal.Title id="contained-modal-title-vcenter">Nova conta</Modal.Title>
+										</Modal.Header>
+										<Modal.Body>
+											<Form>
+												<Form.Group className="mb-3">
+													<Form.Label>Descrição</Form.Label>
+													<Form.Control
+														type="text"
+														name="descricao"
+														value={descricao}
+														onChange={(e) => setDescricao(e.target.value)}
+
+													/>
+												</Form.Group>
+												<Form.Group className="mb-3">
+													<Form.Label>Vencimento (dia)</Form.Label>
+													<Form.Control
+														name='vencimento'
+														type="text"
+														value={vencimento}
+														onChange={(e) => setVencimento(e.target.value)}
+													/>
+												</Form.Group>
+												<Form.Group className="mb-3">
+													<Form.Label>Duração</Form.Label>
+													<Form.Select
+														name='duracao'
+														value={duracao}
+														onChange={(e) => setDuracao(e.target.value)}
+													>
+														<option value="Todos os meses">Todos os meses</option>
+														<option value="Por um período">Por um período</option>
+													</Form.Select>
+												</Form.Group>
+												<Form.Group className="mb-3">
+													<Form.Label>Valor</Form.Label>
+													<div className="input-group">
+														<span className="input-group-text">R$</span>
+														<Form.Control
+															name='valor'
+															type="number"
+															step="0.01"  // Permita valores fracionados com duas casas decimais
+															value={valor}
+															onChange={(e) => setValor(e.target.value)}
+														/>
+													</div>
+												</Form.Group>
+
+												{duracao === "Por um período" && (
+													<>
+														<Form.Group className="mb-3">
+															<Form.Label>Mês Inicial</Form.Label>
+															<Form.Control
+																name='mesInicial'
+																type="text"
+																value={mesInicial}
+																onChange={(e) => setMesInicial(e.target.value)}
+															/>
+														</Form.Group>
+														<Form.Group className="mb-3">
+															<Form.Label>Ano Inicial</Form.Label>
+															<Form.Control
+																name='anoInicial'
+																type="text"
+																value={anoInicial}
+																onChange={(e) => setAnoInicial(e.target.value)}
+															/>
+														</Form.Group>
+														<Form.Group className="mb-3">
+															<Form.Label>Mês Final</Form.Label>
+															<Form.Control
+																name='mesFinal'
+																type="text"
+																value={mesFinal}
+																onChange={(e) => setMesFinal(e.target.value)}
+															/>
+														</Form.Group>
+														<Form.Group className="mb-3">
+															<Form.Label>Ano Final</Form.Label>
+															<Form.Control
+																name='anoFinal'
+																type="text"
+																value={anoFinal}
+																onChange={(e) => setAnoFinal(e.target.value)}
+															/>
+														</Form.Group>
+													</>
+												)}
+											</Form>
+										</Modal.Body>
+										<Modal.Footer>
+											<Button as='button' variant="secondary" onClick={handleAdicionarNovaConta}>
+												Criar
+											</Button>
+										</Modal.Footer>
+										{showConfirmation && (
+											<div className="alert alert-danger alert-custom" role="alert">
+												{confirmationMessage}
+											</div>
+										)}
+									</Modal>
+								</div>
+							</div>
+						</div>
+
+						<div className='container painel mt-5 mb-5'>
+							<h1 className='mb-5'>Agenda Financeira {/*<AiOutlineSchedule />*/}</h1>
+
+
+
+							<div className="tabela p-4">
+								<div className="titulo row mb-5">
+									<div className="col"></div>
+									<div className="linha col mb-4">Data</div>
+									<div className="linha col mb-4">Descrição</div>
+									<div className="linha col mb-4">Ação</div>
+									<div className="linha col mb-4">Valor</div>
+									<div className="linha col mb-4">Status</div>
+									<div className="col mb-4"></div>
+
+								</div>
+
+								<div className="pagar row mb-5 pt-1 pb-1">
+									<div className="col"><BsArrowUpLeft className='seta text-danger' /></div>
+									<div className="col">08/11/23</div>
+									<div className="col fw-bold"><i>Financiamento</i></div>
+									<div className="col">Pagar</div>
+									<div className="col">R$ 1200,00</div>
+									<div className="col">Valor</div>
+									<div className="col text-danger">Excluir</div>
+
+								</div>
+
+								<div className="receber row mb-5 pt-1 pb-1">
+									<div className="col"><BsArrowDownRight className='seta text-primary' /></div>
+									<div className="col">10/11/23</div>
+									<div className="col fw-bold"><i>Salário</i></div>
+									<div className="col">Receber</div>
+									<div className="col">R$ 5000,00</div>
+									<div className="col">Valor</div>
+									<div className="col text-danger">Excluir</div>
+
+								</div>
+
+								<div className="pagar row mb-5 pt-1 pb-1">
+									<div className="col"><BsArrowUpLeft className='seta text-danger' /></div>
+									<div className="col">11/11/23</div>
+									<div className="col fw-bold"><i>Cartão de crédito</i></div>
+									<div className="col">Pagar</div>
+									<div className="col">R$ 1200,00</div>
+									<div className="col">Valor</div>
+									<div className="col text-danger">Excluir</div>
+
+								</div>
+							</div>
 
 						</div>
-						<div className="row">
-							<div className="col"><Button as="button" variant="primary" onClick={() => setShowModal7(true)}>Nova categoria</Button>
-								<Modal
-									show={showModal7}
-									onHide={() => setShowModal7(false)}
-									size="md"
-									aria-labelledby="contained-modal-title-vcenter"
-									centered
-								>
-									<Modal.Header closeButton>
-										<Modal.Title id="contained-modal-title-vcenter">Nova categoria</Modal.Title>
-									</Modal.Header>
-									<Modal.Body>
-										<Form>
-											<Form.Group className="mb-3">
-												<Form.Label>Escolher uma categoria ou adicionar uma nova</Form.Label>
-												<Form.Control as="select" name="categoria" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)}>
-													<option value="">Escolha uma categoria</option>
-													{categorias.map((categoria, index) => (
-														<option key={index} value={categoria}>
-															{categoria}
-														</option>
-													))}
-												</Form.Control>
-											</Form.Group>
-											<Form.Group className="mb-3">
-												<Form.Label>Ou adicione uma nova categoria</Form.Label>
-												<Form.Control type="text" name="novaCategoria" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)} />
-											</Form.Group>
-										</Form>
-									</Modal.Body>
-									<Modal.Footer>
-										<Button as='button' variant="secondary" onClick={handleAdicionarNovaCategoria}>
-											Criar
-										</Button>
-									</Modal.Footer>
-									{showConfirmation && (
-										<div className="alert alert-danger alert-custom" role="alert">
-											{confirmationMessage}
+
+						<div className="container contas-cadastradas">
+							<h1>Minhas contas</h1>
+							{contasCadastradas.map((conta, index) => (
+								<div key={index} className="etiqueta">
+									<p className='fw-bold fs-5'>{conta.descricao}</p>
+									<p>{conta.vencimento}</p>
+									<p>{conta.duracao}</p>
+									<p>{conta.valor}</p>
+									{conta.duracao === "Por um período" && (
+										<div>
+											<p>Início: {conta.mesInicial}/{conta.anoInicial}</p>
+											<p>Final: {conta.mesFinal}/{conta.anoFinal}</p>
 										</div>
 									)}
-								</Modal>
-							</div>
-
-							<div className="col"><Button as="button" variant="primary" onClick={() => setShowModal8(true)}>Nova conta</Button>
-								<Modal
-									show={showModal8}
-									onHide={() => setShowModal8(false)}
-									size="md"
-									aria-labelledby="contained-modal-title-vcenter"
-									centered
-								>
-									<Modal.Header closeButton>
-										<Modal.Title id="contained-modal-title-vcenter">Nova conta</Modal.Title>
-									</Modal.Header>
-									<Modal.Body>
-										<Form>
-											<Form.Group className="mb-3">
-												<Form.Label>Descrição</Form.Label>
-												<Form.Control
-												type="text" 
-												name="descricao" 
-												value={descricao} 
-												onChange={(e) => setDescricao(e.target.value)}
-													
-												/>
-											</Form.Group>
-											<Form.Group className="mb-3">
-												<Form.Label>Vencimento (dia)</Form.Label>
-												<Form.Control
-													name='vencimento'
-													type="text"
-													value={vencimento}
-													onChange={(e) => setVencimento(e.target.value)}
-												/>
-											</Form.Group>
-											<Form.Group className="mb-3">
-												<Form.Label>Duração</Form.Label>
-												<Form.Select
-												name='duracao'
-													value={duracao}
-													onChange={(e) => setDuracao(e.target.value)}
-												>
-													<option value="Todos os meses">Todos os meses</option>
-													<option value="Por um período">Por um período</option>
-												</Form.Select>
-											</Form.Group>
-											<Form.Group className="mb-3">
-												<Form.Label>Valor</Form.Label>
-												<Form.Control
-													name='valor'
-													type="number"
-													value={valor}
-													onChange={(e) => setValor(e.target.value)}
-												/>
-											</Form.Group>
-											{duracao === "Por um período" && (
-												<>
-													<Form.Group className="mb-3">
-														<Form.Label>Mês Inicial</Form.Label>
-														<Form.Control
-														name='mesInicial'
-															type="text"
-															value={mesInicial}
-															onChange={(e) => setMesInicial(e.target.value)}
-														/>
-													</Form.Group>
-													<Form.Group className="mb-3">
-														<Form.Label>Ano Inicial</Form.Label>
-														<Form.Control
-														name='anoInicial'
-															type="text"
-															value={anoInicial}
-															onChange={(e) => setAnoInicial(e.target.value)}
-														/>
-													</Form.Group>
-													<Form.Group className="mb-3">
-														<Form.Label>Mês Final</Form.Label>
-														<Form.Control
-														name='mesFinal'
-															type="text"
-															value={mesFinal}
-															onChange={(e) => setMesFinal(e.target.value)}
-														/>
-													</Form.Group>
-													<Form.Group className="mb-3">
-														<Form.Label>Ano Final</Form.Label>
-														<Form.Control
-														name='anoFinal'
-															type="text"
-															value={anoFinal}
-															onChange={(e) => setAnoFinal(e.target.value)}
-														/>
-													</Form.Group>
-												</>
-											)}
-										</Form>
-									</Modal.Body>
-									<Modal.Footer>
-										<Button as='button' variant="secondary" onClick={handleAdicionarNovaConta}>
-											Criar
-										</Button>
-									</Modal.Footer>
-									{showConfirmation && (
-										<div className="alert alert-danger alert-custom" role="alert">
-											{confirmationMessage}
-										</div>
-									)}
-								</Modal>
-							</div>
-						</div>
-					</div>
-
-					<div className='container painel text-secondary mt-5 mb-5 p-5'>
-						<h1 className='mb-5'>Agenda Financeira {/*<AiOutlineSchedule />*/}</h1>
-
-
-
-						<div className="tabela p-4">
-							<div className="titulo row mb-5">
-								<div className="col"></div>
-								<div className="linha col mb-4">Data</div>
-								<div className="linha col mb-4">Descrição</div>
-								<div className="linha col mb-4">Ação</div>
-								<div className="linha col mb-4">Valor</div>
-								<div className="linha col mb-4">Status</div>
-								<div className="col mb-4"></div>
-
-							</div>
-
-							<div className="pagar row mb-5 pt-1 pb-1">
-								<div className="col"><BsArrowUpLeft className='seta text-danger' /></div>
-								<div className="col">08/11/23</div>
-								<div className="col fw-bold"><i>Financiamento</i></div>
-								<div className="col">Pagar</div>
-								<div className="col">R$ 1200,00</div>
-								<div className="col">Valor</div>
-								<div className="col text-danger">Excluir</div>
-
-							</div>
-
-							<div className="receber row mb-5 pt-1 pb-1">
-								<div className="col"><BsArrowDownRight className='seta text-primary' /></div>
-								<div className="col">10/11/23</div>
-								<div className="col fw-bold"><i>Salário</i></div>
-								<div className="col">Receber</div>
-								<div className="col">R$ 5000,00</div>
-								<div className="col">Valor</div>
-								<div className="col text-danger">Excluir</div>
-
-							</div>
-
-							<div className="pagar row mb-5 pt-1 pb-1">
-								<div className="col"><BsArrowUpLeft className='seta text-danger' /></div>
-								<div className="col">11/11/23</div>
-								<div className="col fw-bold"><i>Cartão de crédito</i></div>
-								<div className="col">Pagar</div>
-								<div className="col">R$ 1200,00</div>
-								<div className="col">Valor</div>
-								<div className="col text-danger">Excluir</div>
-
-							</div>
-						</div>
-
-					</div>
-
-					<div className="container contas-cadastradas">
-						<h2>Contas Cadastradas</h2>
-						{contasCadastradas.map((conta, index) => (
-							<div key={index} className="conta">
-								<p>Descrição: {conta.descricao}</p>
-								<p>Vencimento: {conta.vencimento}</p>
-								<p>Duração: {conta.duracao}</p>
-								<p>Valor: {conta.valor}</p>
-								{conta.duracao === "Por um período" && (
-									<div>
-										<p>Mês Inicial: {conta.mesInicial}</p>
-										<p>Ano Inicial: {conta.anoInicial}</p>
-										<p>Mês Final: {conta.mesFinal}</p>
-										<p>Ano Final: {conta.anoFinal}</p>
-									</div>
-								)}
-							</div>
-						))}
-					</div>
-
-
-					<Container className='controle p-5 mb-5'>
-						<h1 className='m-5'>Minhas despesas</h1>
-
-						<Row md={4}>
-							{categorias.map((categoria, index) => (
-								<div className={`etiqueta text-dark col-md-3`} key={index}>
-									<div className="gasto">
-										<p className="fw-bold fs-5">{categoria}</p>
-										<p>
-											{" "}
-											{gastosPorCategoria[categoria]
-												? gastosPorCategoria[categoria].reduce(
-													(total, gasto) => total + gasto.valor,
-													0
-												).toLocaleString('pt-BR', {
-													style: 'currency',
-													currency: 'BRL'
-												})
-												: 0}
-										</p>
-									</div>
-
-									<hr />
-
-									<div className="botoes">
-										<Button
-											as="button"
-											size="sm"
-											variant="primary"
-											className="botao"
-											onClick={() => mostrarDetalhesCategoria(categoria)
-											}
-										>
-											Detalhar
-										</Button>
-
-
-										<Button
-											as="button"
-											size="sm"
-											variant="secondary"
-											className="botao"
-											onClick={() => handleExcluirCategoria(index)}
-										>
-											Excluir
-										</Button>
-									</div>
-
 								</div>
 							))}
+						</div>
 
-						</Row>
+
+						<Container className='controle p-5 mb-5'>
+							<h1 className='m-5'>Minhas despesas</h1>
+
+							<Row md={3}>
+								{categorias.map((categoria, index) => (
+									<div className={`etiqueta col-md-3`} key={index}>
+										<div className="gasto">
+											<p className="fw-bold fs-5">{categoria}</p>
+											<p className=''>
+												{" "}
+												{gastosPorCategoria[categoria]
+													? gastosPorCategoria[categoria].reduce(
+														(total, gasto) => total + gasto.valor,
+														0
+													).toLocaleString('pt-BR', {
+														style: 'currency',
+														currency: 'BRL'
+													})
+													: 0}
+											</p>
+										</div>
+
+										<hr />
+
+										<div className="botoes">
+											<Button
+												as="button"
+												size="sm"
+												variant="outline-primary"
+												className="botao"
+												onClick={() => mostrarDetalhesCategoria(categoria)
+												}
+											>
+												Detalhar
+											</Button>
 
 
-						<Modal
-							show={showModalDetalhes}
-							onHide={() => setShowModalDetalhes(false)}
-							size="lg"
-							aria-labelledby="contained-modal-title-vcenter"
-							centered
-						>
-							<Modal.Header closeButton>
-								<Modal.Title id="contained-modal-title-vcenter">
-									Meus gastos com {categoriaSelecionada}
-								</Modal.Title>
-							</Modal.Header>
-							<Modal.Body>
-								<div className="row">
-									<div className="col fw-bold">Descrição</div>
-									<div className="col fw-bold">Data</div>
-									<div className="col fw-bold">Valor</div>
-								</div>
-								<br />
-								{categoriaSelecionada && (
-									<ul>
-										{gastosPorCategoria[categoriaSelecionada]?.map((gasto, index) => (
-											<li key={index} className='row'>
-												<p className='col'>{gasto.descricao}</p>
-												<p className='col'>{gasto.data}</p>
-												<p className='col'>{gasto.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-												<br />
-											</li>
-										))}
-									</ul>
-								)}
-							</Modal.Body>
-							<Modal.Footer>
-								<Button as="button" variant="secondary" onClick={() => setShowModalDetalhes(false)}>
-									Fechar
-								</Button>
-							</Modal.Footer>
-						</Modal>
+											<Button
+												as="button"
+												size="sm"
+												variant="outline-danger"
+												className="botao"
+												onClick={() => handleExcluirCategoria(index)}
+											>
+												Excluir
+											</Button>
+										</div>
 
+									</div>
+								))}
+
+							</Row>
+
+
+							<Modal
+								show={showModalDetalhes}
+								onHide={() => setShowModalDetalhes(false)}
+								size="lg"
+								aria-labelledby="contained-modal-title-vcenter"
+								centered
+							>
+								<Modal.Header closeButton>
+									<Modal.Title id="contained-modal-title-vcenter">
+										Meus gastos com {categoriaSelecionada}
+									</Modal.Title>
+								</Modal.Header>
+								<Modal.Body>
+									<div className="row">
+										<div className="col fw-bold">Descrição</div>
+										<div className="col fw-bold">Data</div>
+										<div className="col fw-bold">Valor</div>
+									</div>
+									<br />
+									{categoriaSelecionada && (
+										<ul>
+											{gastosPorCategoria[categoriaSelecionada]?.map((gasto, index) => (
+												<li key={index} className='row'>
+													<p className='col'>{gasto.descricao}</p>
+													<p className='col'>{gasto.data}</p>
+													<p className='col'>{gasto.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+													<br />
+												</li>
+											))}
+										</ul>
+									)}
+								</Modal.Body>
+								<Modal.Footer>
+									<Button as="button" variant="secondary" onClick={() => setShowModalDetalhes(false)}>
+										Fechar
+									</Button>
+								</Modal.Footer>
+							</Modal>
+
+
+						</Container>
+
+						<Container className='investimentos p-5'>
+							<h1>Meus investimentos</h1>
+						</Container>
 
 					</Container>
 
-					<Container fluid className='investimentos bg-warning text-light p-5'>
-						<h1>Meus investimentos</h1>
-					</Container>
+
+
+
+
+
+
+
+
+
+
 
 				</Content >
 			</div >
