@@ -50,12 +50,23 @@ function SignupModal({ handleFeedback, feedback, loginModal, showSign, handleSho
 
 	useEffect(() => {
 		setValidPass(PASS_REGEX.test(pass));
-		setValidMatch(pass === match && pass);
+		if (pass)
+		setValidMatch(pass === match);
 	}, [pass, match]);
+
+	function checkForm() {
+        if (validName && validSname && validEmail && validPass && validMatch === true) {
+            return true 
+        } else {
+            handleFeedback('Campos inválidos ou faltando');
+            return false
+        }
+    }
 
 
 	async function createUser(e) {
 		e.preventDefault();
+		if (checkForm() === false) return
 
 		const userInput = {
 			name: e.target.name.value,
@@ -190,14 +201,15 @@ function SignupModal({ handleFeedback, feedback, loginModal, showSign, handleSho
 											/>
 											<Form.Control.Feedback type="invalid" id="confirm-info">Confirme corretamente sua senha</Form.Control.Feedback>
 										</FloatingLabel>
-									
 									<Form.Text className="small text-muted"><span className="fs-3">&#129323;</span>Não compartilhe sua senha com ninguem. Shhh.</Form.Text>
-							
 							</Form.Group>
 
 
 							<div className="d-flex justify-content-center mt-3">
-								<Button className="w-50" type="submit"><AccountIco className='me-2' size={28} />Criar Conta!</Button>
+								<Button className="w-50" type="submit"
+								disabled={validName && validSname && validEmail && validPass && validMatch === true ? false : true}>
+									<AccountIco className='me-2' size={28} />Criar Conta!
+								</Button>
 							</div>
 						</fieldset>
 					</Row>
