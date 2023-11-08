@@ -26,7 +26,7 @@ const Investimentos = () => {
                     <Row>
                         <Col md={12} className="mb-4">
                             <Card>
-                                <Card.Img src="img/tiposInv.png" alt="Imagem do artigo poupança" />
+
                                 <Card.Body>
                                     <Card.Title><h2>Os Diferentes Tipos de Renda Fixa</h2></Card.Title>
                                     <Card.Text>
@@ -55,6 +55,8 @@ const Investimentos = () => {
                                         <h5>Desvantagens:</h5>
                                         <p>Flutuação de Preços: Os preços dos títulos podem variar no mercado secundário, impactando o valor dos investimentos antes do vencimento.</p>
                                         <p>Tributação: Incide Imposto de Renda sobre os rendimentos, seguindo uma tabela regressiva.</p>
+
+                                        <Card.Img src="img/tiposInv.png" alt="Imagem do artigo poupança" />
 
                                         <h4>Letra de Crédito Imobiliário (LCI) e Letra de Crédito do Agronegócio (LCA):</h4>
                                         <h5>Vantagens:</h5>
