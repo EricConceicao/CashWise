@@ -20,6 +20,8 @@ import { BsArrowUpLeft } from 'react-icons/bs'
 import { BsArrowDownRight } from 'react-icons/bs'
 import useUserStore from '../store/UserStore';
 import { format } from 'date-fns';
+import { Chart } from 'chart.js';
+
 
 
 const Home = () => {
@@ -127,13 +129,31 @@ const Home = () => {
 		"Saúde",
 		"Lazer",
 		"Impostos",
-		"Investimentos",
-		"Previdência",
 		"Compras",
 		"Contas",
 		"Financiamento",
 		"Aluguel",
 		"Seguro"]);
+
+		// Função para calcular o total dos valores das categorias
+		const calcularTotal = () => {
+			return categorias.reduce((total, categoria) => total + categoria.valor, 0);
+		  };
+		
+		  // Função para calcular o percentual de cada categoria
+		  const calcularPercentual = (categoria) => {
+			const total = calcularTotal();
+			const valorCategoria = categoria.valor;
+			return ((valorCategoria / total) * 100).toFixed(2);
+		  };
+		
+		  useEffect(() => {
+			// Exemplo de como calcular o percentual de cada categoria
+			categorias.forEach((categoria) => {
+			  console.log(`Categoria: ${categoria.nome}, Percentual: ${calcularPercentual(categoria)}%`);
+			}
+			);
+		  }, []);
 
 	const adicionarCategoria = (novaCategoria) => {
 		setCategorias([...categorias, novaCategoria]);
@@ -175,18 +195,6 @@ const Home = () => {
 	const [gastosDoMesCorrente, setGastosDoMesCorrente] = useState([]);
 	const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
 
-	const filtrarGastosDoMesCorrente = (categoriaSelecionada) => {
-		const gastosCategoria = gastosPorCategoria[categoriaSelecionada] || [];
-		const gastosFiltrados = gastosCategoria.filter((gasto) => {
-			const dataGasto = new Date(gasto.data);
-			return (
-				dataGasto.getMonth() === currentDate.getMonth() &&
-				dataGasto.getFullYear() === currentDate.getFullYear()
-			);
-		});
-		return gastosFiltrados;
-	};
-
 	const mostrarDetalhesCategoria = (categoria) => {
 		setCategoriaSelecionada(categoria);
 		setShowModalDetalhes(true);
@@ -227,6 +235,17 @@ const Home = () => {
 		setContasCadastradas([...contasCadastradas, novaConta]);
 		showConfirmationMessage("Nova conta criada com sucesso!");
 	};
+
+	
+
+
+
+
+
+
+
+
+
 
 	const [users, setUsers] = useState([])
 	const [showModal, setShowModal] = useState(false)
@@ -726,13 +745,13 @@ const Home = () => {
 						</div>
 
 						<div className='container painel mt-5 mb-5'>
-							<h1 className='mb-5'>Agenda Financeira {/*<AiOutlineSchedule />*/}</h1>
+							<h1 className='mb-5'>Agenda Financeira </h1>
 
 
 
 							<div className="tabela p-4">
-								<div className="titulo row mb-5">
-									<div className="col"></div>
+								<div className="bg-secondary titulo row mb-5">
+									<div className="col">{<AiOutlineSchedule className='fs-lg' />}</div>
 									<div className="linha col mb-4">Data</div>
 									<div className="linha col mb-4">Descrição</div>
 									<div className="linha col mb-4">Ação</div>
@@ -742,7 +761,7 @@ const Home = () => {
 
 								</div>
 
-								<div className="pagar row mb-5 pt-1 pb-1">
+								<div className="bg-secondary pagar row mb-5 pt-1 pb-1">
 									<div className="col"><BsArrowUpLeft className='seta text-danger' /></div>
 									<div className="col">08/11/23</div>
 									<div className="col fw-bold"><i>Financiamento</i></div>
@@ -753,7 +772,7 @@ const Home = () => {
 
 								</div>
 
-								<div className="receber row mb-5 pt-1 pb-1">
+								<div className="bg-secondary receber row mb-5 pt-1 pb-1">
 									<div className="col"><BsArrowDownRight className='seta text-primary' /></div>
 									<div className="col">10/11/23</div>
 									<div className="col fw-bold"><i>Salário</i></div>
@@ -764,7 +783,7 @@ const Home = () => {
 
 								</div>
 
-								<div className="pagar row mb-5 pt-1 pb-1">
+								<div className="bg-secondary pagar row mb-5 pt-1 pb-1">
 									<div className="col"><BsArrowUpLeft className='seta text-danger' /></div>
 									<div className="col">11/11/23</div>
 									<div className="col fw-bold"><i>Cartão de crédito</i></div>
@@ -800,12 +819,12 @@ const Home = () => {
 						<Container className='controle p-5 mb-5'>
 							<h1 className='m-5'>Minhas despesas</h1>
 
-							<Row md={3}>
+							<div className='cartoes-categoria'>
 								{categorias.map((categoria, index) => (
-									<div className={`etiqueta col-md-3`} key={index}>
+									<div className={`cartao-categoria col-md-3`} key={index}>
 										<div className="gasto">
 											<p className="fw-bold fs-5">{categoria}</p>
-											<p className=''>
+											<p className='valor-categoria bg-secondary'>
 												{" "}
 												{gastosPorCategoria[categoria]
 													? gastosPorCategoria[categoria].reduce(
@@ -848,7 +867,7 @@ const Home = () => {
 									</div>
 								))}
 
-							</Row>
+							</div>
 
 
 							<Modal
@@ -892,6 +911,16 @@ const Home = () => {
 
 
 						</Container>
+
+						<Container>
+							<h1>Meu gráfico</h1>
+							<canvas id="meuGrafico"></canvas>
+							
+
+
+						</Container>
+
+
 
 						<Container className='investimentos p-5'>
 							<h1>Meus investimentos</h1>

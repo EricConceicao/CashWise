@@ -113,6 +113,20 @@ h3 {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
 }
 
+.cartao-categoria {
+    width: 300px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+    margin: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;    
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    border-bottom: 4px solid #fff;
+}
+
 .item {
     display: flex;
     flex-direction: column;
@@ -125,9 +139,12 @@ h3 {
 }
 
 .painel {
-    border-style: outset;
     border-radius: 10px;
     padding: 70px 70px 20px 70px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    border-bottom: 4px solid #fff;
+    display: flex;
+    flex-direction: column;    
 }
 
 .etiqueta {
@@ -243,35 +260,31 @@ h1 {
     box-shadow: 0;
 }
 
+.tabela .col {
+    gap: 20px;
+}
+
 .tabela .titulo {
     font-size: large;
     border-radius: 10px;
     padding: 0 5px;
-    border-bottom: 4px solid #fff;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    padding-bottom: 5px;
-    background: #fff;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    padding-bottom: 5px; 
+    
 }
 
 .pagar {
-    border: 1px 1px 0 1px #ccc;
-    border-bottom: 4px solid red;
+    border: 1px 1px 0 1px #ccc;    
     border-radius: 10px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     font-size: large;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-
 }
 
 .receber {
-    border: 1px 1px 0 1px #ccc;
-    border-bottom: 4px solid palegreen;
+    border: 1px 1px 0 1px #ccc;    
     border-radius: 10px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     font-size: large;
-    background: #fff;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
 }
 
 .seta {
@@ -299,4 +312,20 @@ h1 {
     text-align: center;
 }
 
+.cartao-categoria .botoes {
+    display: flex;
+    flex-direction: column;
+}
+
+.valor-categoria {
+    width: 100px;
+    border-radius: 5px;
+    padding-left: 3px;
+}
+
+.controle .cartoes-categoria{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;    
+}
 /* Fim para estilo da Home */
