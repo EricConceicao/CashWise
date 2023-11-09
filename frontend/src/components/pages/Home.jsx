@@ -152,13 +152,15 @@ const Home = () => {
 		'#C0C0C0',
 		'#FFD700',
 		'#00FFFF',
-		'',
-		'',
-		'',
-		'',
-		'',
-		'',
-	]
+		'#800080',
+		'#FFFF00', 
+		'#00FF00', 
+		'#FF6347', 
+		'#6A5ACD', 
+		'#4B0082', 
+		'#7CFC00', 
+		'#FF4500' 
+	  ];
 
 	const [categorias, setCategorias] = useState([
 		"Alimentação",
@@ -623,7 +625,7 @@ const Home = () => {
 									</Button>
 								</Modal.Footer>
 								{showConfirmation && (
-									<div className="alert alert-danger alert-custom" role="alert">
+									<div className="alert alert-success alert-custom" role="alert">
 										{confirmationMessage}
 									</div>
 								)}
@@ -992,23 +994,7 @@ const Home = () => {
 							
 						</Container>
 
-						
-
-
-
-						<Container className='controle p-5'>
-							<h1>Meus investimentos</h1>
-						</Container>
-
 					</Container>
-
-
-
-
-
-
-
-
 
 				</Content >
 			</div >

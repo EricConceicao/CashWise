@@ -196,60 +196,6 @@ h1 {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-.etiqueta.vermelha {
-    border-left: 3px solid #FF0000;
-}
-
-.etiqueta.laranja {
-    border-left: 3px solid #FFA500;
-}
-
-.etiqueta.amarela {
-    border-left: 3px solid #DAA520;
-}
-
-.etiqueta.verde {
-    border-left: 3px solid #008000;
-}
-
-.etiqueta.azul {
-    border-left: 3px solid #000080;
-}
-
-.etiqueta.violeta {
-    border-left: 3px solid #9400D3;
-}
-
-.etiqueta.rosa {
-    border-left: 3px solid #FF69B4;
-}
-
-.etiqueta.marron {
-    border-left: 3px solid #A52A2A;
-}
-
-.etiqueta.cinza {
-    border-left: 3px solid #808080;
-}
-
-.etiqueta.prata {
-    border-left: 3px solid #C0C0C0;
-}
-
-.etiqueta.ouro {
-    border-left: 3px solid #FFD700;
-}
-
-.etiqueta.ciano {
-    border-left: 3px solid #00FFFF;
-}
-
-.investimentos {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 .pontuacao {
     display: flex;  
     border-radius: 30px;
@@ -340,7 +286,7 @@ h1 {
 
 .controle .cartoes-categoria{
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;    
 }
 /* Fim para estilo da Home */
