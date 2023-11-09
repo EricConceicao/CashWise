@@ -9,7 +9,6 @@ function Loader() {
 	const [checked, setChecked] = useState(false);
 
 	useEffect(() => {
-		console.log(checked, session)
 		async function checkSession() {
 			const response = await fetch('http://localhost:3000/auth/refresh', {
 				method: 'POST',
@@ -26,8 +25,8 @@ function Loader() {
 				} else {
 					setChecked(true);
 					navigate('/');
-					
 				}
+				
 				setChecked(true);
 				return
 			}

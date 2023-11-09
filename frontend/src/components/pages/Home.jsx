@@ -22,6 +22,8 @@ import useUserStore from '../store/UserStore';
 import { format } from 'date-fns';
 import { Chart } from 'chart.js';
 
+import IconShop from '../utils/IconShop';
+
 const Home = () => {
 	// Dados do store após o login do usuário //
 	const name = useUserStore(state => state.name);
@@ -304,7 +306,7 @@ const Home = () => {
 
 							<div className="perfil1">
 
-								<img className='mb-5' src="https://avatars.githubusercontent.com/u/4259630?v=4" alt="Foto de perfil" />
+								<IconShop className="mb-5" photo={photo} />
 
 								<h1 className='mb-5 text-primary'><i>{name} {sname}</i></h1>
 
