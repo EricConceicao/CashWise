@@ -19,8 +19,12 @@ import { AiOutlineSchedule } from 'react-icons/ai';
 import { BsArrowUpLeft } from 'react-icons/bs'
 import { BsArrowDownRight } from 'react-icons/bs'
 import useUserStore from '../store/UserStore';
-import { format } from 'date-fns';
-import { Chart } from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Doughnut } from "react-chartjs-2";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+import IconShop from '../utils/IconShop';
 
 const Home = () => {
 	// Dados do store após o login do usuário //
@@ -124,14 +128,37 @@ const Home = () => {
 				const percentual = (totalCategoria / valorGasto) * 100;
 				percentuaisPorCategoria[categoria] = percentual;
 			}
-
+			
 			showConfirmationMessage("Novo gasto adicionado com sucesso!");
 		}
 	};
-
-
-
+	
+	
+	
 	const [showModal7, setShowModal7] = useState(false);
+	
+	const [gastosPorCategoria, setGastosPorCategoria] = useState({});
+
+	const colors = [
+		'#FF0000',
+		'#FFA500',
+		'#DAA520',
+		'#008000',
+		'#000080',
+		'#9400D3',
+		'#FF69B4',
+		'#A52A2A',
+		'#808080',
+		'#C0C0C0',
+		'#FFD700',
+		'#00FFFF',
+		'',
+		'',
+		'',
+		'',
+		'',
+		'',
+	]
 
 	const [categorias, setCategorias] = useState([
 		"Alimentação",
@@ -143,6 +170,30 @@ const Home = () => {
 		"Financiamento",
 		"Aluguel",
 		"Seguro"]);
+	
+	const labelsColors = []
+	const valorCategorias = []
+	const categoriasLegenda = [] 
+
+	categorias.map((categoria, index)=>{
+		if (gastosPorCategoria[categoria]){
+			categoriasLegenda.push(categoria)
+			labelsColors.push(colors[index])
+			valorCategorias.push(gastosPorCategoria[categoria].reduce((total, gasto) => total + gasto.valor, 0))
+		}
+	})
+
+	console.log(valorCategorias)
+
+	const dataMyChart = {
+		labels: categoriasLegenda,
+	  datasets: [{
+		label: 'My First Dataset',
+		data: valorCategorias,
+		backgroundColor: labelsColors,
+		hoverOffset: 4
+	  }]
+	}
 
 	// Função para calcular o total dos valores das categorias
 	const calcularTotal = () => {
@@ -186,7 +237,6 @@ const Home = () => {
 
 	const [selectedCategoria, setSelectedCategoria] = useState("");
 
-	const [gastosPorCategoria, setGastosPorCategoria] = useState({});
 
 	const [showConfirmation, setShowConfirmation] = useState(false);
 	const [confirmationMessage, setConfirmationMessage] = useState("");
@@ -244,6 +294,13 @@ const Home = () => {
 		setContasCadastradas([...contasCadastradas, novaConta]);
 		showConfirmationMessage("Nova conta criada com sucesso!");
 	};
+
+	
+
+
+
+	  
+
 	
 
 	const [users, setUsers] = useState([])
@@ -304,7 +361,7 @@ const Home = () => {
 
 							<div className="perfil1">
 
-								<img className='mb-5' src="https://avatars.githubusercontent.com/u/4259630?v=4" alt="Foto de perfil" />
+								<IconShop className="mb-5" photo={photo} />
 
 								<h1 className='mb-5 text-primary'><i>{name} {sname}</i></h1>
 
@@ -927,6 +984,10 @@ const Home = () => {
 
 						<Container className='controle'>
 							<h1>Meu gráfico</h1>
+							<Doughnut 
+							data={dataMyChart}
+							/>
+
 							
 						</Container>
 

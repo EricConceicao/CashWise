@@ -107,7 +107,7 @@ function SignupModal({ handleFeedback, feedback, loginModal, showSign, handleSho
 					<Row>
 						<fieldset>
 							<legend className="small text-center">Preencha todos os campos!</legend>
-							<span>{feedback}</span>
+							<span className='text-danger fw-bold'>{feedback}</span>
 							<Form.Group as={Col} className="my-4">
 								<FloatingLabel label="Nome" controlId="name-input">
 									<Form.Control 
