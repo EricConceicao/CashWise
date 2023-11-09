@@ -14,6 +14,8 @@ import {FaArrowRight as ArrowIco} from 'react-icons/fa6';
 
 function LoginModal({ handleFeedback, feedback, changeModal, showLogin, handleShowLogin, handleCloseLogin }) {
 	const userLogin = userStore(state => state.login);
+	// Estiliza a cor da mensagem
+	const data = {color: false};
 
 	const navigate = useNavigate();
 	const [view, setView] = useState(false);
@@ -57,6 +59,7 @@ function LoginModal({ handleFeedback, feedback, changeModal, showLogin, handleSh
 			handleFeedback(data.message);
 
 			if (data.success) {
+				data.color = true;
 				handleFeedback(data.message);
 				userLogin(data.userData, data.userToken);
 
@@ -76,7 +79,7 @@ function LoginModal({ handleFeedback, feedback, changeModal, showLogin, handleSh
 					<Row>
 						<fieldset>
 							<legend className="small text-center">Insira seu dados de login!</legend>
-							<span>{feedback}</span>
+							<span className={data.color ? 'text-primary' : 'text-danger'}>{feedback}</span>
 
 							<Form.Group as={Col} className="my-4" controlId="email-input">
 								<FloatingLabel label="E-mail">

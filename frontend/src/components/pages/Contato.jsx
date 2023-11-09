@@ -111,7 +111,6 @@ function Contato() {
                     <Col sm="6" md="12" lg="8" id='form-img'></Col>
 
                     <Col sm="6" md="12" lg="4" className='d-flex p-0 align-items-center justify-content-center'>
-
                         <Form className='w-100 p-3 mb-3 rounded-3' noValidate onSubmit={handleSubmit} style={gradientBkg}>
                             <fieldset>
                                 <legend>Envie seu Feedback!</legend>

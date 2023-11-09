@@ -42,7 +42,7 @@ function Header() {
             <Container>
                 <Navbar.Brand href='/home'>
                     <img className="rounded-pill" 
-                    src="/img/logo-cashwise.jpg" 
+                    src="/img/logo-cashwise.png" 
                     alt="Logo marca do CashWise"
                     title="CashWise. Educação Financeira"
                     width="42%" />

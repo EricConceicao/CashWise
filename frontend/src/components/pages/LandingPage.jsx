@@ -25,6 +25,7 @@ import './LandingPage.css';
 
 const LandingPage = () => {
 	const [feedback, setFeedback] = useState('');
+	
 	const name = useUserStore(state => state.name);
 	const sname = useUserStore(state => state.sname);
 	const userToken = useUserStore(state => state.userToken);
@@ -45,6 +46,7 @@ const LandingPage = () => {
 
 	function signModal() {
 		handleCloseLogin();
+		handleFeedback('');
 		handleShowSign();
 	}
 
