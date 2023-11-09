@@ -22,8 +22,6 @@ import useUserStore from '../store/UserStore';
 import { format } from 'date-fns';
 import { Chart } from 'chart.js';
 
-
-
 const Home = () => {
 	// Dados do store após o login do usuário //
 	const name = useUserStore(state => state.name);
@@ -116,6 +114,17 @@ const Home = () => {
 			// Atualize o valor total de gastos (opcional)
 			setValorGasto(valorGasto + novoValor1);
 
+			const percentuaisPorCategoria = {};
+			for (const categoria in novosGastosPorCategoria) {
+				const gastosCategoria = novosGastosPorCategoria[categoria];
+				const totalCategoria = gastosCategoria.reduce(
+					(total, gasto) => total + gasto.valor,
+					0
+				);
+				const percentual = (totalCategoria / valorGasto) * 100;
+				percentuaisPorCategoria[categoria] = percentual;
+			}
+
 			showConfirmationMessage("Novo gasto adicionado com sucesso!");
 		}
 	};
@@ -135,25 +144,25 @@ const Home = () => {
 		"Aluguel",
 		"Seguro"]);
 
-		// Função para calcular o total dos valores das categorias
-		const calcularTotal = () => {
-			return categorias.reduce((total, categoria) => total + categoria.valor, 0);
-		  };
-		
-		  // Função para calcular o percentual de cada categoria
-		  const calcularPercentual = (categoria) => {
-			const total = calcularTotal();
-			const valorCategoria = categoria.valor;
-			return ((valorCategoria / total) * 100).toFixed(2);
-		  };
-		
-		  useEffect(() => {
-			// Exemplo de como calcular o percentual de cada categoria
-			categorias.forEach((categoria) => {
-			  console.log(`Categoria: ${categoria.nome}, Percentual: ${calcularPercentual(categoria)}%`);
-			}
-			);
-		  }, []);
+	// Função para calcular o total dos valores das categorias
+	const calcularTotal = () => {
+		return categorias.reduce((total, categoria) => total + categoria.valor, 0);
+	};
+
+	// Função para calcular o percentual de cada categoria
+	const calcularPercentual = (categoria) => {
+		const total = calcularTotal();
+		const valorCategoria = categoria.valor;
+		return ((valorCategoria / total) * 100).toFixed(2);
+	};
+
+	useEffect(() => {
+		// Exemplo de como calcular o percentual de cada categoria
+		categorias.forEach((categoria) => {
+			console.log(`Categoria: ${categoria.nome}, Percentual: ${calcularPercentual(categoria)}%`);
+		}
+		);
+	}, []);
 
 	const adicionarCategoria = (novaCategoria) => {
 		setCategorias([...categorias, novaCategoria]);
@@ -235,17 +244,7 @@ const Home = () => {
 		setContasCadastradas([...contasCadastradas, novaConta]);
 		showConfirmationMessage("Nova conta criada com sucesso!");
 	};
-
 	
-
-
-
-
-
-
-
-
-
 
 	const [users, setUsers] = useState([])
 	const [showModal, setShowModal] = useState(false)
@@ -797,10 +796,10 @@ const Home = () => {
 
 						</div>
 
-						<div className="container contas-cadastradas">
+						<div className="controle contas-cadastradas">
 							<h1>Minhas contas</h1>
 							{contasCadastradas.map((conta, index) => (
-								<div key={index} className="etiqueta">
+								<div key={index} className="cartao-conta">
 									<p className='fw-bold fs-5'>{conta.descricao}</p>
 									<p>{conta.vencimento}</p>
 									<p>{conta.duracao}</p>
@@ -822,7 +821,7 @@ const Home = () => {
 							<div className='cartoes-categoria'>
 								{categorias.map((categoria, index) => (
 									<div className={`cartao-categoria col-md-3`} key={index}>
-										<div className="gasto">
+										<div className="categoria">
 											<p className="fw-bold fs-5">{categoria}</p>
 											<p className='valor-categoria bg-secondary'>
 												{" "}
@@ -836,6 +835,20 @@ const Home = () => {
 													})
 													: 0}
 											</p>
+
+											{valorGasto > 0 && (
+												<p className='percentual-categoria'>
+													{gastosPorCategoria[categoria]
+														? (
+															(gastosPorCategoria[categoria].reduce(
+																(total, gasto) => total + gasto.valor,
+																0
+															) / valorGasto) * 100
+														).toFixed(2) + "%"
+														: "0.00%"}
+												</p>
+											)}
+
 										</div>
 
 										<hr />
@@ -912,24 +925,20 @@ const Home = () => {
 
 						</Container>
 
-						<Container>
+						<Container className='controle'>
 							<h1>Meu gráfico</h1>
-							<canvas id="meuGrafico"></canvas>
 							
-
-
 						</Container>
 
+						
 
 
-						<Container className='investimentos p-5'>
+
+						<Container className='controle p-5'>
 							<h1>Meus investimentos</h1>
 						</Container>
 
 					</Container>
-
-
-
 
 
 

@@ -127,6 +127,21 @@ h3 {
     border-bottom: 4px solid #fff;
 }
 
+.cartao-conta {
+    width: 300px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+    margin: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;    
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    border-bottom: 4px solid red;
+}
+
+
 .item {
     display: flex;
     flex-direction: column;
