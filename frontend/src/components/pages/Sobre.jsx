@@ -87,7 +87,7 @@ const Sobre = () => {
 
                         <div className="col-sm col-md-4 col-lg">
                             <Card className="card my-3">
-                                <Card.Img style={cardStyle} variant="top" src="/img/redimensionadas/valdemirArte.jpg" />
+                                <Card.Img style={cardStyle} variant="top" src="/img/redimensionadas/valdemirArte1.jpg" />
                                 <Card.Body>
                                     <Card.Title>Valdemir</Card.Title>
                                 </Card.Body>
