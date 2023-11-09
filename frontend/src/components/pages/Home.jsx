@@ -163,6 +163,7 @@ const Home = () => {
 		"Saúde",
 		"Lazer",
 		"Impostos",
+		"Investimentos",
 		"Compras",
 		"Contas",
 		"Financiamento",
@@ -186,7 +187,7 @@ const Home = () => {
 	const dataMyChart = {
 		labels: categoriasLegenda,
 	  datasets: [{
-		label: 'My First Dataset',
+		label: ' Gastos',
 		data: valorCategorias,
 		backgroundColor: labelsColors,
 		hoverOffset: 4
