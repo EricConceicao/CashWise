@@ -4,7 +4,6 @@
 generator client {
   provider = "prisma-client-js"
 }
-
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
@@ -42,17 +41,24 @@ model Session {
 }
 
 model Icon {
-  id        Int     @id @default(autoincrement())
-  src       String  @db.Text
+  id        Int       @id @default(autoincrement())
+  src       String    @db.Text
   price     Int
   userIcon  UserIcons[]
 }
 
 model UserIcons {
-  id       Int     @id @default(autoincrement())
+  id       Int        @id @default(autoincrement())
   iconId   Int
   userId   Int
-  obtained Boolean @default(false)
-  user     User    @relation(fields: [userId], references: [id])
-  icon     Icon    @relation(fields: [iconId], references: [id])
+  obtained Boolean    @default(false)
+  user     User       @relation(fields: [userId], references: [id])
+  icon     Icon       @relation(fields: [iconId], references: [id])
+}
+model Gasto {
+  id         Int      @id @default(autoincrement())
+  descricao  String   @db.VarChar(255)
+  categoria  String   @db.VarChar(50)
+  data       DateTime
+  valor      Decimal  @db.Decimal(10, 2)
 }
