@@ -11,7 +11,7 @@ function Loader() {
 	useEffect(() => {
 		async function checkSession() {
 			const response = await fetch('http://localhost:3000/auth/refresh', {
-				method: 'POST',
+				method: 'GET',
 				credentials: 'include'
 			});
 

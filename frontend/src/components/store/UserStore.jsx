@@ -31,6 +31,7 @@ const useUserStore = create((set) => ({
 		userToken: null,
 		session: false,
 	}),
+	changePhoto: (newPhoto) => ({ photo: newPhoto }),
 })); 
 
 export default useUserStore

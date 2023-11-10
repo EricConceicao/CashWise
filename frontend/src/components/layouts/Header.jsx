@@ -17,7 +17,7 @@ function Header() {
     async function handleLogout(e) {
         e.preventDefault();
         const response = await fetch('http://localhost:3000/auth/logout', {
-            method: 'POST',
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
             },
