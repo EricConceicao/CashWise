@@ -20,7 +20,7 @@ import { BsArrowUpLeft } from 'react-icons/bs'
 import { BsArrowDownRight } from 'react-icons/bs'
 import useUserStore from '../store/UserStore';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
+import { Pie } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -366,7 +366,7 @@ const Home = () => {
 
 								<IconShop className="mb-5" photo={photo} />
 
-								<h1 className='mb-5 text-primary'><i>{name} {sname}</i></h1>
+								<h1 className='text-primary'><i>{name} {sname}</i></h1>
 
 								<div className="botoes">
 
@@ -646,7 +646,7 @@ const Home = () => {
 
 							<div className="row">
 								<h3 className='col'>Em destaque</h3>
-								<div className="col"><Button as="button" variant="outline-primary" onClick={() => setShowModal7(true)}>Nova categoria</Button>
+								<div className="cartao-categoria"><Button as="button" variant="outline-primary" onClick={() => setShowModal7(true)}>Nova categoria</Button>
 									<Modal
 										show={showModal7}
 										onHide={() => setShowModal7(false)}
@@ -985,9 +985,9 @@ const Home = () => {
 
 						</Container>
 
-						<Container className='controle'>
+						<Container className='rosca controle'>
 							<h1>Meu gráfico</h1>
-							<Doughnut 
+							<Pie className=''
 							data={dataMyChart}
 							/>
 

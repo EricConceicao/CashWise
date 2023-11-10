@@ -9,7 +9,7 @@
 
 #principal img {
     width: 200px;
-    border-radius: 50%;
+    border-radius: 0%;
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -37,9 +37,10 @@
     justify-content: center;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    padding: 30px 30px;
+    padding: 50px 0px;
     border-bottom: 4px solid #fff;
     border-radius: 10px;
+    gap: 50px;
 }
 
 .perfil2 {
@@ -288,5 +289,13 @@ h1 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;    
+}
+
+.rosca {
+    gap: 60px;
+    width: 700px;
+    height: 700px;
+    padding-bottom: 100px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
 }
 /* Fim para estilo da Home */

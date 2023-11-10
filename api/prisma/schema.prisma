@@ -39,3 +39,11 @@ model Session {
   userId    Int
   user      User      @relation(fields: [userId], references: [id])
 }
+
+model Gasto {
+  id        Int       @id @default(autoincrement())
+  descricao String    @db.VarChar(255)
+  categoria  String    @db.VarChar(50)
+  data      DateTime
+  valor     Decimal   @db.Decimal(10, 2)
+}
