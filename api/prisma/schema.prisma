@@ -22,6 +22,7 @@ model User {
   exp           Int       @default(0)
   creationDate  DateTime  @default(now())
   sessions      Session[]
+  UserIcons     UserIcons[]
 }
 
 model Contact {
@@ -38,4 +39,20 @@ model Session {
   token     String    @unique @db.VarChar(200)
   userId    Int
   user      User      @relation(fields: [userId], references: [id])
+}
+
+model Icon {
+  id        Int     @id @default(autoincrement())
+  src       String  @db.Text
+  price     Int
+  userIcon  UserIcons[]
+}
+
+model UserIcons {
+  id       Int     @id @default(autoincrement())
+  iconId   Int
+  userId   Int
+  obtained Boolean @default(false)
+  user     User    @relation(fields: [userId], references: [id])
+  icon     Icon    @relation(fields: [iconId], references: [id])
 }
