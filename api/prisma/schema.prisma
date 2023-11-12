@@ -59,6 +59,6 @@ model Gasto {
   id         Int      @id @default(autoincrement())
   descricao  String   @db.VarChar(255)
   categoria  String   @db.VarChar(50)
-  data       DateTime
+  data       DateTime @default(now())
   valor      Decimal  @db.Decimal(10, 2)
 }

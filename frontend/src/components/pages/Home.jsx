@@ -27,6 +27,14 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 import IconShop from '../utils/IconShop';
 
 const Home = () => {
+
+
+	//Perfil do usuário
+
+	const [showModalEditarPerfil, setShowModalEditarPerfil] = useState(false)
+	const [showModalAlerta, setShowModalAlerta] = useState(false)
+
+
 	// Dados do store após o login do usuário //
 	const name = useUserStore(state => state.name);
 	const sname = useUserStore(state => state.sname);
@@ -46,8 +54,11 @@ const Home = () => {
 
 	const currentMonth = months[currentDate.getMonth()];
 
-	// Obtenha o ano atual
+	// Obter o ano atual
 	const currentYear = currentDate.getFullYear();
+
+
+	// Controle mensal
 
 	const [valorRecebido, setValorRecebido] = useState(0);
 	const [valorGasto, setValorGasto] = useState(0);
@@ -89,33 +100,59 @@ const Home = () => {
 	}
 
 	const [novoDescricao, setNovoDescricao] = useState('');
-	const [novaData, setNovaData] = useState(""); // Adicione esse estado
+	const [novaData, setNovaData] = useState("");
+
+	// Adicionar o novo gasto no banco de dados
+	const adicionarNovaDespesa = async (descricao, categoria, data, valor) => {
+		try {
+			const novaDespesa = await prisma.Gasto.create({
+				data: {
+					descricao: descricao,
+					categoria: categoria,
+					data: new Date(data), // Supondo que a data seja uma string no formato "AAAA-MM-DD"
+					valor: parseFloat(valor), // Supondo que o valor seja uma string
+				},
+			});
+
+			console.log("Nova despesa adicionada:", novaDespesa);
+
+			// Feche o modal ou faça outras ações após adicionar a despesa
+			setShowModal6(false);
+		} catch (erro) {
+			console.error("Erro ao adicionar despesa:", erro);
+
+			
+		}
+	};
 
 
 	const handleAdicionarNovoGasto = () => {
 		if (selectedCategoria && novoDescricao && novoValor1) {
-			// Adicione o novo gasto com a categoria correspondente
+
+			// Adiciona o novo gasto com a categoria correspondente
 			const novoGasto = {
-				descricao: novoDescricao, // Substitua pela descrição real do gasto
+				descricao: novoDescricao,
 				valor: novoValor1,
 				data: novaData,
 			};
 
-			// Crie uma cópia do objeto gastosPorCategoria
+			/* adicionarNovaDespesa(novoDescricao, selectedCategoria, novaData, novoValor1); */
+
+			// Cria uma cópia do objeto gastosPorCategoria
 			const novosGastosPorCategoria = { ...gastosPorCategoria };
 
-			// Verifique se já existe um array de gastos para a categoria
+			// Verifica se já existe um array de gastos para a categoria
 			if (!novosGastosPorCategoria[selectedCategoria]) {
 				novosGastosPorCategoria[selectedCategoria] = [];
 			}
 
-			// Adicione o novo gasto ao array de gastos da categoria
+			// Adiciona o novo gasto ao array de gastos da categoria
 			novosGastosPorCategoria[selectedCategoria].push(novoGasto);
 
-			// Atualize o estado com os novos gastos por categoria
+			// Atualiza o estado com os novos gastos por categoria
 			setGastosPorCategoria(novosGastosPorCategoria);
 
-			// Atualize o valor total de gastos (opcional)
+			// Atualiza o valor total de gastos
 			setValorGasto(valorGasto + novoValor1);
 
 			const percentuaisPorCategoria = {};
@@ -128,16 +165,69 @@ const Home = () => {
 				const percentual = (totalCategoria / valorGasto) * 100;
 				percentuaisPorCategoria[categoria] = percentual;
 			}
-			
+
 			showConfirmationMessage("Novo gasto adicionado com sucesso!");
 		}
 	};
-	
-	
-	
-	const [showModal7, setShowModal7] = useState(false);
-	
+
+
+
+
+
+
+
+	// Categorias
+
+	const [showModalCategorias, setShowModalCategorias] = useState(false);
+
 	const [gastosPorCategoria, setGastosPorCategoria] = useState({});
+
+	
+
+	const [categorias, setCategorias] = useState([
+		"Alimentação",
+		"Saúde",
+		"Lazer",
+		"Impostos",
+		"Investimentos",
+		"Compras",
+		"Contas",
+		"Financiamento",
+		"Aluguel"]);
+
+
+		const adicionarCategoria = (novaCategoria) => {
+			setCategorias([...categorias, novaCategoria]);
+		};
+	
+		const [novaCategoria, setNovaCategoria] = useState('');
+	
+		const handleAdicionarNovaCategoria = () => {
+			if (novaCategoria) {
+				adicionarCategoria(novaCategoria);
+				showConfirmationMessage("Nova categoria criada com sucesso!");
+				setNovaCategoria('');
+			}
+		};
+	
+		const handleExcluirCategoria = (index) => {
+			const novasCategorias = [...categorias];
+			novasCategorias.splice(index, 1);
+			setCategorias(novasCategorias);
+		};
+	
+		const [selectedCategoria, setSelectedCategoria] = useState("");
+		const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
+	
+		const mostrarDetalhesCategoria = (categoria) => {
+			setCategoriaSelecionada(categoria);
+			setShowModalDetalhes(true);
+		};
+	
+		const [showModalDetalhes, setShowModalDetalhes] = useState(false);
+
+
+	// Gráfico
 
 	const colors = [
 		'#FF0000',
@@ -153,122 +243,62 @@ const Home = () => {
 		'#FFD700',
 		'#00FFFF',
 		'#800080',
-		'#FFFF00', 
-		'#00FF00', 
-		'#FF6347', 
-		'#6A5ACD', 
-		'#4B0082', 
-		'#7CFC00', 
-		'#FF4500' 
-	  ];
+		'#FFFF00',
+		'#00FF00',
+		'#FF6347',
+		'#6A5ACD',
+		'#4B0082',
+		'#7CFC00',
+		'#FF4500'
+	];
 
-	const [categorias, setCategorias] = useState([
-		"Alimentação",
-		"Saúde",
-		"Lazer",
-		"Impostos",
-		"Investimentos",
-		"Compras",
-		"Contas",
-		"Financiamento",
-		"Aluguel",
-		"Seguro"]);
-	
 	const labelsColors = []
 	const valorCategorias = []
-	const categoriasLegenda = [] 
+	const categoriasLegenda = []
 
-	categorias.map((categoria, index)=>{
-		if (gastosPorCategoria[categoria]){
+	categorias.map((categoria, index) => {
+		if (gastosPorCategoria[categoria]) {
 			categoriasLegenda.push(categoria)
 			labelsColors.push(colors[index])
 			valorCategorias.push(gastosPorCategoria[categoria].reduce((total, gasto) => total + gasto.valor, 0))
 		}
 	})
 
-	console.log(valorCategorias)
-
 	const dataMyChart = {
 		labels: categoriasLegenda,
-	  datasets: [{
-		label: ' Gastos',
-		data: valorCategorias,
-		backgroundColor: labelsColors,
-		hoverOffset: 4
-	  }]
+		datasets: [{
+			label: ' Gastos',
+			data: valorCategorias,
+			backgroundColor: labelsColors,
+			hoverOffset: 4
+		}]
 	}
 
-	// Função para calcular o total dos valores das categorias
-	const calcularTotal = () => {
-		return categorias.reduce((total, categoria) => total + categoria.valor, 0);
-	};
-
-	// Função para calcular o percentual de cada categoria
-	const calcularPercentual = (categoria) => {
-		const total = calcularTotal();
-		const valorCategoria = categoria.valor;
-		return ((valorCategoria / total) * 100).toFixed(2);
-	};
-
-	useEffect(() => {
-		// Exemplo de como calcular o percentual de cada categoria
-		categorias.forEach((categoria) => {
-			console.log(`Categoria: ${categoria.nome}, Percentual: ${calcularPercentual(categoria)}%`);
-		}
-		);
-	}, []);
-
-	const adicionarCategoria = (novaCategoria) => {
-		setCategorias([...categorias, novaCategoria]);
-	};
-
-	const [novaCategoria, setNovaCategoria] = useState('');
-
-	const handleAdicionarNovaCategoria = () => {
-		if (novaCategoria) {
-			adicionarCategoria(novaCategoria);
-			showConfirmationMessage("Nova categoria criada com sucesso!");
-			setNovaCategoria(''); // Limpar o campo de entrada
-		}
-	};
-
-	const handleExcluirCategoria = (index) => {
-		const novasCategorias = [...categorias];
-		novasCategorias.splice(index, 1);
-		setCategorias(novasCategorias);
-	};
-
-	const [selectedCategoria, setSelectedCategoria] = useState("");
 
 
-	const [showConfirmation, setShowConfirmation] = useState(false);
-	const [confirmationMessage, setConfirmationMessage] = useState("");
-
-	const showConfirmationMessage = (message) => {
-		setConfirmationMessage(message);
-		setShowConfirmation(true);
-
-		// Defina um temporizador para ocultar a mensagem após alguns segundos (opcional)
-		setTimeout(() => {
-			setShowConfirmation(false);
-		}, 3000); // A mensagem será ocultada após 3 segundos
-	};
-
-	const [gastosDoMesCorrente, setGastosDoMesCorrente] = useState([]);
-	const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
-
-	const mostrarDetalhesCategoria = (categoria) => {
-		setCategoriaSelecionada(categoria);
-		setShowModalDetalhes(true);
-	};
+	
 
 
 
-	const [showModalDetalhes, setShowModalDetalhes] = useState(false);
 
-	const [showModal8, setShowModal8] = useState(false);
 
-	const [contasCadastradas, setContasCadastradas] = useState([]);
+	// Contas
+
+	const [showModalContas, setShowModalContas] = useState(false);
+
+	const [contasCadastradas, setContasCadastradas] = useState([
+		"Luz",
+		"Água",
+		"Telefone",
+		"Internet",
+		"Aluguel",
+		"Condomínio",
+		"Gás",
+		"TV por assinatura",
+		"Seguro",
+		"Mensalidade escolar",
+		"Academia",
+		"Plano de Saúde"]);
 
 	const [descricao, setDescricao] = useState("");
 	const [vencimento, setVencimento] = useState("");
@@ -298,59 +328,77 @@ const Home = () => {
 		showConfirmationMessage("Nova conta criada com sucesso!");
 	};
 
+
+
+
+
+	// Mensagem de sucesso
+
+	const [showConfirmation, setShowConfirmation] = useState(false);
+	const [confirmationMessage, setConfirmationMessage] = useState("");
+
+	const showConfirmationMessage = (message) => {
+		setConfirmationMessage(message);
+		setShowConfirmation(true);
+
+		// Defina um temporizador para ocultar a mensagem após alguns segundos (opcional)
+		setTimeout(() => {
+			setShowConfirmation(false);
+		}, 3000); // A mensagem será ocultada após 3 segundos
+	};
+
+
+
+
+
+
+
+
+	/*
+		const [users, setUsers] = useState([])
+		const [showModal, setShowModal] = useState(false)
 	
-
-
-
-	  
-
 	
-
-	const [users, setUsers] = useState([])
-	const [showModal, setShowModal] = useState(false)
-	const [showModal1, setShowModal1] = useState(false)
-	const [showModal2, setShowModal2] = useState(false)
-
-
-	useEffect(() => {
-
-		const getUsers = async () => {
-			const response = await fetch('http://localhost:3300/user/list')
-			const data = await response.json()
-			console.log(data.success)
-			console.log(data.users)
-			setUsers(data.users)
-		}
-
-		getUsers()
-
-	}, [])
-
-	const handleSubmit = async (event) => {
-		event.preventDefault()
-
-		const newUser = {
-			name: event.target.name.value,
-			email: event.target.email.value,
-			pass: event.target.pass.value,
-			photo: event.target.photo.value
-		}
-
-		const response = await fetch('http://localhost:3300/user', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(newUser)
-		})
-
-		if (response.ok) {
-			const data = await response.json()
-			alert(data.success)
-			setShowModal(false)
-			setUsers([...users, data.user])
-		}
-	}
+		useEffect(() => {
+	
+			const getUsers = async () => {
+				const response = await fetch('http://localhost:3300/user/list')
+				const data = await response.json()
+				console.log(data.success)
+				console.log(data.users)
+				setUsers(data.users)
+			}
+	
+			getUsers()
+	
+		}, [])
+	
+		const handleSubmit = async (event) => {
+			event.preventDefault()
+	
+			const newUser = {
+				name: event.target.name.value,
+				email: event.target.email.value,
+				pass: event.target.pass.value,
+				photo: event.target.photo.value
+			}
+	
+			const response = await fetch('http://localhost:3300/user', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(newUser)
+			})
+	
+			if (response.ok) {
+				const data = await response.json()
+				alert(data.success)
+				setShowModal(false)
+				setUsers([...users, data.user])
+			}
+		} 
+	*/
 
 	return (
 		<>
@@ -359,7 +407,7 @@ const Home = () => {
 				<Content>
 					<Container fluid className="conteudo bg-secondary p-5">
 
-						<h1 title='Consulte seu perfil'>Meu perfil</h1>
+						<h1 title='Consulte seu perfil'>Seu perfil</h1>
 						<div className='perfil'>
 
 							<div className="perfil1">
@@ -372,12 +420,12 @@ const Home = () => {
 
 
 									{/* Início do botão de Editar perfil */}
-									<Button as="button" className="editar fw-bold" title='Editar perfil' variant="outline-primary" onClick={() => setShowModal1(true)}><FiEdit />
+									<Button as="button" className="editar fw-bold" title='Editar perfil' variant="outline-primary" onClick={() => setShowModalEditarPerfil(true)}><FiEdit />
 									</Button>
 
 									<Modal
-										show={showModal1}
-										onHide={() => setShowModal1(false)}
+										show={showModalEditarPerfil}
+										onHide={() => setShowModalEditarPerfil(false)}
 										size="md"
 										aria-labelledby="contained-modal-title-vcenter"
 										centered
@@ -419,11 +467,11 @@ const Home = () => {
 
 
 									{/* Início do botão de Alerta */}
-									<Button as="button" className='editar fw-bold' title='Avisos' variant="outline-danger" onClick={() => setShowModal2(true)}><AiOutlineAlert className='alerta' /></Button>
+									<Button as="button" className='editar fw-bold' title='Avisos' variant="outline-danger" onClick={() => setShowModalAlerta(true)}><AiOutlineAlert className='alerta' /></Button>
 
 									<Modal
-										show={showModal2}
-										onHide={() => setShowModal2(false)}
+										show={showModalAlerta}
+										onHide={() => setShowModalAlerta(false)}
 										size="lg"
 										aria-labelledby="contained-modal-title-vcenter"
 										centered
@@ -478,13 +526,11 @@ const Home = () => {
 
 							</Row>
 
-
-
 						</div>
 
-						<hr />
+						<br />
 
-						<h1>Meu controle mensal</h1>
+						<h1>Seu controle mensal</h1>
 						<Row>
 
 							<div className="cartao-perfil col">
@@ -580,7 +626,7 @@ const Home = () => {
 										<Form.Group className="mb-3">
 											<Form.Label>Categoria</Form.Label>
 											<Form.Select
-												name="categoria"
+												name='categoria'
 												value={selectedCategoria}
 												onChange={(e) => setSelectedCategoria(e.target.value)}
 											>
@@ -594,13 +640,17 @@ const Home = () => {
 										</Form.Group>
 										<Form.Group className="mb-3">
 											<Form.Label>Descrição</Form.Label>
-											<Form.Control type="text" name="descricao" value={novoDescricao} onChange={(e) => setNovoDescricao(e.target.value)} />
+											<Form.Control
+												type="text"
+												name='descricao'
+												value={novoDescricao}
+												onChange={(e) => setNovoDescricao(e.target.value)} />
 										</Form.Group>
 										<Form.Group className="mb-3">
 											<Form.Label>Data</Form.Label>
 											<Form.Control
 												type="date"
-												name="data"
+												name='data'
 												value={novaData}
 												onChange={(e) => setNovaData(e.target.value)}
 											/>
@@ -612,6 +662,7 @@ const Home = () => {
 												<Form.Control
 													type="number"
 													step="0.01"  // Permita valores fracionados com duas casas decimais
+													name='valor'
 													value={novoValor1}
 													onChange={(event) => setNovoValor1(parseFloat(event.target.value))}
 												/>
@@ -642,57 +693,70 @@ const Home = () => {
 
 						</Row>
 
-						<div className="container bg-secondary p-5">
+						<br />
 
-							<div className="row">
-								<h3 className='col'>Em destaque</h3>
-								<div className="cartao-categoria"><Button as="button" variant="outline-primary" onClick={() => setShowModal7(true)}>Nova categoria</Button>
-									<Modal
-										show={showModal7}
-										onHide={() => setShowModal7(false)}
-										size="md"
-										aria-labelledby="contained-modal-title-vcenter"
-										centered
-									>
-										<Modal.Header closeButton>
-											<Modal.Title id="contained-modal-title-vcenter">Nova categoria</Modal.Title>
-										</Modal.Header>
-										<Modal.Body>
-											<Form>
-												<Form.Group className="mb-3">
-													<Form.Label>Escolher uma categoria ou adicionar uma nova</Form.Label>
-													<Form.Control as="select" name="categoria" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)}>
-														<option value="">Escolha uma categoria</option>
-														{categorias.map((categoria, index) => (
-															<option key={index} value={categoria}>
-																{categoria}
-															</option>
-														))}
-													</Form.Control>
-												</Form.Group>
-												<Form.Group className="mb-3">
-													<Form.Label>Ou adicione uma nova categoria</Form.Label>
-													<Form.Control type="text" name="novaCategoria" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)} />
-												</Form.Group>
-											</Form>
-										</Modal.Body>
-										<Modal.Footer>
-											<Button as='button' variant="secondary" onClick={handleAdicionarNovaCategoria}>
-												Criar
-											</Button>
-										</Modal.Footer>
-										{showConfirmation && (
-											<div className="alert alert-danger alert-custom" role="alert">
-												{confirmationMessage}
-											</div>
-										)}
-									</Modal>
+
+						<Container className='painel mt-5 mb-5'>
+							<h1 className='mb-5'>Agenda Financeira </h1>
+
+							<div className="tabela p-4">
+								<div className="bg-secondary titulo row mb-5">
+									<div className="col">{<AiOutlineSchedule className='fs-lg' />}</div>
+									<div className="linha col mb-4">Data</div>
+									<div className="linha col mb-4">Descrição</div>
+									<div className="linha col mb-4">Ação</div>
+									<div className="linha col mb-4">Valor</div>
+									<div className="linha col mb-4">Status</div>
+									<div className="col mb-4"></div>
+
 								</div>
 
-								<div className="col"><Button as="button" variant="outline-danger" onClick={() => setShowModal8(true)}>Nova conta</Button>
+								<div className="bg-secondary pagar row mb-5 pt-1 pb-1">
+									<div className="col"><BsArrowUpLeft className='seta text-danger' /></div>
+									<div className="col">08/11/23</div>
+									<div className="col fw-bold"><i>Financiamento</i></div>
+									<div className="col">Pagar</div>
+									<div className="col">R$ 1200,00</div>
+									<div className="col">Valor</div>
+									<div className="col text-danger">Excluir</div>
+
+								</div>
+
+								<div className="bg-secondary receber row mb-5 pt-1 pb-1">
+									<div className="col"><BsArrowDownRight className='seta text-primary' /></div>
+									<div className="col">10/11/23</div>
+									<div className="col fw-bold"><i>Salário</i></div>
+									<div className="col">Receber</div>
+									<div className="col">R$ 5000,00</div>
+									<div className="col">Valor</div>
+									<div className="col text-danger">Excluir</div>
+
+								</div>
+
+								<div className="bg-secondary pagar row mb-5 pt-1 pb-1">
+									<div className="col"><BsArrowUpLeft className='seta text-danger' /></div>
+									<div className="col">11/11/23</div>
+									<div className="col fw-bold"><i>Cartão de crédito</i></div>
+									<div className="col">Pagar</div>
+									<div className="col">R$ 1200,00</div>
+									<div className="col">Valor</div>
+									<div className="col text-danger">Excluir</div>
+
+								</div>
+							</div>
+
+						</Container>
+
+						<br />
+
+						<div className="contas">
+
+							<div className="contas-titulo">
+								<h1>Suas contas</h1>
+								<div><Button as="button" variant="outline-danger" onClick={() => setShowModalContas(true)}>Cadastrar nova conta</Button>
 									<Modal
-										show={showModal8}
-										onHide={() => setShowModal8(false)}
+										show={showModalContas}
+										onHide={() => setShowModalContas(false)}
 										size="md"
 										aria-labelledby="contained-modal-title-vcenter"
 										centered
@@ -794,93 +858,85 @@ const Home = () => {
 											</Button>
 										</Modal.Footer>
 										{showConfirmation && (
-											<div className="alert alert-danger alert-custom" role="alert">
+											<div className="alert alert-success alert-custom" role="alert">
 												{confirmationMessage}
 											</div>
 										)}
 									</Modal>
 								</div>
 							</div>
+
+							<div className="cartoes-conta">
+								{contasCadastradas.map((conta, index) => (
+									<div className="cartao-conta" key={index}>
+										<p className='fw-bold fs-5'>{conta}</p>
+										<p>{conta.descricao}</p>
+										<p>{conta.vencimento}</p>
+										<p>{conta.duracao}</p>
+										<p>{conta.valor}</p>
+										{conta.duracao === "Por um período" && (
+											<div>
+												<p>Início: {conta.mesInicial}/{conta.anoInicial}</p>
+												<p>Final: {conta.mesFinal}/{conta.anoFinal}</p>
+											</div>
+										)}
+									</div>
+								))}
+							</div>
 						</div>
 
-						<div className='container painel mt-5 mb-5'>
-							<h1 className='mb-5'>Agenda Financeira </h1>
+						<br />
 
-
-
-							<div className="tabela p-4">
-								<div className="bg-secondary titulo row mb-5">
-									<div className="col">{<AiOutlineSchedule className='fs-lg' />}</div>
-									<div className="linha col mb-4">Data</div>
-									<div className="linha col mb-4">Descrição</div>
-									<div className="linha col mb-4">Ação</div>
-									<div className="linha col mb-4">Valor</div>
-									<div className="linha col mb-4">Status</div>
-									<div className="col mb-4"></div>
-
-								</div>
-
-								<div className="bg-secondary pagar row mb-5 pt-1 pb-1">
-									<div className="col"><BsArrowUpLeft className='seta text-danger' /></div>
-									<div className="col">08/11/23</div>
-									<div className="col fw-bold"><i>Financiamento</i></div>
-									<div className="col">Pagar</div>
-									<div className="col">R$ 1200,00</div>
-									<div className="col">Valor</div>
-									<div className="col text-danger">Excluir</div>
-
-								</div>
-
-								<div className="bg-secondary receber row mb-5 pt-1 pb-1">
-									<div className="col"><BsArrowDownRight className='seta text-primary' /></div>
-									<div className="col">10/11/23</div>
-									<div className="col fw-bold"><i>Salário</i></div>
-									<div className="col">Receber</div>
-									<div className="col">R$ 5000,00</div>
-									<div className="col">Valor</div>
-									<div className="col text-danger">Excluir</div>
-
-								</div>
-
-								<div className="bg-secondary pagar row mb-5 pt-1 pb-1">
-									<div className="col"><BsArrowUpLeft className='seta text-danger' /></div>
-									<div className="col">11/11/23</div>
-									<div className="col fw-bold"><i>Cartão de crédito</i></div>
-									<div className="col">Pagar</div>
-									<div className="col">R$ 1200,00</div>
-									<div className="col">Valor</div>
-									<div className="col text-danger">Excluir</div>
-
+						<Container className='categorias p-5 mb-5'>
+							<div className="categorias-titulo">
+								<h1>Seus gastos por categoria</h1>
+								<div><Button as="button" variant="outline-primary" onClick={() => setShowModalCategorias(true)}>Criar nova categoria</Button>
+									<Modal
+										show={showModalCategorias}
+										onHide={() => setShowModalCategorias(false)}
+										size="md"
+										aria-labelledby="contained-modal-title-vcenter"
+										centered
+									>
+										<Modal.Header className='bg-primary' closeButton>
+											<Modal.Title id="contained-modal-title-vcenter">Nova categoria</Modal.Title>
+										</Modal.Header>
+										<Modal.Body className='bg-secondary text-light'>
+											<Form>
+												<Form.Group className="mb-3">
+													<Form.Label>Veja alguns exemplos de categorias</Form.Label>
+													<Form.Control as="select" name="categoria" className='bg-secondary text-light'>
+														<option value="">Lista de categorias</option>
+														{categorias.map((categoria, index) => (
+															<option key={index} value={categoria}>
+																{categoria}
+															</option>
+														))}
+													</Form.Control>
+												</Form.Group>
+												<Form.Group className="mb-3">
+													<Form.Label>Adicione uma nova categoria</Form.Label>
+													<Form.Control type="text" name="novaCategoria" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)} className='bg-secondary text-light' />
+												</Form.Group>
+											</Form>
+										</Modal.Body>
+										<Modal.Footer className='bg-primary'>
+											<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaCategoria} className='fw-bold'>
+												Criar
+											</Button>
+										</Modal.Footer>
+										{showConfirmation && (
+											<div className="alert alert-success alert-custom" role="alert">
+												{confirmationMessage}
+											</div>
+										)}
+									</Modal>
 								</div>
 							</div>
 
-						</div>
-
-						<div className="controle contas-cadastradas">
-							<h1>Minhas contas</h1>
-							{contasCadastradas.map((conta, index) => (
-								<div key={index} className="cartao-conta">
-									<p className='fw-bold fs-5'>{conta.descricao}</p>
-									<p>{conta.vencimento}</p>
-									<p>{conta.duracao}</p>
-									<p>{conta.valor}</p>
-									{conta.duracao === "Por um período" && (
-										<div>
-											<p>Início: {conta.mesInicial}/{conta.anoInicial}</p>
-											<p>Final: {conta.mesFinal}/{conta.anoFinal}</p>
-										</div>
-									)}
-								</div>
-							))}
-						</div>
-
-
-						<Container className='controle p-5 mb-5'>
-							<h1 className='m-5'>Minhas despesas</h1>
-
 							<div className='cartoes-categoria'>
 								{categorias.map((categoria, index) => (
-									<div className={`cartao-categoria col-md-3`} key={index}>
+									<div className="cartao-categoria" key={index}>
 										<div className="categoria">
 											<p className="fw-bold fs-5">{categoria}</p>
 											<p className='valor-categoria bg-secondary'>
@@ -985,13 +1041,11 @@ const Home = () => {
 
 						</Container>
 
-						<Container className='rosca controle'>
-							<h1>Meu gráfico</h1>
-							<Pie className=''
-							data={dataMyChart}
+						<Container className='grafico bg-light p-5 text-secondary'>
+							<h1>Perfil de gastos</h1>
+							<Pie className='grafico-torta'
+								data={dataMyChart}
 							/>
-
-							
 						</Container>
 
 					</Container>

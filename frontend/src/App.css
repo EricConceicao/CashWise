@@ -9,8 +9,17 @@
 
 #principal img {
     width: 200px;
-    border-radius: 0%;
+    border-radius: 50%;
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.alert-custom {
+    font-size: 16px;
+    width: 350px;
+    margin-left: 20px;
+    margin-top: 20px;
+    padding: 5px 10px 5px 20px;
+    text-align: center;
 }
 
 .conteudo {
@@ -48,11 +57,6 @@
     align-items: center;
     justify-content: center;
 }
-
-/*
-.perfil1 img {
-    border: 5px solid #ffc107;
-}*/
 
 .moeda {
     color: orange;
@@ -114,20 +118,6 @@ h3 {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
 }
 
-.cartao-categoria {
-    width: 300px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 20px;
-    margin: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #fff;    
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    border-bottom: 4px solid #fff;
-}
-
 .cartao-conta {
     width: 300px;
     border-radius: 10px;
@@ -140,6 +130,51 @@ h3 {
     color: #fff;    
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     border-bottom: 4px solid red;
+}
+
+.categorias, .contas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.categorias-titulo, .contas-titulo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 100px;
+    gap: 20px;
+}
+
+.categorias .botoes {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;    
+}
+
+.cartao-categoria {
+    width: 300px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;    
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    border-bottom: 4px solid #fff;
+}
+
+.categorias .cartoes-categoria, .contas .cartoes-conta{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;    
+}
+
+.valor-categoria {
+    width: 100px;
+    border-radius: 5px;
+    padding-left: 3px;
 }
 
 
@@ -261,41 +296,19 @@ h1 {
 
 .controle .botoes {
     display: flex;
-    justify-content: space-around;
-    
+    justify-content: space-around;    
 }
 
-.alert-custom {
-    font-size: 16px;
-    width: 350px;
-    margin-left: 20px;
-    margin-top: 20px;
-    padding: 5px 10px 5px 20px;
-    text-align: center;
-}
-
-.cartao-categoria .botoes {
+.grafico {
     display: flex;
-    flex-direction: column;
-}
-
-.valor-categoria {
-    width: 100px;
     border-radius: 5px;
-    padding-left: 3px;
-}
-
-.controle .cartoes-categoria{
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;    
-}
-
-.rosca {
     gap: 60px;
-    width: 700px;
     height: 700px;
-    padding-bottom: 100px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    opacity: 100%;
 }
+
+.grafico-torta {
+    opacity: 100%;
+}
+
 /* Fim para estilo da Home */
