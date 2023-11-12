@@ -1,9 +1,9 @@
 import express from 'express';
-import shop from '../controllers/shop.controller.js';
+import { purchaseIcon } from '../controllers/shop.controller.js';
 import { authenticate } from '../middlewares/jsonwebtoken.js';
 
 const router = express.Router();
 
-router.post('/', shop);
+router.post('/', authenticate, purchaseIcon);
 
 export default router

@@ -111,7 +111,6 @@ export async function endSession(sessionToken, req, res) {
 		// Verificando se deu certo para então limpar o cookie 
 		if (result) {
 			res.clearCookie('session');
-			res.clearCookie('name');
 			return true
 
 		} else {
