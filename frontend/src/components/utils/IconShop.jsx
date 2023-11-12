@@ -12,33 +12,37 @@ import useUserStore from '../store/UserStore';
 
 import { PiCoinsBold as Coin } from 'react-icons/pi';
 
-function IconShop(props) {
+function IconShop() {
     const [showShop, setShowShop] = useState(false);
+    
+    const photo = useUserStore(state => state.photo);
+    const [pfp, setPfp] = useState(photo);
 
     const changePhoto = useUserStore(state => state.changePhoto);
     const token = useUserStore(state => state.userToken);
 
     async function handleShop(photo) {
-        console.log(photo);
 
-        const res = fetch('http://localhost:3000/shop', {
+        const res = await fetch('http://localhost:3000/shop', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `bearer: ${userToken}`,
+                'Authorization': `bearer: ${token}`,
             },
             credentials: "include",
-            body: JSON.stringify(photo),
+            body: JSON.stringify({ photo: photo }),
         });
 
         if (res.ok) {
             const data = await res.json();
 
-            if (res.success) {
+            if (data.success) {
                 changePhoto(photo);
+                setPfp(photo);
+
                 return 
             } else {
-                alert(res.message)
+                alert(data.message)
                 return
             }
         } else {
@@ -64,7 +68,7 @@ function IconShop(props) {
     // Fazer uma animação com after para quando o mouse passar em cima da foto :3
     return (
         <>
-            <img src={props.photo} alt="Sua foto de perfil" onClick={() => setShowShop(true)} />
+            <img src={pfp} alt="Sua foto de perfil" onClick={() => setShowShop(true)} />
 
             <Modal show={showShop} onHide={() => setShowShop(false)} centered>
                 <Modal.Header className='bg-warning' closeButton><span className="display-6">Loja de icones</span></Modal.Header >
@@ -75,7 +79,12 @@ function IconShop(props) {
                             <Card style={cardItem}>
                                 <Card.Header className='fw-medium'>Foto de perfil padrão</Card.Header>
                                 <Card.Img style={cardImg} className='mb-2' src='img/pfps/pfp-padrao.png' />
-                                <Button onClick={() => handleShop('img/pfps/pfp-padrao.png')}><span className="visually-hidden">Preço:</span> 0 <Coin /></Button>
+
+                                <Button disabled={pfp === 'img/pfps/pfp-padrao.png'} onClick={() => handleShop('img/pfps/pfp-padrao.png')}>
+                                    { pfp === 'img/pfps/pfp-padrao.png' ? 
+                                        "Ícone em uso" : <> <span className="visually-hidden">Preço:</span> 0 <Coin /></>
+                                    }
+                                </Button>
                             </Card>
                         </Col>
 
@@ -83,7 +92,12 @@ function IconShop(props) {
                             <Card style={cardItem}>
                                 <Card.Header className='fw-medium'>Plantinhas e moedas</Card.Header>
                                 <Card.Img style={cardImg} className='mb-2' src='img/pfps/coins-plants.jpg' />
-                                <Button onClick={() => handleShop('img/pfps/coins-plants.jpg')}><span className="visually-hidden">Preço:</span> 1.000 <Coin /></Button>
+
+                                <Button disabled={pfp === 'img/pfps/coins-plants.jpg'} onClick={() => handleShop('img/pfps/coins-plants.jpg')}>
+                                    { pfp === 'img/pfps/coins-plants.jpg' ? 
+                                        "Ícone em uso" : <> <span className="visually-hidden">Preço:</span> 1000 <Coin /></>
+                                    }
+                                </Button>
                             </Card>
                         </Col>
                     </Row>

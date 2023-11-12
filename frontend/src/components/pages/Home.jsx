@@ -412,7 +412,7 @@ const Home = () => {
 
 							<div className="perfil1">
 
-								<IconShop className="mb-5" photo={photo} />
+								<IconShop className="mb-5" />
 
 								<h1 className='text-primary'><i>{name} {sname}</i></h1>
 
