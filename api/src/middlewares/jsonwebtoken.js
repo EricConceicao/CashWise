@@ -5,8 +5,9 @@ export async function createToken(data) {
 }
 
 export async function authenticate(req, res, next) {
-	const token = req.headers['authorization'].split(' ')[1];
 	try {
+		const token = req.headers['authorization'].split(' ')[1];
+		
 		const data = jwt.verify(token, process.env.SECRET_KEY);
 
 		req.accessToken = data;
@@ -15,7 +16,7 @@ export async function authenticate(req, res, next) {
 	} catch (err) {
 		res.status(401).json({
 			success: false,
-			error: "token inválido."
+			error: `Token inválido ${err}`
 		})
 	}
 	
