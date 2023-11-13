@@ -21,13 +21,13 @@ import { BsArrowDownRight } from 'react-icons/bs'
 import useUserStore from '../store/UserStore';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
+import { GiClick } from 'react-icons/gi'
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 import IconShop from '../utils/IconShop';
 
 const Home = () => {
-
 
 	//Perfil do usuário
 
@@ -121,7 +121,7 @@ const Home = () => {
 		} catch (erro) {
 			console.error("Erro ao adicionar despesa:", erro);
 
-			
+
 		}
 	};
 
@@ -182,7 +182,7 @@ const Home = () => {
 
 	const [gastosPorCategoria, setGastosPorCategoria] = useState({});
 
-	
+
 
 	const [categorias, setCategorias] = useState([
 		"Alimentação",
@@ -196,35 +196,35 @@ const Home = () => {
 		"Aluguel"]);
 
 
-		const adicionarCategoria = (novaCategoria) => {
-			setCategorias([...categorias, novaCategoria]);
-		};
-	
-		const [novaCategoria, setNovaCategoria] = useState('');
-	
-		const handleAdicionarNovaCategoria = () => {
-			if (novaCategoria) {
-				adicionarCategoria(novaCategoria);
-				showConfirmationMessage("Nova categoria criada com sucesso!");
-				setNovaCategoria('');
-			}
-		};
-	
-		const handleExcluirCategoria = (index) => {
-			const novasCategorias = [...categorias];
-			novasCategorias.splice(index, 1);
-			setCategorias(novasCategorias);
-		};
-	
-		const [selectedCategoria, setSelectedCategoria] = useState("");
-		const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
-	
-		const mostrarDetalhesCategoria = (categoria) => {
-			setCategoriaSelecionada(categoria);
-			setShowModalDetalhes(true);
-		};
-	
-		const [showModalDetalhes, setShowModalDetalhes] = useState(false);
+	const adicionarCategoria = (novaCategoria) => {
+		setCategorias([...categorias, novaCategoria]);
+	};
+
+	const [novaCategoria, setNovaCategoria] = useState('');
+
+	const handleAdicionarNovaCategoria = () => {
+		if (novaCategoria) {
+			adicionarCategoria(novaCategoria);
+			showConfirmationMessage("Nova categoria criada com sucesso!");
+			setNovaCategoria('');
+		}
+	};
+
+	const handleExcluirCategoria = (index) => {
+		const novasCategorias = [...categorias];
+		novasCategorias.splice(index, 1);
+		setCategorias(novasCategorias);
+	};
+
+	const [selectedCategoria, setSelectedCategoria] = useState("");
+	const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
+
+	const mostrarDetalhesCategoria = (categoria) => {
+		setCategoriaSelecionada(categoria);
+		setShowModalDetalhes(true);
+	};
+
+	const [showModalDetalhes, setShowModalDetalhes] = useState(false);
 
 
 	// Gráfico
@@ -267,16 +267,29 @@ const Home = () => {
 	const dataMyChart = {
 		labels: categoriasLegenda,
 		datasets: [{
-			label: ' Gastos',
+			label: ' Gastos (R$)',
 			data: valorCategorias,
 			backgroundColor: labelsColors,
+			borderWidth: 2,
 			hoverOffset: 4
 		}]
 	}
 
+	const options = {
+
+		plugins: {
+			legend: {
+				labels: {
+					color: 'white',
+				},
+				position:
+					'left',
+			}
+		}
+	};
 
 
-	
+
 
 
 
@@ -328,6 +341,30 @@ const Home = () => {
 		showConfirmationMessage("Nova conta criada com sucesso!");
 	};
 
+
+
+
+
+	const [agendaVisivel, setAgendaVisivel] = useState(false);
+
+	const abrirdivAgendaFinanceira = () => {
+
+		setAgendaVisivel(!agendaVisivel);
+	}
+
+	const [contasVisivel, setContasVisivel] = useState(false);
+
+	const abrirdivContas = () => {
+
+		setContasVisivel(!contasVisivel);
+	}
+
+	const [categoriasVisivel, setCategoriasVisivel] = useState(false);
+
+	const abrirdivCategorias = () => {
+
+		setCategoriasVisivel(!categoriasVisivel);
+	}
 
 
 
@@ -403,11 +440,15 @@ const Home = () => {
 	return (
 		<>
 			<Header />
+
 			<div id="principal">
+
 				<Content>
+
 					<Container fluid className="conteudo bg-secondary p-5">
 
 						<h1 title='Consulte seu perfil'>Seu perfil</h1>
+
 						<div className='perfil'>
 
 							<div className="perfil1">
@@ -494,7 +535,7 @@ const Home = () => {
 							<Row>
 								<div className="cartao-perfil1">
 									<div className="item">
-										<h3 className=''>Idade</h3>
+										<h4 className=''>Idade</h4>
 										<span className='bg-secondary'>30 anos</span>
 									</div>
 									<HiOutlineCake className='moeda' />
@@ -502,7 +543,7 @@ const Home = () => {
 
 								<div className="cartao-perfil1">
 									<div className="item">
-										<h3 className=''>Perfil</h3>
+										<h4 className=''>Perfil</h4>
 										<span className='bg-secondary'>{level}</span>
 									</div>
 									<MdOutlineEmojiPeople className='moeda' />
@@ -510,7 +551,7 @@ const Home = () => {
 
 								<div className="cartao-perfil1">
 									<div className="item">
-										<h3 className=''>WiseCoins</h3>
+										<h4 className=''>WiseCoins</h4>
 										<span className='bg-secondary'>{wiseCoins}</span>
 									</div>
 									<BsCoin className='moeda' />
@@ -518,7 +559,7 @@ const Home = () => {
 
 								<div className="cartao-perfil1">
 									<div className="item">
-										<h3 className=''>Experiência</h3>
+										<h4 className=''>Experiência</h4>
 										<span className='bg-secondary'>Empresário</span>
 									</div>
 									<BsStars className='moeda' />
@@ -535,14 +576,14 @@ const Home = () => {
 
 							<div className="cartao-perfil col">
 								<div className='item'>
-									<h3>Mês / Ano</h3>
+									<h4>Mês / Ano</h4>
 									<span className='bg-secondary'>{currentMonth} / {currentYear}</span>
 								</div>
 							</div>
 
 							<div className="cartao-perfil col">
 								<div className="item">
-									<h3>Valor Recebido</h3>
+									<h4>Valor Recebido</h4>
 									<span className='bg-secondary'>{Recebido}</span>
 								</div>
 
@@ -560,7 +601,7 @@ const Home = () => {
 								centered
 							>
 								<Modal.Header closeButton>
-									<Modal.Title id="contained-modal-title-vcenter">Adicionar Novo Ganho</Modal.Title>
+									<Modal.Title id="contained-modal-title-vcenter">Novo Ganho</Modal.Title>
 								</Modal.Header>
 								<Modal.Body>
 									<Form>
@@ -602,7 +643,7 @@ const Home = () => {
 
 							<div className="cartao-perfil col">
 								<div className="item">
-									<h3>Valor Gasto</h3>
+									<h4>Valor Gasto</h4>
 									<span className='bg-secondary'>{Gasto}</span>
 								</div>
 
@@ -619,7 +660,7 @@ const Home = () => {
 								centered
 							>
 								<Modal.Header closeButton>
-									<Modal.Title id="contained-modal-title-vcenter">Adicionar Novo Gasto</Modal.Title>
+									<Modal.Title id="contained-modal-title-vcenter">Novo Gasto</Modal.Title>
 								</Modal.Header>
 								<Modal.Body>
 									<Form>
@@ -685,7 +726,7 @@ const Home = () => {
 
 							<div className="cartao-perfil col">
 								<div className='item'>
-									<h3>Saldo Atual</h3>
+									<h4>Saldo Atual</h4>
 									<span className='bg-secondary'>{saldoAtual}</span>
 								</div>
 							</div>
@@ -695,8 +736,41 @@ const Home = () => {
 
 						<br />
 
+						<Container className='menu'>
+							<h1 className='mb-5'>Seu menu</h1>
+							<div className="row cartoes-menu">
+								<div className="col text-info">
+									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivAgendaFinanceira}>
+										<h4>Agenda Financeira</h4>
+										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
+									</Button>
+								</div>
+								<div className="col text-info">
+									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivContas}>
+										<h4>Contas</h4>
+										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
+									</Button>
+								</div>
+								<div className="col text-info">
+									<Button as='button' variant='secondary' className='botao-menu'>
+										<h4>Ganhos</h4>
+										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
+									</Button>
+								</div>
+								<div className="col text-info">
+									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivCategorias}>
+										<h4>Gastos por Categoria</h4>
+										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
+									</Button>
+								</div>
+							</div>
 
-						<Container className='painel mt-5 mb-5'>
+						</Container>
+
+						<br />
+
+
+						<Container className={`painel mt-5 mb-5 ${agendaVisivel ? 'visivel' : 'oculto'}`}>
 							<h1 className='mb-5'>Agenda Financeira </h1>
 
 							<div className="tabela p-4">
@@ -749,7 +823,7 @@ const Home = () => {
 
 						<br />
 
-						<div className="contas">
+						<div className={`contas ${contasVisivel ? 'visivel' : 'oculto'}`}>
 
 							<div className="contas-titulo">
 								<h1>Suas contas</h1>
@@ -887,166 +961,174 @@ const Home = () => {
 
 						<br />
 
-						<Container className='categorias p-5 mb-5'>
-							<div className="categorias-titulo">
-								<h1>Seus gastos por categoria</h1>
-								<div><Button as="button" variant="outline-primary" onClick={() => setShowModalCategorias(true)}>Criar nova categoria</Button>
-									<Modal
-										show={showModalCategorias}
-										onHide={() => setShowModalCategorias(false)}
-										size="md"
-										aria-labelledby="contained-modal-title-vcenter"
-										centered
-									>
-										<Modal.Header className='bg-primary' closeButton>
-											<Modal.Title id="contained-modal-title-vcenter">Nova categoria</Modal.Title>
-										</Modal.Header>
-										<Modal.Body className='bg-secondary text-light'>
-											<Form>
-												<Form.Group className="mb-3">
-													<Form.Label>Veja alguns exemplos de categorias</Form.Label>
-													<Form.Control as="select" name="categoria" className='bg-secondary text-light'>
-														<option value="">Lista de categorias</option>
-														{categorias.map((categoria, index) => (
-															<option key={index} value={categoria}>
-																{categoria}
-															</option>
-														))}
-													</Form.Control>
-												</Form.Group>
-												<Form.Group className="mb-3">
-													<Form.Label>Adicione uma nova categoria</Form.Label>
-													<Form.Control type="text" name="novaCategoria" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)} className='bg-secondary text-light' />
-												</Form.Group>
-											</Form>
-										</Modal.Body>
-										<Modal.Footer className='bg-primary'>
-											<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaCategoria} className='fw-bold'>
-												Criar
-											</Button>
-										</Modal.Footer>
-										{showConfirmation && (
-											<div className="alert alert-success alert-custom" role="alert">
-												{confirmationMessage}
-											</div>
-										)}
-									</Modal>
-								</div>
-							</div>
+						<div className={`${categoriasVisivel ? 'visivel' : 'oculto'}`}>
 
-							<div className='cartoes-categoria'>
-								{categorias.map((categoria, index) => (
-									<div className="cartao-categoria" key={index}>
-										<div className="categoria">
-											<p className="fw-bold fs-5">{categoria}</p>
-											<p className='valor-categoria bg-secondary'>
-												{" "}
-												{gastosPorCategoria[categoria]
-													? gastosPorCategoria[categoria].reduce(
-														(total, gasto) => total + gasto.valor,
-														0
-													).toLocaleString('pt-BR', {
-														style: 'currency',
-														currency: 'BRL'
-													})
-													: 0}
-											</p>
-
-											{valorGasto > 0 && (
-												<p className='percentual-categoria'>
-													{gastosPorCategoria[categoria]
-														? (
-															(gastosPorCategoria[categoria].reduce(
-																(total, gasto) => total + gasto.valor,
-																0
-															) / valorGasto) * 100
-														).toFixed(2) + "%"
-														: "0.00%"}
-												</p>
+							<Container className="categorias p-5 mb-5">
+								<div className="categorias-titulo">
+									<h1>Seus gastos por categoria</h1>
+									<div><Button as="button" variant="outline-primary" onClick={() => setShowModalCategorias(true)}>Criar nova categoria</Button>
+										<Modal
+											show={showModalCategorias}
+											onHide={() => setShowModalCategorias(false)}
+											size="md"
+											aria-labelledby="contained-modal-title-vcenter"
+											centered
+										>
+											<Modal.Header className='bg-primary' closeButton>
+												<Modal.Title id="contained-modal-title-vcenter">Nova categoria</Modal.Title>
+											</Modal.Header>
+											<Modal.Body className='bg-secondary text-light'>
+												<Form>
+													<Form.Group className="mb-3">
+														<Form.Label>Veja alguns exemplos de categorias</Form.Label>
+														<Form.Control as="select" name="categoria" className='bg-secondary text-light'>
+															<option value="">Lista de categorias</option>
+															{categorias.map((categoria, index) => (
+																<option key={index} value={categoria}>
+																	{categoria}
+																</option>
+															))}
+														</Form.Control>
+													</Form.Group>
+													<Form.Group className="mb-3">
+														<Form.Label>Adicione uma nova categoria</Form.Label>
+														<Form.Control type="text" name="novaCategoria" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)} className='bg-secondary text-light' />
+													</Form.Group>
+												</Form>
+											</Modal.Body>
+											<Modal.Footer className='bg-primary'>
+												<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaCategoria} className='fw-bold'>
+													Criar
+												</Button>
+											</Modal.Footer>
+											{showConfirmation && (
+												<div className="alert alert-success alert-custom" role="alert">
+													{confirmationMessage}
+												</div>
 											)}
+										</Modal>
+									</div>
+								</div>
+
+								<div className='cartoes-categoria'>
+									{categorias.map((categoria, index) => (
+										<div className="cartao-categoria" key={index}>
+											<div className="categoria">
+												<p className="fw-bold fs-5">{categoria}</p>
+												<p className='valor-categoria bg-secondary'>
+													{" "}
+													{gastosPorCategoria[categoria]
+														? gastosPorCategoria[categoria].reduce(
+															(total, gasto) => total + gasto.valor,
+															0
+														).toLocaleString('pt-BR', {
+															style: 'currency',
+															currency: 'BRL'
+														})
+														: 0}
+												</p>
+
+												{valorGasto > 0 && (
+													<p className='percentual-categoria'>
+														{gastosPorCategoria[categoria]
+															? (
+																(gastosPorCategoria[categoria].reduce(
+																	(total, gasto) => total + gasto.valor,
+																	0
+																) / valorGasto) * 100
+															).toFixed(2) + "%"
+															: "0.00%"}
+													</p>
+												)}
+
+											</div>
+
+											<hr />
+
+											<div className="botoes">
+												<Button
+													as="button"
+													size="sm"
+													variant="outline-primary"
+													className="botao"
+													onClick={() => mostrarDetalhesCategoria(categoria)
+													}
+												>
+													Detalhar
+												</Button>
+
+
+												<Button
+													as="button"
+													size="sm"
+													variant="outline-danger"
+													className="botao"
+													onClick={() => handleExcluirCategoria(index)}
+												>
+													Excluir
+												</Button>
+											</div>
 
 										</div>
+									))}
 
-										<hr />
-
-										<div className="botoes">
-											<Button
-												as="button"
-												size="sm"
-												variant="outline-primary"
-												className="botao"
-												onClick={() => mostrarDetalhesCategoria(categoria)
-												}
-											>
-												Detalhar
-											</Button>
+								</div>
 
 
-											<Button
-												as="button"
-												size="sm"
-												variant="outline-danger"
-												className="botao"
-												onClick={() => handleExcluirCategoria(index)}
-											>
-												Excluir
-											</Button>
+								<Modal
+									show={showModalDetalhes}
+									onHide={() => setShowModalDetalhes(false)}
+									size="lg"
+									aria-labelledby="contained-modal-title-vcenter"
+									centered
+								>
+									<Modal.Header closeButton>
+										<Modal.Title id="contained-modal-title-vcenter">
+											Meus gastos com {categoriaSelecionada}
+										</Modal.Title>
+									</Modal.Header>
+									<Modal.Body>
+										<div className="row">
+											<div className="col fw-bold">Descrição</div>
+											<div className="col fw-bold">Data</div>
+											<div className="col fw-bold">Valor</div>
 										</div>
-
-									</div>
-								))}
-
-							</div>
-
-
-							<Modal
-								show={showModalDetalhes}
-								onHide={() => setShowModalDetalhes(false)}
-								size="lg"
-								aria-labelledby="contained-modal-title-vcenter"
-								centered
-							>
-								<Modal.Header closeButton>
-									<Modal.Title id="contained-modal-title-vcenter">
-										Meus gastos com {categoriaSelecionada}
-									</Modal.Title>
-								</Modal.Header>
-								<Modal.Body>
-									<div className="row">
-										<div className="col fw-bold">Descrição</div>
-										<div className="col fw-bold">Data</div>
-										<div className="col fw-bold">Valor</div>
-									</div>
-									<br />
-									{categoriaSelecionada && (
-										<ul>
-											{gastosPorCategoria[categoriaSelecionada]?.map((gasto, index) => (
-												<li key={index} className='row'>
-													<p className='col'>{gasto.descricao}</p>
-													<p className='col'>{gasto.data}</p>
-													<p className='col'>{gasto.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-													<br />
-												</li>
-											))}
-										</ul>
-									)}
-								</Modal.Body>
-								<Modal.Footer>
-									<Button as="button" variant="secondary" onClick={() => setShowModalDetalhes(false)}>
-										Fechar
-									</Button>
-								</Modal.Footer>
-							</Modal>
+										<br />
+										{categoriaSelecionada && (
+											<ul>
+												{gastosPorCategoria[categoriaSelecionada]?.map((gasto, index) => (
+													<li key={index} className='row'>
+														<p className='col'>{gasto.descricao}</p>
+														<p className='col'>{gasto.data}</p>
+														<p className='col'>{gasto.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+														<br />
+													</li>
+												))}
+											</ul>
+										)}
+									</Modal.Body>
+									<Modal.Footer>
+										<Button as="button" variant="secondary" onClick={() => setShowModalDetalhes(false)}>
+											Fechar
+										</Button>
+									</Modal.Footer>
+								</Modal>
 
 
-						</Container>
+							</Container>
 
-						<Container className='grafico bg-light p-5 text-secondary'>
-							<h1>Perfil de gastos</h1>
-							<Pie className='grafico-torta'
-								data={dataMyChart}
-							/>
-						</Container>
+
+							{categoriasLegenda.length > 0 ? (
+								<Container className='grafico text-info'>
+									<h1>Perfil de gastos</h1>
+									<Pie className='grafico-torta'
+										data={dataMyChart}
+										options={options}
+									/>
+								</Container>
+							) : null
+							}
+						</div>
 
 					</Container>
 
