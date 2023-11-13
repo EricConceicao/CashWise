@@ -27,7 +27,9 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 import IconShop from '../utils/IconShop';
 
+
 const Home = () => {
+
 
 	//Perfil do usuário
 
@@ -81,7 +83,7 @@ const Home = () => {
 	const [showModal5, setShowModal5] = useState(false);
 	const [showModal6, setShowModal6] = useState(false);
 	const [novoValor, setNovoValor] = useState(0);
-	const [novoValor1, setNovoValor1] = useState(0);
+
 
 	const handleValorRecebidoChange = (event) => {
 		setValorRecebido(parseFloat(event.target.value));
@@ -101,29 +103,7 @@ const Home = () => {
 
 	const [novoDescricao, setNovoDescricao] = useState('');
 	const [novaData, setNovaData] = useState("");
-
-	// Adicionar o novo gasto no banco de dados
-	const adicionarNovaDespesa = async (descricao, categoria, data, valor) => {
-		try {
-			const novaDespesa = await prisma.Gasto.create({
-				data: {
-					descricao: descricao,
-					categoria: categoria,
-					data: new Date(data), // Supondo que a data seja uma string no formato "AAAA-MM-DD"
-					valor: parseFloat(valor), // Supondo que o valor seja uma string
-				},
-			});
-
-			console.log("Nova despesa adicionada:", novaDespesa);
-
-			// Feche o modal ou faça outras ações após adicionar a despesa
-			setShowModal6(false);
-		} catch (erro) {
-			console.error("Erro ao adicionar despesa:", erro);
-
-
-		}
-	};
+	const [novoValor1, setNovoValor1] = useState(0);
 
 
 	const handleAdicionarNovoGasto = () => {
@@ -132,11 +112,10 @@ const Home = () => {
 			// Adiciona o novo gasto com a categoria correspondente
 			const novoGasto = {
 				descricao: novoDescricao,
+				categoria: selectedCategoria,
 				valor: novoValor1,
 				data: novaData,
 			};
-
-			/* adicionarNovaDespesa(novoDescricao, selectedCategoria, novaData, novoValor1); */
 
 			// Cria uma cópia do objeto gastosPorCategoria
 			const novosGastosPorCategoria = { ...gastosPorCategoria };
@@ -171,6 +150,48 @@ const Home = () => {
 	};
 
 
+	const [gastos, setgastos] = useState([])
+
+	useEffect(() => {
+
+		const getgastos = async () => {
+			const response = await fetch('http://localhost:3000/gastos/listar')
+			const data = await response.json()
+			console.log(data.success)
+			console.log(data.gastos)
+			setgastos(data.gastos)
+		}
+
+		getgastos()
+
+	}, [])
+
+	const handleSubmit = async (event) => {
+		event.preventDefault()
+		const novoGasto = {
+			descricao: event.target.descricao.value,
+			categoria: event.target.categoria.value,
+			data: event.target.data.value,
+			valor: event.target.valor.value
+		}
+		console.log(novoGasto);
+
+		const response = await fetch('http://localhost:3000/gastos', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(novoGasto)
+		})
+
+		if (response.ok) {
+			const data = await response.json()
+			alert(data.message)
+			setgastos([...gastos, novoGasto])
+		}
+
+
+	}
 
 
 
@@ -663,7 +684,7 @@ const Home = () => {
 									<Modal.Title id="contained-modal-title-vcenter">Novo Gasto</Modal.Title>
 								</Modal.Header>
 								<Modal.Body>
-									<Form>
+									<Form onSubmit={handleSubmit}>
 										<Form.Group className="mb-3">
 											<Form.Label>Categoria</Form.Label>
 											<Form.Select
@@ -709,13 +730,12 @@ const Home = () => {
 												/>
 											</div>
 										</Form.Group>
+										<Button as='button' variant="secondary" type='submit' onClick={handleAdicionarNovoGasto}>
+											Adicionar
+										</Button>
 									</Form>
 								</Modal.Body>
-								<Modal.Footer>
-									<Button as='button' variant="secondary" onClick={handleAdicionarNovoGasto}>
-										Adicionar
-									</Button>
-								</Modal.Footer>
+
 								{showConfirmation && (
 									<div className="alert alert-success alert-custom" role="alert">
 										{confirmationMessage}

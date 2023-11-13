@@ -23,6 +23,7 @@
 }
 
 .conteudo {
+    width: 100vw;
     color: #fff;
     padding: 25px;
     display: flex;
