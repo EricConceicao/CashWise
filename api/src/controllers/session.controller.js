@@ -40,12 +40,13 @@ export async function checkSession(req, res) {
 	try {
 		const sessionToken = req.cookies.session;
 
+		// Vendo se o cookie de sessão existe
 		if (sessionToken) {
-			// Deletando a sessão após um logout
 			const result = await prisma.Session.findFirst({
-			where: {token: sessionToken}
+				where: {token: sessionToken}
 			});
 
+			// Vendo se houve resultado
 			if (result) {
 				const user = await prisma.User.findFirst({
 					where: {id: result.userId}

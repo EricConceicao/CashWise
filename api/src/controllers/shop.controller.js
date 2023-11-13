@@ -4,6 +4,36 @@ const prisma = new PrismaClient();
 // Sistema para fazer a movimentação de wisecoins do usuário
 import { useCoins } from './wiseCoins.controller.js';
 
+// Função para aquisição dos ícones da loja // 
+export async function getItemList(req, res) {
+    try {
+        const userId = req.accessToken.id;
+
+        const userIcons = await prisma.UserIcons.findFirstOrThrow({
+            where: { userId: userId },
+            select: { 
+                iconId: true, 
+                obtained: true, 
+            }
+        });
+        const icons = await prisma.Icon.findMany();
+        // Formatando o objeto para envio
+        const iconsData = {
+            userIcons,
+            icons
+        }
+
+        return res.status(200).json({
+            success: true,
+            data:  iconsData
+        });
+
+    } catch (err) {
+        console.error("Erro no controlador de listagem de ícones " + err);
+        res.status(500);
+    }
+}
+
 // Função para compra e troca de ícones :3 //
 export async function purchaseIcon(req, res) {
     try {
@@ -24,7 +54,6 @@ export async function purchaseIcon(req, res) {
             where: { userId: userId, iconId: icon.id },
             select: { obtained: true }
         });
-
         
         // Se for nulo, ele tenta comprar
         if (haveIcon === null){
