@@ -82,7 +82,7 @@ function IconShop() {
 
                                 <Button disabled={pfp === 'img/pfps/pfp-padrao.png'} onClick={() => handleShop('img/pfps/pfp-padrao.png')}>
                                     { pfp === 'img/pfps/pfp-padrao.png' ? 
-                                        "Ícone em uso" : <> <span className="visually-hidden">Preço:</span> 0 <Coin /></>
+                                        "Selecionado" : <> <span className="visually-hidden">Preço:</span> 0 <img src="img/wisecoin.webp" width="24rem" /></>
                                     }
                                 </Button>
                             </Card>
@@ -95,7 +95,7 @@ function IconShop() {
 
                                 <Button disabled={pfp === 'img/pfps/coins-plants.jpg'} onClick={() => handleShop('img/pfps/coins-plants.jpg')}>
                                     { pfp === 'img/pfps/coins-plants.jpg' ? 
-                                        "Ícone em uso" : <> <span className="visually-hidden">Preço:</span> 1000 <Coin /></>
+                                        "Selecionado" : <> <span className="visually-hidden">Preço:</span> 1000 <img src="img/wisecoin.webp" width="24rem" /></>
                                     }
                                 </Button>
                             </Card>
