@@ -4,7 +4,7 @@ import { authenticate } from '../middlewares/jsonwebtoken.js';
 
 const router = express.Router();
 
-router.get('/showList', authenticate, getItemList);
+router.get('/getIcons', authenticate, getItemList);
 router.post('/', authenticate, purchaseIcon);
 
 export default router

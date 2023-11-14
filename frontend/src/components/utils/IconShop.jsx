@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Imports do BS
 import Modal from 'react-bootstrap/Modal';
@@ -13,40 +13,48 @@ import useUserStore from '../store/UserStore';
 import { PiCoinsBold as Coin } from 'react-icons/pi';
 
 function IconShop() {
-    // Hooks para o visual //
     const [showShop, setShowShop] = useState(false);
-    const [pfp, setPfp] = useState();
-
-    // Dados do store //
+    const [data, setData] = useState([]);
+    
     const photo = useUserStore(state => state.photo);
+    const [pfp, setPfp] = useState(null);
+
     const changePhoto = useUserStore(state => state.changePhoto);
     const token = useUserStore(state => state.userToken);
 
-    // Isto faz com que a foto atualize após o retorno do banco com a foto atual, e não com a foto padrão
-    useEffect(() => {
+    useEffect(() =>{
         setPfp(photo);
-    }, [photo]);
+    },[photo]);
 
+    // Função para requerir os dados com os ícones disponiveis no banco //
     useEffect(() => {
         async function getIcons() {
-            const res = await fetch('http://localhost:3000/shop/showList', {
+            const res = await fetch('http://localhost:3000/shop/getIcons', {
                 method: "GET",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer: ${token}`,
-                },
+                    'Authorization': `Bearer: ${token}`
+                }
             });
-            const data = await res.json();
 
             if (res.ok) {
-                console.log(data)
-                return 
+                const iconData = await res.json();
+
+                if (iconData.success) {
+                    setData(iconData.iconsData);
+                    console.log(data);
+                    return
+                } else {
+                    alert(iconData.message)
+                    return
+                }
             } else {
-                alert(data.error)
+                alert('Erro de servidor interno');
                 return
             }
         }
-        if (token) {getIcons()}
+
+        // Espera o token receber os dados do loader para então chamar esta função
+        if (token) getIcons();
     }, [token]);
 
     async function handleShop(photo) {
@@ -56,6 +64,7 @@ function IconShop() {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer: ${token}`,
             },
+            credentials: "include",
             body: JSON.stringify({ photo: photo }),
         });
 
@@ -99,33 +108,34 @@ function IconShop() {
             <Modal show={showShop} onHide={() => setShowShop(false)} centered>
                 <Modal.Header className='bg-warning' closeButton><span className="display-6">Loja de icones</span></Modal.Header >
                 <Modal.Body>
-                    <p>Selecione um icone para comprar e usar no seu perfil!</p>
+                    <p>Selecione um ícone para comprar e usar no seu perfil!</p>
                     <Row>
-                        <Col sm="12" md="6">
-                            <Card style={cardItem}>
-                                <Card.Header className='fw-medium'>Foto de perfil padrão</Card.Header>
-                                <Card.Img style={cardImg} className='mb-2' src='img/pfps/pfp-padrao.png' />
+                        {
+                            data.icons && data.icons.map(icon => (
+                            <Col sm="12" md="6" key={icon.id}>
+                                <Card style={cardItem}>
+                                    <Card.Header className='fw-medium'>Foto de perfil padrão</Card.Header>
+                                    <Card.Img style={cardImg} className='mb-2' src={icon.src} />
 
-                                <Button disabled={pfp === 'img/pfps/pfp-padrao.png'} onClick={() => handleShop('img/pfps/pfp-padrao.png')}>
-                                    { pfp === 'img/pfps/pfp-padrao.png' ? 
-                                        "Selecionado" : <> <span className="visually-hidden">Preço:</span> 0 <img src="img/wisecoin.webp" width="24rem" /></>
-                                    }
-                                </Button>
-                            </Card>
-                        </Col>
-
-                        <Col sm="12" md="6">
-                            <Card style={cardItem}>
-                                <Card.Header className='fw-medium'>Plantinhas e moedas</Card.Header>
-                                <Card.Img style={cardImg} className='mb-2' src='img/pfps/coins-plants.jpg' />
-
-                                <Button disabled={pfp === 'img/pfps/coins-plants.jpg'} onClick={() => handleShop('img/pfps/coins-plants.jpg')}>
-                                    { pfp === 'img/pfps/coins-plants.jpg' ? 
-                                        "Selecionado" : <> <span className="visually-hidden">Preço:</span> 1000 <img src="img/wisecoin.webp" width="24rem" /></>
-                                    }
-                                </Button>
-                            </Card>
-                        </Col>
+                                    <Button disabled={pfp === icon.src} onClick={() => handleShop(icon.src)}>
+                                    { pfp === icon.src ? (
+                                        "Selecionado" 
+                                    ) : ( 
+                                        data.userIcons.map(userIcons => (
+                                            userIcons.iconId === icon.id && userIcons.obtained === true ? (
+                                            <span>Selecionar ícone</span>
+                                            
+                                        ) : (
+                                            <>
+                                                <span className="visually-hidden">Preço:</span> {icon.price} <img src="img/wisecoin.webp" width="24rem" />
+                                            </>
+                                        )))
+                                    )}
+                                    </Button>
+                                </Card>
+                            </Col>
+                            ))
+                        }
                     </Row>
                 </Modal.Body>
             </Modal>

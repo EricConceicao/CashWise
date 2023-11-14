@@ -9,7 +9,7 @@ export async function getItemList(req, res) {
     try {
         const userId = req.accessToken.id;
 
-        const userIcons = await prisma.UserIcons.findFirstOrThrow({
+        const userIcons = await prisma.UserIcons.findMany({
             where: { userId: userId },
             select: { 
                 iconId: true, 
@@ -25,7 +25,7 @@ export async function getItemList(req, res) {
 
         return res.status(200).json({
             success: true,
-            data:  iconsData
+            iconsData
         });
 
     } catch (err) {
