@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { GiNotebook } from 'react-icons/gi';
 import { MdOutlineQuiz } from 'react-icons/md';
 import { Form } from 'react-bootstrap';
 import Content from '../layouts/Content';
@@ -18,7 +19,6 @@ function Quiz() {
         { id: 9, text: 'Valor que pretende investir por mês?', answer: '', type: 'number' },
         { id: 10, text: 'Qual é o seu objetivo financeiro de longo prazo?', answer: '', type: 'text' },
         { id: 11, text: 'Tem algum objetivo financeiro de médio prazo?', answer: '', type: 'text' },
-        // Adicione mais perguntas conforme necessário
     ]);
 
     const handleAnswerChange = (e, questionId) => {
@@ -56,7 +56,7 @@ function Quiz() {
 
     return (
         <>
-            {show === false && <MdOutlineQuiz size={200} onClick={() => setShow(!show)} />}
+            {show === false && <GiNotebook size={200} onClick={() => setShow(!show)} />}
 
             {show ? (
 

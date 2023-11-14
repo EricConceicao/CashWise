@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Imports do BS
 import Modal from 'react-bootstrap/Modal';
@@ -13,23 +13,49 @@ import useUserStore from '../store/UserStore';
 import { PiCoinsBold as Coin } from 'react-icons/pi';
 
 function IconShop() {
+    // Hooks para o visual //
     const [showShop, setShowShop] = useState(false);
-    
-    const photo = useUserStore(state => state.photo);
-    const [pfp, setPfp] = useState(photo);
+    const [pfp, setPfp] = useState();
 
+    // Dados do store //
+    const photo = useUserStore(state => state.photo);
     const changePhoto = useUserStore(state => state.changePhoto);
     const token = useUserStore(state => state.userToken);
 
-    async function handleShop(photo) {
+    // Isto faz com que a foto atualize após o retorno do banco com a foto atual, e não com a foto padrão
+    useEffect(() => {
+        setPfp(photo);
+    }, [photo]);
 
+    useEffect(() => {
+        async function getIcons() {
+            const res = await fetch('http://localhost:3000/shop/showList', {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer: ${token}`,
+                },
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                console.log(data)
+                return 
+            } else {
+                alert(data.error)
+                return
+            }
+        }
+        if (token) {getIcons()}
+    }, [token]);
+
+    async function handleShop(photo) {
         const res = await fetch('http://localhost:3000/shop', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `bearer: ${token}`,
+                'Authorization': `Bearer: ${token}`,
             },
-            credentials: "include",
             body: JSON.stringify({ photo: photo }),
         });
 

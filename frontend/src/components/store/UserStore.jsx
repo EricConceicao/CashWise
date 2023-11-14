@@ -4,7 +4,7 @@ const useUserStore = create((set) => ({
 	id: null,
 	name: "user",
 	sname: "user",
-	photo: "img/pfps/pfp-padrao.png",
+	photo: null,
 	level: "none",
 	exp: 0,
 	wiseCoins: 0,

@@ -4,61 +4,63 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  email         String    @db.VarChar(255) @unique
-  name          String    @db.VarChar(255)
-  sname         String    @db.VarChar(255)
-  password      String
-  photo         String?   @db.Text @default("/img/pfps/pfp-padrao.svg")
-  wiseCoins     Int       @default(0)
-  level         String    @db.VarChar(255) @default("Iniciante")
-  exp           Int       @default(0)
-  creationDate  DateTime  @default(now())
-  sessions      Session[]
-  UserIcons     UserIcons[]
+  id           Int         @id @default(autoincrement())
+  email        String      @unique @db.VarChar(255)
+  name         String      @db.VarChar(255)
+  sname        String      @db.VarChar(255)
+  password     String
+  photo        String?     @default("/img/pfps/pfp-padrao.svg") @db.Text
+  wiseCoins    Int         @default(0)
+  level        String      @default("Iniciante") @db.VarChar(255)
+  exp          Int         @default(0)
+  creationDate DateTime    @default(now())
+  sessions     Session[]
+  UserIcons    UserIcons[]
 }
 
 model Contact {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(255)
-  email     String    @db.VarChar(255)
-  subject   String    @db.VarChar(255)
-  message   String    @db.Text
-  date      DateTime  @default(now())
+  id      Int      @id @default(autoincrement())
+  name    String   @db.VarChar(255)
+  email   String   @db.VarChar(255)
+  subject String   @db.VarChar(255)
+  message String   @db.Text
+  date    DateTime @default(now())
 }
 
 model Session {
-  id        Int       @id @default(autoincrement())
-  token     String    @unique @db.VarChar(200)
-  userId    Int
-  user      User      @relation(fields: [userId], references: [id])
+  id     Int    @id @default(autoincrement())
+  token  String @unique @db.VarChar(200)
+  userId Int
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 model Icon {
-  id        Int       @id @default(autoincrement())
-  src       String    @db.Text
-  price     Int
-  userIcon  UserIcons[]
+  id       Int         @id @default(autoincrement())
+  src      String      @db.Text
+  price    Int
+  userIcon UserIcons[]
 }
 
 model UserIcons {
-  id       Int        @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   iconId   Int
   userId   Int
-  obtained Boolean    @default(false)
-  user     User       @relation(fields: [userId], references: [id])
-  icon     Icon       @relation(fields: [iconId], references: [id])
+  obtained Boolean @default(false)
+  user     User    @relation(fields: [userId], references: [id])
+  icon     Icon    @relation(fields: [iconId], references: [id])
 }
+
 model Gasto {
-  id         Int      @id @default(autoincrement())
-  descricao  String   @db.VarChar(255)
-  categoria  String   @db.VarChar(50)
-  data       DateTime @default(now())
-  valor      Decimal  @db.Decimal(10, 2)
+  id        Int      @id @default(autoincrement())
+  descricao String   @db.VarChar(255)
+  categoria String   @db.VarChar(50)
+  data      String
+  valor     Decimal  @db.Decimal(10, 2)
 }
