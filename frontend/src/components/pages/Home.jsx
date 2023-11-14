@@ -80,14 +80,13 @@ const Home = () => {
 		currency: 'BRL',
 	});
 
-	const [showModal5, setShowModal5] = useState(false);
-	const [showModal6, setShowModal6] = useState(false);
+
+	// Novo ganho
+
+	const [showModalNovoGanho, setShowModalNovoGanho] = useState(false);
+	
 	const [novoValor, setNovoValor] = useState(0);
 
-
-	const handleValorRecebidoChange = (event) => {
-		setValorRecebido(parseFloat(event.target.value));
-	}
 
 	const handleAdicionarNovoGanho = () => {
 
@@ -97,9 +96,56 @@ const Home = () => {
 	};
 
 
-	const handleValorGastoChange = (event) => {
-		setValorGasto(parseFloat(event.target.value));
+	const [ganhos, setganhos] = useState([])
+
+	useEffect(() => {
+
+		const getganhos = async () => {
+			const response = await fetch('http://localhost:3000/ganhos/listar')
+			const data = await response.json()
+			console.log(data.success)
+			console.log(data.ganhos)
+			setgastos(data.ganhos)
+		}
+
+		getganhos()
+
+	}, [])
+
+	const handleSubmitNovoGanho = async (event) => {
+		event.preventDefault()
+		const novoGanho = {
+			descricao: event.target.descricao.value,
+			data: event.target.data.value,
+			valor: event.target.valor.value
+		}
+		console.log(novoGanho);
+
+		const response = await fetch('http://localhost:3000/ganhos', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(novoGanho)
+		})
+
+		if (response.ok) {
+			const data = await response.json()
+			alert(data.message)
+			setganhos([...ganhos, novoGanho])
+		}
+
+
 	}
+
+
+
+
+
+
+	// Novo gasto
+
+	const [showModal6, setShowModal6] = useState(false);
 
 	const [novoDescricao, setNovoDescricao] = useState('');
 	const [novaData, setNovaData] = useState("");
@@ -166,7 +212,7 @@ const Home = () => {
 
 	}, [])
 
-	const handleSubmit = async (event) => {
+	const handleSubmitNovoGasto = async (event) => {
 		event.preventDefault()
 		const novoGasto = {
 			descricao: event.target.descricao.value,
@@ -609,14 +655,14 @@ const Home = () => {
 								</div>
 
 								<div className="botao">
-									<Button as="button" variant="outline-primary" onClick={() => setShowModal5(true)}>Novo</Button>
+									<Button as="button" variant="outline-primary" onClick={() => setShowModalNovoGanho(true)}>Novo</Button>
 								</div>
 
 							</div>
 
 							<Modal
-								show={showModal5}
-								onHide={() => setShowModal5(false)}
+								show={showModalNovoGanho}
+								onHide={() => setShowModalNovoGanho(false)}
 								size="md"
 								aria-labelledby="contained-modal-title-vcenter"
 								centered
@@ -625,14 +671,18 @@ const Home = () => {
 									<Modal.Title id="contained-modal-title-vcenter">Novo Ganho</Modal.Title>
 								</Modal.Header>
 								<Modal.Body>
-									<Form>
+									<Form onSubmit={handleSubmitNovoGanho}>
 										<Form.Group className="mb-3">
 											<Form.Label>Descrição</Form.Label>
-											<Form.Control type="text" name="name" />
+											<Form.Control 
+											type="text" 
+											name="descricao" />
 										</Form.Group>
 										<Form.Group className="mb-3">
 											<Form.Label>Data</Form.Label>
-											<Form.Control type="date" name="email" />
+											<Form.Control 
+											type="date" 
+											name="data" />
 										</Form.Group>
 										<Form.Group>
 											<Form.Label>Valor a ser adicionado</Form.Label>
@@ -641,18 +691,17 @@ const Home = () => {
 												<Form.Control
 													type="number"
 													step="0.01"  // Permita valores fracionados com duas casas decimais
+													name='valor'
 													value={novoValor}
 													onChange={(event) => setNovoValor(parseFloat(event.target.value))}
 												/>
 											</div>
 										</Form.Group>
-									</Form>
-								</Modal.Body>
-								<Modal.Footer>
-									<Button as='button' variant="secondary" onClick={handleAdicionarNovoGanho}>
+										<Button as='button' variant="secondary" type='submit' onClick={handleAdicionarNovoGanho}>
 										Adicionar
 									</Button>
-								</Modal.Footer>
+									</Form>
+								</Modal.Body>
 								{showConfirmation && (
 									<div className="alert alert-success alert-custom" role="alert">
 										{confirmationMessage}
@@ -684,7 +733,7 @@ const Home = () => {
 									<Modal.Title id="contained-modal-title-vcenter">Novo Gasto</Modal.Title>
 								</Modal.Header>
 								<Modal.Body>
-									<Form onSubmit={handleSubmit}>
+									<Form onSubmit={handleSubmitNovoGasto}>
 										<Form.Group className="mb-3">
 											<Form.Label>Categoria</Form.Label>
 											<Form.Select

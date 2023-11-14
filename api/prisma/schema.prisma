@@ -64,3 +64,10 @@ model Gasto {
   data      String
   valor     Decimal  @db.Decimal(10, 2)
 }
+
+model Ganho {
+  id        Int      @id @default(autoincrement())
+  descricao String   @db.VarChar(255)
+  data      String
+  valor     Decimal  @db.Decimal(10, 2)
+}
