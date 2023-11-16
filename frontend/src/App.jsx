@@ -13,6 +13,8 @@ import Poupanca from './components/pages/Poupanca';
 import Investimentos from './components/pages/Investimentos';
 import Investodos from './components/pages/Investodos';
 import Prev from './components/pages/Prev';
+import Educacao from './components/pages/Educacao';
+import Dicas from './components/pages/Dicas';
 // Importações de componentes //
 import Loader from './components/utils/Loader';
 
@@ -37,6 +39,8 @@ const App = () => {
       <Route path="/investimentos" element={<Investimentos/>}/>
       <Route path="/investodos" element={<Investodos/>}/>
       <Route path="/prev" element={<Prev/>}/>
+      <Route path="/educacao" element={<Educacao/>}/>
+      <Route path="/dicas" element={<Dicas/>}/>
       <Route path="*" element={<NotFound />} />
     </Routes>
     </>
