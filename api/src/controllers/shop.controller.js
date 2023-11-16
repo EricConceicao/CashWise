@@ -57,6 +57,8 @@ export async function purchaseIcon(req, res) {
         
         // Se for nulo, ele tenta comprar
         if (haveIcon === null){
+
+            // Pega a carteira do usuário.
             const user = await prisma.User.findFirstOrThrow({
                 where: { id: userId },
                 select: {
@@ -64,10 +66,10 @@ export async function purchaseIcon(req, res) {
                 }
             });
 
-
+            // Confirma se ele pode comprar
             if (user.wiseCoins >= icon.price) {
-                const result = await useCoins(userId, user.wiseCoins, icon.price);
-                if (result === false) { throw "Erro na hora de pagar as contas" }
+                const newBalance = await useCoins(userId, user.wiseCoins, icon.price);
+                if (newBalance === false) { throw "Erro: Saldo insuficiente. Estude mais ;)" }
 
                 // Registra o novo ícone do usuário em sua tabela de ícones
                 const insertIcon = await prisma.UserIcons.create({
@@ -82,7 +84,8 @@ export async function purchaseIcon(req, res) {
                 return res.status(200).json({
                     success: true,
                     message: 'Ícone comprado com sucesso',
-                    newIcon: src
+                    newIcon: src,
+                    newBalance
                 });
 
             } else {

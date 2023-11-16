@@ -71,20 +71,21 @@ export async function checkSession(req, res) {
 					});
 				} else {
 					// Usuário não encontrado no banco com a id do cookie
-					return res.status(404).json({
+					return res.status(401).json({
 						success: false,
 						message: 'Usuário não encontrado com a crendencial de sessão',
 					});
 				}
 			} else {
 				// Sessão não encontrada no banco
+				res.clearCookie('session');
 				return res.status(404).json({
 					success: false,
 					message: 'Sessão inexistente',
 				});
 			}
 		} else {
-			// Sem cookie 401-Não autorizado.
+			// Sem cookie 401 Não autorizado.
 			return res.status(401).json({
 				success: false,
 				message: 'Cookie de sessão inexistente',
@@ -109,12 +110,13 @@ export async function endSession(sessionToken, req, res) {
 			where: {token: sessionToken}
 		});
 
-		// Verificando se deu certo para então limpar o cookie 
+		// Verificando se deu certo ou não 
 		if (result) {
 			res.clearCookie('session');
 			return true
 
 		} else {
+			res.clearCookie('session');
 			return false
 		}
 

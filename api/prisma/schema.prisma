@@ -9,14 +9,14 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
+// Tábela com todo o esqueleto do nosso usuário comum
 model User {
   id           Int         @id @default(autoincrement())
   email        String      @unique @db.VarChar(255)
   name         String      @db.VarChar(255)
   sname        String      @db.VarChar(255)
   password     String
-  photo        String?     @default("/img/pfps/pfp-padrao.svg") @db.Text
+  photo        String?     @default("/img/pfps/pfp-padrao.png") @db.Text
   wiseCoins    Int         @default(0)
   level        String      @default("Iniciante") @db.VarChar(255)
   exp          Int         @default(0)
@@ -24,7 +24,7 @@ model User {
   sessions     Session[]
   UserIcons    UserIcons[]
 }
-
+// Tábela para envio de feedbacks da página contato
 model Contact {
   id      Int      @id @default(autoincrement())
   name    String   @db.VarChar(255)
@@ -33,21 +33,25 @@ model Contact {
   message String   @db.Text
   date    DateTime @default(now())
 }
-
+// Tábela de sessões de usuários para manter o controle dos refreshTokens
 model Session {
   id     Int    @id @default(autoincrement())
   token  String @unique @db.VarChar(200)
   userId Int
   user   User   @relation(fields: [userId], references: [id])
 }
-
+// Tábela de icones disponiveis no app. Se quiser adicionar um, fique avontade. Ele aparecerá na loja na home :3
+// Apenas coloque a imagem (preferêncialmente svg > png > jpg) dentro da pasta 'pfps' em "public/img" no front 
+// e na hora de inserir o endereço ficaria mais ou menos assim: "img/nome-do-icone.extensão" 
+// e depois insira, um nome para ele na loja e um preço em wiseCoins
 model Icon {
   id       Int         @id @default(autoincrement())
+  name     String      @db.VarChar(255) @default("ícone sem nome")
   src      String      @db.Text
   price    Int
   userIcon UserIcons[]
 }
-
+// Tábela de ícones que o usuário possui/comprou. 
 model UserIcons {
   id       Int     @id @default(autoincrement())
   iconId   Int
@@ -56,7 +60,7 @@ model UserIcons {
   user     User    @relation(fields: [userId], references: [id])
   icon     Icon    @relation(fields: [iconId], references: [id])
 }
-
+// Tábela com os gastos registrados na agenda
 model Gasto {
   id        Int     @id @default(autoincrement())
   descricao String  @db.VarChar(255)
@@ -64,7 +68,7 @@ model Gasto {
   data      String
   valor     Decimal @db.Decimal(10, 2)
 }
-
+// Tábela com os ganhos registrados na agenda
 model Ganho {
   id        Int     @id @default(autoincrement())
   descricao String  @db.VarChar(255)

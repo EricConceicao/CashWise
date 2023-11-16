@@ -32,6 +32,7 @@ const useUserStore = create((set) => ({
 		session: false,
 	}),
 	changePhoto: (newPhoto) => ({ photo: newPhoto }),
+	refreshCoins: (newBalance) => ({ wiseCoins: newBalance }),
 })); 
 
 export default useUserStore

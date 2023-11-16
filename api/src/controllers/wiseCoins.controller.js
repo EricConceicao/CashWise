@@ -10,7 +10,7 @@ export async function useCoins(userId, userCoin, price) {
 			data: { wiseCoins: newBalance }
 		});
 		
-		return
+		return newBalance
 
 	} catch (err) {
 		console.error("Erro no contralador se uso de wiseCoins: " + err);
