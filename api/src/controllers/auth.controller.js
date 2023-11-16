@@ -147,7 +147,7 @@ export async function logout(req, res) {
         if (!sessionToken) {
             return res.status(404).json({
                 success: false,
-                message: "Sessão não encontrada. Faça login novamente"
+                message: "Sessão não encontrada. Saindo"
             })
         }
 

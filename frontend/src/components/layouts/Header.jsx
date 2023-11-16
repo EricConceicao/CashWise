@@ -17,7 +17,7 @@ function Header() {
     async function handleLogout(e) {
         e.preventDefault();
         const response = await fetch('http://localhost:3000/auth/logout', {
-            method: 'POST',
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -42,7 +42,7 @@ function Header() {
             <Container>
                 <Navbar.Brand href='/home'>
                     <img className="rounded-pill" 
-                    src="/img/logo-cashwise.jpg" 
+                    src="/img/logo-cashwise.png" 
                     alt="Logo marca do CashWise"
                     title="CashWise. Educação Financeira"
                     width="42%" />
