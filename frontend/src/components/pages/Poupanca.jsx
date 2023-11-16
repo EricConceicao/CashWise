@@ -28,7 +28,7 @@ const Poupanca = () => {
 				<Container className="mt-5 mx-auto">
 					<Row>
 						<Col lg={6} md={6} className="mb-4">
-							<Card border="#213740" style={{ borderWidth: '3px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
+							<Card border="#213740" style={{ borderWidth: '3px' }}>
 								<Card.Body>
 									<Card.Title className="fs-3 p-3 text-center ">Vantagens da Poupança:</Card.Title>
 									<Card.Img id='card-img' src="img/cofrinho.png" alt="Imagem do artigo poupança" />
@@ -49,10 +49,10 @@ const Poupanca = () => {
 						</Col>
 
 						<Col lg={6} md={6} className="mb-4">
-							<Card border="#213740" style={{ borderWidth: '3px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
+							<Card border="#213740" style={{ borderWidth: '3px' }}>
 								<Card.Body>
 									<Card.Title className="fs-3 p-3 text-center ">Desvantagens da Poupança:</Card.Title>
-									<Card.Img src="img/desvPoup.png" alt="Imagem do artigo poupança" style={{ width: '250px', height: 'auto', float: 'left', marginRight: '10px ' }} />
+									<Card.Img id='card-img' src="img/desvPoup.png" alt="Imagem do artigo poupança" />
 
 
 									<Card.Text className='text-justify'>

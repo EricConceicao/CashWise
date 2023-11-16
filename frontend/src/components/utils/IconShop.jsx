@@ -110,11 +110,11 @@ function IconShop() {
             return <> <span className="visually-hidden">Preço:</span> {icon.price} <img src="img/wisecoin.webp" width="20rem" /> </>
         }
     }
+
     function checkObtainedIcon(icon) {
          const result = data?.userIcons.find(user => user.iconId === icon.id);
          return !result?.obtained
     }
-
 
     // Estilos personalizados
     const cardItem = {
