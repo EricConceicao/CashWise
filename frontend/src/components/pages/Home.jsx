@@ -84,15 +84,42 @@ const Home = () => {
 	// Novo ganho
 
 	const [showModalNovoGanho, setShowModalNovoGanho] = useState(false);
-	
-	const [novoValor, setNovoValor] = useState(0);
+
+	const [novaDescricaoGanho, setNovaDescricaoGanho] = useState('');
+	const [selectedFonte, setSelectedFonte] = useState("");
+	const [novaDataGanho, setNovaDataGanho] = useState("");
+	const [novoValorGanho, setNovoValorGanho] = useState(0);
+	const [ganhosPorFonte, setGanhosPorFonte] = useState({});
 
 
 	const handleAdicionarNovoGanho = () => {
+		if (selectedFonte && novaDescricaoGanho && novoValorGanho) {
 
-		setValorRecebido(valorRecebido + novoValor);
+			const novoGanho = {
+				descricao: novaDescricaoGanho,
+				fonte: selectedFonte,
+				valor: novoValorGanho,
+				data: novaDataGanho,
+			};
 
-		showConfirmationMessage("Novo ganho adicionado com sucesso!");
+			// Cria uma cópia do objeto gastosPorCategoria
+			const novosGanhosPorFonte = { ...ganhosPorFonte };
+
+			// Verifica se já existe um array de gastos para a categoria
+			if (!novosGanhosPorFonte[selectedFonte]) {
+				novosGanhosPorFonte[selectedFonte] = [];
+			}
+
+			// Adiciona o novo gasto ao array de gastos da categoria
+			novosGanhosPorFonte[selectedFonte].push(novoGanho);
+
+			// Atualiza o estado com os novos gastos por categoria
+			setGanhosPorFonte(novosGanhosPorFonte);
+
+			setValorRecebido(valorRecebido + novoValorGanho);
+
+			showConfirmationMessage("Novo ganho adicionado com sucesso!");
+		}
 	};
 
 
@@ -103,8 +130,8 @@ const Home = () => {
 		const getganhos = async () => {
 			const response = await fetch('http://localhost:3000/ganhos/listar')
 			const data = await response.json()
-			console.log(data.success)
-			console.log(data.ganhos)
+			/*console.log(data.success)
+			console.log(data.ganhos)*/
 			setgastos(data.ganhos)
 		}
 
@@ -116,6 +143,7 @@ const Home = () => {
 		event.preventDefault()
 		const novoGanho = {
 			descricao: event.target.descricao.value,
+			fonte: event.target.fonte.value,
 			data: event.target.data.value,
 			valor: event.target.valor.value
 		}
@@ -132,7 +160,6 @@ const Home = () => {
 		if (response.ok) {
 			const data = await response.json()
 			alert(data.message)
-			setganhos([...ganhos, novoGanho])
 		}
 
 
@@ -148,8 +175,10 @@ const Home = () => {
 	const [showModal6, setShowModal6] = useState(false);
 
 	const [novoDescricao, setNovoDescricao] = useState('');
+	const [selectedCategoria, setSelectedCategoria] = useState("");
 	const [novaData, setNovaData] = useState("");
 	const [novoValor1, setNovoValor1] = useState(0);
+	const [gastosPorCategoria, setGastosPorCategoria] = useState({});
 
 
 	const handleAdicionarNovoGasto = () => {
@@ -203,8 +232,8 @@ const Home = () => {
 		const getgastos = async () => {
 			const response = await fetch('http://localhost:3000/gastos/listar')
 			const data = await response.json()
-			console.log(data.success)
-			console.log(data.gastos)
+			/*console.log(data.success)
+			console.log(data.gastos)*/
 			setgastos(data.gastos)
 		}
 
@@ -233,12 +262,26 @@ const Home = () => {
 		if (response.ok) {
 			const data = await response.json()
 			alert(data.message)
-			setgastos([...gastos, novoGasto])
 		}
 
 
 	}
 
+
+
+	// Fontes de receita
+
+	const [fontesdeReceita, setFontesdeReceita] = useState([
+		"Salário",
+		"Décimo Terceiro",
+		"Férias",
+		"Bônus",
+		"Transferência",
+		"PIX",
+		"Aluguel",
+		"Rendimentos",
+		"Doação",
+		"Patrocínio"]);
 
 
 
@@ -247,7 +290,7 @@ const Home = () => {
 
 	const [showModalCategorias, setShowModalCategorias] = useState(false);
 
-	const [gastosPorCategoria, setGastosPorCategoria] = useState({});
+
 
 
 
@@ -283,7 +326,7 @@ const Home = () => {
 		setCategorias(novasCategorias);
 	};
 
-	const [selectedCategoria, setSelectedCategoria] = useState("");
+
 	const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
 
 	const mostrarDetalhesCategoria = (categoria) => {
@@ -410,7 +453,7 @@ const Home = () => {
 
 
 
-
+	// Exibir div ao clicar no menu
 
 	const [agendaVisivel, setAgendaVisivel] = useState(false);
 
@@ -433,6 +476,13 @@ const Home = () => {
 		setCategoriasVisivel(!categoriasVisivel);
 	}
 
+	const [fontesVisivel, setFontesVisivel] = useState(false);
+
+	const abrirdivFontes = () => {
+
+		setFontesVisivel(!fontesVisivel);
+	}
+
 
 
 
@@ -451,9 +501,38 @@ const Home = () => {
 		}, 3000); // A mensagem será ocultada após 3 segundos
 	};
 
+	const [gastosTotais, setgastosTotais] = useState(false)
+	const [totalGastosDoMesCorrente, setTotalGastosDoMesCorrente] = useState(0);
 
+	useEffect(() => {
 
+		const getGastosTotais = async () => {
+			const response = await fetch('http://localhost:3000/gastos/listar')
+			const data = await response.json()
 
+			// Filtrar os dados para incluir apenas aqueles do mês corrente
+			const dataDoMesCorrente = data.filter(gasto => {
+				const dataGasto = new Date(gasto.data);
+				const dataAtual = new Date();
+
+				return (
+					dataGasto.getMonth() === dataAtual.getMonth() &&
+					dataGasto.getFullYear() === dataAtual.getFullYear()
+				);
+			});
+
+			// Extrair os valores correspondentes
+			const valoresDoMesCorrente = dataDoMesCorrente.map(gasto => parseFloat(gasto.valor));
+
+			// Somar os valores
+			const totalGastos = valoresDoMesCorrente.reduce((total, valor) => total + valor, 0);
+
+			setTotalGastosDoMesCorrente(totalGastos);
+		};
+
+		getGastosTotais();
+
+	}, []);
 
 
 
@@ -461,7 +540,6 @@ const Home = () => {
 	/*
 		const [users, setUsers] = useState([])
 		const [showModal, setShowModal] = useState(false)
-	
 	
 		useEffect(() => {
 	
@@ -673,16 +751,37 @@ const Home = () => {
 								<Modal.Body>
 									<Form onSubmit={handleSubmitNovoGanho}>
 										<Form.Group className="mb-3">
+											<Form.Label>Fonte de Receita</Form.Label>
+											<Form.Select
+												name='fonte'
+												value={selectedFonte}
+												onChange={(e) => setSelectedFonte(e.target.value)}
+											>
+												<option value="">Selecione</option>
+												{fontesdeReceita.map((fonte, index) => (
+													<option key={index} value={fonte}>
+														{fonte}
+													</option>
+												))}
+											</Form.Select>
+										</Form.Group>
+										<Form.Group className="mb-3">
 											<Form.Label>Descrição</Form.Label>
-											<Form.Control 
-											type="text" 
-											name="descricao" />
+											<Form.Control
+												type="text"
+												name="descricao"
+												value={novaDescricaoGanho}
+												onChange={(e) => setNovaDescricaoGanho(e.target.value)}
+											/>
 										</Form.Group>
 										<Form.Group className="mb-3">
 											<Form.Label>Data</Form.Label>
-											<Form.Control 
-											type="date" 
-											name="data" />
+											<Form.Control
+												type="date"
+												name="data" 
+												value={novaDataGanho}
+												onChange={(e) => setNovaDataGanho(e.target.value)}
+												/>
 										</Form.Group>
 										<Form.Group>
 											<Form.Label>Valor a ser adicionado</Form.Label>
@@ -692,14 +791,14 @@ const Home = () => {
 													type="number"
 													step="0.01"  // Permita valores fracionados com duas casas decimais
 													name='valor'
-													value={novoValor}
-													onChange={(event) => setNovoValor(parseFloat(event.target.value))}
+													value={novoValorGanho}
+													onChange={(event) => setNovoValorGanho(parseFloat(event.target.value))}
 												/>
 											</div>
 										</Form.Group>
 										<Button as='button' variant="secondary" type='submit' onClick={handleAdicionarNovoGanho}>
-										Adicionar
-									</Button>
+											Adicionar
+										</Button>
 									</Form>
 								</Modal.Body>
 								{showConfirmation && (
@@ -714,6 +813,7 @@ const Home = () => {
 							<div className="cartao-perfil col">
 								<div className="item">
 									<h4>Valor Gasto</h4>
+									<span>{totalGastosDoMesCorrente}</span>
 									<span className='bg-secondary'>{Gasto}</span>
 								</div>
 
@@ -829,6 +929,15 @@ const Home = () => {
 								<div className="col text-info">
 									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivCategorias}>
 										<h4>Gastos por Categoria</h4>
+										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
+									</Button>
+								</div>
+							</div>
+
+							<div className='row cartoes-menu'>
+								<div className="col text-info">
+									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivFontes}>
+										<h4>Fontes de Receita</h4>
 										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
 									</Button>
 								</div>
@@ -1198,6 +1307,10 @@ const Home = () => {
 							) : null
 							}
 						</div>
+
+					</Container>
+
+					<Container className={`${fontesVisivel ? 'visivel' : 'oculto'}`}>
 
 					</Container>
 

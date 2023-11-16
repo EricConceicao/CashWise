@@ -62,16 +62,17 @@ model UserIcons {
 }
 // Tábela com os gastos registrados na agenda
 model Gasto {
-  id        Int      @id @default(autoincrement())
-  descricao String   @db.VarChar(255)
-  categoria String   @db.VarChar(50)
+  id        Int     @id @default(autoincrement())
+  descricao String  @db.VarChar(255)
+  categoria String  @db.VarChar(50)
   data      String
-  valor     Decimal  @db.Decimal(10, 2)
+  valor     Decimal @db.Decimal(10, 2)
 }
 // Tábela com os ganhos registrados na agenda
 model Ganho {
-  id        Int      @id @default(autoincrement())
-  descricao String   @db.VarChar(255)
+  id        Int     @id @default(autoincrement())
+  descricao String  @db.VarChar(255)
+  fonte     String  @db.VarChar(50)
   data      String
-  valor     Decimal  @db.Decimal(10, 2)
+  valor     Decimal @db.Decimal(10, 2)
 }
