@@ -1,0 +1,11 @@
+
+@media screen and (max-width: 768px) {
+    #card-img {
+        width: 100%;
+    }
+}
+#card-img {
+    width: 50%;
+    float: left;
+    margin-right: .8rem;
+}

@@ -10,6 +10,7 @@ import Row from 'react-bootstrap/Row';
 // Store do usuário
 import useUserStore from '../store/UserStore';
 
+import './IconShop.css';
 
 function IconShop() {
 
@@ -60,6 +61,7 @@ function IconShop() {
         if (token) getIcons();
     }, [token, pfp]);
 
+    // Compra ou altera ícones
     async function handleShop(photo) {
         const res = await fetch('http://localhost:3000/shop', {
             method: "POST",
@@ -73,15 +75,18 @@ function IconShop() {
 
         if (res.ok) {
             const data = await res.json();
+
             if (data.success) {
-                // Atualiza o store
-                if (typeof data.newBalance !== undefined) {refreshCoins(data.newBalance)}
+                // Atualiza o store e atualiza os valores na página
+                if (data.newBalance != undefined) {
+                    refreshCoins(data.newBalance);
+                    setCoins(data.newBalance);
+                }
                 changePhoto(photo);
-                // Atualiza os valores na página
                 setPfp(photo);
-                setCoins(newBalance);
-            
-                return 
+
+                setFeedback(data.message);
+                return
             } else {
                 alert(data.message);
 
@@ -98,18 +103,26 @@ function IconShop() {
         const result = data?.userIcons.find(user => user.iconId === icon.id)
 
         if (result?.obtained) {
-            
-            return <span>Selecionar ícone</span>    
+
+            return <span>Selecionar ícone</span>
         } else {
-            
+
             return <> <span className="visually-hidden">Preço:</span> {icon.price} <img src="img/wisecoin.webp" width="20rem" /> </>
+<<<<<<< HEAD
         }       
     }
     function checkObtainedIcon(icon) {
          const result = data?.userIcons.find(user => user.iconId === icon.id);
          return !result?.obtained
+=======
+        }
+>>>>>>> 5320bd1d962ec10b0ec058e87cb12eace74089d9
     }
 
+    function checkObtainedIcon(icon) {
+         const result = data?.userIcons.find(user => user.iconId === icon.id);
+         return !result?.obtained
+    }
 
     // Estilos personalizados
     const cardItem = {
@@ -127,13 +140,16 @@ function IconShop() {
     // Fazer uma animação com after para quando o mouse passar em cima da foto :3
     return (
         <>
-            <img src={pfp} alt="Sua foto de perfil" onClick={() => setShowShop(true)} />
+            <div id='img-overlay' onKeyDown={() => setShowShop(true)} onClick={() => setShowShop(true)} tabIndex={0}>
+                <img id='profile-img' src={pfp} alt="Sua foto de perfil" />
+            </div>
 
             <Modal show={showShop} onHide={() => setShowShop(false)} centered>
                 <Modal.Header className='bg-warning' closeButton><span className="display-6">Loja de icones</span></Modal.Header >
                 <Modal.Body>
                     <h1 className="h5">Selecione um ícone para comprar e usar no seu perfil!</h1>
                     <p className="text-center bg-secondary text-white p-1 rounded-pill">Seu saldo: {coins} <img src="img/wisecoin.webp" width="24rem" /></p>
+                    <p>{feedback}</p>
                     <Row>
                         {
                             data.icons && data.icons.map(icon => (
@@ -144,8 +160,8 @@ function IconShop() {
 
                                     <Button disabled={pfp === icon.src || wiseCoins < icon.price && checkObtainedIcon(icon)} onClick={() => handleShop(icon.src)}>
                                     { pfp === icon.src ? (
-                                        "Selecionado" 
-                                    ) : ( 
+                                        "Selecionado"
+                                    ) : (
                                         checkObtainedIcons(icon)
                                     )}
                                     </Button>
