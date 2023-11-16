@@ -107,7 +107,7 @@ function IconShop() {
     }
     function checkObtainedIcon(icon) {
          const result = data?.userIcons.find(user => user.iconId === icon.id);
-         return !result.obtained
+         return !result?.obtained
     }
 
 

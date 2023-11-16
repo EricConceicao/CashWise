@@ -22,6 +22,7 @@ export async function adicionargasto (req, res) {
       });
       
       res.status(200).json({
+        gasto: despesaCriada,
         success: true, 
         message: "Criado com sucesso!"
       })

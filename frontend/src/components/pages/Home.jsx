@@ -133,6 +133,7 @@ const Home = () => {
 			/*console.log(data.success)
 			console.log(data.ganhos)*/
 			setgastos(data.ganhos)
+
 		}
 
 		getganhos()
@@ -226,6 +227,7 @@ const Home = () => {
 
 
 	const [gastos, setgastos] = useState([])
+	const [totalGastosMes, setTotalGastosMes] = useState(0);
 
 	useEffect(() => {
 
@@ -234,12 +236,45 @@ const Home = () => {
 			const data = await response.json()
 			/*console.log(data.success)
 			console.log(data.gastos)*/
+			console.log(data)
 			setgastos(data.gastos)
+
+
 		}
 
 		getgastos()
 
 	}, [])
+
+	useEffect(() => {
+
+		const getGastosTotais = async () => {
+			const response = await fetch('http://localhost:3000/gastos/listar')
+			const data = await response.json()
+
+			// Filtrar os dados para incluir apenas aqueles do mês corrente
+			const dataDoMesCorrente = data.filter(gasto => {
+				const dataGasto = new Date(gasto.data);
+				const dataAtual = new Date();
+
+				return (
+					dataGasto.getMonth() === dataAtual.getMonth() &&
+					dataGasto.getFullYear() === dataAtual.getFullYear()
+				);
+			});
+
+			// Extrair os valores correspondentes
+			const valoresDoMesCorrente = dataDoMesCorrente.map(gasto => parseFloat(gasto.valor));
+
+			// Somar os valores
+			const totalGastosMes = valoresDoMesCorrente.reduce((total, valor) => total + valor, 0);
+
+			setTotalGastosMes(totalGastosMes);
+		};
+
+		getGastosTotais();
+
+	}, []);
 
 	const handleSubmitNovoGasto = async (event) => {
 		event.preventDefault()
@@ -261,9 +296,20 @@ const Home = () => {
 
 		if (response.ok) {
 			const data = await response.json()
-			alert(data.message)
-		}
 
+			const dataGasto = new Date(data.gasto.data);
+			const dataAtual = new Date();
+
+			console.log(dataGasto.getMonth(), dataGasto.getFullYear())
+			console.log(dataAtual.getMonth(), dataAtual.getFullYear())
+
+			if (dataGasto.getMonth() === dataAtual.getMonth() &&
+				dataGasto.getFullYear() === dataAtual.getFullYear()) {
+					
+				setTotalGastosMes(totalGastosMes + parseInt(data.gasto.valor));
+			}
+
+		}
 
 	}
 
@@ -289,9 +335,6 @@ const Home = () => {
 	// Categorias
 
 	const [showModalCategorias, setShowModalCategorias] = useState(false);
-
-
-
 
 
 	const [categorias, setCategorias] = useState([
@@ -501,38 +544,9 @@ const Home = () => {
 		}, 3000); // A mensagem será ocultada após 3 segundos
 	};
 
-	const [gastosTotais, setgastosTotais] = useState(false)
-	const [totalGastosDoMesCorrente, setTotalGastosDoMesCorrente] = useState(0);
 
-	useEffect(() => {
 
-		const getGastosTotais = async () => {
-			const response = await fetch('http://localhost:3000/gastos/listar')
-			const data = await response.json()
 
-			// Filtrar os dados para incluir apenas aqueles do mês corrente
-			const dataDoMesCorrente = data.filter(gasto => {
-				const dataGasto = new Date(gasto.data);
-				const dataAtual = new Date();
-
-				return (
-					dataGasto.getMonth() === dataAtual.getMonth() &&
-					dataGasto.getFullYear() === dataAtual.getFullYear()
-				);
-			});
-
-			// Extrair os valores correspondentes
-			const valoresDoMesCorrente = dataDoMesCorrente.map(gasto => parseFloat(gasto.valor));
-
-			// Somar os valores
-			const totalGastos = valoresDoMesCorrente.reduce((total, valor) => total + valor, 0);
-
-			setTotalGastosDoMesCorrente(totalGastos);
-		};
-
-		getGastosTotais();
-
-	}, []);
 
 
 
@@ -778,10 +792,10 @@ const Home = () => {
 											<Form.Label>Data</Form.Label>
 											<Form.Control
 												type="date"
-												name="data" 
+												name="data"
 												value={novaDataGanho}
 												onChange={(e) => setNovaDataGanho(e.target.value)}
-												/>
+											/>
 										</Form.Group>
 										<Form.Group>
 											<Form.Label>Valor a ser adicionado</Form.Label>
@@ -813,7 +827,7 @@ const Home = () => {
 							<div className="cartao-perfil col">
 								<div className="item">
 									<h4>Valor Gasto</h4>
-									<span>{totalGastosDoMesCorrente}</span>
+									<span>{totalGastosMes}</span>
 									<span className='bg-secondary'>{Gasto}</span>
 								</div>
 
