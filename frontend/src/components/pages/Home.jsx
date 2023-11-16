@@ -941,6 +941,12 @@ const Home = () => {
 										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
 									</Button>
 								</div>
+								<div className="col text-info">
+									<Button as='button' variant='secondary' className='botao-menu'>
+										<h4>Relatório</h4>
+										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
+									</Button>
+								</div>
 							</div>
 
 						</Container>
