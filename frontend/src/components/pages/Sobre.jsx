@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/esm/Container';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 import Quiz from '../layouts/Quiz';
+import Quiz2 from '../layouts/Quiz copy';
 
 const containerStyle = {
     backgroundImage: 'linear-gradient(to bottom, #213740, #5BD992, #AEF2C6)',
@@ -26,6 +27,7 @@ const Sobre = () => {
             <Header />
             <main className="container-fluid" id='main' style={containerStyle}>
                 <Quiz/>
+                <Quiz2/>
                 <Content>
                     <Container className="p-0" id='text'>
                         <div className="jumbotron text-center" id='title' >
