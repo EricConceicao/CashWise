@@ -351,11 +351,12 @@ h1 {
 
 .visivel {
     display: block;
-  }
-  
-  .oculto {
+}
+
+.oculto {
     display: none;
-  }
-  
+}
+
+
 
 /* Fim para estilo da Home */

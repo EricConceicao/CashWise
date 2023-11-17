@@ -108,15 +108,7 @@ function IconShop() {
         } else {
 
             return <> <span className="visually-hidden">Preço:</span> {icon.price} <img src="img/wisecoin.webp" width="20rem" /> </>
-<<<<<<< HEAD
-        }       
-    }
-    function checkObtainedIcon(icon) {
-         const result = data?.userIcons.find(user => user.iconId === icon.id);
-         return !result?.obtained
-=======
         }
->>>>>>> 5320bd1d962ec10b0ec058e87cb12eace74089d9
     }
 
     function checkObtainedIcon(icon) {

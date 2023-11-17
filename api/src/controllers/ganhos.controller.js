@@ -21,6 +21,7 @@ export async function adicionarganho (req, res) {
       });
       
       res.status(200).json({
+        ganho: despesaCriada,
         success: true, 
         message: "Criado com sucesso!"
       })

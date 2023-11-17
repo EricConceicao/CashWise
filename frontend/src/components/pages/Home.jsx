@@ -124,6 +124,7 @@ const Home = () => {
 
 
 	const [ganhos, setganhos] = useState([])
+	const [totalGanhosMes, setTotalGanhosMes] = useState(0);
 
 	useEffect(() => {
 
@@ -132,13 +133,55 @@ const Home = () => {
 			const data = await response.json()
 			/*console.log(data.success)
 			console.log(data.ganhos)*/
-			setgastos(data.ganhos)
+			console.log(data)
+			setganhos(data.ganhos)
 
 		}
 
 		getganhos()
 
 	}, [])
+
+
+	useEffect(() => {
+
+		const getGanhosTotais = async () => {
+			const response = await fetch('http://localhost:3000/ganhos/listar')
+			const data = await response.json()
+
+			// Filtrar os dados para incluir apenas aqueles do mês corrente
+			const ganhosPorData = data.filter(ganho => {
+				const dataGanho = new Date(ganho.data);
+				const dataAtual = new Date();
+
+				dataGanho.setMonth(dataGanho.getMonth() + 1);
+				dataAtual.setMonth(dataAtual.getMonth() + 1);
+
+				/*console.log(dataGanho.getMonth(), dataGanho.getFullYear())
+				console.log(dataAtual.getMonth(), dataAtual.getFullYear())*/
+
+
+				return (
+					dataGanho.getMonth() === dataAtual.getMonth() &&
+					dataGanho.getFullYear() === dataAtual.getFullYear()
+				);
+			});
+
+			// Extrair os valores correspondentes
+			const valoresDoMesCorrente = ganhosPorData.map(ganho => parseFloat(ganho.valor));
+			console.log(valoresDoMesCorrente)
+
+			// Somar os valores
+			const totalGanhosMes = valoresDoMesCorrente.reduce((total, valor) => total + valor, 0);
+			console.log(totalGanhosMes)
+
+			setTotalGanhosMes(totalGanhosMes);
+		};
+
+		getGanhosTotais();
+
+	}, []);
+
 
 	const handleSubmitNovoGanho = async (event) => {
 		event.preventDefault()
@@ -160,11 +203,29 @@ const Home = () => {
 
 		if (response.ok) {
 			const data = await response.json()
-			alert(data.message)
+
+			const dataGanho = new Date(data.ganho.data);
+			const dataAtual = new Date();
+
+			dataGanho.setMonth(dataGanho.getMonth() + 1);
+			dataAtual.setMonth(dataAtual.getMonth() + 1);
+
+			/*console.log(dataGanho.getMonth(), dataGanho.getFullYear())
+			console.log(dataAtual.getMonth(), dataAtual.getFullYear())*/
+
+			if (dataGanho.getMonth() === dataAtual.getMonth() &&
+				dataGanho.getFullYear() === dataAtual.getFullYear()) {
+
+				setTotalGanhosMes(totalGanhosMes + parseInt(data.ganho.valor));
+			}
 		}
 
-
 	}
+
+	const GanhosMes = totalGanhosMes.toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+	});
 
 
 
@@ -257,6 +318,13 @@ const Home = () => {
 				const dataGasto = new Date(gasto.data);
 				const dataAtual = new Date();
 
+				dataGasto.setMonth(dataGasto.getMonth() + 1);
+				dataAtual.setMonth(dataAtual.getMonth() + 1);
+
+				/*console.log(dataGasto.getMonth(), dataGasto.getFullYear())
+				console.log(dataAtual.getMonth(), dataAtual.getFullYear())*/
+
+
 				return (
 					dataGasto.getMonth() === dataAtual.getMonth() &&
 					dataGasto.getFullYear() === dataAtual.getFullYear()
@@ -300,12 +368,15 @@ const Home = () => {
 			const dataGasto = new Date(data.gasto.data);
 			const dataAtual = new Date();
 
+			dataGasto.setMonth(dataGasto.getMonth() + 1);
+			dataAtual.setMonth(dataAtual.getMonth() + 1);
+
 			console.log(dataGasto.getMonth(), dataGasto.getFullYear())
 			console.log(dataAtual.getMonth(), dataAtual.getFullYear())
 
 			if (dataGasto.getMonth() === dataAtual.getMonth() &&
 				dataGasto.getFullYear() === dataAtual.getFullYear()) {
-					
+
 				setTotalGastosMes(totalGastosMes + parseInt(data.gasto.valor));
 			}
 
@@ -313,9 +384,21 @@ const Home = () => {
 
 	}
 
+	const GastosMes = totalGastosMes.toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+	});
+
+	const saldoMes = (totalGanhosMes - totalGastosMes).toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+	});
+
 
 
 	// Fontes de receita
+
+	const [showModalNovaFonte, setShowModalNovaFonte] = useState(false);
 
 	const [fontesdeReceita, setFontesdeReceita] = useState([
 		"Salário",
@@ -329,13 +412,39 @@ const Home = () => {
 		"Doação",
 		"Patrocínio"]);
 
+	const adicionarFonte = (novaFonte) => {
+		setFontesdeReceita([...fontesdeReceita, novaFonte]);
+	};
+
+	const [novaFonte, setNovaFonte] = useState('');
+
+	const handleAdicionarNovaFonte = () => {
+		if (novaFonte) {
+			adicionarFonte(novaFonte);
+			showConfirmationMessage("Nova fonte de receita criada com sucesso!");
+			setNovaFonte('');
+		}
+	};
+
+	const handleExcluirFonte = (index) => {
+		const novasFontes = [...fontesdeReceita];
+		novasFontes.splice(index, 1);
+		setCategorias(novasFontes);
+	};
+
+	const [fonteSelecionada, setFonteSelecionada] = useState("");
+	const [showModalDetalhesFontes, setShowModalDetalhesFontes] = useState(false);
+
+	const mostrarDetalhesFonte = (fonte) => {
+		setFonteSelecionada(fonte);
+		setShowModalDetalhesFontes(true);
+	};
 
 
 
 	// Categorias
 
 	const [showModalCategorias, setShowModalCategorias] = useState(false);
-
 
 	const [categorias, setCategorias] = useState([
 		"Alimentação",
@@ -371,13 +480,14 @@ const Home = () => {
 
 
 	const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
+	const [showModalDetalhes, setShowModalDetalhes] = useState(false);
 
 	const mostrarDetalhesCategoria = (categoria) => {
 		setCategoriaSelecionada(categoria);
 		setShowModalDetalhes(true);
 	};
 
-	const [showModalDetalhes, setShowModalDetalhes] = useState(false);
+	
 
 
 	// Gráfico
@@ -743,7 +853,8 @@ const Home = () => {
 							<div className="cartao-perfil col">
 								<div className="item">
 									<h4>Valor Recebido</h4>
-									<span className='bg-secondary'>{Recebido}</span>
+									<span className='bg-secondary'>{GanhosMes}</span>
+									<span>{Recebido}</span>
 								</div>
 
 								<div className="botao">
@@ -827,8 +938,8 @@ const Home = () => {
 							<div className="cartao-perfil col">
 								<div className="item">
 									<h4>Valor Gasto</h4>
-									<span>{totalGastosMes}</span>
-									<span className='bg-secondary'>{Gasto}</span>
+									<span className='bg-secondary'>{GastosMes}</span>
+									<span>{Gasto}</span>
 								</div>
 
 								<div className="botao">
@@ -910,7 +1021,8 @@ const Home = () => {
 							<div className="cartao-perfil col">
 								<div className='item'>
 									<h4>Saldo Atual</h4>
-									<span className='bg-secondary'>{saldoAtual}</span>
+									<span className='bg-secondary'>{saldoMes}</span>
+									<span>{saldoAtual}</span>
 								</div>
 							</div>
 
@@ -1328,11 +1440,168 @@ const Home = () => {
 							}
 						</div>
 
+						<div className={`${fontesVisivel ? 'visivel' : 'oculto'}`}>
+
+							<Container className="categorias p-5 mb-5">
+								<div className="categorias-titulo">
+									<h1>Seus ganhos por fonte de receita</h1>
+									<div><Button as="button" variant="outline-primary" onClick={() => setShowModalNovaFonte(true)}>Criar nova fonte de receita</Button>
+										<Modal
+											show={showModalNovaFonte}
+											onHide={() => setShowModalNovaFonte(false)}
+											size="md"
+											aria-labelledby="contained-modal-title-vcenter"
+											centered
+										>
+											<Modal.Header className='bg-primary' closeButton>
+												<Modal.Title id="contained-modal-title-vcenter">Nova fonte de receita</Modal.Title>
+											</Modal.Header>
+											<Modal.Body className='bg-secondary text-light'>
+												<Form>
+													<Form.Group className="mb-3">
+														<Form.Label>Veja alguns exemplos de fontes de receita</Form.Label>
+														<Form.Control as="select" name="categoria" className='bg-secondary text-light'>
+															<option value="">Lista de categorias</option>
+															{fontesdeReceita.map((fonte, index) => (
+																<option key={index} value={fonte}>
+																	{fonte}
+																</option>
+															))}
+														</Form.Control>
+													</Form.Group>
+													<Form.Group className="mb-3">
+														<Form.Label>Adicione uma nova fonte de receita</Form.Label>
+														<Form.Control type="text" name="novaFonte" value={novaFonte} onChange={(e) => setNovaFonte(e.target.value)} className='bg-secondary text-light' />
+													</Form.Group>
+												</Form>
+											</Modal.Body>
+											<Modal.Footer className='bg-primary'>
+												<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaFonte} className='fw-bold'>
+													Criar
+												</Button>
+											</Modal.Footer>
+											{showConfirmation && (
+												<div className="alert alert-success alert-custom" role="alert">
+													{confirmationMessage}
+												</div>
+											)}
+										</Modal>
+									</div>
+								</div>
+
+								<div className='cartoes-categoria'>
+									{fontesdeReceita.map((fonte, index) => (
+										<div className="cartao-categoria" key={index}>
+											<div className="categoria">
+												<p className="fw-bold fs-5">{fonte}</p>
+												<p className='valor-categoria bg-secondary'>
+													{" "}
+													{ganhosPorFonte[fonte]
+														? ganhosPorFonte[fonte].reduce(
+															(total, ganho) => total + ganho.valor,
+															0
+														).toLocaleString('pt-BR', {
+															style: 'currency',
+															currency: 'BRL'
+														})
+														: 0}
+												</p>
+												{/*
+												{valorGasto > 0 && (
+													<p className='percentual-categoria'>
+														{gastosPorCategoria[categoria]
+															? (
+																(gastosPorCategoria[categoria].reduce(
+																	(total, gasto) => total + gasto.valor,
+																	0
+																) / valorGasto) * 100
+															).toFixed(2) + "%"
+															: "0.00%"}
+													</p>
+												)}
+																*/}
+
+											</div>
+
+											<hr />
+
+											<div className="botoes">
+												<Button
+													as="button"
+													size="sm"
+													variant="outline-primary"
+													className="botao"
+													onClick={() => mostrarDetalhesFonte(fonte)
+													}
+												>
+													Detalhar
+												</Button>
+
+
+												<Button
+													as="button"
+													size="sm"
+													variant="outline-danger"
+													className="botao"
+													onClick={() => handleExcluirFonte(index)}
+												>
+													Excluir
+												</Button>
+											</div>
+
+										</div>
+									))}
+
+								</div>
+
+
+								<Modal
+									show={showModalDetalhesFontes}
+									onHide={() => setShowModalDetalhesFontes(false)}
+									size="lg"
+									aria-labelledby="contained-modal-title-vcenter"
+									centered
+								>
+									<Modal.Header closeButton>
+										<Modal.Title id="contained-modal-title-vcenter">
+											Meus gastos com {fonteSelecionada}
+										</Modal.Title>
+									</Modal.Header>
+									<Modal.Body>
+										<div className="row">
+											<div className="col fw-bold">Descrição</div>
+											<div className="col fw-bold">Data</div>
+											<div className="col fw-bold">Valor</div>
+										</div>
+										<br />
+										{fonteSelecionada && (
+											<ul>
+												{ganhosPorFonte[fonteSelecionada]?.map((ganho, index) => (
+													<li key={index} className='row'>
+														<p className='col'>{ganho.descricao}</p>
+														<p className='col'>{ganho.data}</p>
+														<p className='col'>{ganho.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+														<br />
+													</li>
+												))}
+											</ul>
+										)}
+									</Modal.Body>
+									<Modal.Footer>
+										<Button as="button" variant="secondary" onClick={() => setShowModalDetalhesFontes(false)}>
+											Fechar
+										</Button>
+									</Modal.Footer>
+								</Modal>
+
+
+							</Container>
+
+						</div>
+
 					</Container>
 
-					<Container className={`${fontesVisivel ? 'visivel' : 'oculto'}`}>
 
-					</Container>
 
 				</Content >
 			</div >
