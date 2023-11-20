@@ -30,7 +30,7 @@ import { create } from 'zustand';
 const useCoxinhaStore = create((set) => ({
   coxinhas: 1000,
   comerCoxinha: () => set((state) => ({ coxinhas: state.coxinhas - 1 })),
-  enfiarCoxinhasPraDentro: () => set({ coxinhas: 0 }),
+  mandarCoxinhasPraDentro: () => set({ coxinhas: 0 }),
 }));
 ```
 
