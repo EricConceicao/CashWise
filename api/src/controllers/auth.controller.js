@@ -46,6 +46,20 @@ export async function signup(req, res) {
 
         // Checando se o Prisma retornou com sucesso da query
         if (newUser) {
+            // Registrando o ícone padrão para o usuário
+            const src = "img/pfps/pfp-padrao.png"
+            const icon = await prisma.Icon.findFirstOrThrow({
+                where: { src },
+                select: { id: true }
+            });
+            const insertIcon = await prisma.UserIcons.create({
+                data: {
+                    userId: newUser.id,
+                    iconId: icon.id,
+                    obtained: true
+                }
+            });
+
             return res.status(201).json({
                 success: true,
                 message: 'Usuário criado com successo!'

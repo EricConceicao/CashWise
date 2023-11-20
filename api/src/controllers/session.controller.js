@@ -5,24 +5,38 @@ const prisma = new PrismaClient();
 
 export async function createSession(userId, req, res) {
 	try {
-		// Gerando um token único
-		const sessionToken = uuidv4();
+		const time = 3 * 60 * 60 * 1000;
 
-		// Registrando a sessão no banco
-		const userSession = await prisma.Session.create({
-			data: {
-				userId: userId,
-				token: sessionToken
-			}
+		// Vendo se não há uma sessão antiga, e então recriando um cookie para ela
+		const oldSession = await prisma.Session.findFirst({
+			where: { userId: userId }
 		});
 
 		// Verificando se deu certo para então escrever um cookie
-		if (userSession) {
-			res.cookie('session', sessionToken, { secure: true, httpOnly: true, sameSite: 'None' });
+		if (oldSession) {
+			res.cookie('session', oldSession.token, { secure: true, httpOnly: true, sameSite: 'None', expire: time });
 			return true
+		}
 
-		} else {
-			return false
+		if (oldSession === null) {
+			// Gerando um token único
+			const newToken = uuidv4();
+			// Registrando a nova sessão no banco caso não exista
+			const userSession = await prisma.Session.create({
+				data: {
+					userId: userId,
+					token: newToken
+				}
+			});
+
+			// Verificando se deu certo para então escrever um cookie
+			if (userSession) {
+				res.cookie('session', newToken, { secure: true, httpOnly: true, sameSite: 'None', expire: time });
+				return true
+
+			} else {
+				throw "Sessão retornou com nulo"
+			}
 		}
 
 	} catch (err) {
