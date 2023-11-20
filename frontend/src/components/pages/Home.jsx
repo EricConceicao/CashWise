@@ -1195,16 +1195,10 @@ const Home = () => {
 													<Form.Label>Descrição</Form.Label>
 													<Form.Control
 														type="text"
-<<<<<<< HEAD
 														name='descricao'
 														value={descricaoConta}
 														onChange={(e) => setDescricaoConta(e.target.value)}
 
-=======
-														name="descricao"
-														value={descricao}
-														onChange={(e) => setDescricao(e.target.value)}
->>>>>>> 3d93d62a1f6c1138b1238580df9dcfb08e7a3fd1
 													/>
 												</Form.Group>
 
@@ -1623,6 +1617,7 @@ const Home = () => {
 						{/* Fim de Fontes de Receita */}
 
 						{/* Início de Relatório*/}
+						{/*
 						<div className={`${relatorioVisivel ? 'visivel' : 'oculto'}`}>
 							<Container className='relatorio'>
 								<h1>Relatório</h1>
@@ -1641,6 +1636,7 @@ const Home = () => {
 								</Form>
 							</Container>
 						</div>
+												*/}
 						{/* Fim de Relatório*/}
 
 					</Container>

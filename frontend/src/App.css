@@ -357,23 +357,12 @@ h1 {
     display: none;
 }
 
-<<<<<<< HEAD
 .campo {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
 }
-=======
-.relatorio {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    border-radius: 10px;
-    padding: 30px;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    gap: 20px;
-}
-
->>>>>>> 3d93d62a1f6c1138b1238580df9dcfb08e7a3fd1
 
 .caixa {
     width: 250px;
