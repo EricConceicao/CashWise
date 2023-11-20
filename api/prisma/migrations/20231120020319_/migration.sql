@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `periodo` MODIFY `inicio` VARCHAR(191) NOT NULL,
+    MODIFY `fim` VARCHAR(191) NOT NULL;

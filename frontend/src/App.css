@@ -357,6 +357,15 @@ h1 {
     display: none;
 }
 
+.campo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
 
+.caixa {
+    width: 250px;
+}
 
 /* Fim para estilo da Home */

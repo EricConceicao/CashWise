@@ -487,7 +487,7 @@ const Home = () => {
 		setShowModalDetalhes(true);
 	};
 
-	
+
 
 
 	// Gráfico
@@ -562,7 +562,7 @@ const Home = () => {
 
 	const [showModalContas, setShowModalContas] = useState(false);
 
-	const [contasCadastradas, setContasCadastradas] = useState([
+	const [contas, setContas] = useState([
 		"Luz",
 		"Água",
 		"Telefone",
@@ -576,33 +576,64 @@ const Home = () => {
 		"Academia",
 		"Plano de Saúde"]);
 
-	const [descricao, setDescricao] = useState("");
-	const [vencimento, setVencimento] = useState("");
-	const [duracao, setDuracao] = useState("Todos os meses");
-	const [valor, setValor] = useState("");
-	const [mesInicial, setMesInicial] = useState("");
-	const [anoInicial, setAnoInicial] = useState("");
-	const [mesFinal, setMesFinal] = useState("");
-	const [anoFinal, setAnoFinal] = useState("");
-
+	const [descricaoConta, setDescricaoConta] = useState("");
+	const [valorConta, setValorConta] = useState("");
+	const [vencimentoConta, setVencimentoConta] = useState("");
+	const [recorrenciaConta, setRecorrenciaConta] = useState("Mensal");
+	const [inicioPeriodoConta, setInicioPeriodoConta] = useState("");
+	const [fimPeriodoConta, setFimPeriodoConta] = useState("");
 
 
 	const handleAdicionarNovaConta = () => {
 
 		const novaConta = {
-			descricao,
-			vencimento,
-			duracao,
-			valor,
-			mesInicial,
-			anoInicial,
-			mesFinal,
-			anoFinal,
+			descricao: descricaoConta,
+			valor: valorConta,
+			vencimento: vencimentoConta,
+			recorrencia: recorrenciaConta,
+			periodo: {
+				inicio: inicioPeriodoConta,
+				fim: fimPeriodoConta,
+			}
 		}
 
-		setContasCadastradas([...contasCadastradas, novaConta]);
+		setContas([...contas, novaConta]);
 		showConfirmationMessage("Nova conta criada com sucesso!");
 	};
+
+
+	const handleSubmitNovaConta = async (event) => {
+		event.preventDefault()
+
+
+		const novoPeriodo = {
+			inicio: event.target.inicioPeriodo.value,
+			fim: event.target.fimPeriodo.value,
+		  };
+		 
+		
+		  const novaConta = {
+			descricao: event.target.descricao.value,
+			valor: event.target.valor.value,
+			diaVencimento: parseInt(event.target.vencimento.value, 10),
+			recorrencia: event.target.recorrencia.value,
+			periodo: novoPeriodo,
+		  };
+
+		const response = await fetch('http://localhost:3000/contas', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(novaConta)
+		})
+
+		if (response.ok) {
+			const data = await response.json()
+			alert(data.success)
+			setContas([...contas, data.conta])
+		}
+	}
 
 
 
@@ -875,9 +906,10 @@ const Home = () => {
 								</Modal.Header>
 								<Modal.Body>
 									<Form onSubmit={handleSubmitNovoGanho}>
-										<Form.Group className="mb-3">
+										<Form.Group className="campo mb-4">
 											<Form.Label>Fonte de Receita</Form.Label>
 											<Form.Select
+												className='caixa'
 												name='fonte'
 												value={selectedFonte}
 												onChange={(e) => setSelectedFonte(e.target.value)}
@@ -890,27 +922,29 @@ const Home = () => {
 												))}
 											</Form.Select>
 										</Form.Group>
-										<Form.Group className="mb-3">
+										<Form.Group className="campo mb-4">
 											<Form.Label>Descrição</Form.Label>
 											<Form.Control
+												className='caixa'
 												type="text"
 												name="descricao"
 												value={novaDescricaoGanho}
 												onChange={(e) => setNovaDescricaoGanho(e.target.value)}
 											/>
 										</Form.Group>
-										<Form.Group className="mb-3">
+										<Form.Group className="campo mb-4">
 											<Form.Label>Data</Form.Label>
 											<Form.Control
+												className='caixa'
 												type="date"
 												name="data"
 												value={novaDataGanho}
 												onChange={(e) => setNovaDataGanho(e.target.value)}
 											/>
 										</Form.Group>
-										<Form.Group>
+										<Form.Group className='campo mb-4'>
 											<Form.Label>Valor a ser adicionado</Form.Label>
-											<div className="input-group">
+											<div className="input-group caixa">
 												<span className="input-group-text">R$</span>
 												<Form.Control
 													type="number"
@@ -1149,98 +1183,83 @@ const Home = () => {
 											<Modal.Title id="contained-modal-title-vcenter">Nova conta</Modal.Title>
 										</Modal.Header>
 										<Modal.Body>
-											<Form>
+											<Form onSubmit={handleSubmitNovaConta}>
+
 												<Form.Group className="mb-3">
 													<Form.Label>Descrição</Form.Label>
 													<Form.Control
 														type="text"
-														name="descricao"
-														value={descricao}
-														onChange={(e) => setDescricao(e.target.value)}
+														name='descricao'
+														value={descricaoConta}
+														onChange={(e) => setDescricaoConta(e.target.value)}
 
 													/>
 												</Form.Group>
-												<Form.Group className="mb-3">
-													<Form.Label>Vencimento (dia)</Form.Label>
-													<Form.Control
-														name='vencimento'
-														type="text"
-														value={vencimento}
-														onChange={(e) => setVencimento(e.target.value)}
-													/>
-												</Form.Group>
-												<Form.Group className="mb-3">
-													<Form.Label>Duração</Form.Label>
-													<Form.Select
-														name='duracao'
-														value={duracao}
-														onChange={(e) => setDuracao(e.target.value)}
-													>
-														<option value="Todos os meses">Todos os meses</option>
-														<option value="Por um período">Por um período</option>
-													</Form.Select>
-												</Form.Group>
+
 												<Form.Group className="mb-3">
 													<Form.Label>Valor</Form.Label>
 													<div className="input-group">
 														<span className="input-group-text">R$</span>
 														<Form.Control
-															name='valor'
 															type="number"
 															step="0.01"  // Permita valores fracionados com duas casas decimais
-															value={valor}
-															onChange={(e) => setValor(e.target.value)}
+															name='valor'
+															value={valorConta}
+															onChange={(e) => setValorConta(e.target.value)}
 														/>
 													</div>
 												</Form.Group>
 
-												{duracao === "Por um período" && (
+												<Form.Group className="mb-3">
+													<Form.Label>Dia de vencimento</Form.Label>
+													<Form.Control
+														type="number"
+														name='vencimento'
+														value={vencimentoConta}
+														onChange={(e) => setVencimentoConta(e.target.value)}
+													/>
+												</Form.Group>
+
+												<Form.Group className="mb-3">
+													<Form.Label>Recorrência</Form.Label>
+													<Form.Select
+														name='recorrencia'
+														value={recorrenciaConta}
+														onChange={(e) => setRecorrenciaConta(e.target.value)}
+													>
+														<option value="MENSAL">Mensal</option>
+														<option value="POR_PERIODO">Por Período</option>
+													</Form.Select>
+												</Form.Group>
+
+												{recorrenciaConta === 'POR_PERIODO' && (
 													<>
 														<Form.Group className="mb-3">
-															<Form.Label>Mês Inicial</Form.Label>
+															<Form.Label>Início do Período</Form.Label>
 															<Form.Control
-																name='mesInicial'
-																type="text"
-																value={mesInicial}
-																onChange={(e) => setMesInicial(e.target.value)}
+																type="month"
+																name='inicioPeriodo'
+																value={inicioPeriodoConta}
+																onChange={(e) => setInicioPeriodoConta(e.target.value)}
 															/>
 														</Form.Group>
+
 														<Form.Group className="mb-3">
-															<Form.Label>Ano Inicial</Form.Label>
+															<Form.Label>Fim do Período</Form.Label>
 															<Form.Control
-																name='anoInicial'
-																type="text"
-																value={anoInicial}
-																onChange={(e) => setAnoInicial(e.target.value)}
-															/>
-														</Form.Group>
-														<Form.Group className="mb-3">
-															<Form.Label>Mês Final</Form.Label>
-															<Form.Control
-																name='mesFinal'
-																type="text"
-																value={mesFinal}
-																onChange={(e) => setMesFinal(e.target.value)}
-															/>
-														</Form.Group>
-														<Form.Group className="mb-3">
-															<Form.Label>Ano Final</Form.Label>
-															<Form.Control
-																name='anoFinal'
-																type="text"
-																value={anoFinal}
-																onChange={(e) => setAnoFinal(e.target.value)}
+																type="month"
+																name='fimPeriodo'
+																value={fimPeriodoConta}
+																onChange={(e) => setFimPeriodoConta(e.target.value)}
 															/>
 														</Form.Group>
 													</>
 												)}
+												<Button as='button' type='submit' variant="secondary" onClick={handleAdicionarNovaConta}>
+													Criar
+												</Button>
 											</Form>
 										</Modal.Body>
-										<Modal.Footer>
-											<Button as='button' variant="secondary" onClick={handleAdicionarNovaConta}>
-												Criar
-											</Button>
-										</Modal.Footer>
 										{showConfirmation && (
 											<div className="alert alert-success alert-custom" role="alert">
 												{confirmationMessage}
@@ -1248,24 +1267,6 @@ const Home = () => {
 										)}
 									</Modal>
 								</div>
-							</div>
-
-							<div className="cartoes-conta">
-								{contasCadastradas.map((conta, index) => (
-									<div className="cartao-conta" key={index}>
-										<p className='fw-bold fs-5'>{conta}</p>
-										<p>{conta.descricao}</p>
-										<p>{conta.vencimento}</p>
-										<p>{conta.duracao}</p>
-										<p>{conta.valor}</p>
-										{conta.duracao === "Por um período" && (
-											<div>
-												<p>Início: {conta.mesInicial}/{conta.anoInicial}</p>
-												<p>Final: {conta.mesFinal}/{conta.anoFinal}</p>
-											</div>
-										)}
-									</div>
-								))}
 							</div>
 						</div>
 
