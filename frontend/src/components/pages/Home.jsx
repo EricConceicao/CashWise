@@ -667,6 +667,12 @@ const Home = () => {
 		setFontesVisivel(!fontesVisivel);
 	}
 
+	const [relatorioVisivel, setRelatorioVisivel] = useState(false);
+
+	const abrirdivRelatorio = () => {
+		setRelatorioVisivel(!relatorioVisivel);
+	}
+
 
 
 
@@ -1102,7 +1108,7 @@ const Home = () => {
 									</Button>
 								</div>
 								<div className="col text-info">
-									<Button as='button' variant='secondary' className='botao-menu'>
+									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivRelatorio}>
 										<h4>Relatório</h4>
 										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
 									</Button>
@@ -1189,10 +1195,16 @@ const Home = () => {
 													<Form.Label>Descrição</Form.Label>
 													<Form.Control
 														type="text"
+<<<<<<< HEAD
 														name='descricao'
 														value={descricaoConta}
 														onChange={(e) => setDescricaoConta(e.target.value)}
 
+=======
+														name="descricao"
+														value={descricao}
+														onChange={(e) => setDescricao(e.target.value)}
+>>>>>>> 3d93d62a1f6c1138b1238580df9dcfb08e7a3fd1
 													/>
 												</Form.Group>
 
@@ -1290,6 +1302,7 @@ const Home = () => {
 											</Modal.Header>
 											<Modal.Body className='bg-secondary text-light'>
 												<Form>
+
 													<Form.Group className="mb-3">
 														<Form.Label>Veja alguns exemplos de categorias</Form.Label>
 														<Form.Control as="select" name="categoria" className='bg-secondary text-light'>
@@ -1301,17 +1314,25 @@ const Home = () => {
 															))}
 														</Form.Control>
 													</Form.Group>
+
 													<Form.Group className="mb-3">
 														<Form.Label>Adicione uma nova categoria</Form.Label>
-														<Form.Control type="text" name="novaCategoria" value={novaCategoria} onChange={(e) => setNovaCategoria(e.target.value)} className='bg-secondary text-light' />
+														<Form.Control
+															type="text"
+															name="novaCategoria"
+															value={novaCategoria}
+															onChange={(e) => setNovaCategoria(e.target.value)} className='bg-secondary text-light' />
 													</Form.Group>
+
 												</Form>
 											</Modal.Body>
+
 											<Modal.Footer className='bg-primary'>
 												<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaCategoria} className='fw-bold'>
 													Criar
 												</Button>
 											</Modal.Footer>
+
 											{showConfirmation && (
 												<div className="alert alert-success alert-custom" role="alert">
 													{confirmationMessage}
@@ -1599,6 +1620,28 @@ const Home = () => {
 							</Container>
 
 						</div>
+						{/* Fim de Fontes de Receita */}
+
+						{/* Início de Relatório*/}
+						<div className={`${relatorioVisivel ? 'visivel' : 'oculto'}`}>
+							<Container className='relatorio'>
+								<h1>Relatório</h1>
+								<p className='text-primary'><i>Selecione o mês e o ano para obter um resumo dos valores totais dos seus gastos e ganhos no período escolhido.</i></p>
+								<Form>
+									<Form.Group className="mb-3">
+										<Form.Label>Mês/Ano</Form.Label>
+										<Form.Control
+											type="month"
+											name="mes"
+											value={descricao}
+											onChange={(e) => setDescricao(e.target.value)}
+											className="border border-primary"
+										/>
+									</Form.Group>
+								</Form>
+							</Container>
+						</div>
+						{/* Fim de Relatório*/}
 
 					</Container>
 

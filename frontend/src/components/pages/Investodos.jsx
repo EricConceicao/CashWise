@@ -6,6 +6,15 @@ import './Artigos.css';
 
 const Investodos = () => {
 
+    const card = {
+        minHeight: "28rem",
+        maxHeight: "20rem",
+        borderWidth: '3px',
+        overflow: 'auto'
+
+    }
+
+
     const divStyle = {
         width: '100%',
         backgroundImage: 'url("img/moldura.png")',
@@ -25,8 +34,8 @@ const Investodos = () => {
                 <Container className="mt-5">
                     <Row>
                         <Col md={12} className="mb-4">
-                            <Card>
-                                <Card.Body>
+                            <Card style={card}>
+                                <Card.Body >
                                     <Card.Img id='card-img' src="img/investtodos.png" alt="Imagem do artigo Investimento para todos" />
                                     <Card.Title><h2>Entenda sobre os conceitos dos principais investimentos</h2></Card.Title>
                                     <Card.Text>
@@ -38,7 +47,7 @@ const Investodos = () => {
                         </Col>
 
                         <Col lg={6} md={6} className="mb-4">
-                            <Card>
+                            <Card style={card}>
                                 <Card.Body>
                                     <Card.Img id='card-img' src="img/inv1.png" alt="Imagem do artigo Investimento para todos" />
                                     <Card.Title>Renda Ativa</Card.Title>
@@ -57,7 +66,7 @@ const Investodos = () => {
                         </Col>
 
                         <Col lg={6} md={6} className="mb-4">
-                            <Card>
+                            <Card style={card}>
                                 <Card.Body>
                                     <Card.Img id='card-img' src="img/inv2.png" alt="Imagem do artigo Investimento para todos" />
                                     <Card.Title>Renda Passiva</Card.Title>
@@ -76,9 +85,9 @@ const Investodos = () => {
                         </Col>
 
                         <Col md={12} className="mb-4">
-                            <Card>
+                            <Card style={card}>
                                 <Card.Body>
-                                    <Card.Img id='card-img' src="img/inv3.png" alt="Imagem do artigo Investimento para todos"/>
+                                    <Card.Img id='card-img' src="img/inv3.png" alt="Imagem do artigo Investimento para todos" />
                                     <Card.Title></Card.Title>
                                     <Card.Text>
                                         <p>Ambos os tipos de renda têm suas vantagens e desvantagens. A renda ativa pode oferecer maior controle sobre seus ganhos e a possibilidade de aumentar sua renda com base no seu esforço. No entanto, ela também pode ser limitada pelo número de horas que você pode trabalhar e pela disponibilidade de oportunidades.</p>
@@ -90,7 +99,7 @@ const Investodos = () => {
                         </Col>
 
                         <Col lg={6} md={6} className="mb-4">
-                            <Card>
+                            <Card style={card}>
                                 <Card.Body>
                                     <Card.Img id='card-img' src="img/inv4.png" alt="Imagem do artigo Investimento para todos" />
                                     <Card.Title>Renda Fixa</Card.Title>
@@ -103,7 +112,7 @@ const Investodos = () => {
                         </Col>
 
                         <Col lg={6} md={6} className="mb-4">
-                            <Card>
+                            <Card style={card}>
                                 <Card.Body>
                                     <Card.Img id='card-img' src="img/inv5.png" alt="Imagem do artigo Investimento para todos" />
                                     <Card.Title>Fontes de Renda Passiva para Pequenos Investidores:</Card.Title>
@@ -121,7 +130,7 @@ const Investodos = () => {
                         </Col >
                         <Col md={12} className="mb-4">
 
-                            <Card>
+                            <Card style={card}>
                                 <Card.Body>
                                     <Card.Img id='card-img' src="img/inv6.png" alt="Imagem do artigo Investimento para todos" />
                                     <Card.Title>Renda Variável</Card.Title>
