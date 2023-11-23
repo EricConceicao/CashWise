@@ -92,7 +92,7 @@ h4 {
 }
 
 .cartao-perfil {
-    width: 350px;
+    width: 300px;
     border-bottom: 4px solid palegreen;
     border-radius: 10px;
     display: flex;
@@ -104,6 +104,12 @@ h4 {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+}
+
+.cartao-perfil span {
+    font-size: 20px;
+    font-weight: lighter;
+    letter-spacing: 1px;
 }
 
 .cartao-perfil1 {

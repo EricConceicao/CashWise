@@ -1,6 +1,18 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
+
+export async function vercontas (req, res) {
+  try {
+    const contas = await prisma.conta.findMany();
+    res.json(contas);
+  } catch (error) {
+    console.error('Erro ao adicionar nova despesa:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+};
+
+
 export async function criarconta(req, res) {
   try {
     const { descricao, valor, diaVencimento, recorrencia, periodo } = req.body;
