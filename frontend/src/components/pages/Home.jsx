@@ -605,20 +605,21 @@ const Home = () => {
 	const handleSubmitNovaConta = async (event) => {
 		event.preventDefault()
 
-
-		const novoPeriodo = {
+		let novoPeriodo;
+		event.target.recorrencia.value === 'MENSAL' ? (novoPeriodo = null) : (
+		 novoPeriodo = {
 			inicio: event.target.inicioPeriodo.value,
 			fim: event.target.fimPeriodo.value,
-		  };
-		 
-		
-		  const novaConta = {
+		} )
+
+
+		const novaConta = {
 			descricao: event.target.descricao.value,
 			valor: event.target.valor.value,
 			diaVencimento: parseInt(event.target.vencimento.value, 10),
 			recorrencia: event.target.recorrencia.value,
 			periodo: novoPeriodo,
-		  };
+		};
 
 		const response = await fetch('http://localhost:3000/contas', {
 			method: 'POST',
