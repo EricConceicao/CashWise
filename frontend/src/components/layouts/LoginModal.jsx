@@ -116,7 +116,7 @@ function LoginModal({ handleFeedback, feedback, changeModal, showLogin, handleSh
 							</Form.Group>
 
 							<div className="d-flex justify-content-between">
-								<Button className="text-decoration-underline" variant="outline-dark" onClick={changeModal}>Não tem uma conta?</Button>
+								<Button className="text-decoration-underline" style={{border: 'none'}} variant="outline-secondary" onClick={changeModal}>Não tem uma conta?</Button>
 								<Button type="submit"><ArrowIco className='me-2' size={28} />Acessar</Button>
 							</div>
 						</fieldset>
