@@ -11,7 +11,8 @@
     display: inline-block;
 }
 
-#img-overlay:hover::after {
+#img-overlay:hover::after,
+#img-overlay:Focus::after {
     content: "";
     position: absolute;
     bottom: 0;
@@ -22,7 +23,8 @@
     background: linear-gradient(transparent 9rem,#070707 14rem);
     transition: 1s linear;
 }
-#img-overlay:hover::before {
+#img-overlay:hover::before,
+#img-overlay:Focus::before {
     position: absolute;
     content: "Mudar ícone";
     text-align: center;
