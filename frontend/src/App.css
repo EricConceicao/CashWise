@@ -236,12 +236,20 @@ h5 {
 }
 
 .painel {
-    border-radius: 10px;
-    padding: 70px 70px 20px 70px;
+    border-radius: 5px;
+    padding: 60px 70px;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     border-bottom: 4px solid #fff;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.painel h1 {
+    margin-bottom: 30px;
+    font-weight: lighter;   
+    letter-spacing: 0.5px; 
 }
 
 .etiqueta {
@@ -297,42 +305,31 @@ h1 {
 
 .linha {
     font-size: large;
-    margin-right: 10px;
-    font-weight: 700;
-    margin: 0;
-    box-shadow: 0;
-}
-
-.tabela .col {
-    gap: 20px;
+    font-weight: lighter;
 }
 
 .tabela .titulo {
-    font-size: large;
-    border-radius: 10px;
-    padding: 0 5px;
+    border-radius: 5px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    padding-bottom: 5px;
-
 }
 
 .pagar {
-    border: 1px 1px 0 1px #ccc;
-    border-radius: 10px;
+    border-radius: px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     font-size: large;
+    font-weight: lighter;
 }
 
 .receber {
-    border: 1px 1px 0 1px #ccc;
-    border-radius: 10px;
+    border-radius: px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     font-size: large;
+    font-weight: lighter;
 }
 
 .seta {
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
 }
 
 .botao {
@@ -379,12 +376,10 @@ h1 {
 }
 
 .conta p {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     width: 150px;
     text-align: center;
     font-weight: lighter;
-    padding: 10px;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 10px;    
     border-radius: 5px;
 }
 /* Fim para estilo da Home */
