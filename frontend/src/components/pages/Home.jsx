@@ -584,6 +584,24 @@ const Home = () => {
 	const [fimPeriodoConta, setFimPeriodoConta] = useState("");
 
 
+
+	useEffect(() => {
+
+		const getcontas = async () => {
+			const response = await fetch('http://localhost:3000/contas/listar')
+			const data = await response.json()
+			/*console.log(data.success)
+			console.log(data.gastos)*/
+			console.log(data)
+			setContas(data)
+
+
+		}
+
+		getcontas()
+
+	}, [])
+
 	const handleAdicionarNovaConta = () => {
 
 		const novaConta = {
@@ -607,10 +625,10 @@ const Home = () => {
 
 		let novoPeriodo;
 		event.target.recorrencia.value === 'MENSAL' ? (novoPeriodo = null) : (
-		 novoPeriodo = {
-			inicio: event.target.inicioPeriodo.value,
-			fim: event.target.fimPeriodo.value,
-		} )
+			novoPeriodo = {
+				inicio: event.target.inicioPeriodo.value,
+				fim: event.target.fimPeriodo.value,
+			})
 
 
 		const novaConta = {
@@ -883,20 +901,20 @@ const Home = () => {
 
 							<div className="cartao-perfil col">
 								<div className='item'>
-									<h4>Mês / Ano</h4>
-									<span className='bg-secondary'>{currentMonth} / {currentYear}</span>
+									<h4>Mês e Ano</h4>
+									<span className='bg-secondary text-success'>{currentMonth} de {currentYear}</span>
 								</div>
 							</div>
 
 							<div className="cartao-perfil col">
 								<div className="item">
 									<h4>Valor Recebido</h4>
-									<span className='bg-secondary'>{GanhosMes}</span>
-									<span>{Recebido}</span>
+									<span className='bg-secondary text-success'>{GanhosMes}</span>
+									{/*<span>{Recebido}</span>*/}
 								</div>
 
 								<div className="botao">
-									<Button as="button" variant="outline-primary" onClick={() => setShowModalNovoGanho(true)}>Novo</Button>
+									<Button as="button" variant="outline-success" onClick={() => setShowModalNovoGanho(true)}>Novo</Button>
 								</div>
 
 							</div>
@@ -979,12 +997,12 @@ const Home = () => {
 							<div className="cartao-perfil col">
 								<div className="item">
 									<h4>Valor Gasto</h4>
-									<span className='bg-secondary'>{GastosMes}</span>
-									<span>{Gasto}</span>
+									<span className='bg-secondary text-success'>{GastosMes}</span>
+									{/*<span>{Gasto}</span>*/}
 								</div>
 
 								<div className="botao">
-									<Button as="button" variant="outline-primary" onClick={() => setShowModal6(true)}>Novo</Button>
+									<Button as="button" variant="outline-success" onClick={() => setShowModal6(true)}>Novo</Button>
 								</div>
 							</div>
 
@@ -1062,8 +1080,8 @@ const Home = () => {
 							<div className="cartao-perfil col">
 								<div className='item'>
 									<h4>Saldo Atual</h4>
-									<span className='bg-secondary'>{saldoMes}</span>
-									<span>{saldoAtual}</span>
+									<span className='bg-secondary text-success'>{saldoMes}</span>
+									{/*<span>{saldoAtual}</span>*/}
 								</div>
 							</div>
 
@@ -1275,6 +1293,27 @@ const Home = () => {
 									</Modal>
 								</div>
 							</div>
+
+							<div className='conta row'>
+												<p className="col text-primary fs-5">Conta</p>
+												<p className='col fs-5' >Valor</p>
+												<p className='col fs-5'>Vencimento</p>
+											</div>
+											<br />
+
+								{contas.map((conta, index) => (
+									<div className="" key={index}>
+										
+											<div className='conta row' style={{ backgroundColor: index % 2 === 0 ? 'red' : 'green' }}>
+												<p className="col text-primary fs-5">{conta.descricao}</p>
+												<p className='col fs-5'>R$ {conta.valor}</p>
+												<p className='col fs-5'>{conta.diaVencimento}</p>
+											</div>
+											<hr />
+										<br />
+									</div>
+								))}
+
 						</div>
 
 						<br />
