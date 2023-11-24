@@ -76,3 +76,57 @@ model Ganho {
   data      String
   valor     Decimal @db.Decimal(10, 2)
 }
+
+//==================================================================================================
+
+
+
+model atualizacao_monetaria {
+  id      Int     @id @default(autoincrement()) @db.UnsignedInt
+  mes_ano String  @db.VarChar(7)
+  indice  Decimal @db.Decimal(10, 6)
+}
+
+model SimulacaoBeneficio {
+  id                          Int                          @id @default(autoincrement()) @db.UnsignedInt
+  genero                      simulacao_beneficio_genero
+  data_nascimento             DateTime                     @db.Date
+  salario_atualizado          SalarioAtualizado?           @relation(fields: [salario_atualizado_id], references: [id])  
+  salario_atualizado_id       Int?                         @unique
+  idade                       Int?
+  tempo_contribuicao_mes      Int?
+  idade_aposentadoria         Int?
+  mes_aposentadoria           Int?
+  anoAposentadoria            Int?
+  tempo_contribuicao_pendente Int?
+  simulacao_beneficio_id      Int?                         @unique
+  valor_beneficio             Decimal?                     @db.Decimal(10, 2)
+  simulacao_periodo_trabalho  simulacao_periodo_trabalho[]
+}
+
+
+model simulacao_periodo_trabalho {
+  id                     Int                 @id @default(autoincrement()) @db.UnsignedInt
+  mes                    Int
+  ano                    Int
+  salario                Decimal             @db.Decimal(10, 2)
+  mes_ano                String              @db.VarChar(7)
+  simulacao_beneficio_id Int                 @db.UnsignedInt
+  simulacao_beneficio    SimulacaoBeneficio  @relation(fields: [simulacao_beneficio_id], references: [id])
+}
+
+model SalarioAtualizado {
+  id                Int      @id @default(autoincrement())
+  mes_ano           DateTime
+  salario_atualizado Float
+  simulacao_beneficio SimulacaoBeneficio?   // Alterado para ser opcional
+  simulacao_beneficio_id Int?                // Adicionado o campo simulacao_beneficio_id
+}
+
+enum simulacao_beneficio_genero {
+  m
+  f
+}
+
+
+

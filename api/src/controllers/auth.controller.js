@@ -9,6 +9,8 @@ export async function signup(req, res) {
     try {
         const userData = req.body;
 
+        console.log('Dados', req.body)
+
         // Verifica se os dados estão todos aqui
         if (!userData.name || !userData.sname || !userData.email || !userData.password) {
             return res.status(400).json({
@@ -17,10 +19,14 @@ export async function signup(req, res) {
             });
         }
 
+        console.log('Verifica emails')
+
         const checkEmail = await prisma.User.findFirst({
             where: { email: userData.email },
             select: { email: true },
         });
+
+        console.log('Verifica emails banco')
 
         // Checa no banco para ver se o E-mail já está cadastrado
         if (checkEmail) {
@@ -34,6 +40,9 @@ export async function signup(req, res) {
         const salt = await bcrypt.genSalt(10);
         const password = await bcrypt.hash(userData.password, salt);
 
+
+        console.log('Craiar usuario')
+
         // Fazendo a query com o Prisma
         const newUser = await prisma.User.create({
             data: {
@@ -44,8 +53,31 @@ export async function signup(req, res) {
             },
         });
 
+        console.log('User criado', newUser)
+
         // Checando se o Prisma retornou com sucesso da query
         if (newUser) {
+            // Registrando o ícone padrão para o usuário
+
+            console.log('cria icone')
+
+            const src = "img/pfps/pfp-padrao.png"
+            const icon = await prisma.Icon.findFirstOrThrow({
+                where: { src },
+                select: { id: true }
+            });
+
+            console.log('cria icon user')
+            const insertIcon = await prisma.UserIcons.create({
+                data: {
+                    userId: newUser.id,
+                    iconId: icon.id,
+                    obtained: true
+                }
+            });
+
+            console.log('criado icon user')
+
             return res.status(201).json({
                 success: true,
                 message: 'Usuário criado com successo!'

@@ -150,7 +150,7 @@ function IconShop() {
                                     <Card.Header className='fw-medium'>{icon.name}</Card.Header>
                                     <Card.Img style={cardImg} className='mb-2' src={icon.src} />
 
-                                    <Button disabled={pfp === icon.src || wiseCoins < icon.price && checkObtainedIcon(icon)} onClick={() => handleShop(icon.src)}>
+                                    <Button disabled={pfp === icon.src || coins < icon.price && checkObtainedIcon(icon)} onClick={() => handleShop(icon.src)}>
                                     { pfp === icon.src ? (
                                         "Selecionado"
                                     ) : (
