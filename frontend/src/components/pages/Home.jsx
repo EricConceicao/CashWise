@@ -1294,9 +1294,25 @@ const Home = () => {
 								</div>
 							</div>
 
-							{contas.map((conta, index) => {
-								<div className="contas" key={index}><p className="fw-bold fs-5">{conta}</p></div>
-							})}
+							<div className='conta row'>
+												<p className="col text-primary fs-5">Conta</p>
+												<p className='col fs-5' >Valor</p>
+												<p className='col fs-5'>Vencimento</p>
+											</div>
+											<br />
+
+								{contas.map((conta, index) => (
+									<div className="" key={index}>
+										
+											<div className='conta row' style={{ backgroundColor: index % 2 === 0 ? 'red' : 'green' }}>
+												<p className="col text-primary fs-5">{conta.descricao}</p>
+												<p className='col fs-5'>R$ {conta.valor}</p>
+												<p className='col fs-5'>{conta.diaVencimento}</p>
+											</div>
+											<hr />
+										<br />
+									</div>
+								))}
 
 						</div>
 
