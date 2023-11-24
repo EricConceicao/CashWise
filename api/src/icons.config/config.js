@@ -1,6 +1,6 @@
 // Este é um arquivo para inserir os ícones da loja de acordo com o que for configurado aqui
 // O mesmo pode ser e deve ser, executado com um script após completar a configuração inicial
-// do projeto. Script: npm run insert icons
+// do projeto. Script: npm run insert-icons
 
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();

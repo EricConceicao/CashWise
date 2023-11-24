@@ -181,9 +181,10 @@ function SignupModal({ handleFeedback, feedback, loginModal, showSign, handleSho
 												autoComplete="off"
 												required
 											/>
-											<Form.Check className='mx-1' label="Mostrar senha?" onClick={() => setView(!view)} />
 											<Form.Control.Feedback type="invalid" id="pass-info" className="text-center">A senha deve conter pelo menos 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula e um número.</Form.Control.Feedback>
 										</FloatingLabel>
+										<Form.Check className='mx-1' label="Mostrar senha?" onClick={() => setView(!view)} />
+											
 								
 										<FloatingLabel label="Confirme sua senha" controlId="confirm-input">
 											<Form.Control 
