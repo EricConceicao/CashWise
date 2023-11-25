@@ -50,36 +50,9 @@ function Controls() {
 }
 ```
 
--- COMANDOS PARA POPULAR A TABELA ATUALIZAÇÃO MONETÁRIA DO BANCO DE DADOS cashwise
+## Insert com os dados para o funcionamento do sistema do simule
 
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Tempo de geração: 24/11/2023 às 17:56
--- Versão do servidor: 10.4.28-MariaDB
--- Versão do PHP: 8.0.28
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
-
--- Banco de dados: `cashwise`
---
--- --------------------------------------------------------
-use cashwise;
---
--- Despejando dados para a tabela `atualizacao_monetaria`
---
-
+```
 INSERT INTO `atualizacao_monetaria` (`id`, `mes_ano`, `indice`) VALUES
 (1, '1994-07', 10.534006),
 (2, '1994-08', 9.930246),
@@ -427,7 +400,5 @@ INSERT INTO `atualizacao_monetaria` (`id`, `mes_ano`, `indice`) VALUES
 (344, '2023-02', 1.023194),
 (345, '2023-03', 1.015376),
 (346, '2023-04', 1.008919),
-(347, '2023-05', 1.003600)
-
-
-
+(347, '2023-05', 1.003600);
+```

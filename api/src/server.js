@@ -11,12 +11,7 @@ config();
 const api = express();
 
 // Definindo middlewares
-api.use(
-  cors({
-    origin: [process.env.ORIGIN, 'http://localhost:5173', 'http://127.0.0.1:5173'], 
-    credentials: true,
-  })
-);
+api.use(cors({ origin: process.env.ORIGIN, credentials: true });
 api.use(express.json());
 api.use(cookieParser());
 
@@ -32,6 +27,7 @@ import coinsRouter from './routes/coins.routes.js';
 import gastosRouter from './routes/gastos.routes.js'
 import ganhosRouter from './routes/ganhos.routes.js'
 import contasRouter from './routes/contas.routes.js'
+import simulacaoRouter from './routes/simulacao.routes.js';
 
 // Atribuições
 api.use('/auth', authRouter);
@@ -40,7 +36,9 @@ api.use('/shop', shopRouter);
 api.use('/coins', coinsRouter);
 api.use('/gastos', gastosRouter);
 api.use('/ganhos', ganhosRouter);
-api.use('/simule', simulacaoRegras);
+api.use('/contas', contasRouter);
+api.use('/simule', simulacaoRouter);
+
 
 api.use('/', (req, res) => {
   res.status(200).json({ success: true, message: 'Bem vindo ao lugar nenhum da nossa API :3' });
