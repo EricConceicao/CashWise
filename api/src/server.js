@@ -2,7 +2,6 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import morgan from 'morgan';
 
 // Importando as variáveis de ambiente do .env
 import { config } from 'dotenv';
@@ -11,9 +10,13 @@ config();
 const api = express();
 
 // Definindo middlewares
-api.use(cors({ origin: process.env.ORIGIN, credentials: true });
+api.use(cors({
+  origin: process.env.ORIGIN,
+  credentials: true,
+}));
 api.use(express.json());
 api.use(cookieParser());
+
 
 // Rotas //
 
@@ -21,8 +24,6 @@ api.use(cookieParser());
 import authRouter from './routes/auth.routes.js';
 import contactRouter from './routes/contact.routes.js';
 import shopRouter from './routes/shop.routes.js';
-
-import simulacaoRegras from './controllers/simule/simulacaoRegras.js';
 import coinsRouter from './routes/coins.routes.js';
 import gastosRouter from './routes/gastos.routes.js'
 import ganhosRouter from './routes/ganhos.routes.js'
@@ -39,13 +40,13 @@ api.use('/ganhos', ganhosRouter);
 api.use('/contas', contasRouter);
 api.use('/simule', simulacaoRouter);
 
-
 api.use('/', (req, res) => {
-  res.status(200).json({ success: true, message: 'Bem vindo ao lugar nenhum da nossa API :3' });
+	res.status(200).json({ success: true, message: 'Bem vindo ao lugar nenhum da nossa API :3'});
 });
+
 
 // Configurações da api
 const port = process.env.PORT || 3000;
 api.listen(port, (req, res) => {
-  console.log(`Api online na porta ${port}`);
+	console.log(`Api online na porta ${port}`);
 });
