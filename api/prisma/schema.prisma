@@ -44,10 +44,9 @@ model Session {
   user   User   @relation(fields: [userId], references: [id])
 }
 
-// Tábela de icones disponiveis no app. Se quiser adicionar um, fique avontade. Ele aparecerá na loja na home :3
-// Apenas coloque a imagem (preferêncialmente svg > png > jpg) dentro da pasta 'pfps' em "public/img" no front 
-// e na hora de inserir o endereço ficaria mais ou menos assim: "img/nome-do-icone.extensão" 
-// e depois insira, um nome para ele na loja e um preço em wiseCoins
+// Tábela de icones disponiveis no app. Se quiser adicionar um, fique avontade no meu script
+// de configuração de ícones na API.
+
 model Icon {
   id       Int         @id @default(autoincrement())
   name     String      @default("ícone sem nome") @db.VarChar(255)
@@ -107,4 +106,51 @@ model Periodo {
   fim     String 
   conta   Conta  @relation(fields: [contaId], references: [id])
   contaId Int    @unique
+}
+
+// Schema do sistema previdência //
+
+model atualizacao_monetaria {
+  id        Int       @id @default(autoincrement()) @db.UnsignedInt
+  mes_ano   String    @db.VarChar(7)
+  indice    Decimal   @db.Decimal(10, 6)
+}
+
+model SimulacaoBeneficio {
+  id                          Int                          @id @default(autoincrement()) @db.UnsignedInt
+  genero                      simulacao_beneficio_genero
+  data_nascimento             DateTime                     @db.Date
+  salario_atualizado          SalarioAtualizado?           @relation(fields: [salario_atualizado_id], references: [id])  
+  salario_atualizado_id       Int?                         @unique
+  idade                       Int?
+  tempo_contribuicao_mes      Int?
+  idade_aposentadoria         Int?
+  mes_aposentadoria           Int?
+  anoAposentadoria            Int?
+  tempo_contribuicao_pendente Int?
+  simulacao_beneficio_id      Int?                         @unique
+  valor_beneficio             Decimal?                     @db.Decimal(10, 2)
+  simulacao_periodo_trabalho  simulacao_periodo_trabalho[]
+}
+enum simulacao_beneficio_genero {
+  m
+  f
+}
+
+model simulacao_periodo_trabalho {
+  id                     Int                 @id @default(autoincrement()) @db.UnsignedInt
+  mes                    Int
+  ano                    Int
+  salario                Decimal             @db.Decimal(10, 2)
+  mes_ano                String              @db.VarChar(7)
+  simulacao_beneficio_id Int                 @db.UnsignedInt
+  simulacao_beneficio    SimulacaoBeneficio  @relation(fields: [simulacao_beneficio_id], references: [id])
+}
+
+model SalarioAtualizado {
+  id                      Int                @id @default(autoincrement())
+  mes_ano                 DateTime
+  salario_atualizado      Float
+  simulacao_beneficio     SimulacaoBeneficio?   
+  simulacao_beneficio_id  Int?                
 }

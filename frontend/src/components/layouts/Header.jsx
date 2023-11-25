@@ -53,7 +53,7 @@ function Header() {
                     <Nav className="fw-bold gap-2 m-2" id="header-nav">
                         <NavLink className="nav-link" to="/home">Home</NavLink>
                         <NavLink className="nav-link" to="/boletim">Boletim Informativo</NavLink>
-                        <NavLink className="nav-link" to="/previdencia">Previdência Aqui</NavLink>
+                        <NavLink className="nav-link" to="/simule">Minha Simulação</NavLink>
                     </Nav>    
                     <Button size="sm" variant="outline-secondary mt-1" onClick={handleLogout}>Logout</Button>               
                 </Navbar.Collapse>
