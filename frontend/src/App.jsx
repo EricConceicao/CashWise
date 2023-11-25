@@ -7,14 +7,13 @@ import Home from './components/pages/Home';
 import Sobre from './components/pages/Sobre';
 import Contato from './components/pages/Contato';
 import NotFound from './components/pages/NotFound';
-import PrevidenciaAqui from './components/pages/PrevidenciaAqui';
 import BoletimInformativo from './components/pages/BoletimInformativo';
 import Poupanca from './components/pages/Poupanca';
 import Investimentos from './components/pages/Investimentos';
 import Investodos from './components/pages/Investodos';
-import Prev from './components/pages/Prev';
-import Educacao from './components/pages/Educacao';
-import Dicas from './components/pages/Dicas';
+import Simule from "./components/pages/Simule";
+import Resultado from "./components/layouts/Resultado";
+import Prev from "./components/pages/Prev";
 // Importações de componentes //
 import Loader from './components/utils/Loader';
 
@@ -33,14 +32,13 @@ const App = () => {
       <Route path="/contato" element={<Contato />} />
       <Route path="/sobre" element={<Sobre />} />
       <Route path="/home" element={<Home />}/>
-      <Route path="/previdencia" element={<PrevidenciaAqui/>}/>
+      <Route path="/simule" element={<Simule />} />
+      <Route path="/resultado" element={<Resultado />} />
       <Route path="/boletim" element={<BoletimInformativo/>}/>
       <Route path="/poupanca" element={<Poupanca/>}/>
       <Route path="/investimentos" element={<Investimentos/>}/>
       <Route path="/investodos" element={<Investodos/>}/>
       <Route path="/prev" element={<Prev/>}/>
-      <Route path="/educacao" element={<Educacao/>}/>
-      <Route path="/dicas" element={<Dicas/>}/>
       <Route path="*" element={<NotFound />} />
     </Routes>
     </>

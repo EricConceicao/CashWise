@@ -9,7 +9,6 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
 // Tábela com todo o esqueleto do nosso usuário comum
 model User {
   id           Int         @id @default(autoincrement())
@@ -25,7 +24,6 @@ model User {
   sessions     Session[]
   UserIcons    UserIcons[]
 }
-
 // Tábela para envio de feedbacks da página contato
 model Contact {
   id      Int      @id @default(autoincrement())
@@ -35,7 +33,6 @@ model Contact {
   message String   @db.Text
   date    DateTime @default(now())
 }
-
 // Tábela de sessões de usuários para manter o controle dos refreshTokens
 model Session {
   id     Int    @id @default(autoincrement())
@@ -43,19 +40,17 @@ model Session {
   userId Int
   user   User   @relation(fields: [userId], references: [id])
 }
-
 // Tábela de icones disponiveis no app. Se quiser adicionar um, fique avontade. Ele aparecerá na loja na home :3
 // Apenas coloque a imagem (preferêncialmente svg > png > jpg) dentro da pasta 'pfps' em "public/img" no front 
 // e na hora de inserir o endereço ficaria mais ou menos assim: "img/nome-do-icone.extensão" 
 // e depois insira, um nome para ele na loja e um preço em wiseCoins
 model Icon {
   id       Int         @id @default(autoincrement())
-  name     String      @default("ícone sem nome") @db.VarChar(255)
+  name     String      @db.VarChar(255) @default("ícone sem nome")
   src      String      @db.Text
   price    Int
   userIcon UserIcons[]
 }
-
 // Tábela de ícones que o usuário possui/comprou. 
 model UserIcons {
   id       Int     @id @default(autoincrement())
@@ -65,7 +60,6 @@ model UserIcons {
   user     User    @relation(fields: [userId], references: [id])
   icon     Icon    @relation(fields: [iconId], references: [id])
 }
-
 // Tábela com os gastos registrados na agenda
 model Gasto {
   id        Int     @id @default(autoincrement())
@@ -74,8 +68,7 @@ model Gasto {
   data      String
   valor     Decimal @db.Decimal(10, 2)
 }
-
-// Tabela com os ganhos registrados na agenda
+// Tábela com os ganhos registrados na agenda
 model Ganho {
   id        Int     @id @default(autoincrement())
   descricao String  @db.VarChar(255)
@@ -84,27 +77,56 @@ model Ganho {
   valor     Decimal @db.Decimal(10, 2)
 }
 
-// Tabela para armazenar informações sobre contas
-model Conta {
-  id            Int         @id @default(autoincrement())
-  descricao     String      @db.VarChar(255)
-  valor         Decimal     @db.Decimal(10, 2)
-  diaVencimento Int
-  recorrencia   Recorrencia
-  periodo       Periodo?
+//==================================================================================================
+
+
+
+model atualizacao_monetaria {
+  id      Int     @id @default(autoincrement()) @db.UnsignedInt
+  mes_ano String  @db.VarChar(7)
+  indice  Decimal @db.Decimal(10, 6)
 }
 
-// Enum para representar a recorrência da conta (mensal ou por período)
-enum Recorrencia {
-  MENSAL
-  POR_PERIODO
+model SimulacaoBeneficio {
+  id                          Int                          @id @default(autoincrement()) @db.UnsignedInt
+  genero                      simulacao_beneficio_genero
+  data_nascimento             DateTime                     @db.Date
+  salario_atualizado          SalarioAtualizado?           @relation(fields: [salario_atualizado_id], references: [id])  
+  salario_atualizado_id       Int?                         @unique
+  idade                       Int?
+  tempo_contribuicao_mes      Int?
+  idade_aposentadoria         Int?
+  mes_aposentadoria           Int?
+  anoAposentadoria            Int?
+  tempo_contribuicao_pendente Int?
+  simulacao_beneficio_id      Int?                         @unique
+  valor_beneficio             Decimal?                     @db.Decimal(10, 2)
+  simulacao_periodo_trabalho  simulacao_periodo_trabalho[]
 }
 
-// Modelo para representar o período, caso a conta tenha recorrência por período
-model Periodo {
-  id      Int    @id @default(autoincrement())
-  inicio  String 
-  fim     String 
-  conta   Conta  @relation(fields: [contaId], references: [id])
-  contaId Int    @unique
+
+model simulacao_periodo_trabalho {
+  id                     Int                 @id @default(autoincrement()) @db.UnsignedInt
+  mes                    Int
+  ano                    Int
+  salario                Decimal             @db.Decimal(10, 2)
+  mes_ano                String              @db.VarChar(7)
+  simulacao_beneficio_id Int                 @db.UnsignedInt
+  simulacao_beneficio    SimulacaoBeneficio  @relation(fields: [simulacao_beneficio_id], references: [id])
 }
+
+model SalarioAtualizado {
+  id                Int      @id @default(autoincrement())
+  mes_ano           DateTime
+  salario_atualizado Float
+  simulacao_beneficio SimulacaoBeneficio?   // Alterado para ser opcional
+  simulacao_beneficio_id Int?                // Adicionado o campo simulacao_beneficio_id
+}
+
+enum simulacao_beneficio_genero {
+  m
+  f
+}
+
+
+
