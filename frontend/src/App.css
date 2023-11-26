@@ -237,39 +237,19 @@ h5 {
 
 .painel {
     border-radius: 5px;
-    padding: 60px 70px;
+    padding: 50px 70px 30px 70px;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    border-bottom: 4px solid #fff;
-    border-radius: 10px;
+    border-bottom: 4px solid palegreen;
     display: flex;
     flex-direction: column;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .painel h1 {
-    margin-bottom: 30px;
+    margin-bottom: 0px;
     font-weight: lighter;   
     letter-spacing: 0.5px; 
-}
-
-.etiqueta {
-    width: 250px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 10px;
-    margin: 10px;
-    color: #fff;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    border-left: 3px solid #ccc;
-    border-radius: 10px;
-}
-
-.etiqueta span {
-    font-size: 15px;
-    color: #a9a9a9;
-    font-weight: bold;
+    color: palegreen;
 }
 
 .item span {
@@ -304,32 +284,28 @@ h1 {
 }
 
 .linha {
-    font-size: large;
-    font-weight: lighter;
+    font-weight: bold;
 }
 
 .tabela .titulo {
     border-radius: 5px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    border-bottom: 2px solid palegreen;
+    margin-bottom: 10px;
 }
 
 .pagar {
-    border-radius: px;
+    border-radius: 5px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    font-size: large;
     font-weight: lighter;
-}
-
-.receber {
-    border-radius: px;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    font-size: large;
-    font-weight: lighter;
+    border-bottom: 2px solid #fff;    
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .seta {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
 }
 
 .botao {

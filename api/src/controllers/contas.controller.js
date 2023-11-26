@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 
-export async function vercontas (req, res) {
+export async function vercontas(req, res) {
   try {
     const contas = await prisma.conta.findMany();
     res.json(contas);
@@ -19,7 +19,7 @@ export async function criarconta(req, res) {
     console.log({ descricao, valor, diaVencimento, recorrencia, periodo })
     // Cria a conta
 
-    const objDados  = {
+    const objDados = {
       data: {
         descricao,
         valor,
@@ -38,7 +38,7 @@ export async function criarconta(req, res) {
         periodo: true,
       },
     }
-    if(recorrencia === 'MENSAL'){
+    if (recorrencia === 'MENSAL') {
       delete objDados.data.periodo
     }
     const contaCriada = await prisma.conta.create(objDados);
@@ -50,6 +50,34 @@ export async function criarconta(req, res) {
     });
   } catch (error) {
     console.error('Erro ao criar nova conta:', error);
+    res.status(500).json({ error: 'Erro interno no servidor' });
+  }
+}
+
+
+export async function contasValidas(req, res) {
+  try {
+    const contas = await prisma.conta.findMany({
+      include: {
+        periodo: true,
+      },
+    });
+
+    const contasFiltradas = contas.filter((conta) => {
+      if (conta.recorrencia === 'MENSAL') {
+        return true;
+      } else if (conta.recorrencia === 'POR_PERIODO' && conta.periodo) {
+        // Se a recorrência for "POR_PERIODO" e houver um período associado
+        // Faça a junção dos dados da conta e do período
+        
+        return true;
+      }
+      return false;
+    });
+
+    res.json(contasFiltradas);
+  } catch (error) {
+    console.error('Erro ao obter contas válidas:', error);
     res.status(500).json({ error: 'Erro interno no servidor' });
   }
 }

@@ -564,6 +564,7 @@ const Home = () => {
 	const [showModalContas, setShowModalContas] = useState(false);
 
 	const [contas, setContas] = useState([]);
+	const [contasAgenda, setContasAgenda] = useState([]);
 
 	const [descricaoConta, setDescricaoConta] = useState("");
 	const [valorConta, setValorConta] = useState("");
@@ -588,6 +589,66 @@ const Home = () => {
 		getcontas()
 
 	}, [])
+
+	useEffect(() => {
+		const getContasAgenda = async () => {
+			try {
+				const response = await fetch('http://localhost:3000/contas/agenda');
+				if (!response.ok) {
+					throw new Error('Erro ao obter contas para a agenda');
+				}
+				const contas = await response.json();
+
+				// Ordenar contas por dia de vencimento
+				const contasOrdenadas = contas.sort((a, b) => a.diaVencimento - b.diaVencimento);
+
+				// Filtrar contas válidas
+				const contasFiltradas = contasOrdenadas.map((conta) => {
+					let vencimento;
+
+					if (conta.recorrencia === 'MENSAL') {
+						// Se a recorrência for "MENSAL", definir vencimento para o diaVencimento/mês corrente/ano corrente
+						const dataAtual = new Date();
+						vencimento = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), conta.diaVencimento);
+
+						if (vencimento < dataAtual) {
+							console.log(`Ajustando data para o próximo mês para conta ${conta.id}`);
+							vencimento.setMonth(vencimento.getMonth() + 1);
+						  }
+					} else if (conta.recorrencia === 'POR_PERIODO' && conta.periodo) {
+						// Se a recorrência for "POR_PERIODO" e houver um período associado
+						const dataAtual = new Date();
+						const inicioPeriodo = new Date(conta.periodo.inicio);
+						const fimPeriodo = new Date(conta.periodo.fim);
+						if (dataAtual >= inicioPeriodo && dataAtual <= fimPeriodo) {
+							// Se a data atual estiver dentro do período, definir vencimento
+							vencimento = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), conta.diaVencimento);
+						}
+						if (vencimento < dataAtual) {
+							console.log(`Ajustando data para o próximo mês para conta ${conta.id}`);
+							vencimento.setMonth(vencimento.getMonth() + 1);
+						  }
+					}
+
+					// Formatando a data para "DD-MM-AAAA"
+					const dd = String(vencimento.getDate()).padStart(2, '0');
+					const mm = String(vencimento.getMonth() + 1).padStart(2, '0');
+					const aaaa = vencimento.getFullYear();
+
+					return {
+						...conta,
+						vencimento: `${dd}-${mm}-${aaaa}`,
+					};
+				}).filter(Boolean);
+
+				setContasAgenda(contasFiltradas);
+			} catch (error) {
+				console.error('Erro na requisição:', error);
+			}
+		};
+
+		getContasAgenda();
+	}, []);
 
 	const handleAdicionarNovaConta = () => {
 
@@ -1127,26 +1188,47 @@ const Home = () => {
 
 
 						<Container className={`painel mt-5 mb-5 ${agendaVisivel ? 'visivel' : 'oculto'}`}>
-							<h1 className='text-info'>Agenda Financeira </h1>
+							<h1>Agenda Financeira </h1>
 
 							<div className="tabela pt-5 pb-5">
 								<div className="bg-secondary titulo row pt-3 pb-3">
-									<div className="linha col-1"><GoArrowSwitch className='seta'/></div>
-									<div className="linha col-4 fw-bold">Descrição</div>
-									<div className="linha col-2">Vencimento</div>
-									
-									<div className="linha col-2">Ação</div>
-									<div className="linha col-2">Valor</div>
+									{/*<div className="linha col-1"><GoArrowSwitch className='seta' /></div>*/}
+
+									<div className="linha col">Descrição</div>
+
+									<div className="linha col">Vencimento</div>
+
+									<div className="linha col">Ação</div>
+									<div className="linha col">Valor</div>
 									<div className="linha col-1">Excluir</div>
 
 								</div>
-								<br />
 
+								<div>
+
+
+									{contasAgenda.map((conta) => (
+										<div key={conta.id} className='bg-secondary pagar row pt-3 pb-3'>
+											{/*<div className="col-1"><GoArrowRight className='seta text-danger' /></div>*/}
+											<div className="col fw-bold">{conta.descricao}</div>
+
+											<div className="col">{conta.vencimento}</div>
+											<div className="col">Pagar</div>
+											<div className="col">{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>
+											<div className="col-1 text-danger"><Button variant='outline-warning'>Excluir</Button></div>
+										</div>
+									))}
+
+								</div>
+							</div>
+
+							{/*
 								<div className="bg-secondary pagar row pt-3 pb-3">
 									<div className="col-1"><GoArrowLeft className='seta text-danger' /></div>
-									<div className="col-4 fw-bold"><i>Financiamento</i></div>
-									<div className="col-2 text-warning">08/11/23</div>
-									
+									<div className="col-2 fw-bold"><i>Financiamento</i></div>
+									<div className="linha col-2"></div>
+									<div className="col-2">08/11/23</div>
+
 									<div className="col-2">Pagar</div>
 									<div className="col-2">R$ 1200,00</div>
 									<div className="col-1 text-danger"><Button variant='outline-danger'>Excluir</Button></div>
@@ -1154,10 +1236,11 @@ const Home = () => {
 								</div>
 
 								<div className="bg-secondary receber row pt-3 pb-3">
-									<div className="col-1"><GoArrowRight className='seta' /></div>
-									<div className="col-4 fw-bold"><i>Salário</i></div>
-									<div className="col-2 text-warning">10/11/23</div>
-									
+									<div className="col-1"><GoArrowRight className='seta text-primary' /></div>
+									<div className="col-2 fw-bold"><i>Salário</i></div>
+									<div className="linha col-2"></div>
+									<div className="col-2">10/11/23</div>
+
 									<div className="col-2">Receber</div>
 									<div className="col-2">R$ 5000,00</div>
 									<div className="col-1 text-danger"><Button variant='outline-danger'>Excluir</Button></div>
@@ -1165,16 +1248,17 @@ const Home = () => {
 								</div>
 
 								<div className="bg-secondary pagar row pt-3 pb-3">
-									<div className="col-1"><GoArrowLeft className='seta' /></div>
-									<div className="col-4 fw-bold"><i>Cartão de crédito</i></div>
-									<div className="col-2 text-warning">11/11/23</div>
-									
+									<div className="col-1"><GoArrowLeft className='seta text-danger' /></div>
+									<div className="col-2 fw-bold"><i>Cartão de crédito</i></div>
+									<div className="linha col-2"></div>
+									<div className="col-2">11/11/23</div>
+
 									<div className="col-2">Pagar</div>
 									<div className="col-2">R$ 1200,00</div>
 									<div className="col-1 text-danger"><Button variant='outline-danger'>Excluir</Button></div>
 
-								</div>
-							</div>
+										</div> */}
+
 
 						</Container>
 
@@ -1292,16 +1376,16 @@ const Home = () => {
 								</div>
 
 								{contas.map((conta, index) => (
-									<div className="" >
 
-										<div className='conta row' key={index} style={{ backgroundColor: index % 2 === 0 ? '#fff' : '#D3D3D3' }}>
-											<p className="col text-dark fs-5">{conta.descricao}</p>
-											<p className='col fs-5'>R$ {conta.valor}</p>
-											<p className='col fs-5'>{conta.diaVencimento}</p>
-										</div>
-										
-										
+
+									<div className='conta row' key={index} style={{ backgroundColor: index % 2 === 0 ? '#fff' : '#D3D3D3' }}>
+										<p className="col text-dark fs-5">{conta.descricao}</p>
+										<p className='col fs-5'>R$ {conta.valor}</p>
+										<p className='col fs-5'>{conta.diaVencimento}</p>
 									</div>
+
+
+
 								))}
 							</Container>
 						</div>
@@ -1668,6 +1752,8 @@ const Home = () => {
 						</div>
 												*/}
 						{/* Fim de Relatório*/}
+
+
 
 					</Container>
 
