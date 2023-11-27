@@ -30,7 +30,7 @@ const Educacao = () => {
             <div style={colorBody}>
                 <div className="bg-secondary text-white text-center py-5">
                     <h1>Educação Financeira</h1>
-                    <h2 style={{ color: '#AEF2C6' }}> Aprenda, planeje e conquiste sua liberdade financeira</h2>
+                    <h2 style={{ color: '#AEF2C6' }}> Aprenda, Planeje e Conquiste sua Liberdade Financeira</h2>
                 </div>
 
                 <Container className="mt-5">
@@ -49,7 +49,7 @@ const Educacao = () => {
                         <Col lg={6} md={6} className="mb-4">
                             <Card border="#213740" style={card}>
                                 <Card.Body className={cardBody}>
-                                    <Card.Title className='fs-4 p-3 bg-info rounded-3 mb-3' style={{ textAlign: "center" }} >A importância da Educação Financeira</Card.Title>
+                                    <Card.Title className='fs-4 p-3 bg-info rounded-3 mb-3' style={{ textAlign: "center" }} >A Importância da Educação Financeira</Card.Title>
                                     <Card.Img id='card-img' src="/img/educ.png" alt="Imagem do artigo Educação Financeira" />
 
 
@@ -64,7 +64,7 @@ const Educacao = () => {
                                 <Card.Body className={cardBody}>
                                     <Card.Img id='card-img' src="/img/investimentos.png" alt="Imagem do artigo investimento para todos" />
 
-                                    <Card.Title className='fs-4  mb-3' style={{ textAlign: "center" }}>A Educação financeira permite:</Card.Title>
+                                    <Card.Title className='fs-4 p-1 bg-info rounded-3 mb-3' style={{ textAlign: "center" }}>A Educação Financeira Permite:</Card.Title>
                                     <Card.Text className='fs-5 p-1' style={{ textAlign: "justify" }}>
                                         <ul>
                                             <p> < Money size={35} className='text-primary' /> Reduzir o Estresse Financeiro através do conhecimento adequado se reduz a ansiedade associada a questões monetárias, permitindo lidar melhor com imprevistos e crises econômicas pessoais;</p>
