@@ -1,5 +1,6 @@
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
+import CoinText from '../utils/CoinText';
 
 import { Container, Row, Col, Card } from 'react-bootstrap';
 
@@ -39,7 +40,7 @@ const Poupanca = () => {
 									<Card.Img className='w-60' src="img/cofrinho.png" alt="Imagem do artigo poupança" />
 
 									<Card.Text className='fs-5' style={{ textAlign: "justify" }}>
-										<p><Check size={35} className='text-primary' /> Segurança: A poupança é garantida pelo Fundo Garantidor de Créditos (FGC) até um determinado valor, proporcionando segurança aos seus fundos.</p>
+										<p><Check size={35} className='text-primary' /> Segurança: <CoinText>A poupança é garantida pelo Fundo Garantidor de Créditos (FGC)</CoinText> até um determinado valor, proporcionando segurança aos seus fundos.</p>
 
 										<p><Check size={35} className='text-primary' /> Acesso Fácil: É fácil abrir uma conta poupança, e a maioria dos bancos oferece serviços online, proporcionando acesso conveniente aos seus fundos.</p>
 

@@ -8,6 +8,11 @@ const prisma = new PrismaClient();
 console.log("Inicializando inserções de icones...");
 
 try {
+	console.log('Passando uma vassoura na tabela icons, a fim de evitar duplicas');
+	const deleteResult = await prisma.Icon.deleteMany();
+
+	console.log("Ícones deletados:", deleteResult.count);
+
 	const success = await prisma.Icon.createMany({
 		data: 
 		[

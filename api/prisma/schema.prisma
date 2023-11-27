@@ -62,7 +62,7 @@ model UserIcons {
   userId   Int
   obtained Boolean @default(false)
   user     User    @relation(fields: [userId], references: [id])
-  icon     Icon    @relation(fields: [iconId], references: [id])
+  icon     Icon    @relation(fields: [iconId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 // Tábela com os gastos registrados na agenda
