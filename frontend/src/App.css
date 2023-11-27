@@ -242,11 +242,10 @@ h5 {
     border-bottom: 4px solid palegreen;
     display: flex;
     flex-direction: column;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    
 }
 
 .painel h1 {
-    margin-bottom: 0px;
     font-weight: lighter;   
     letter-spacing: 0.5px; 
     color: palegreen;
@@ -289,18 +288,25 @@ h1 {
 
 .tabela .titulo {
     border-radius: 5px;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    border-bottom: 2px solid palegreen;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    
     margin-bottom: 10px;
 }
 
 .pagar {
     border-radius: 5px;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+
     font-weight: lighter;
-    border-bottom: 2px solid #fff;    
+        
     align-items: center;
     margin-bottom: 10px;
+}
+
+.pagar .col {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .seta {

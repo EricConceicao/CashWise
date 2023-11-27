@@ -23,6 +23,11 @@ import useUserStore from '../store/UserStore';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { GiClick } from 'react-icons/gi'
+import { FaTrashAlt } from "react-icons/fa";
+import { FaCalendarAlt } from "react-icons/fa";
+import { FaPiggyBank } from "react-icons/fa";
+
+
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -608,26 +613,32 @@ const Home = () => {
 
 					if (conta.recorrencia === 'MENSAL') {
 						// Se a recorrência for "MENSAL", definir vencimento para o diaVencimento/mês corrente/ano corrente
-						const dataAtual = new Date();
+						let dataAtual = new Date();
 						vencimento = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), conta.diaVencimento);
+						/*console.log("vencimento:", vencimento);
+						console.log("data atual:", dataAtual);*/
 
-						if (vencimento < dataAtual) {
-							console.log(`Ajustando data para o próximo mês para conta ${conta.id}`);
+						let diaDoMes = dataAtual.getDate();
+						/*console.log(diaDoMes);*/
+
+						if ((vencimento < dataAtual) && (conta.diaVencimento != diaDoMes)) {
+							/*console.log(`Ajustando data para o próximo mês para conta ${conta.id}`);*/
 							vencimento.setMonth(vencimento.getMonth() + 1);
-						  }
+						}
 					} else if (conta.recorrencia === 'POR_PERIODO' && conta.periodo) {
 						// Se a recorrência for "POR_PERIODO" e houver um período associado
-						const dataAtual = new Date();
+						let dataAtual = new Date();
 						const inicioPeriodo = new Date(conta.periodo.inicio);
 						const fimPeriodo = new Date(conta.periodo.fim);
+						let diaDoMes = dataAtual.getDate();
 						if (dataAtual >= inicioPeriodo && dataAtual <= fimPeriodo) {
 							// Se a data atual estiver dentro do período, definir vencimento
 							vencimento = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), conta.diaVencimento);
 						}
-						if (vencimento < dataAtual) {
-							console.log(`Ajustando data para o próximo mês para conta ${conta.id}`);
+						if ((vencimento < dataAtual) && (conta.diaVencimento != diaDoMes)) {
+							/*console.log(`Ajustando data para o próximo mês para conta ${conta.id}`);*/
 							vencimento.setMonth(vencimento.getMonth() + 1);
-						  }
+						}
 					}
 
 					// Formatando a data para "DD-MM-AAAA"
@@ -640,6 +651,20 @@ const Home = () => {
 						vencimento: `${dd}-${mm}-${aaaa}`,
 					};
 				}).filter(Boolean);
+
+				// Ordenar contas filtradas
+				console.log("Contas Filtradas: ", contasFiltradas)
+				const contasFiltradasOrdenadas = contasFiltradas.sort((a, b) => {
+					const [diaA, mesA, anoA] = a.vencimento.split('-').map(Number);
+					const [diaB, mesB, anoB] = b.vencimento.split('-').map(Number);
+
+					// Criar objetos Date a partir dos valores extraídos
+					const dataVencimentoA = new Date(anoA, mesA - 1, diaA); // O mês é base 0 no objeto Date
+					const dataVencimentoB = new Date(anoB, mesB - 1, diaB);
+
+					return dataVencimentoA - dataVencimentoB;
+				});
+				console.log(contasFiltradasOrdenadas);
 
 				setContasAgenda(contasFiltradas);
 			} catch (error) {
@@ -1188,17 +1213,17 @@ const Home = () => {
 
 
 						<Container className={`painel mt-5 mb-5 ${agendaVisivel ? 'visivel' : 'oculto'}`}>
-							<h1>Agenda Financeira </h1>
+							<h1>Agenda Financeira</h1>
 
 							<div className="tabela pt-5 pb-5">
-								<div className="bg-secondary titulo row pt-3 pb-3">
+								<div className="bg-secondary titulo row pt-4 pb-4">
 									{/*<div className="linha col-1"><GoArrowSwitch className='seta' /></div>*/}
 
 									<div className="linha col">Descrição</div>
 
 									<div className="linha col">Vencimento</div>
 
-									<div className="linha col">Ação</div>
+									<div className="linha col">Status</div>
 									<div className="linha col">Valor</div>
 									<div className="linha col-1">Excluir</div>
 
@@ -1208,14 +1233,14 @@ const Home = () => {
 
 
 									{contasAgenda.map((conta) => (
-										<div key={conta.id} className='bg-secondary pagar row pt-3 pb-3'>
+										<div key={conta.id} className='pagar row pt-3 pb-3'>
 											{/*<div className="col-1"><GoArrowRight className='seta text-danger' /></div>*/}
-											<div className="col fw-bold">{conta.descricao}</div>
+											<div className="col fw-bold"><FaPiggyBank className='moeda'/>{conta.descricao}</div>
 
-											<div className="col">{conta.vencimento}</div>
+											<div className="col"><FaCalendarAlt />{conta.vencimento}</div>
 											<div className="col">Pagar</div>
 											<div className="col">{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>
-											<div className="col-1 text-danger"><Button variant='outline-warning'>Excluir</Button></div>
+											<div className="col-1"><Button variant='outline-info'><FaTrashAlt /></Button></div>
 										</div>
 									))}
 
