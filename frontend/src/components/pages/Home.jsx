@@ -24,7 +24,10 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { GiClick } from 'react-icons/gi'
 import { FaTrashAlt } from "react-icons/fa";
-import { FaCalendarAlt } from "react-icons/fa";
+import { FaRegCalendarAlt } from "react-icons/fa";
+import { MdOutlineAddBox } from "react-icons/md";
+import { MdLibraryAdd } from "react-icons/md";
+
 import { FaPiggyBank } from "react-icons/fa";
 
 
@@ -595,6 +598,7 @@ const Home = () => {
 
 	}, [])
 
+	//Organizar as contas numa agenda
 	useEffect(() => {
 		const getContasAgenda = async () => {
 			try {
@@ -673,8 +677,11 @@ const Home = () => {
 		};
 
 		getContasAgenda();
+
 	}, []);
 
+
+	//Adicionar uma nova conta
 	const handleAdicionarNovaConta = () => {
 
 		const novaConta = {
@@ -1166,18 +1173,7 @@ const Home = () => {
 						<Container className='menu'>
 							<h1 className='mb-5'>Seu menu</h1>
 							<div className="row cartoes-menu">
-								<div className="col text-info">
-									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivAgendaFinanceira}>
-										<h4>Agenda Financeira</h4>
-										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
-									</Button>
-								</div>
-								<div className="col text-info">
-									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivContas}>
-										<h4>Contas</h4>
-										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
-									</Button>
-								</div>
+								
 								<div className="col text-info">
 									<Button as='button' variant='secondary' className='botao-menu'>
 										<h4>Ganhos</h4>
@@ -1212,20 +1208,17 @@ const Home = () => {
 						<br />
 
 
-						<Container className={`painel mt-5 mb-5 ${agendaVisivel ? 'visivel' : 'oculto'}`}>
+						<Container className='painel mt-5 mb-5'>
 							<h1>Agenda Financeira</h1>
 
 							<div className="tabela pt-5 pb-5">
 								<div className="bg-secondary titulo row pt-4 pb-4">
-									{/*<div className="linha col-1"><GoArrowSwitch className='seta' /></div>*/}
 
 									<div className="linha col">Descrição</div>
-
 									<div className="linha col">Vencimento</div>
-
 									<div className="linha col">Status</div>
 									<div className="linha col">Valor</div>
-									<div className="linha col-1">Excluir</div>
+									<div className="linha col-1">Ação</div>
 
 								</div>
 
@@ -1234,186 +1227,136 @@ const Home = () => {
 
 									{contasAgenda.map((conta) => (
 										<div key={conta.id} className='pagar row pt-3 pb-3'>
-											{/*<div className="col-1"><GoArrowRight className='seta text-danger' /></div>*/}
-											<div className="col fw-bold"><FaPiggyBank className='moeda'/>{conta.descricao}</div>
 
-											<div className="col"><FaCalendarAlt />{conta.vencimento}</div>
+											<div className="descricao-conta col fw-bold"><FaPiggyBank className='moeda' />{conta.descricao}</div>
+											<div className="col"><FaRegCalendarAlt className='icone-conta' />{conta.vencimento}</div>
 											<div className="col">Pagar</div>
-											<div className="col">{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>
-											<div className="col-1"><Button variant='outline-info'><FaTrashAlt /></Button></div>
+											<div className="col"><BsCoin className='icone-conta' />{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>
+											<div className="col-1"><Button variant='outline-info' title='Excluir'><FaTrashAlt /></Button></div>
 										</div>
 									))}
 
 								</div>
+
+								<div className="pagar row pt-3 pb-3 border border-3">
+
+									<div className="linha col nova-despesa">
+										<FaPiggyBank className='moeda' />
+										Nova Despesa
+									</div>
+									<div className="linha col"></div>
+									<div className="linha col"></div>
+									<div className="linha col"></div>
+									<div className="linha col-1">
+										<Button as="button" variant="outline-info" title='Criar' onClick={() => setShowModalContas(true)}><MdLibraryAdd className=''/>
+										</Button>
+										<Modal
+											show={showModalContas}
+											onHide={() => setShowModalContas(false)}
+											size="md"
+											aria-labelledby="contained-modal-title-vcenter"
+											centered
+										>
+											<Modal.Header closeButton>
+												<Modal.Title id="contained-modal-title-vcenter">Nova despesa</Modal.Title>
+											</Modal.Header>
+											<Modal.Body>
+												<Form onSubmit={handleSubmitNovaConta}>
+
+													<Form.Group className="mb-3">
+														<Form.Label>Descrição</Form.Label>
+														<Form.Control
+															type="text"
+															name='descricao'
+															value={descricaoConta}
+															onChange={(e) => setDescricaoConta(e.target.value)}
+
+														/>
+													</Form.Group>
+
+													<Form.Group className="mb-3">
+														<Form.Label>Valor</Form.Label>
+														<div className="input-group">
+															<span className="input-group-text">R$</span>
+															<Form.Control
+																type="number"
+																step="0.01"  // Permita valores fracionados com duas casas decimais
+																name='valor'
+																value={valorConta}
+																onChange={(e) => setValorConta(e.target.value)}
+															/>
+														</div>
+													</Form.Group>
+
+													<Form.Group className="mb-3">
+														<Form.Label>Dia de vencimento</Form.Label>
+														<Form.Control
+															type="number"
+															name='vencimento'
+															value={vencimentoConta}
+															onChange={(e) => setVencimentoConta(e.target.value)}
+														/>
+													</Form.Group>
+
+													<Form.Group className="mb-3">
+														<Form.Label>Recorrência</Form.Label>
+														<Form.Select
+															name='recorrencia'
+															value={recorrenciaConta}
+															onChange={(e) => setRecorrenciaConta(e.target.value)}
+														>
+															<option value="MENSAL">Mensal</option>
+															<option value="POR_PERIODO">Por Período</option>
+														</Form.Select>
+													</Form.Group>
+
+													{recorrenciaConta === 'POR_PERIODO' && (
+														<>
+															<Form.Group className="mb-3">
+																<Form.Label>Início do Período</Form.Label>
+																<Form.Control
+																	type="month"
+																	name='inicioPeriodo'
+																	value={inicioPeriodoConta}
+																	onChange={(e) => setInicioPeriodoConta(e.target.value)}
+																/>
+															</Form.Group>
+
+															<Form.Group className="mb-3">
+																<Form.Label>Fim do Período</Form.Label>
+																<Form.Control
+																	type="month"
+																	name='fimPeriodo'
+																	value={fimPeriodoConta}
+																	onChange={(e) => setFimPeriodoConta(e.target.value)}
+																/>
+															</Form.Group>
+														</>
+													)}
+													<Button as='button' type='submit' variant="secondary" onClick={handleAdicionarNovaConta}>
+														Criar
+													</Button>
+												</Form>
+											</Modal.Body>
+											{showConfirmation && (
+												<div className="alert alert-success alert-custom" role="alert">
+													{confirmationMessage}
+												</div>
+											)}
+										</Modal>
+									</div>
+
+								</div>
 							</div>
-
-							{/*
-								<div className="bg-secondary pagar row pt-3 pb-3">
-									<div className="col-1"><GoArrowLeft className='seta text-danger' /></div>
-									<div className="col-2 fw-bold"><i>Financiamento</i></div>
-									<div className="linha col-2"></div>
-									<div className="col-2">08/11/23</div>
-
-									<div className="col-2">Pagar</div>
-									<div className="col-2">R$ 1200,00</div>
-									<div className="col-1 text-danger"><Button variant='outline-danger'>Excluir</Button></div>
-
-								</div>
-
-								<div className="bg-secondary receber row pt-3 pb-3">
-									<div className="col-1"><GoArrowRight className='seta text-primary' /></div>
-									<div className="col-2 fw-bold"><i>Salário</i></div>
-									<div className="linha col-2"></div>
-									<div className="col-2">10/11/23</div>
-
-									<div className="col-2">Receber</div>
-									<div className="col-2">R$ 5000,00</div>
-									<div className="col-1 text-danger"><Button variant='outline-danger'>Excluir</Button></div>
-
-								</div>
-
-								<div className="bg-secondary pagar row pt-3 pb-3">
-									<div className="col-1"><GoArrowLeft className='seta text-danger' /></div>
-									<div className="col-2 fw-bold"><i>Cartão de crédito</i></div>
-									<div className="linha col-2"></div>
-									<div className="col-2">11/11/23</div>
-
-									<div className="col-2">Pagar</div>
-									<div className="col-2">R$ 1200,00</div>
-									<div className="col-1 text-danger"><Button variant='outline-danger'>Excluir</Button></div>
-
-										</div> */}
 
 
 						</Container>
 
 						<br />
 
-						<div className={`contas ${contasVisivel ? 'visivel' : 'oculto'}`}>
-
-							<div className="contas-titulo">
-								<h1>Suas contas</h1>
-								<div><Button as="button" variant="outline-danger" onClick={() => setShowModalContas(true)}>Cadastrar nova conta</Button>
-									<Modal
-										show={showModalContas}
-										onHide={() => setShowModalContas(false)}
-										size="md"
-										aria-labelledby="contained-modal-title-vcenter"
-										centered
-									>
-										<Modal.Header closeButton>
-											<Modal.Title id="contained-modal-title-vcenter">Nova conta</Modal.Title>
-										</Modal.Header>
-										<Modal.Body>
-											<Form onSubmit={handleSubmitNovaConta}>
-
-												<Form.Group className="mb-3">
-													<Form.Label>Descrição</Form.Label>
-													<Form.Control
-														type="text"
-														name='descricao'
-														value={descricaoConta}
-														onChange={(e) => setDescricaoConta(e.target.value)}
-
-													/>
-												</Form.Group>
-
-												<Form.Group className="mb-3">
-													<Form.Label>Valor</Form.Label>
-													<div className="input-group">
-														<span className="input-group-text">R$</span>
-														<Form.Control
-															type="number"
-															step="0.01"  // Permita valores fracionados com duas casas decimais
-															name='valor'
-															value={valorConta}
-															onChange={(e) => setValorConta(e.target.value)}
-														/>
-													</div>
-												</Form.Group>
-
-												<Form.Group className="mb-3">
-													<Form.Label>Dia de vencimento</Form.Label>
-													<Form.Control
-														type="number"
-														name='vencimento'
-														value={vencimentoConta}
-														onChange={(e) => setVencimentoConta(e.target.value)}
-													/>
-												</Form.Group>
-
-												<Form.Group className="mb-3">
-													<Form.Label>Recorrência</Form.Label>
-													<Form.Select
-														name='recorrencia'
-														value={recorrenciaConta}
-														onChange={(e) => setRecorrenciaConta(e.target.value)}
-													>
-														<option value="MENSAL">Mensal</option>
-														<option value="POR_PERIODO">Por Período</option>
-													</Form.Select>
-												</Form.Group>
-
-												{recorrenciaConta === 'POR_PERIODO' && (
-													<>
-														<Form.Group className="mb-3">
-															<Form.Label>Início do Período</Form.Label>
-															<Form.Control
-																type="month"
-																name='inicioPeriodo'
-																value={inicioPeriodoConta}
-																onChange={(e) => setInicioPeriodoConta(e.target.value)}
-															/>
-														</Form.Group>
-
-														<Form.Group className="mb-3">
-															<Form.Label>Fim do Período</Form.Label>
-															<Form.Control
-																type="month"
-																name='fimPeriodo'
-																value={fimPeriodoConta}
-																onChange={(e) => setFimPeriodoConta(e.target.value)}
-															/>
-														</Form.Group>
-													</>
-												)}
-												<Button as='button' type='submit' variant="secondary" onClick={handleAdicionarNovaConta}>
-													Criar
-												</Button>
-											</Form>
-										</Modal.Body>
-										{showConfirmation && (
-											<div className="alert alert-success alert-custom" role="alert">
-												{confirmationMessage}
-											</div>
-										)}
-									</Modal>
-								</div>
-							</div>
-
-							<Container className='bg-light text-dark'>
+						{/*style={{ backgroundColor: index % 2 === 0 ? '#fff' : '#D3D3D3' }}*/}
 
 
-								<div className='conta row'>
-									<p className="col fs-5">Conta</p>
-									<p className='col fs-5' >Valor</p>
-									<p className='col fs-5'>Vencimento</p>
-								</div>
-
-								{contas.map((conta, index) => (
-
-
-									<div className='conta row' key={index} style={{ backgroundColor: index % 2 === 0 ? '#fff' : '#D3D3D3' }}>
-										<p className="col text-dark fs-5">{conta.descricao}</p>
-										<p className='col fs-5'>R$ {conta.valor}</p>
-										<p className='col fs-5'>{conta.diaVencimento}</p>
-									</div>
-
-
-
-								))}
-							</Container>
-						</div>
 
 						<br />
 
