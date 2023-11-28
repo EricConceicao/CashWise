@@ -113,4 +113,4 @@ function Quiz2() {
 	);
 }
 
-export default Quiz;
+export default Quiz2;

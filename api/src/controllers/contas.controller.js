@@ -69,7 +69,7 @@ export async function contasValidas(req, res) {
       } else if (conta.recorrencia === 'POR_PERIODO' && conta.periodo) {
         // Se a recorrência for "POR_PERIODO" e houver um período associado
         // Faça a junção dos dados da conta e do período
-        
+
         return true;
       }
       return false;
@@ -81,3 +81,42 @@ export async function contasValidas(req, res) {
     res.status(500).json({ error: 'Erro interno no servidor' });
   }
 }
+
+
+export async function deletarconta (req, res) {
+  const contaId = parseInt(req.params.id);
+
+  try {
+    const conta = await prisma.conta.findUnique({
+      where: { id: contaId },
+    });
+
+    if (!conta) {
+      return res.status(404).json({ error: 'Conta não encontrada' });
+    }
+
+    if (conta.recorrencia === 'MENSAL') {
+      // Exclua diretamente a conta, pois não há período associado
+      await prisma.conta.delete({
+        where: { id: contaId },
+      });
+    } else {
+      // Se a conta tem outro tipo de recorrência, exclua o período associado primeiro
+      await prisma.periodo.delete({
+        where: { contaId: contaId },
+      });
+
+      // Em seguida, exclua a conta
+      await prisma.conta.delete({
+        where: { id: contaId },
+      });
+    }
+
+    return res.status(204).end();
+  } catch (error) {
+    console.error('Erro ao excluir conta:', error);
+    return res.status(500).json({ error: 'Erro interno no servidor' });
+  }
+};
+
+
