@@ -653,6 +653,8 @@ const Home = () => {
 							vencimento: formatoData,
 						});
 
+						console.log("vish", formatoData)
+
 					} else if (conta.recorrencia === 'POR_PERIODO' && conta.periodo) {
 						// Se a recorrência for "POR_PERIODO" e houver um período associado
 						let dataAtual = new Date();
@@ -713,9 +715,10 @@ const Home = () => {
 
 					return dataVencimentoA - dataVencimentoB;
 				});
-				console.log(contasFiltradasOrdenadas);
+				/*console.log(contasFiltradasOrdenadas);*/
 
 				setContasAgenda(contasFiltradasOrdenadas);
+
 			} catch (error) {
 				console.error('Erro na requisição:', error);
 			}
@@ -723,7 +726,7 @@ const Home = () => {
 
 		getContasAgenda();
 
-	}, []);
+	}, [contas]);
 
 
 	const handleSubmitNovaConta = async (event) => {
@@ -757,10 +760,26 @@ const Home = () => {
 			const data = await response.json()
 			alert(data.success)
 			showConfirmationMessage("Nova conta criada com sucesso!");
+			console.log("veja",data.conta)
 			setContas([...contas, data.conta])
-			setContasAgenda((prevContas) => [...prevContas, data.conta]);
+			setContasAgenda([...contasAgenda, data.conta]);
 		}
 	}
+
+
+	// Adicione esta função ao seu componente
+	const calcularDiasRestantes = (dataVencimento) => {
+		const dataAtual = moment();
+		const dataVencimentoFormatada = moment(dataVencimento, 'DD-MM-YYYY');
+	  
+		// Calcula a diferença em dias
+		const diasRestantes = dataVencimentoFormatada.diff(dataAtual, 'days');
+		console.log("faltam",diasRestantes)
+	  
+		return diasRestantes;
+	  };
+	
+
 
 	const [showModalExcluirConta, setShowModalExcluirConta] = useState(false);
 	const [contaIdParaExcluir, setContaIdParaExcluir] = useState(null);
@@ -791,7 +810,10 @@ const Home = () => {
 			if (response.ok) {
 				// Atualize o estado ou realize alguma ação após a exclusão bem-sucedida
 				showConfirmationMessage("Conta excluída com sucesso!");
-				setShowModalExcluirConta(false);
+				setTimeout(() => {
+					setShowModalExcluirConta(false);
+				}, 2000);
+				
 				setContasAgenda((prevContas) => prevContas.filter((conta) => conta.id !== contaIdParaExcluir));
 			} else {
 				// Trate o caso em que a exclusão falhou
@@ -1275,7 +1297,7 @@ const Home = () => {
 
 											<div className="descricao-conta col fw-bold"><FaPiggyBank className='moeda' />{conta.descricao}</div>
 											<div className="col"><FaRegCalendarAlt className='icone-conta' />{conta.vencimento}</div>
-											<div className="col">Pagar</div>
+											<div className="col"> Vence em {calcularDiasRestantes(conta.vencimento)} dias</div>
 											<div className="col"><BsCoin className='icone-conta' />{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>
 											<div className="col-1"><Button variant='outline-info' title='Excluir' onClick={() => handleExcluirConta(conta.id)}><FaTrashAlt /></Button></div>
 
@@ -1321,7 +1343,7 @@ const Home = () => {
 									<div className="col"></div>
 									<div className="col"></div>
 									<div className="col-1">
-										<Button as="button" variant="outline-info" title='Criar' onClick={() => setShowModalContas(true)}className='border-'><IoMdAddCircle className='icone-conta'/>
+										<Button as="button" variant="outline-info" title='Criar' onClick={() => setShowModalContas(true)} className='border-'><IoMdAddCircle className='icone-conta' />
 										</Button>
 									</div>
 									<Modal
