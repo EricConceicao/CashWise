@@ -13,6 +13,10 @@ Faz a migração do schema para o dialeto do MYSQL
 ```
 npx prisma migrate dev --name init
 ```
+Insere os ícones no bd:
+```
+npm run insert-icons 
+```
 
 ### Referência dos comandos
 https://www.prisma.io/docs/guides/migrate/developing-with-prisma-migrate/troubleshooting-development

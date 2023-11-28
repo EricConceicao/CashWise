@@ -9,7 +9,7 @@ async function handleAsyncError(fn) {
     return await fn();
   } catch (error) {
     console.error('Erro:', error);
-    throw error; 
+    throw error;
   }
 }
 
@@ -222,9 +222,8 @@ function calcularTempoContribuicao(arrCampoAnoMes, periodoContribuicaoMinimo) {
   }
 }
 
-// Função para calcular o valor do benefício
-async function calcularValorBeneficio(simulacaoId) {
-
+// Função para calcular o ValorAposentadoria
+async function calcularValorAposentadoria(simulacaoId) {
   const salarioAtualizado = await prisma.SalarioAtualizado.findFirst({
     where: { simulacao_beneficio_id: simulacaoId },
     select: { salario_atualizado: true },
@@ -233,22 +232,40 @@ async function calcularValorBeneficio(simulacaoId) {
   if (!salarioAtualizado) {
     throw new Error('Não há valores de salário atualizado para calcular o benefício');
   }
-  const valorBeneficio = new Big(salarioAtualizado.salario_atualizado).times(0.60).toFixed(2);
 
-  return valorBeneficio;
-};
+  const valorAposentadoria = new Big(salarioAtualizado.salario_atualizado).times(0.60).toFixed(2);
 
-async function calcSimulacao(req, res) {
+  return valorAposentadoria;
+}
 
+// Função para calcular o ValorAuxilioDoenca
+async function calcularValorAuxilioDoenca(simulacaoId) {
+  const salarioAtualizado = await prisma.SalarioAtualizado.findFirst({
+    where: { simulacao_beneficio_id: simulacaoId },
+    select: { salario_atualizado: true },
+  });
+
+  if (!salarioAtualizado) {
+    throw new Error('Não há valores de salário atualizado para calcular o benefício');
+  }
+
+  const valorAuxilioDoenca = new Big(salarioAtualizado.salario_atualizado).times(0.91).toFixed(2);
+
+  return valorAuxilioDoenca;
+}
+
+
+// Função principal do controlador
+const calcSimulacao = async (req, res) => {
   try {
     // Obter dados da requisição
     const { campoAnoMes, campoSalario, dataNascimento, genero } = req.body;
 
     // Validar dados da requisição
     if (!campoAnoMes || !campoSalario || !Array.isArray(campoAnoMes) || !Array.isArray(campoSalario) || isNaN(Date.parse(dataNascimento)) || typeof genero !== "string") {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Dados ausentes ou inválidos" 
+      return res.status(400).json({
+        success: false,
+        message: "Dados ausentes ou inválidos"
       });
     }
 
@@ -274,7 +291,6 @@ async function calcSimulacao(req, res) {
         mes_aposentadoria: mesAposentadoria,
         anoAposentadoria,
         tempo_contribuicao_pendente: tempoContribuicaoPendente,
-        // valor_beneficio: valorBeneficio, // Removido
       },
     });
 
@@ -286,13 +302,21 @@ async function calcSimulacao(req, res) {
       data: salarioAtualizadoEntries,
     });
 
-    // Calcular valor do benefício
-    const valorBeneficio = await calcularValorBeneficio(simulacao.id); // Alterado para usar o ID da simulação criada
+    // Calcular valor da aposentadoria
+    const valorAposentadoria = await calcularValorAposentadoria(simulacao.id);
+    console.log('Valor de Aposentadoria:', valorAposentadoria);
 
-    // Atualizar simulação de benefício com o valor do benefício
+    // Calcular valor do auxílio doença
+    const valorAuxilioDoenca = await calcularValorAuxilioDoenca(simulacao.id);
+    console.log('Valor de Auxílio Doença:', valorAuxilioDoenca);
+
+    // Atualizar simulação de benefício com os valores calculados
     await prisma.SimulacaoBeneficio.update({
       where: { id: simulacao.id },
-      data: { valor_beneficio: valorBeneficio },
+      data: {
+        valor_aposentadoria: valorAposentadoria,
+        valor_auxilio_doenca: valorAuxilioDoenca,
+      },
     });
 
     // Construir resultado final
@@ -308,7 +332,8 @@ async function calcSimulacao(req, res) {
       tempoContribuicaoPendente,
       mesAposentadoria,
       anoAposentadoria,
-      valorBeneficio: isNaN(valorBeneficio) ? 'Valor não apurado' : valorBeneficio,
+      valorAposentadoria: isNaN(valorAposentadoria) ? 'Valor não apurado' : valorAposentadoria,
+      valorAuxilioDoenca: isNaN(valorAuxilioDoenca) ? 'Valor não apurado' : valorAuxilioDoenca,
     };
 
     res.status(200).json({
@@ -318,11 +343,12 @@ async function calcSimulacao(req, res) {
 
   } catch (error) {
     console.error('Erro ao processar a simulação', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Erro ao processar a simulação', 
-      error: error.message });
+    res.status(500).json({
+      success: false,
+      message: 'Erro ao processar a simulação',
+      error: error.message
+    });
   }
 };
 
-export default calcSimulacao
+export default calcSimulacao;

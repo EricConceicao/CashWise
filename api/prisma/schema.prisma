@@ -129,7 +129,8 @@ model SimulacaoBeneficio {
   anoAposentadoria            Int?
   tempo_contribuicao_pendente Int?
   simulacao_beneficio_id      Int?                         @unique
-  valor_beneficio             Decimal?                     @db.Decimal(10, 2)
+  valor_aposentadoria         Decimal?                     @db.Decimal(10, 2)
+  valor_auxilio_doenca        Decimal?                     @db.Decimal(10, 2)
   simulacao_periodo_trabalho  simulacao_periodo_trabalho[]
 }
 enum simulacao_beneficio_genero {
