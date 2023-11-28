@@ -26,8 +26,6 @@ const Sobre = () => {
         <>
             <Header />
             <main className="container-fluid" id='main' style={containerStyle}>
-                <Quiz />
-                <Quiz2 />
                 <Content>
                     <Container className="p-0" id='text'>
                         <div className="jumbotron text-center" id='title' >
