@@ -11,7 +11,7 @@ const Footer = ({ anchor }) => {
             <a className="text-info text-decorarion-underline" href={`#${anchor}`}>Voltar ao Topo</a>
             
             <div>
-                <Nav className="fw-bold gap-2 me-4 justify-content-end text-decoration-underline">
+                <Nav className="fw-bold mt-2 gap-1 justify-content-end text-decoration-underline">
                     <NavLink className="nav-link text-info" to="/sobre">Sobre o CashWise</NavLink>
                     <NavLink className="nav-link text-info" to="/contato">Contate-nos</NavLink>
                 </Nav>
