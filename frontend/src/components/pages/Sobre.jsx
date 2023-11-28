@@ -4,8 +4,8 @@ import Content from '../layouts/Content';
 import Container from 'react-bootstrap/esm/Container';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
-import Quiz from '../layouts/Quiz';
-import Quiz2 from '../layouts/Quiz copy';
+import Quiz from '../layouts/Quiz copy';
+import Quiz2 from '../layouts/Quiz copy1';
 
 const containerStyle = {
     backgroundImage: 'linear-gradient(to bottom, #213740, #5BD992, #AEF2C6)',
@@ -18,7 +18,7 @@ const titleStyle = {
 const cardStyle = {
     min: '12rem',
     max: '20rem',
-    minHeight:'28rem',
+    minHeight: '28rem',
 };
 
 const Sobre = () => {
@@ -26,8 +26,8 @@ const Sobre = () => {
         <>
             <Header />
             <main className="container-fluid" id='main' style={containerStyle}>
-                <Quiz/>
-                <Quiz2/>
+                <Quiz />
+                <Quiz2 />
                 <Content>
                     <Container className="p-0" id='text'>
                         <div className="jumbotron text-center" id='title' >
@@ -54,7 +54,7 @@ const Sobre = () => {
                     <Container fluid id='cardsAlunos' className='row pb-2 justify-content-around'>
                         <div className="col-sm col-md-4 col-lg" >
                             <Card className="card my-3">
-                                <Card.Img style={cardStyle} variant="top" src="/img/redimensionadas/ericArte.jpg"/>
+                                <Card.Img style={cardStyle} variant="top" src="/img/redimensionadas/ericArte.jpg" />
                                 <Card.Body>
                                     <Card.Title>Eric</Card.Title>
                                 </Card.Body>

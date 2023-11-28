@@ -33,7 +33,7 @@ const Prev = () => {
                             <Card border="#213740" style={{ borderWidth: '3px' }}>
                                 <Card.Body>
                                     <Card.Img id='card-img' src="img/previdencia.png" alt="Imagem do artigo Previdência" />
-                                    <Card.Title className='fs-4 p-2'>Previdência Social</Card.Title>
+                                    <Card.Title className='fs-4 p-1 bg-info rounded-3 mb-3' style={{ textAlign: "center" }}>Previdência Social</Card.Title>
                                     <Card.Text className='fs-5 p-3' style={{ textAlign: "justify" }}>
                                         <p className='fs-5'>Previdência Social é um sistema público de seguridade social, onde os trabalhadores contribuem ao longo da vida e, quando se aposentam, recebem benefícios do governo. É uma forma de renda passiva, mas o valor pode ser limitado.</p>
                                     </Card.Text>
@@ -45,7 +45,7 @@ const Prev = () => {
                             <Card border="#213740" style={{ borderWidth: '3px' }}>
                                 <Card.Body>
                                     <Card.Img id='card-img' src="img/prev1.png" alt="Imagem do artigo Previdência" />
-                                    <Card.Title className='fs-4 p-1'>Previdência Privada</Card.Title>
+                                    <Card.Title className='fs-4 p-1 bg-info rounded-3 mb-3' style={{ textAlign: "center" }}>Previdência Privada</Card.Title>
                                     <Card.Text className='fs-5 p-3' style={{ textAlign: "justify" }}>
                                         <p className='fs-5'>Previdência Privada é uma opção voluntária, onde você contribui regularmente para uma instituição financeira, como um banco ou seguradora, para receber benefícios na aposentadoria. Pode ser uma alternativa para complementar a Previdência Social.</p>
 
@@ -59,7 +59,7 @@ const Prev = () => {
                             <Card border="#213740" style={{ borderWidth: '3px' }}>
                                 <Card.Body>
                                     <Card.Img id='card-img' src="img/prev2.png" alt="Imagem do artigo Previdência" />
-                                    <Card.Title className='fs-4 p-2'>Tesouro Renda+ (Tesouro Direto)</Card.Title>
+                                    <Card.Title className='fs-4 p-1 bg-info rounded-3 mb-3' style={{ textAlign: "center" }}>Tesouro Renda+ (Tesouro Direto)</Card.Title>
                                     <Card.Text className='fs-5 p-3' style={{ textAlign: "justify" }}>
                                         <p className='fs-5'>O Tesouro Renda+ é um programa do governo que permite que as pessoas comprem títulos públicos. </p>
                                         <p className='fs-5'>O Tesouro Renda+ é um programa do governo que permite que as pessoas comprem títulos públicos. </p>

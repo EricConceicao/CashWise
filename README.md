@@ -17,7 +17,6 @@ Insere os ícones no bd:
 ```
 npm run insert-icons 
 ```
-
 ### Referência dos comandos
 https://www.prisma.io/docs/guides/migrate/developing-with-prisma-migrate/troubleshooting-development
 

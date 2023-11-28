@@ -27,8 +27,10 @@ import { FaTrashAlt } from "react-icons/fa";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { MdOutlineAddBox } from "react-icons/md";
 import { MdLibraryAdd } from "react-icons/md";
-
 import { FaPiggyBank } from "react-icons/fa";
+import moment from 'moment';
+import { IoMdAddCircle } from "react-icons/io";
+
 
 
 
@@ -38,6 +40,21 @@ import IconShop from '../utils/IconShop';
 
 
 const Home = () => {
+
+	// Mensagem de sucesso
+
+	const [showConfirmation, setShowConfirmation] = useState(false);
+	const [confirmationMessage, setConfirmationMessage] = useState("");
+
+	const showConfirmationMessage = (message) => {
+		setConfirmationMessage(message);
+		setShowConfirmation(true);
+
+		// Defina um temporizador para ocultar a mensagem após alguns segundos (opcional)
+		setTimeout(() => {
+			setShowConfirmation(false);
+		}, 3000); // A mensagem será ocultada após 3 segundos
+	};
 
 
 	//Perfil do usuário
@@ -612,49 +629,77 @@ const Home = () => {
 				const contasOrdenadas = contas.sort((a, b) => a.diaVencimento - b.diaVencimento);
 
 				// Filtrar contas válidas
-				const contasFiltradas = contasOrdenadas.map((conta) => {
+				const contasFiltradas = contasOrdenadas.reduce((acc, conta) => {
 					let vencimento;
 
 					if (conta.recorrencia === 'MENSAL') {
 						// Se a recorrência for "MENSAL", definir vencimento para o diaVencimento/mês corrente/ano corrente
 						let dataAtual = new Date();
 						vencimento = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), conta.diaVencimento);
-						/*console.log("vencimento:", vencimento);
-						console.log("data atual:", dataAtual);*/
 
 						let diaDoMes = dataAtual.getDate();
-						/*console.log(diaDoMes);*/
+
 
 						if ((vencimento < dataAtual) && (conta.diaVencimento != diaDoMes)) {
 							/*console.log(`Ajustando data para o próximo mês para conta ${conta.id}`);*/
 							vencimento.setMonth(vencimento.getMonth() + 1);
 						}
+
+						console.log("eita", vencimento)
+
+						const formatoData = moment(vencimento).format('DD-MM-YYYY');
+						acc.push({
+							...conta,
+							vencimento: formatoData,
+						});
+
 					} else if (conta.recorrencia === 'POR_PERIODO' && conta.periodo) {
 						// Se a recorrência for "POR_PERIODO" e houver um período associado
 						let dataAtual = new Date();
-						const inicioPeriodo = new Date(conta.periodo.inicio);
-						const fimPeriodo = new Date(conta.periodo.fim);
+						let formatoDataAtual = `${dataAtual.getFullYear()}-${(dataAtual.getMonth() + 1).toString().padStart(2, '0')}`;
+						const dataMoment = moment(formatoDataAtual, 'YYYY-MM');
+
+
+						// const inicioPeriodo = new Date(conta.periodo.inicio);
+						// const fimPeriodo = new Date(conta.periodo.fim);
+
+						const inicioPeriodo = moment(conta.periodo.inicio, 'YYYY-MM');
+						const fimPeriodo = moment(conta.periodo.fim, 'YYYY-MM');
+
+
 						let diaDoMes = dataAtual.getDate();
-						if (dataAtual >= inicioPeriodo && dataAtual <= fimPeriodo) {
+						if (dataMoment >= inicioPeriodo && dataMoment <= fimPeriodo) {
 							// Se a data atual estiver dentro do período, definir vencimento
 							vencimento = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), conta.diaVencimento);
+							console.log("aqui", vencimento)
+
+							let hoje = new Date;
+							if ((vencimento < hoje) && (conta.diaVencimento != diaDoMes)) {
+								/*console.log(`Ajustando data para o próximo mês para conta ${conta.id}`);*/
+								vencimento.setMonth(vencimento.getMonth() + 1);
+							}
+
+							const formatoData = moment(vencimento).format('DD-MM-YYYY');
+
+							acc.push({
+								...conta,
+								vencimento: formatoData,
+							});
+
 						}
-						if ((vencimento < dataAtual) && (conta.diaVencimento != diaDoMes)) {
-							/*console.log(`Ajustando data para o próximo mês para conta ${conta.id}`);*/
-							vencimento.setMonth(vencimento.getMonth() + 1);
+
+						else {
+							console.log(`A conta ${conta.id} não está dentro do período e não será adicionada.`);
 						}
+
 					}
 
 					// Formatando a data para "DD-MM-AAAA"
-					const dd = String(vencimento.getDate()).padStart(2, '0');
-					const mm = String(vencimento.getMonth() + 1).padStart(2, '0');
-					const aaaa = vencimento.getFullYear();
 
-					return {
-						...conta,
-						vencimento: `${dd}-${mm}-${aaaa}`,
-					};
-				}).filter(Boolean);
+
+
+					return acc;
+				}, []).filter(Boolean);
 
 				// Ordenar contas filtradas
 				console.log("Contas Filtradas: ", contasFiltradas)
@@ -670,7 +715,7 @@ const Home = () => {
 				});
 				console.log(contasFiltradasOrdenadas);
 
-				setContasAgenda(contasFiltradas);
+				setContasAgenda(contasFiltradasOrdenadas);
 			} catch (error) {
 				console.error('Erro na requisição:', error);
 			}
@@ -679,25 +724,6 @@ const Home = () => {
 		getContasAgenda();
 
 	}, []);
-
-
-	//Adicionar uma nova conta
-	const handleAdicionarNovaConta = () => {
-
-		const novaConta = {
-			descricao: descricaoConta,
-			valor: valorConta,
-			vencimento: vencimentoConta,
-			recorrencia: recorrenciaConta,
-			periodo: {
-				inicio: inicioPeriodoConta,
-				fim: fimPeriodoConta,
-			}
-		}
-
-		setContas([...contas, novaConta]);
-		showConfirmationMessage("Nova conta criada com sucesso!");
-	};
 
 
 	const handleSubmitNovaConta = async (event) => {
@@ -730,27 +756,59 @@ const Home = () => {
 		if (response.ok) {
 			const data = await response.json()
 			alert(data.success)
+			showConfirmationMessage("Nova conta criada com sucesso!");
 			setContas([...contas, data.conta])
+			setContasAgenda((prevContas) => [...prevContas, data.conta]);
 		}
 	}
 
+	const [showModalExcluirConta, setShowModalExcluirConta] = useState(false);
+	const [contaIdParaExcluir, setContaIdParaExcluir] = useState(null);
+
+	const handleExcluirConta = (contaId) => {
+		// Define o ID da conta no estado ou em outro local, se necessário
+		setContaIdParaExcluir(contaId);
+
+		// Abre o modal de confirmação
+		setShowModalExcluirConta(true);
+	};
 
 
-	// Exibir div ao clicar no menu
 
-	const [agendaVisivel, setAgendaVisivel] = useState(false);
+	const handleSubmitExcluirConta = async (event) => {
+		event.preventDefault();
 
-	const abrirdivAgendaFinanceira = () => {
+		if (!contaIdParaExcluir) {
+			console.error('ID da conta não definido.');
+			return;
+		}
 
-		setAgendaVisivel(!agendaVisivel);
-	}
+		try {
+			const response = await fetch(`http://localhost:3000/contas/deletar/${contaIdParaExcluir}`, {
+				method: 'DELETE',
+			});
 
-	const [contasVisivel, setContasVisivel] = useState(false);
+			if (response.ok) {
+				// Atualize o estado ou realize alguma ação após a exclusão bem-sucedida
+				showConfirmationMessage("Conta excluída com sucesso!");
+				setShowModalExcluirConta(false);
+				setContasAgenda((prevContas) => prevContas.filter((conta) => conta.id !== contaIdParaExcluir));
+			} else {
+				// Trate o caso em que a exclusão falhou
+				console.error('Erro ao excluir conta:', response.statusText);
+				// Adicione lógica de tratamento de erro, se necessário
+			}
+		} catch (error) {
+			// Trate qualquer erro que possa ocorrer durante a exclusão
+			console.error('Erro ao excluir conta:', error);
+			// Adicione lógica de tratamento de erro, se necessário
+		}
+	};
 
-	const abrirdivContas = () => {
 
-		setContasVisivel(!contasVisivel);
-	}
+
+
+
 
 	const [categoriasVisivel, setCategoriasVisivel] = useState(false);
 
@@ -775,20 +833,7 @@ const Home = () => {
 
 
 
-	// Mensagem de sucesso
 
-	const [showConfirmation, setShowConfirmation] = useState(false);
-	const [confirmationMessage, setConfirmationMessage] = useState("");
-
-	const showConfirmationMessage = (message) => {
-		setConfirmationMessage(message);
-		setShowConfirmation(true);
-
-		// Defina um temporizador para ocultar a mensagem após alguns segundos (opcional)
-		setTimeout(() => {
-			setShowConfirmation(false);
-		}, 3000); // A mensagem será ocultada após 3 segundos
-	};
 
 
 
@@ -1173,7 +1218,7 @@ const Home = () => {
 						<Container className='menu'>
 							<h1 className='mb-5'>Seu menu</h1>
 							<div className="row cartoes-menu">
-								
+
 								<div className="col text-info">
 									<Button as='button' variant='secondary' className='botao-menu'>
 										<h4>Ganhos</h4>
@@ -1232,7 +1277,35 @@ const Home = () => {
 											<div className="col"><FaRegCalendarAlt className='icone-conta' />{conta.vencimento}</div>
 											<div className="col">Pagar</div>
 											<div className="col"><BsCoin className='icone-conta' />{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>
-											<div className="col-1"><Button variant='outline-info' title='Excluir'><FaTrashAlt /></Button></div>
+											<div className="col-1"><Button variant='outline-info' title='Excluir' onClick={() => handleExcluirConta(conta.id)}><FaTrashAlt /></Button></div>
+
+											<Modal
+												show={showModalExcluirConta}
+												onHide={() => setShowModalExcluirConta(false)}
+												size="md"
+												aria-labelledby="contained-modal-title-vcenter"
+												centered
+											>
+												<Modal.Header closeButton>
+
+												</Modal.Header>
+												<Modal.Body>
+													<Form onSubmit={handleSubmitExcluirConta}>
+														Tem certeza que quer excluir essa despesa?
+														<br />
+														<br />
+														<Button as='button' type='submit' variant="secondary">
+															Excluir
+														</Button>
+													</Form>
+												</Modal.Body>
+												{showConfirmation && (
+													<div className="alert alert-success alert-custom" role="alert">
+														{confirmationMessage}
+													</div>
+												)}
+											</Modal>
+
 										</div>
 									))}
 
@@ -1244,107 +1317,108 @@ const Home = () => {
 										<FaPiggyBank className='moeda' />
 										Nova Despesa
 									</div>
-									<div className="linha col"></div>
-									<div className="linha col"></div>
-									<div className="linha col"></div>
-									<div className="linha col-1">
-										<Button as="button" variant="outline-info" title='Criar' onClick={() => setShowModalContas(true)}><MdLibraryAdd className=''/>
+									<div className="col"></div>
+									<div className="col"></div>
+									<div className="col"></div>
+									<div className="col-1">
+										<Button as="button" variant="outline-info" title='Criar' onClick={() => setShowModalContas(true)}className='border-'><IoMdAddCircle className='icone-conta'/>
 										</Button>
-										<Modal
-											show={showModalContas}
-											onHide={() => setShowModalContas(false)}
-											size="md"
-											aria-labelledby="contained-modal-title-vcenter"
-											centered
-										>
-											<Modal.Header closeButton>
-												<Modal.Title id="contained-modal-title-vcenter">Nova despesa</Modal.Title>
-											</Modal.Header>
-											<Modal.Body>
-												<Form onSubmit={handleSubmitNovaConta}>
+									</div>
+									<Modal
+										show={showModalContas}
+										onHide={() => setShowModalContas(false)}
+										size="md"
+										aria-labelledby="contained-modal-title-vcenter"
+										centered
+									>
+										<Modal.Header closeButton>
+											<Modal.Title id="contained-modal-title-vcenter">Nova despesa</Modal.Title>
+										</Modal.Header>
+										<Modal.Body>
+											<Form onSubmit={handleSubmitNovaConta}>
 
-													<Form.Group className="mb-3">
-														<Form.Label>Descrição</Form.Label>
-														<Form.Control
-															type="text"
-															name='descricao'
-															value={descricaoConta}
-															onChange={(e) => setDescricaoConta(e.target.value)}
+												<Form.Group className="mb-3">
+													<Form.Label>Descrição</Form.Label>
+													<Form.Control
+														type="text"
+														name='descricao'
+														value={descricaoConta}
+														onChange={(e) => setDescricaoConta(e.target.value)}
 
-														/>
-													</Form.Group>
+													/>
+												</Form.Group>
 
-													<Form.Group className="mb-3">
-														<Form.Label>Valor</Form.Label>
-														<div className="input-group">
-															<span className="input-group-text">R$</span>
-															<Form.Control
-																type="number"
-																step="0.01"  // Permita valores fracionados com duas casas decimais
-																name='valor'
-																value={valorConta}
-																onChange={(e) => setValorConta(e.target.value)}
-															/>
-														</div>
-													</Form.Group>
-
-													<Form.Group className="mb-3">
-														<Form.Label>Dia de vencimento</Form.Label>
+												<Form.Group className="mb-3">
+													<Form.Label>Valor</Form.Label>
+													<div className="input-group">
+														<span className="input-group-text">R$</span>
 														<Form.Control
 															type="number"
-															name='vencimento'
-															value={vencimentoConta}
-															onChange={(e) => setVencimentoConta(e.target.value)}
+															step="0.01"  // Permita valores fracionados com duas casas decimais
+															name='valor'
+															value={valorConta}
+															onChange={(e) => setValorConta(e.target.value)}
 														/>
-													</Form.Group>
+													</div>
+												</Form.Group>
 
-													<Form.Group className="mb-3">
-														<Form.Label>Recorrência</Form.Label>
-														<Form.Select
-															name='recorrencia'
-															value={recorrenciaConta}
-															onChange={(e) => setRecorrenciaConta(e.target.value)}
-														>
-															<option value="MENSAL">Mensal</option>
-															<option value="POR_PERIODO">Por Período</option>
-														</Form.Select>
-													</Form.Group>
+												<Form.Group className="mb-3">
+													<Form.Label>Dia de vencimento</Form.Label>
+													<Form.Control
+														type="number"
+														name='vencimento'
+														value={vencimentoConta}
+														onChange={(e) => setVencimentoConta(e.target.value)}
+													/>
+												</Form.Group>
 
-													{recorrenciaConta === 'POR_PERIODO' && (
-														<>
-															<Form.Group className="mb-3">
-																<Form.Label>Início do Período</Form.Label>
-																<Form.Control
-																	type="month"
-																	name='inicioPeriodo'
-																	value={inicioPeriodoConta}
-																	onChange={(e) => setInicioPeriodoConta(e.target.value)}
-																/>
-															</Form.Group>
+												<Form.Group className="mb-3">
+													<Form.Label>Recorrência</Form.Label>
+													<Form.Select
+														name='recorrencia'
+														value={recorrenciaConta}
+														onChange={(e) => setRecorrenciaConta(e.target.value)}
+													>
+														<option value="MENSAL">Mensal</option>
+														<option value="POR_PERIODO">Por Período</option>
+													</Form.Select>
+												</Form.Group>
 
-															<Form.Group className="mb-3">
-																<Form.Label>Fim do Período</Form.Label>
-																<Form.Control
-																	type="month"
-																	name='fimPeriodo'
-																	value={fimPeriodoConta}
-																	onChange={(e) => setFimPeriodoConta(e.target.value)}
-																/>
-															</Form.Group>
-														</>
-													)}
-													<Button as='button' type='submit' variant="secondary" onClick={handleAdicionarNovaConta}>
-														Criar
-													</Button>
-												</Form>
-											</Modal.Body>
-											{showConfirmation && (
-												<div className="alert alert-success alert-custom" role="alert">
-													{confirmationMessage}
-												</div>
-											)}
-										</Modal>
-									</div>
+												{recorrenciaConta === 'POR_PERIODO' && (
+													<>
+														<Form.Group className="mb-3">
+															<Form.Label>Início do Período</Form.Label>
+															<Form.Control
+																type="month"
+																name='inicioPeriodo'
+																value={inicioPeriodoConta}
+																onChange={(e) => setInicioPeriodoConta(e.target.value)}
+															/>
+														</Form.Group>
+
+														<Form.Group className="mb-3">
+															<Form.Label>Fim do Período</Form.Label>
+															<Form.Control
+																type="month"
+																name='fimPeriodo'
+																value={fimPeriodoConta}
+																onChange={(e) => setFimPeriodoConta(e.target.value)}
+															/>
+														</Form.Group>
+													</>
+												)}
+												<Button as='button' type='submit' variant="secondary">
+													Criar
+												</Button>
+											</Form>
+										</Modal.Body>
+										{showConfirmation && (
+											<div className="alert alert-success alert-custom" role="alert">
+												{confirmationMessage}
+											</div>
+										)}
+									</Modal>
+
 
 								</div>
 							</div>
