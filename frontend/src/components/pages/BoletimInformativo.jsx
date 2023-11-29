@@ -7,12 +7,14 @@ const BoletimInformativo = () => {
 
   
   const cardBody = {
-    minHeight: "30rem",
+    minHeight: "40rem",
+    maxHeight: "40rem",
     borderWidth: '3px',
   }
 
   const cardImg = {
-    maxHeight: "16rem"  
+    maxHeight: "24rem",
+    minHeight: "24rem"  
    
   }
 
@@ -36,8 +38,8 @@ const BoletimInformativo = () => {
               <Card style={cardBody}>
                 <Card.Img className="" style={cardImg} src="/img/poupanca.png" alt="Imagem do artigo poupança" />
                 <Card.Body className={cardBody}>
-                  <Card.Title>Poupança</Card.Title>
-                  <Card.Text>Conheça as vantagens e desvantagens de um dos investimentos mais tradicionais.</Card.Text>
+                  <Card.Title className='fs-3 fw-bold' style={{ textAlign: "center" }}>Poupança</Card.Title>
+                  <Card.Text style={{ textAlign: "center" }}>Conheça as vantagens e desvantagens de um dos investimentos mais tradicionais.</Card.Text>
                   <Button variant="outline-success mt-4"><Link to="/poupanca"  style={{textDecoration: 'none', color: '#213740'}}>Leia Mais</Link></Button>
                 </Card.Body>
               </Card>
@@ -45,10 +47,10 @@ const BoletimInformativo = () => {
 
             <Col lg={4} md={6} className="mb-4">
               <Card style={cardBody}>
-                <Card.Img className="mb-3" style={cardImg} src="img/investimentos.png" alt="Imagem do artigo tipos de investimentos" />
+                <Card.Img style={cardImg} src="img/investimento.png" alt="Imagem do artigo tipos de investimentos" />
                 <Card.Body className={cardBody}>
-                  <Card.Title>Principais Tipos de Investimentos</Card.Title>
-                  <Card.Text>Conheça os principais investimentos para compreender a diversidade de risco e retorno.</Card.Text>
+                  <Card.Title className='fs-3 fw-bold' style={{ textAlign: "center" }}>Principais Tipos de Investimentos</Card.Title>
+                  <Card.Text style={{ textAlign: "center" }}>Conheça os principais investimentos para compreender a diversidade de risco e retorno.</Card.Text>
                   <Button variant="outline-success mt-4"><Link to="/investimentos" style={{textDecoration: 'none', color: '#213740'}}>Leia Mais</Link></Button>
                 </Card.Body>
               </Card>
@@ -58,8 +60,8 @@ const BoletimInformativo = () => {
               <Card style={cardBody}>
                 <Card.Img style={cardImg} src="/img/financas.png" alt="Imagem do artigo investimento para todos" />
                 <Card.Body className={cardBody}>
-                  <Card.Title>Investimentos para Todos</Card.Title>
-                  <Card.Text>Desmistificando conceitos financeiros essenciais para facilitar a compreensão do universo das finanças.</Card.Text>
+                  <Card.Title className='fs-3 fw-bold' style={{ textAlign: "center" }}>Investimentos para Todos</Card.Title>
+                  <Card.Text style={{ textAlign: "center" }}>Desmistificando conceitos financeiros essenciais para facilitar a compreensão do universo das finanças.</Card.Text>
                   <Button variant="outline-success mt-4"><Link to="/investodos"  style={{textDecoration: 'none', color: '#213740'}}>Leia Mais</Link></Button>
                 </Card.Body>
               </Card>
@@ -69,8 +71,8 @@ const BoletimInformativo = () => {
               <Card style={cardBody}>
                 <Card.Img style={cardImg} src="/img/previdencia.png" alt="Imagem do artigo investimento para todos" />
                 <Card.Body className={cardBody}>
-                  <Card.Title>Previdência</Card.Title>
-                  <Card.Text>Construindo bases sólidas para um futuro financeiramente seguro e próspero, realizando seus objetivos com tranquilidade e estabilidade.</Card.Text>
+                  <Card.Title className='fs-3 fw-bold' style={{ textAlign: "center" }}>Previdência</Card.Title>
+                  <Card.Text style={{ textAlign: "center" }}>Construindo bases sólidas para um futuro financeiramente seguro e próspero, realizando seus objetivos com tranquilidade e estabilidade.</Card.Text>
                   <Button variant="outline-success mt-2"><Link to="/prev"  style={{textDecoration: 'none', color: '#213740'}}>Leia Mais</Link></Button>
                 </Card.Body>
               </Card>
@@ -80,8 +82,8 @@ const BoletimInformativo = () => {
               <Card style={cardBody}>
                 <Card.Img style={cardImg} src="/img/edu.png" alt="Imagem do artigo Educação Financeira" />
                 <Card.Body className={cardBody}>
-                  <Card.Title>Educação financeira</Card.Title>
-                  <Card.Text>Aprender a gerenciar seu dinheiro é o primeiro passo para conquistar a liberdade financeira.</Card.Text>
+                  <Card.Title className='fs-3 fw-bold' style={{ textAlign: "center" }}>Educação financeira</Card.Title>
+                  <Card.Text style={{ textAlign: "center" }}>Aprender a gerenciar seu dinheiro é o primeiro passo para conquistar a liberdade financeira.</Card.Text>
                   <Button variant="outline-success mt-4"><Link to="/educacao"  style={{textDecoration: 'none', color: '#213740'}}>Leia Mais</Link></Button>
                 </Card.Body>
               </Card>
@@ -92,8 +94,8 @@ const BoletimInformativo = () => {
               <Card style={cardBody}>
                 <Card.Img style={cardImg} src="/img/dicas.png" alt="Imagem do artigo Educação Financeira" />
                 <Card.Body className={cardBody}>
-                  <Card.Title>Dicas</Card.Title>
-                  <Card.Text>Ideias práticas e inteligentes para organizar suas finanças de maneira simples e eficaz, proporcionando controle sobre seu dinheiro.</Card.Text>
+                  <Card.Title className='fs-3 fw-bold' style={{ textAlign: "center" }}>Dicas</Card.Title>
+                  <Card.Text style={{ textAlign: "center" }}>Ideias práticas e inteligentes para organizar suas finanças de maneira simples e eficaz, proporcionando controle sobre seu dinheiro.</Card.Text>
                   <Button variant="outline-success mt-4"><Link to="/dicas"  style={{textDecoration: 'none', color: '#213740'}}>Leia Mais</Link></Button>
                 </Card.Body>
               </Card>
