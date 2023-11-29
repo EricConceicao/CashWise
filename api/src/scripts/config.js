@@ -406,7 +406,6 @@ try {
 			{ mes_ano: '2023-05', indice: 1.003600 },
 		]
 	});
-
 	if (success) {
 		console.log("Dados de atualização monetária inseridos: ", atualizacao.count);
 	} else {
