@@ -69,8 +69,8 @@ h1 {
 }
 
 .icone-conta {
-    width: 25px;
-    height: 25px;
+    width: 27px;
+    height: 27px;
 }
 
 h3,
@@ -185,7 +185,8 @@ h5 {
 
 .menu,
 .categorias,
-.contas, .relatorio {
+.contas,
+.relatorio {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -251,12 +252,12 @@ h5 {
     border-bottom: 4px solid orange;
     display: flex;
     flex-direction: column;
-    
+
 }
 
 .painel h1 {
-    font-weight: lighter;   
-    letter-spacing: 0.5px; 
+    font-weight: lighter;
+    letter-spacing: 0.5px;
     color: orange;
     text-align: center;
 }
@@ -290,7 +291,7 @@ h5 {
 
 .tabela .titulo {
     border-radius: 5px;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);    
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     margin-bottom: 10px;
     font-size: 17px;
 }
@@ -298,7 +299,7 @@ h5 {
 .pagar {
     border-radius: 5px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    font-weight: lighter;        
+    font-weight: lighter;
     align-items: center;
     margin-bottom: 10px;
     font-size: 17px;
@@ -323,7 +324,9 @@ h5 {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
-.pagar .col, .pagar .nova-despesa {
+.pagar .col,
+.pagar .nova-despesa,
+.pagar .col p {
     display: flex;
     align-items: center;
     gap: 9px;
@@ -381,7 +384,38 @@ h5 {
     width: 150px;
     text-align: center;
     font-weight: lighter;
-    padding: 10px;    
+    padding: 10px;
     border-radius: 5px;
 }
+
+.yellow {
+    background-color: rgba(255, 166, 0, 0.763);
+    border-radius: 10px;
+    padding: 1px 5px;
+    width: 150px;
+    /* font-style: oblique; */
+}
+
+.red {
+    background-color: red;
+    border-radius: 10px;
+    padding: 1px 5px;
+    width: 150px;
+    /* font-style: oblique; */
+}
+
+.green {
+    background-color: green;
+    border-radius: 10px;
+    padding: 1px 5px;
+    width: 150px;
+    /* font-style: oblique; */
+}
+
+.pagar span {
+    text-align: center;
+}
+
+
+
 /* Fim para estilo da Home */

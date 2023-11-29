@@ -30,6 +30,15 @@ import { MdLibraryAdd } from "react-icons/md";
 import { FaPiggyBank } from "react-icons/fa";
 import moment from 'moment';
 import { IoMdAddCircle } from "react-icons/io";
+import { MdOutlineUpdate } from "react-icons/md";
+import { IoCalendarOutline } from "react-icons/io5";
+import { CiBullhorn } from "react-icons/ci";
+import { CiDollar } from "react-icons/ci";
+import { CiCalendar } from "react-icons/ci";
+import { CiBag1 } from "react-icons/ci";
+
+
+
 
 
 
@@ -758,9 +767,9 @@ const Home = () => {
 
 		if (response.ok) {
 			const data = await response.json()
-			alert(data.success)
+			/*alert(data.success)*/
 			showConfirmationMessage("Nova conta criada com sucesso!");
-			console.log("veja",data.conta)
+			console.log("veja", data.conta)
 			setContas([...contas, data.conta])
 			setContasAgenda([...contasAgenda, data.conta]);
 		}
@@ -771,14 +780,33 @@ const Home = () => {
 	const calcularDiasRestantes = (dataVencimento) => {
 		const dataAtual = moment();
 		const dataVencimentoFormatada = moment(dataVencimento, 'DD-MM-YYYY');
-	  
+
 		// Calcula a diferença em dias
 		const diasRestantes = dataVencimentoFormatada.diff(dataAtual, 'days');
-		console.log("faltam",diasRestantes)
-	  
-		return diasRestantes;
-	  };
-	
+		console.log("faltam", diasRestantes)
+
+		let mensagem = '';
+		let corFundo = '';
+
+		if (diasRestantes === 0) {
+			mensagem = 'Vence hoje!';
+			corFundo = 'red';
+		} else if (diasRestantes === 1) {
+			mensagem = 'Vence amanhã!';
+			corFundo = 'red';
+		}
+		else if (diasRestantes >= 2 && diasRestantes <= 5) {
+			mensagem = `Vence em ${diasRestantes} dias!`;
+			corFundo = 'yellow';
+		}
+		else {
+			mensagem = 'Fique tranquilo!';
+			corFundo = 'green'
+		}
+
+		return { mensagem, corFundo };
+	};
+
 
 
 	const [showModalExcluirConta, setShowModalExcluirConta] = useState(false);
@@ -813,7 +841,7 @@ const Home = () => {
 				setTimeout(() => {
 					setShowModalExcluirConta(false);
 				}, 2000);
-				
+
 				setContasAgenda((prevContas) => prevContas.filter((conta) => conta.id !== contaIdParaExcluir));
 			} else {
 				// Trate o caso em que a exclusão falhou
@@ -1290,48 +1318,61 @@ const Home = () => {
 								</div>
 
 								<div>
+									{contasAgenda.map((conta) => {
+										const { mensagem, corFundo } = calcularDiasRestantes(conta.vencimento);
 
+										return (
+											<div key={conta.id} className='pagar row pt-3 pb-3'>
+												<div className="descricao-conta col fw-bold">
+													<FaPiggyBank className='moeda' />
+													{conta.descricao}
+												</div>
+												<div className="col">
+													<CiCalendar className='icone-conta' />
+													{conta.vencimento}
+												</div>
+												<div className="col"><CiBullhorn className='icone-conta' /><span className={`${corFundo}`}>{mensagem}</span>
 
-									{contasAgenda.map((conta) => (
-										<div key={conta.id} className='pagar row pt-3 pb-3'>
+												</div>
+												<div className="col">
+													<CiBag1 className='icone-conta' />
+													{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+												</div>
+												<div className="col-1">
+													<Button variant='outline-info' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
+														<FaTrashAlt />
+													</Button>
+												</div>
 
-											<div className="descricao-conta col fw-bold"><FaPiggyBank className='moeda' />{conta.descricao}</div>
-											<div className="col"><FaRegCalendarAlt className='icone-conta' />{conta.vencimento}</div>
-											<div className="col"> Vence em {calcularDiasRestantes(conta.vencimento)} dias</div>
-											<div className="col"><BsCoin className='icone-conta' />{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>
-											<div className="col-1"><Button variant='outline-info' title='Excluir' onClick={() => handleExcluirConta(conta.id)}><FaTrashAlt /></Button></div>
-
-											<Modal
-												show={showModalExcluirConta}
-												onHide={() => setShowModalExcluirConta(false)}
-												size="md"
-												aria-labelledby="contained-modal-title-vcenter"
-												centered
-											>
-												<Modal.Header closeButton>
-
-												</Modal.Header>
-												<Modal.Body>
-													<Form onSubmit={handleSubmitExcluirConta}>
-														Tem certeza que quer excluir essa despesa?
-														<br />
-														<br />
-														<Button as='button' type='submit' variant="secondary">
-															Excluir
-														</Button>
-													</Form>
-												</Modal.Body>
-												{showConfirmation && (
-													<div className="alert alert-success alert-custom" role="alert">
-														{confirmationMessage}
-													</div>
-												)}
-											</Modal>
-
-										</div>
-									))}
-
+												<Modal
+													show={showModalExcluirConta}
+													onHide={() => setShowModalExcluirConta(false)}
+													size="md"
+													aria-labelledby="contained-modal-title-vcenter"
+													centered
+												>
+													<Modal.Header closeButton></Modal.Header>
+													<Modal.Body>
+														<Form onSubmit={handleSubmitExcluirConta}>
+															Tem certeza que quer excluir essa despesa?
+															<br />
+															<br />
+															<Button as='button' type='submit' variant="secondary">
+																Excluir
+															</Button>
+														</Form>
+													</Modal.Body>
+													{showConfirmation && (
+														<div className="alert alert-success alert-custom" role="alert">
+															{confirmationMessage}
+														</div>
+													)}
+												</Modal>
+											</div>
+										);
+									})}
 								</div>
+
 
 								<div className="pagar row pt-3 pb-3 border border-3">
 
@@ -1343,7 +1384,7 @@ const Home = () => {
 									<div className="col"></div>
 									<div className="col"></div>
 									<div className="col-1">
-										<Button as="button" variant="outline-info" title='Criar' onClick={() => setShowModalContas(true)} className='border-'><IoMdAddCircle className='icone-conta' />
+										<Button as="button" variant="outline-info" title='Criar' onClick={() => setShowModalContas(true)} className='mais'><IoMdAddCircle className='icone-conta' />
 										</Button>
 									</div>
 									<Modal
