@@ -245,20 +245,19 @@ h5 {
     align-items: center;
 }
 
-.painel {
+.painel, .relatorio {
     border-radius: 5px;
     padding: 50px 70px 30px 70px;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    border-bottom: 4px solid orange;
+    border-bottom: 4px solid #fff;
     display: flex;
     flex-direction: column;
 
 }
 
-.painel h1 {
-    font-weight: lighter;
-    letter-spacing: 0.5px;
-    color: orange;
+.painel h1, .relatorio h1 {
+    
+    color: #fff;
     text-align: center;
 }
 
@@ -310,12 +309,6 @@ h5 {
     color: #fff;
     font-weight: bold;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.pagar:hover button {
-    color: orange;
-    border: none;
-    background-color: #fff;
 }
 
 .pagar:hover .moeda {
@@ -420,6 +413,16 @@ h5 {
     text-align: center;
 }
 
+.pagar button {
+    width: 35px;
+    border: none;
+    background-color: transparent;
+}
+
+.pagar:hover button {
+    color: #fff;
+    border: none;
+}
 
 
 /* Fim para estilo da Home */

@@ -813,36 +813,38 @@ const Home = () => {
 
 	const calcularDiasRestantes = (dataVencimento) => {
 		const dataAtual = new Date();
+		console.log('dados:  ',dataVencimento)
 		const partesDataVencimento = dataVencimento.split('-');
+		console.log(partesDataVencimento)
 		const dataVencimentoFormatada = new Date(partesDataVencimento[2], partesDataVencimento[1] - 1, partesDataVencimento[0]);
-	  
+
 		// Calcula a diferença em dias
 		const umDiaEmMilissegundos = 24 * 60 * 60 * 1000; // Número de milissegundos em um dia
 		const diferencaEmMilissegundos = dataVencimentoFormatada - dataAtual;
 		const diasRestantes = Math.ceil(diferencaEmMilissegundos / umDiaEmMilissegundos);
-	  
+
 		console.log("faltam", diasRestantes);
-	  
+
 		let mensagem = '';
 		let corFundo = '';
-	  
+
 		if (diasRestantes === 0) {
-		  mensagem = 'Vence hoje!';
-		  corFundo = 'red';
+			mensagem = 'Vence hoje!';
+			corFundo = 'bg-danger red';
 		} else if (diasRestantes === 1) {
-		  mensagem = 'Vence amanhã!';
-		  corFundo = 'red';
+			mensagem = 'Vence amanhã!';
+			corFundo = 'bg-danger red';
 		} else if (diasRestantes >= 2 && diasRestantes <= 5) {
-		  mensagem = `Vence em ${diasRestantes} dias!`;
-		  corFundo = 'yellow';
+			mensagem = `Vence em ${diasRestantes} dias!`;
+			corFundo = 'bg-warning yellow';
 		} else {
-		  mensagem = 'Fique tranquilo!';
-		  corFundo = 'green';
+			mensagem = 'Fique tranquilo!';
+			corFundo = 'green';
 		}
-	  
+
 		return { mensagem, corFundo };
-	  };
-	  
+	};
+
 
 
 
@@ -1327,12 +1329,12 @@ const Home = () => {
 										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
 									</Button>
 								</div>
-								<div className="col text-info">
+								{/* <div className="col text-info">
 									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivRelatorio}>
 										<h4>Relatório</h4>
 										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
 									</Button>
-								</div>
+								</div> */}
 							</div>
 
 						</Container>
@@ -1345,12 +1347,12 @@ const Home = () => {
 
 							<div className="tabela pt-5 pb-5">
 								<div className="bg-secondary titulo row pt-4 pb-4">
-									<div className="linha col-1"></div>
+
 									<div className="linha col">Descrição</div>
 									<div className="linha col">Vencimento</div>
 									<div className="linha col">Status</div>
 									<div className="linha col">Valor</div>
-									<div className="linha col">Ação</div>
+									<div className="linha col-1">Ação</div>
 
 								</div>
 
@@ -1360,7 +1362,7 @@ const Home = () => {
 
 										return (
 											<div key={conta.id} className='pagar row pt-3 pb-3'>
-												<div className="col-1"></div>
+
 												<div className="descricao-conta col fw-bold">
 													<FaPiggyBank className='moeda' />
 													{conta.descricao}
@@ -1377,9 +1379,9 @@ const Home = () => {
 													<CiBag1 className='icone-conta' />
 													{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
 												</div>
-												<div className="col">
-													<Button as='button' variant='outline-info' title='Editar'><MdEdit /></Button>
-													<Button as='button' variant='outline-info' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
+												<div className="col-1">
+													<Button as='button' variant='outline-info' className='bg-transparent' title='Editar'><MdEdit /></Button>
+													<Button as='button' variant='outline-info' className='bg-transparent' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
 														<FaTrashAlt />
 													</Button>
 												</div>
@@ -1413,7 +1415,7 @@ const Home = () => {
 									})}
 								</div>
 
-
+								<br />
 								<div className="pagar row pt-3 pb-3 border border-3">
 
 									<div className="linha col nova-despesa">
@@ -1876,26 +1878,29 @@ const Home = () => {
 						{/* Fim de Fontes de Receita */}
 
 						{/* Início de Relatório*/}
-						{/*
-						<div className={`${relatorioVisivel ? 'visivel' : 'oculto'}`}>
-							<Container className='relatorio'>
+
+
+						{/* className={`${relatorioVisivel ? 'visivel' : 'oculto'}`} */}
+						<Container className='relatorio'>
+							<div >
 								<h1>Relatório</h1>
 								<p className='text-primary'><i>Selecione o mês e o ano para obter um resumo dos valores totais dos seus gastos e ganhos no período escolhido.</i></p>
 								<Form>
 									<Form.Group className="mb-3">
-										<Form.Label>Mês/Ano</Form.Label>
+										<Form.Label><h4>Mês/Ano</h4></Form.Label>
 										<Form.Control
 											type="month"
 											name="mes"
-											value={descricao}
 											onChange={(e) => setDescricao(e.target.value)}
-											className="border border-primary"
+											className="bg-secondary text-info"
 										/>
 									</Form.Group>
+									<Button as='button' type='submit' variant='outline-primary' size='sm'>Consultar</Button>
 								</Form>
-							</Container>
-						</div>
-												*/}
+							</div>
+						</Container>
+
+
 						{/* Fim de Relatório*/}
 
 
