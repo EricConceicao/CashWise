@@ -389,7 +389,7 @@ h5 {
 }
 
 .yellow {
-    background-color: rgba(255, 166, 0, 0.763);
+    background-color:#d29e00;
     border-radius: 10px;
     padding: 1px 5px;
     width: 150px;
@@ -402,6 +402,10 @@ h5 {
     padding: 1px 5px;
     width: 150px;
     /* font-style: oblique; */
+    /* display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px; */
 }
 
 .green {

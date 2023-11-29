@@ -36,6 +36,8 @@ import { CiBullhorn } from "react-icons/ci";
 import { CiDollar } from "react-icons/ci";
 import { CiCalendar } from "react-icons/ci";
 import { CiBag1 } from "react-icons/ci";
+import { MdEdit } from "react-icons/md";
+
 
 
 
@@ -777,13 +779,15 @@ const Home = () => {
 
 
 	// Adicione esta função ao seu componente
-	const calcularDiasRestantes = (dataVencimento) => {
+	/*const calcularDiasRestantes = (dataVencimento) => {
 		const dataAtual = moment();
 		const dataVencimentoFormatada = moment(dataVencimento, 'DD-MM-YYYY');
 
 		// Calcula a diferença em dias
 		const diasRestantes = dataVencimentoFormatada.diff(dataAtual, 'days');
 		console.log("faltam", diasRestantes)
+		console.log("data atual",dataAtual)
+		console.log("dataVencimentoFormatada",dataVencimentoFormatada)
 
 		let mensagem = '';
 		let corFundo = '';
@@ -805,7 +809,40 @@ const Home = () => {
 		}
 
 		return { mensagem, corFundo };
-	};
+	};*/
+
+	const calcularDiasRestantes = (dataVencimento) => {
+		const dataAtual = new Date();
+		const partesDataVencimento = dataVencimento.split('-');
+		const dataVencimentoFormatada = new Date(partesDataVencimento[2], partesDataVencimento[1] - 1, partesDataVencimento[0]);
+	  
+		// Calcula a diferença em dias
+		const umDiaEmMilissegundos = 24 * 60 * 60 * 1000; // Número de milissegundos em um dia
+		const diferencaEmMilissegundos = dataVencimentoFormatada - dataAtual;
+		const diasRestantes = Math.ceil(diferencaEmMilissegundos / umDiaEmMilissegundos);
+	  
+		console.log("faltam", diasRestantes);
+	  
+		let mensagem = '';
+		let corFundo = '';
+	  
+		if (diasRestantes === 0) {
+		  mensagem = 'Vence hoje!';
+		  corFundo = 'red';
+		} else if (diasRestantes === 1) {
+		  mensagem = 'Vence amanhã!';
+		  corFundo = 'red';
+		} else if (diasRestantes >= 2 && diasRestantes <= 5) {
+		  mensagem = `Vence em ${diasRestantes} dias!`;
+		  corFundo = 'yellow';
+		} else {
+		  mensagem = 'Fique tranquilo!';
+		  corFundo = 'green';
+		}
+	  
+		return { mensagem, corFundo };
+	  };
+	  
 
 
 
@@ -1308,12 +1345,12 @@ const Home = () => {
 
 							<div className="tabela pt-5 pb-5">
 								<div className="bg-secondary titulo row pt-4 pb-4">
-
+									<div className="linha col-1"></div>
 									<div className="linha col">Descrição</div>
 									<div className="linha col">Vencimento</div>
 									<div className="linha col">Status</div>
 									<div className="linha col">Valor</div>
-									<div className="linha col-1">Ação</div>
+									<div className="linha col">Ação</div>
 
 								</div>
 
@@ -1323,6 +1360,7 @@ const Home = () => {
 
 										return (
 											<div key={conta.id} className='pagar row pt-3 pb-3'>
+												<div className="col-1"></div>
 												<div className="descricao-conta col fw-bold">
 													<FaPiggyBank className='moeda' />
 													{conta.descricao}
@@ -1331,15 +1369,17 @@ const Home = () => {
 													<CiCalendar className='icone-conta' />
 													{conta.vencimento}
 												</div>
-												<div className="col"><CiBullhorn className='icone-conta' /><span className={`${corFundo}`}>{mensagem}</span>
+												<div className="col"><span className={`${corFundo}`}>{mensagem}</span>
 
 												</div>
+												{/* <CiBullhorn className='icone-conta' /> */}
 												<div className="col">
 													<CiBag1 className='icone-conta' />
 													{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
 												</div>
-												<div className="col-1">
-													<Button variant='outline-info' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
+												<div className="col">
+													<Button as='button' variant='outline-info' title='Editar'><MdEdit /></Button>
+													<Button as='button' variant='outline-info' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
 														<FaTrashAlt />
 													</Button>
 												</div>
