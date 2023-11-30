@@ -1596,7 +1596,7 @@ const Home = () => {
 									{categorias.map((categoria, index) => (
 										<div className="cartao-categoria" key={index}>
 											<div className="categoria">
-												<p className="fw-bold fs-5">{categoria}</p>
+												<h4 className="fs-5">{categoria}</h4>
 												<p className='valor-categoria bg-secondary'>
 													{" "}
 													{gastosPorCategoria[categoria]
