@@ -424,5 +424,12 @@ h5 {
     border: none;
 }
 
+.form-relatorio, .data-relatorio {
+    display: flex;
+    align-items: first baseline;
+    justify-content: center;
+    gap: 20px;
+}
+
 
 /* Fim para estilo da Home */

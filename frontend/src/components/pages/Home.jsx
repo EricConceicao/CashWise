@@ -37,7 +37,13 @@ import { CiDollar } from "react-icons/ci";
 import { CiCalendar } from "react-icons/ci";
 import { CiBag1 } from "react-icons/ci";
 import { MdEdit } from "react-icons/md";
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { registerLocale } from 'react-datepicker';
+import pt from 'date-fns/locale/pt'; 
+registerLocale('pt', pt);
+import React, { useRef } from 'react';
+import InputComIcone from '../utils/InputComIcone';
 
 
 
@@ -813,7 +819,7 @@ const Home = () => {
 
 	const calcularDiasRestantes = (dataVencimento) => {
 		const dataAtual = new Date();
-		console.log('dados:  ',dataVencimento)
+		console.log('dados:  ', dataVencimento)
 		const partesDataVencimento = dataVencimento.split('-');
 		console.log(partesDataVencimento)
 		const dataVencimentoFormatada = new Date(partesDataVencimento[2], partesDataVencimento[1] - 1, partesDataVencimento[0]);
@@ -919,14 +925,9 @@ const Home = () => {
 		setRelatorioVisivel(!relatorioVisivel);
 	}
 
+	const [data, setData] = useState(null);
 
-
-
-
-
-
-
-
+	const inputRef = useRef();
 
 
 
@@ -1308,12 +1309,6 @@ const Home = () => {
 							<h1 className='mb-5'>Seu menu</h1>
 							<div className="row cartoes-menu">
 
-								<div className="col text-info">
-									<Button as='button' variant='secondary' className='botao-menu'>
-										<h4>Ganhos</h4>
-										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
-									</Button>
-								</div>
 								<div className="col text-info">
 									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivCategorias}>
 										<h4>Gastos por Categoria</h4>
@@ -1884,18 +1879,30 @@ const Home = () => {
 						<Container className='relatorio'>
 							<div >
 								<h1>Relatório</h1>
-								<p className='text-primary'><i>Selecione o mês e o ano para obter um resumo dos valores totais dos seus gastos e ganhos no período escolhido.</i></p>
+								<hr className='text-info'/>
+								<p className='text-primary'><i>Selecione o mês e o ano e clique em "consultar" para obter um resumo dos valores totais dos seus gastos e ganhos.</i></p>
+								<br />
 								<Form>
-									<Form.Group className="mb-3">
+									<div className="form-relatorio">
+									<Form.Group className="mb-3 data-relatorio">
 										<Form.Label><h4>Mês/Ano</h4></Form.Label>
-										<Form.Control
+										{/* <Form.Control
 											type="month"
 											name="mes"
 											onChange={(e) => setDescricao(e.target.value)}
 											className="bg-secondary text-info"
+										/> */}
+										<DatePicker
+											selected={data}
+											onChange={(date) => setData(date)}
+											showMonthYearPicker
+											dateFormat="MM/yyyy"
+											customInput={<InputComIcone ref={inputRef}/>}
+											className="form-control bg-secondary text-info"
+											locale="pt"
 										/>
 									</Form.Group>
-									<Button as='button' type='submit' variant='outline-primary' size='sm'>Consultar</Button>
+									<Button as='button' type='submit' variant='outline-primary' size=''>Consultar</Button></div>
 								</Form>
 							</div>
 						</Container>
