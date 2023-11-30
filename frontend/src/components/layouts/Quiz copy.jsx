@@ -4,7 +4,7 @@ import { MdOutlineQuiz } from 'react-icons/md';
 import { Form, Modal} from 'react-bootstrap';
 
 //componente - ícone
-function Quiz2() {
+function Quiz() {
 	const [show, setShow] = useState(false);
 	const [showRes, setShowRes] = useState(false);
 	const [quizRes, setQuizRes] = useState('');
@@ -35,7 +35,7 @@ function Quiz2() {
 	const handleNextQuestion = () => {
 		if (currentQuestionIndex < questions.length - 1) {
 			setCurrentQuestionIndex(currentQuestionIndex + 1);
-			// colocar aqui para enviá-las para um servidor, agora só mostra
+			// colocar aqui para enviá-las para um servidor
 		} else {
 			const sumAnswers = questions
 				.slice(1, 8)
@@ -48,9 +48,17 @@ function Quiz2() {
 
 			if (questions[0].answer > sumAnswers) {
 				setShowRes(true);
-				setQuizRes('parabéns')
-			} else {
-				window.alert('DEF');
+				setQuizRes('Parabéns! Você gasta menos que ganha, mas pode melhorar, conheça nossa agenda.')
+			} 
+
+			if (questions[0].answer == sumAnswers) {
+				setShowRes(true);
+				setQuizRes('Cuidado! Seus gastos batem com seu ganho, reavalie seus gastos, discarte ou diminua o dispensável. ')
+			}
+
+			if (questions[0].answer < sumAnswers) {
+				setShowRes(true);
+				setQuizRes('Vamos reavaliar os gastos! Fazendo controle dos gastos, sobrará dinheiro para investir em algum projeto e no seu futuro. ')
 			}
 		}
 	};
@@ -94,17 +102,17 @@ function Quiz2() {
 						<button onClick={handleNextQuestion} type="button" style={buttonStyle}>
 							{currentQuestionIndex === questions.length - 1 ? 'ENVIAR' : 'PRÓXIMA PERGUNTA'}
 						</button>
-						<button onClick={() => setShow(false)} type="button" style={buttonStyle}>
+						{/* <button onClick={() => setShow(false)} type="button" style={buttonStyle}>
 							DESISTIR
-						</button>
+						</button> */}
 					</Form>
 				</Modal.Body>
 
 			</Modal>
 
 			<Modal show={showRes} onHide={() => setShowRes(false)} centered>
-				<Modal.Header closeButton>Tralálá</Modal.Header>
-				<Modal.Body>{
+				{/* <Modal.Header closeButton>Tralálá</Modal.Header> */}
+				<Modal.Body className="border-3 border-secondary bg-info p-5 fs-4">{
 					quizRes
 				}</Modal.Body>
 			</Modal>
@@ -113,4 +121,4 @@ function Quiz2() {
 	);
 }
 
-export default Quiz2;
+export default Quiz;
