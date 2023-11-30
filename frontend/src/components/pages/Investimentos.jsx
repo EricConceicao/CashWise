@@ -11,23 +11,22 @@ const Investimentos = () => {
 
 	const divStyle = {
 		width: '100%',
-		backgroundImage: 'url("img/moldura.png")',
 		backgroundSize: 'contain',
 		backgroundPosition: 'center',
 		clear: 'both', textAlign: "left",
 
 	}
-
 	const colorBody = {
-		backgroundImage: "linear-gradient(150deg, #fff, var(--cw-primary), #213740 )"
+		backgroundImage: 'url("img/moldura.png")',
 	}
 
+
 	const card = {
-		minHeight: "65rem",
-		maxHeight: "65rem",
+		minHeight: "74rem",
+		maxHeight: "70rem",
 		borderWidth: '3px',
 		padding: '10px',
-		
+
 	};
 
 	return (
@@ -39,7 +38,7 @@ const Investimentos = () => {
 					<h2 style={{ color: '#AEF2C6' }}>Os Diferentes Tipos de Renda Fixa</h2>
 				</div>
 
-				<Container className="mt-5 mx-auto">
+				<Container className="mt-5 mb-5 mx-auto">
 					<Row className='bg-light px-1 py-3'>
 						<Col lg={4} md={6} className="mb-4">
 							<Card style={card}>
@@ -62,7 +61,7 @@ const Investimentos = () => {
 											<p>Rentabilidade: Oferece taxas de juros mais atrativas do que a poupança, dependendo do prazo e do banco emissor.</p>
 										</ul>
 
-										<p className='fs-5'><Nocheck size={30} className='text-danger'/> Desvantagens:</p>
+										<p className='fs-5'><Nocheck size={30} className='text-danger' /> Desvantagens:</p>
 										<ul className='fs-6 p-2'>
 											<p>Imposto de Renda: Sujeito à tributação de Imposto de Renda, com alíquotas decrescentes conforme o tempo de investimento.
 											</p>

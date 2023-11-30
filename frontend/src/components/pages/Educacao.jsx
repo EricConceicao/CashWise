@@ -33,7 +33,7 @@ const Educacao = () => {
                     <h2 style={{ color: '#AEF2C6' }}> Aprenda, Planeje e Conquiste sua Liberdade Financeira</h2>
                 </div>
 
-                <Container className="mt-5">
+                <Container className="mt-5 mb-5">
                     <Row className='bg-light px-1 py-3'>
                         <Col lg={6} md={6} className="mb-4">
                             <Card border="#213740" style={card} >
