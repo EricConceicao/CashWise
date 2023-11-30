@@ -7,15 +7,13 @@ const Prev = () => {
     const divStyle = {
         padding: '2rem 0',
         width: '100%',
-        backgroundImage: 'url("img/moldura.png")',
         backgroundSize: 'contain',
         backgroundPosition: 'center',
 
     }
-
     const colorBody = {
-        backgroundImage: "linear-gradient(150deg, #fff, var(--cw-primary), #213740 )"
-    };
+        backgroundImage: 'url("img/moldura.png")',
+    }
 
 
     return (
@@ -27,12 +25,12 @@ const Prev = () => {
                     <h2 style={{ color: '#AEF2C6' }}>Previdência Social e Previdência Privada</h2>
                 </div>
 
-                <Container className="mt-5">
+                <Container className="mt-5 mb-5">
                     <Row className='bg-light px-1 py-3'>
                         <Col md={12} className="mb-4">
                             <Card border="#213740" style={{ borderWidth: '3px' }}>
                                 <Card.Body>
-                                    <Card.Img id='card-img' style={{ width: "rem", float: "left" }} src="img/prev2.png" alt="Imagem do artigo Previdência" />
+                                    <Card.Img id='card-img' style={{ width: "rem", float: "left" }} src="img/prev3.png" alt="Imagem do artigo Previdência" />
                                     <Card.Title className='fs-4 p-1 bg-info rounded-3 mb-3' style={{ textAlign: "center" }}>Investir em Previdência</Card.Title>
                                     <Card.Text className='fs-5 p-3' style={{ textAlign: "justify" }}>
                                         <p className='fs-5'> Para garantir uma vida financeira saudável, é importante ter uma combinação de renda ativa e passiva. A renda ativa é importante para garantir o sustento
@@ -100,9 +98,9 @@ const Prev = () => {
                 </Container>
                 <Footer anchor="top" />
             </div >
-
         </>
     );
+
 }
 
 
