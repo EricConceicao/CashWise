@@ -7,6 +7,12 @@ um conteúdo mais leve, e com uma abordagem de "gameficação".
 
 ## Banco de dados MYSQL com ORM PRISMA
 
+## Comando para inserção de dados do simule e loga de ícones
+
+```
+npm run insert-data
+```
+
 ### Comandinhos pra lembrar:
 
 Faz a migração do schema para o dialeto do MYSQL

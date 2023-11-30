@@ -25,7 +25,7 @@ import './LandingPage.css';
 
 const LandingPage = () => {
 	const [feedback, setFeedback] = useState('');
-	
+
 	const name = useUserStore(state => state.name);
 	const sname = useUserStore(state => state.sname);
 	const userToken = useUserStore(state => state.userToken);
@@ -58,19 +58,21 @@ const LandingPage = () => {
 	function handleFeedback(msg) {
 		return setFeedback(msg);
 	}
-	
+
 	return (
 		<>
 			<header className="position-sticky z-1 top-0 p-0 bg-primary">
-				<Container className="d-flex justify-content-between align-items-center">
-					<Navbar.Brand href='#foi'>
+				<Container fluid className="d-flex justify-content-between align-items-center">
+					<Navbar.Brand className='p-1 fw-bold'>
 						<img className="my-1 bg-light rounded-pill"
 							src="/img/logo-cashwise.png"
 							alt="Logo marca do CashWise"
 							title="CashWise. Educação Financeira"
-							width="50%" />
+							width="40%"
+						/>{' '}
+						CashWise
 					</Navbar.Brand>
-					<Button className="fw-medium" onClick={handleShowLogin} variant="secondary" size="md"><LoginIco className='me-2' size={25} />Entrar</Button>
+					<Button className="fw-medium" onClick={handleShowLogin} variant="secondary"><LoginIco className='me-2' size={25} />Entrar</Button>
 				</Container>
 			</header>
 
@@ -89,13 +91,13 @@ const LandingPage = () => {
 				<Container fluid className="bg-secondary pt-5" id="main-container"
 					style={{ backgroundImage: "linear-gradient(40deg, #172a32 45%, #213740 40%)" }}>
 
-					<p className='text-light fs-3 container text-center mt-5 pb-3 border-bottom'>
-						<span className="lead text-primary fs-2">Bem-vindo ao nosso Sistema de Educação Financeira!</span> Aqui você encontrará ferramentas e recursos para ajudar jovens e
+					<p className='text-light fs-4 container text-center mt-5 pb-3'>
+						<span className="lead text-primary fs-3">Bem-vindo ao nosso Sistema de Educação Financeira!</span> Aqui você encontrará ferramentas e recursos para ajudar jovens e
 						adultos a alcançarem um futuro financeiro estável e confortável.
 						Nós acreditamos que um <strong>planejamento sólido é a chave</strong> para uma vida
 						financeira tranquila. Comece sua jornada hoje mesmo!
 					</p>
-
+					<hr className='text-light border-3 rounded border-light' />
 					<Row>
 						<Col md="6">
 							<Article title="Controle orçamentário" img="/img/cofrinho.svg" alt="Desenho de uma pessoa sentada em um puf com um notebook">
@@ -123,13 +125,13 @@ const LandingPage = () => {
 					</Row>
 
 					<div className="d-grid">
-						<Button onClick={handleShowLogin} className="w-50 mx-auto p-2 my-3 fs-4 fw-bold" size="large" variant="primary">Acesse já!</Button>
+						<Button onClick={handleShowLogin} className="w-50 mx-auto p-2 mt-3 mb-5 fs-4 fw-bold" size="large" variant="primary">ACESSE JÁ!</Button>
 					</div>
 				</Container>
 			</main>
 
-			<LoginModal feedback={feedback} handleFeedback={handleFeedback} changeModal={signModal} showLogin={showLogin} handleShowLogin={handleShowLogin} handleCloseLogin={handleCloseLogin}/>
-			<SignupModal feedback={feedback} handleFeedback={handleFeedback} loginModal={loginModal} showSign={showSign} handleShowSign={handleShowSign}  handleCloseSign={handleCloseSign} />
+			<LoginModal feedback={feedback} handleFeedback={handleFeedback} changeModal={signModal} showLogin={showLogin} handleShowLogin={handleShowLogin} handleCloseLogin={handleCloseLogin} />
+			<SignupModal feedback={feedback} handleFeedback={handleFeedback} loginModal={loginModal} showSign={showSign} handleShowSign={handleShowSign} handleCloseSign={handleCloseSign} />
 
 			<Footer anchor="hero" />
 		</>

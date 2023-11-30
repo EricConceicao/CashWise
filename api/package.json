@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon",
-    "insert-icons": "node ./src/icons.config/config.js"
+    "insert-data": "node ./src/scripts/config.js"
   },
   "keywords": [
     "express",

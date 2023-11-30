@@ -30,6 +30,23 @@ import { MdLibraryAdd } from "react-icons/md";
 import { FaPiggyBank } from "react-icons/fa";
 import moment from 'moment';
 import { IoMdAddCircle } from "react-icons/io";
+import { MdOutlineUpdate } from "react-icons/md";
+import { IoCalendarOutline } from "react-icons/io5";
+import { CiBullhorn } from "react-icons/ci";
+import { CiDollar } from "react-icons/ci";
+import { CiCalendar } from "react-icons/ci";
+import { CiBag1 } from "react-icons/ci";
+import { MdEdit } from "react-icons/md";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { registerLocale } from 'react-datepicker';
+import pt from 'date-fns/locale/pt'; 
+registerLocale('pt', pt);
+import React, { useRef } from 'react';
+import InputComIcone from '../utils/InputComIcone';
+
+
+
 
 
 
@@ -653,6 +670,8 @@ const Home = () => {
 							vencimento: formatoData,
 						});
 
+						console.log("vish", formatoData)
+
 					} else if (conta.recorrencia === 'POR_PERIODO' && conta.periodo) {
 						// Se a recorrência for "POR_PERIODO" e houver um período associado
 						let dataAtual = new Date();
@@ -713,9 +732,10 @@ const Home = () => {
 
 					return dataVencimentoA - dataVencimentoB;
 				});
-				console.log(contasFiltradasOrdenadas);
+				/*console.log(contasFiltradasOrdenadas);*/
 
 				setContasAgenda(contasFiltradasOrdenadas);
+
 			} catch (error) {
 				console.error('Erro na requisição:', error);
 			}
@@ -723,7 +743,7 @@ const Home = () => {
 
 		getContasAgenda();
 
-	}, []);
+	}, [contas]);
 
 
 	const handleSubmitNovaConta = async (event) => {
@@ -755,12 +775,84 @@ const Home = () => {
 
 		if (response.ok) {
 			const data = await response.json()
-			alert(data.success)
+			/*alert(data.success)*/
 			showConfirmationMessage("Nova conta criada com sucesso!");
+			console.log("veja", data.conta)
 			setContas([...contas, data.conta])
-			setContasAgenda((prevContas) => [...prevContas, data.conta]);
+			setContasAgenda([...contasAgenda, data.conta]);
 		}
 	}
+
+
+	// Adicione esta função ao seu componente
+	/*const calcularDiasRestantes = (dataVencimento) => {
+		const dataAtual = moment();
+		const dataVencimentoFormatada = moment(dataVencimento, 'DD-MM-YYYY');
+
+		// Calcula a diferença em dias
+		const diasRestantes = dataVencimentoFormatada.diff(dataAtual, 'days');
+		console.log("faltam", diasRestantes)
+		console.log("data atual",dataAtual)
+		console.log("dataVencimentoFormatada",dataVencimentoFormatada)
+
+		let mensagem = '';
+		let corFundo = '';
+
+		if (diasRestantes === 0) {
+			mensagem = 'Vence hoje!';
+			corFundo = 'red';
+		} else if (diasRestantes === 1) {
+			mensagem = 'Vence amanhã!';
+			corFundo = 'red';
+		}
+		else if (diasRestantes >= 2 && diasRestantes <= 5) {
+			mensagem = `Vence em ${diasRestantes} dias!`;
+			corFundo = 'yellow';
+		}
+		else {
+			mensagem = 'Fique tranquilo!';
+			corFundo = 'green'
+		}
+
+		return { mensagem, corFundo };
+	};*/
+
+	const calcularDiasRestantes = (dataVencimento) => {
+		const dataAtual = new Date();
+		console.log('dados:  ', dataVencimento)
+		const partesDataVencimento = dataVencimento.split('-');
+		console.log(partesDataVencimento)
+		const dataVencimentoFormatada = new Date(partesDataVencimento[2], partesDataVencimento[1] - 1, partesDataVencimento[0]);
+
+		// Calcula a diferença em dias
+		const umDiaEmMilissegundos = 24 * 60 * 60 * 1000; // Número de milissegundos em um dia
+		const diferencaEmMilissegundos = dataVencimentoFormatada - dataAtual;
+		const diasRestantes = Math.ceil(diferencaEmMilissegundos / umDiaEmMilissegundos);
+
+		console.log("faltam", diasRestantes);
+
+		let mensagem = '';
+		let corFundo = '';
+
+		if (diasRestantes === 0) {
+			mensagem = 'Vence hoje!';
+			corFundo = 'bg-danger red';
+		} else if (diasRestantes === 1) {
+			mensagem = 'Vence amanhã!';
+			corFundo = 'bg-danger red';
+		} else if (diasRestantes >= 2 && diasRestantes <= 5) {
+			mensagem = `Vence em ${diasRestantes} dias!`;
+			corFundo = 'bg-warning yellow';
+		} else {
+			mensagem = 'Fique tranquilo!';
+			corFundo = 'green';
+		}
+
+		return { mensagem, corFundo };
+	};
+
+
+
 
 	const [showModalExcluirConta, setShowModalExcluirConta] = useState(false);
 	const [contaIdParaExcluir, setContaIdParaExcluir] = useState(null);
@@ -791,7 +883,10 @@ const Home = () => {
 			if (response.ok) {
 				// Atualize o estado ou realize alguma ação após a exclusão bem-sucedida
 				showConfirmationMessage("Conta excluída com sucesso!");
-				setShowModalExcluirConta(false);
+				setTimeout(() => {
+					setShowModalExcluirConta(false);
+				}, 2000);
+
 				setContasAgenda((prevContas) => prevContas.filter((conta) => conta.id !== contaIdParaExcluir));
 			} else {
 				// Trate o caso em que a exclusão falhou
@@ -830,14 +925,9 @@ const Home = () => {
 		setRelatorioVisivel(!relatorioVisivel);
 	}
 
+	const [data, setData] = useState(null);
 
-
-
-
-
-
-
-
+	const inputRef = useRef();
 
 
 
@@ -1220,12 +1310,6 @@ const Home = () => {
 							<div className="row cartoes-menu">
 
 								<div className="col text-info">
-									<Button as='button' variant='secondary' className='botao-menu'>
-										<h4>Ganhos</h4>
-										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
-									</Button>
-								</div>
-								<div className="col text-info">
 									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivCategorias}>
 										<h4>Gastos por Categoria</h4>
 										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
@@ -1240,12 +1324,12 @@ const Home = () => {
 										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
 									</Button>
 								</div>
-								<div className="col text-info">
+								{/* <div className="col text-info">
 									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivRelatorio}>
 										<h4>Relatório</h4>
 										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
 									</Button>
-								</div>
+								</div> */}
 							</div>
 
 						</Container>
@@ -1268,49 +1352,65 @@ const Home = () => {
 								</div>
 
 								<div>
+									{contasAgenda.map((conta) => {
+										const { mensagem, corFundo } = calcularDiasRestantes(conta.vencimento);
 
+										return (
+											<div key={conta.id} className='pagar row pt-3 pb-3'>
 
-									{contasAgenda.map((conta) => (
-										<div key={conta.id} className='pagar row pt-3 pb-3'>
+												<div className="descricao-conta col fw-bold">
+													<FaPiggyBank className='moeda' />
+													{conta.descricao}
+												</div>
+												<div className="col">
+													<CiCalendar className='icone-conta' />
+													{conta.vencimento}
+												</div>
+												<div className="col"><span className={`${corFundo}`}>{mensagem}</span>
 
-											<div className="descricao-conta col fw-bold"><FaPiggyBank className='moeda' />{conta.descricao}</div>
-											<div className="col"><FaRegCalendarAlt className='icone-conta' />{conta.vencimento}</div>
-											<div className="col">Pagar</div>
-											<div className="col"><BsCoin className='icone-conta' />{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>
-											<div className="col-1"><Button variant='outline-info' title='Excluir' onClick={() => handleExcluirConta(conta.id)}><FaTrashAlt /></Button></div>
+												</div>
+												{/* <CiBullhorn className='icone-conta' /> */}
+												<div className="col">
+													<CiBag1 className='icone-conta' />
+													{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+												</div>
+												<div className="col-1">
+													<Button as='button' variant='outline-info' className='bg-transparent' title='Editar'><MdEdit /></Button>
+													<Button as='button' variant='outline-info' className='bg-transparent' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
+														<FaTrashAlt />
+													</Button>
+												</div>
 
-											<Modal
-												show={showModalExcluirConta}
-												onHide={() => setShowModalExcluirConta(false)}
-												size="md"
-												aria-labelledby="contained-modal-title-vcenter"
-												centered
-											>
-												<Modal.Header closeButton>
-
-												</Modal.Header>
-												<Modal.Body>
-													<Form onSubmit={handleSubmitExcluirConta}>
-														Tem certeza que quer excluir essa despesa?
-														<br />
-														<br />
-														<Button as='button' type='submit' variant="secondary">
-															Excluir
-														</Button>
-													</Form>
-												</Modal.Body>
-												{showConfirmation && (
-													<div className="alert alert-success alert-custom" role="alert">
-														{confirmationMessage}
-													</div>
-												)}
-											</Modal>
-
-										</div>
-									))}
-
+												<Modal
+													show={showModalExcluirConta}
+													onHide={() => setShowModalExcluirConta(false)}
+													size="md"
+													aria-labelledby="contained-modal-title-vcenter"
+													centered
+												>
+													<Modal.Header closeButton></Modal.Header>
+													<Modal.Body>
+														<Form onSubmit={handleSubmitExcluirConta}>
+															Tem certeza que quer excluir essa despesa?
+															<br />
+															<br />
+															<Button as='button' type='submit' variant="secondary">
+																Excluir
+															</Button>
+														</Form>
+													</Modal.Body>
+													{showConfirmation && (
+														<div className="alert alert-success alert-custom" role="alert">
+															{confirmationMessage}
+														</div>
+													)}
+												</Modal>
+											</div>
+										);
+									})}
 								</div>
 
+								<br />
 								<div className="pagar row pt-3 pb-3 border border-3">
 
 									<div className="linha col nova-despesa">
@@ -1321,7 +1421,7 @@ const Home = () => {
 									<div className="col"></div>
 									<div className="col"></div>
 									<div className="col-1">
-										<Button as="button" variant="outline-info" title='Criar' onClick={() => setShowModalContas(true)}className='border-'><IoMdAddCircle className='icone-conta'/>
+										<Button as="button" variant="outline-info" title='Criar' onClick={() => setShowModalContas(true)} className='mais'><IoMdAddCircle className='icone-conta' />
 										</Button>
 									</div>
 									<Modal
@@ -1496,7 +1596,7 @@ const Home = () => {
 									{categorias.map((categoria, index) => (
 										<div className="cartao-categoria" key={index}>
 											<div className="categoria">
-												<p className="fw-bold fs-5">{categoria}</p>
+												<h4 className="fs-5">{categoria}</h4>
 												<p className='valor-categoria bg-secondary'>
 													{" "}
 													{gastosPorCategoria[categoria]
@@ -1773,26 +1873,41 @@ const Home = () => {
 						{/* Fim de Fontes de Receita */}
 
 						{/* Início de Relatório*/}
-						{/*
-						<div className={`${relatorioVisivel ? 'visivel' : 'oculto'}`}>
-							<Container className='relatorio'>
+
+
+						{/* className={`${relatorioVisivel ? 'visivel' : 'oculto'}`} */}
+						<Container className='relatorio'>
+							<div >
 								<h1>Relatório</h1>
-								<p className='text-primary'><i>Selecione o mês e o ano para obter um resumo dos valores totais dos seus gastos e ganhos no período escolhido.</i></p>
+								<hr className='text-info'/>
+								<p className='text-primary'><i>Selecione o mês e o ano e clique em "consultar" para obter um resumo dos valores totais dos seus gastos e ganhos.</i></p>
+								<br />
 								<Form>
-									<Form.Group className="mb-3">
-										<Form.Label>Mês/Ano</Form.Label>
-										<Form.Control
+									<div className="form-relatorio">
+									<Form.Group className="mb-3 data-relatorio">
+										<Form.Label><h4>Mês/Ano</h4></Form.Label>
+										{/* <Form.Control
 											type="month"
 											name="mes"
-											value={descricao}
 											onChange={(e) => setDescricao(e.target.value)}
-											className="border border-primary"
+											className="bg-secondary text-info"
+										/> */}
+										<DatePicker
+											selected={data}
+											onChange={(date) => setData(date)}
+											showMonthYearPicker
+											dateFormat="MM/yyyy"
+											customInput={<InputComIcone ref={inputRef}/>}
+											className="form-control bg-secondary text-info"
+											locale="pt"
 										/>
 									</Form.Group>
+									<Button as='button' type='submit' variant='outline-primary' size=''>Consultar</Button></div>
 								</Form>
-							</Container>
-						</div>
-												*/}
+							</div>
+						</Container>
+
+
 						{/* Fim de Relatório*/}
 
 

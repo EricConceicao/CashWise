@@ -28,7 +28,7 @@ const Poupanca = () => {
 			<Header />
 			<div style={colorBody}>
 				<div className="bg-secondary text-white text-center py-5">
-					<h1>Poupança</h1>
+					<h1 >Poupança</h1>
 					<h2 style={{ color: '#AEF2C6' }}>Conheça as vantagens e desvantagens de um dos investimentos mais tradicionais</h2>
 				</div>
 				<Container className="mt-5 mx-auto">

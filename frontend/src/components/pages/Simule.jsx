@@ -1,11 +1,14 @@
+// Importações de bibliotecas //
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
+// Importações de components do projeto //
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
 
+// Importações do BS //
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -19,16 +22,11 @@ function SimulePage() {
   const [mesAno, setMesAno] = useState(['']);
   const [salario, setSalario] = useState(['']);
   const [genero, setGenero] = useState('');
-//  const [dataNascimento, setDataNascimento] = useState('');
   const [error, setError] = useState(null);
 
   const handleGeneroChange = (e) => {
     setGenero(e.target.value);
   };
-
-  // const handleDataNascimentoChange = (e) => {
-  //   setDataNascimento(e.target.value);
-  // };
 
   const adicionarLinha = () => {
     setMesAno([...mesAno, '']);
@@ -62,23 +60,25 @@ function SimulePage() {
     e.preventDefault();
     handleSimulation(e.target.dataNascimento.value);
   };
-// .................................................................................
   function GeneroSelection({ genero, handleGeneroChange }) {
     return (
-      <div className="section">
-        <h2>2. Selecione o seu Gênero</h2>
+      <div>
+        <h2 className='h3'>Selecione o seu Gênero</h2>
         <div className="radio-group">
-          <label>
+          <div className="px-1 d-inline">
+            <label className='p-1'>Masculino</label>
             <input
               type="radio"
               name="genero"
               value="m"
               checked={genero === 'm'}
               onChange={handleGeneroChange}
+              className='px-2'
             />
-            Masculino
-          </label>
-          <label>
+          </div>
+
+          <div className="px-1 d-inline">
+            <label className='p-1'>Feminino</label>
             <input
               type="radio"
               name="genero"
@@ -86,8 +86,7 @@ function SimulePage() {
               checked={genero === 'f'}
               onChange={handleGeneroChange}
             />
-            Feminino
-          </label>
+          </div>
         </div>
       </div>
     );
@@ -101,7 +100,7 @@ function SimulePage() {
   function DataNascimentoInput() {
     return (
       <div className="section">
-        <h2>3. Insira a sua Data de Nascimento</h2>
+        <h2 className='h3'>Insira a sua Data de Nascimento</h2>
         <input
           type="date"
           className="data-input"
@@ -120,78 +119,45 @@ function SimulePage() {
   return (
     <>
       <Header />
-      <div className="simule-page">
 
-        <main className="main-content">
-          <h1>Previdência Social!</h1>
-          <div className="blockquote-container w-100">
-            <div className="blockquote-wrapper">
-      <Container className="blockquote-container">
-        <Row>
-          <Col lg={8} md={10} sm={12} className="quote-text w-100">
-            <p>
-              Como já falamos em outras partes desse site, a educação financeira é fundamental para garantir a saúde financeira e a estabilidade econômica.
-              A renda ativa é o dinheiro que você ganha por meio do seu trabalho ou negócio próprio. Já a renda passiva é o dinheiro que você ganha sem precisar
-              trabalhar ativamente, como por exemplo, aluguel de imóveis, investimentos em fundos imobiliários, direitos autorais, royalties de música, entre outros.
-            </p>
-
-            <p>
-              Para garantir uma vida financeira saudável, é importante ter uma combinação de renda ativa e passiva. A renda ativa é importante para garantir o sustento
-              diário e a renda passiva pode ser utilizada para complementar a renda ativa e garantir um futuro mais tranquilo.
-            </p>
-
-            <p>
-              Nesse módulo queremos dar ênfase em uma parte muito importante da renda passiva que é a Previdência Social. A Previdência Social é um seguro público que
-              garante renda aos seus contribuintes, quando esses por algum motivo de saúde ou acidentes de trabalho ficam impossibilitados de ter uma renda ativamente e
-              também quando chega a hora de sua aposentadoria.
-            </p>
-
-            <p>
-              Todos os trabalhadores, sejam da iniciativa privada, seja do serviço público ou mesmo empresários, são automaticamente filiados a um Regime Previdenciário,
-              seja o Regime Geral (INSS), seja a um Regime Próprio (Servidor Público Estatutário), que assim podem contribuir com o regime e garantir uma renda passiva,
-              no caso de imprevistos como doenças, acidentes e outros eventos inesperados, além de garantir uma renda futura no caso da aposentadoria.
-            </p>
-
-            <p>
-              A partir da Emenda Constitucional 103/2019 (
-              <a href="https://www.planalto.gov.br/ccivil_03/Constituicao/Emendas/Emc/emc103.htm" rel='noreferrer' target="_blank">
-                Emenda Constitucional 103/2019
-              </a>
-              ), que entrou em vigor em 13 de novembro de 2019, <strong>o cálculo dos benefícios de Auxílio Doença e aposentadoria para</strong> para os trabalhadores que ingressaram no sistema previdenciário após a vigência da reforma <strong>mudou</strong> em relação ao modelo anterior.
-            </p>
-
-            <p>
-              Agora, o trabalhador precisará atingir a <strong>idade mínima</strong> de 62 anos, se mulher, e 65 anos, se homem, além de ter no mínimo 15 anos de <strong>contribuição</strong> para a Previdência Social, se mulher e 20 anos no caso de homem. Para esses casos, o cálculo do benefício previdenciário passou a ser feito com base na média aritmética simples de todos os salários de contribuição do trabalhador desde julho de 1994, corrigidos mês a mês pelo fator de atualização fornecido pelo governo, com base no inpc acumulado. O valor do benefício, então, será equivalente a 60% da média salarial, acrescido de 2% para cada ano de contribuição que exceder o tempo mínimo de 15 ou 20 anos, respectivamente, se mulher ou homem, para o caso de aposentadoria e 91% da média salarial, para o caso de Auxílio Doença.
-            </p>
-
-            <p>
-              <i>Na seção abaixo, disponibilizamos um recurso que ajudará o beneficiário da previdência a fazer uma simulação de cálculo do seu benefício, devendo para tanto, preencher os dados necessários (salários de contribuição, data de nascimento e sexo) e clicar em (Enviar dados e Simular).</i>
-            </p>
-          </Col>
-        </Row>
-      </Container>
-    </div>
-          </div>
-        </main>
-        <Container className="corpo">
+      <main>
+        <h1 className='display-1 bg-secondary text-light text-center py-3 px-2 m-0'>Previdência Social!</h1>
+        <Container className='py-2 fs-5 bg-info rounded-2 text-center'>
           <Row>
-            <Col xs={12} md={6} className="imagem">
-              {/* Imagem */}
+            <Col>
+              <p>
+                Como já falamos em outras partes desse site, a educação financeira é fundamental para garantir a saúde financeira e a estabilidade econômica.
+                A renda ativa é o dinheiro que você ganha por meio do seu trabalho ou negócio próprio. Já a renda passiva é o dinheiro que você ganha sem precisar
+                trabalhar ativamente, como por exemplo, aluguel de imóveis, investimentos em fundos imobiliários, direitos autorais, royalties de música, entre outros.
+              </p>
+              <p>A Previdência Social é parte crucial da renda passiva, oferecendo segurança em casos de doença, acidente ou aposentadoria.</p>
+              <p>Há mudanças na legislação exigem idade mínima e tempo de contribuição para benefícios como aposentadoria e auxílio doença. O cálculo dos benefícios agora considera a média dos salários desde julho de 1994, com ajustes pelo governo, aumentando com mais anos de contribuição.</p>              
+              <p>
+                <i>Na seção abaixo, disponibilizamos um recurso que ajudará o beneficiário da previdência a fazer uma simulação de cálculo do seu benefício, devendo para tanto, preencher os dados necessários (salários de contribuição, data de nascimento e sexo) e clicar em (Enviar dados e Simular).</i>
+              </p>
             </Col>
-            <Col xs={12} md={6}>
+          </Row>
+        </Container>
+
+        <Container className='mt-2'>
+          <Row>
+            <Col sm={12} md={6} className='justify-content-center align-items-center'>
+              <img src='img/inv1.png' alt='homem pensando com gráficos ao fundo' width="100%" />
+            </Col>
+            <Col sm={12} md={6}>
               <form onSubmit={handleFormSubmit}>
-                <div className="tabela">
-                  <h2>1. Informe o salário recebido correspondente ao mês/ano trabalhado</h2>
+                <div className="justify-content-center align-items-center">
+                  <h2 className='h3'>Informe o salário recebido correspondente ao mês/ano trabalhado</h2>
                   <table>
                     <thead>
-                      <tr>
+                      <tr className='text-center'>
                         <th>MÊS / ANO</th>
                         <th>SALÁRIO (R$)</th>
                       </tr>
                     </thead>
                     <tbody>
                       {mesAno.map((value, index) => (
-                        <tr key={index}>
+                        <tr className='text-center' key={index}>
                           <td>
                             <Form.Group>
                               <Form.Control
@@ -224,13 +190,13 @@ function SimulePage() {
                       ))}
                     </tbody>
                   </table>
-                  <Button variant="primary" className="add-button" onClick={adicionarLinha}>
-                    Adicionar Linha na Tabela
-                  </Button>
                 </div>
+
+                <Button variant="primary" onClick={adicionarLinha} className='my-2'>Adicionar Linha na Tabela</Button>
+
                 <GeneroSelection genero={genero} handleGeneroChange={handleGeneroChange} />
-                <DataNascimentoInput  />
-                <Button variant="primary" type="submit" className="submit-button">
+                <DataNascimentoInput />
+                <Button variant="primary" type="submit" className="my-2">
                   Enviar dados e Simular
                 </Button>
                 {error && <div className="error-message">{error}</div>}
@@ -238,8 +204,7 @@ function SimulePage() {
             </Col>
           </Row>
         </Container>
-
-      </div>
+      </main>
       <Footer />
     </>
   );
