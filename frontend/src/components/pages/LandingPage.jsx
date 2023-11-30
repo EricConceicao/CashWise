@@ -91,8 +91,8 @@ const LandingPage = () => {
 				<Container fluid className="bg-secondary pt-5" id="main-container"
 					style={{ backgroundImage: "linear-gradient(40deg, #172a32 45%, #213740 40%)" }}>
 
-					<p className='text-light fs-4 container text-center mt-5 pb-3'>
-						<span className="lead text-primary fs-3">Bem-vindo ao nosso Sistema de Educação Financeira!</span> Aqui você encontrará ferramentas e recursos para ajudar jovens e
+					<p className='container text-light fs-5 text-center pt-5'>
+						<span className="lead text-primary fs-3">Bem-vindo ao nosso Sistema de Educação Financeira!</span> <br />Aqui você encontrará ferramentas e recursos para ajudar jovens e
 						adultos a alcançarem um futuro financeiro estável e confortável.
 						Nós acreditamos que um <strong>planejamento sólido é a chave</strong> para uma vida
 						financeira tranquila. Comece sua jornada hoje mesmo!
