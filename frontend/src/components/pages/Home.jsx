@@ -40,7 +40,7 @@ import { MdEdit } from "react-icons/md";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from 'react-datepicker';
-import pt from 'date-fns/locale/pt'; 
+import pt from 'date-fns/locale/pt';
 registerLocale('pt', pt);
 import React, { useRef } from 'react';
 import InputComIcone from '../utils/InputComIcone';
@@ -928,6 +928,61 @@ const Home = () => {
 	const [data, setData] = useState(null);
 
 	const inputRef = useRef();
+
+	const [somatorioGanhos, setSomatorioGanhos] = useState(0);
+	const [somatorioGastos, setSomatorioGastos] = useState(0);
+
+
+	const handleSubmitRelatorio = async (event) => {
+		event.preventDefault()
+
+		// const dataInputValue = event?.currentTarget?.dataInput?.value;
+
+		// if (!dataInputValue) {
+		//   console.error('Valor de dataInput não está definido.');
+		//   return;
+		// }
+
+		
+
+		const dataRelatorio = {
+			data: moment(data).format('YYYY-MM'),
+		};
+
+		console.log("dataInput:",dataRelatorio)
+
+		const response = await fetch(`http://localhost:3000/relatorio?data=${dataRelatorio.data}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+			
+		})
+
+		if (response.ok) {
+			const data = await response.json()
+			alert(data.success)
+			console.log('Somatório de Gastos:', data.somatorioGastos);
+			console.log('Somatório de Ganhos:', data.somatorioGanhos);
+			setSomatorioGanhos(data.somatorioGanhos);
+			setSomatorioGastos(data.somatorioGastos)
+		}
+		else {
+			console.error('Erro ao obter relatório:', response.statusText);
+			// Lógica de tratamento de erro, se necessário
+		  }
+	}
+
+	const somaGanhos = somatorioGanhos.toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+	});
+
+	const somaGastos = somatorioGastos.toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+	});
+
 
 
 
@@ -1879,31 +1934,45 @@ const Home = () => {
 						<Container className='relatorio'>
 							<div >
 								<h1>Relatório</h1>
-								<hr className='text-info'/>
+								<hr className='text-info' />
 								<p className='text-primary'><i>Selecione o mês e o ano e clique em "consultar" para obter um resumo dos valores totais dos seus gastos e ganhos.</i></p>
 								<br />
-								<Form>
+								<Form onSubmit={handleSubmitRelatorio}>
 									<div className="form-relatorio">
-									<Form.Group className="mb-3 data-relatorio">
-										<Form.Label><h4>Mês/Ano</h4></Form.Label>
-										{/* <Form.Control
+										<Form.Group className="mb-3 data-relatorio">
+											<Form.Label><h4>Mês/Ano</h4></Form.Label>
+											{/* <Form.Control
 											type="month"
 											name="mes"
 											onChange={(e) => setDescricao(e.target.value)}
 											className="bg-secondary text-info"
 										/> */}
-										<DatePicker
-											selected={data}
-											onChange={(date) => setData(date)}
-											showMonthYearPicker
-											dateFormat="MM/yyyy"
-											customInput={<InputComIcone ref={inputRef}/>}
-											className="form-control bg-secondary text-info"
-											locale="pt"
-										/>
-									</Form.Group>
-									<Button as='button' type='submit' variant='outline-primary' size=''>Consultar</Button></div>
+											<DatePicker
+												name='dataInput'
+												selected={data}
+												onChange={(date) => setData(date)}
+												showMonthYearPicker
+												dateFormat="MM/yyyy"
+												customInput={<InputComIcone ref={inputRef} />}
+												className="form-control bg-secondary text-info"
+												locale="pt"
+											/>
+										</Form.Group>
+										<Button as='button' type='submit' variant='outline-primary' size=''>Consultar</Button></div>
 								</Form>
+								<hr />
+								<h1>Resultados</h1>
+								<h4 className='fw-bold'>Referente</h4>
+								<p className='dado-relatorio d1 bg-secondary'>10/2023</p>
+								<h4 className='text-primary fw-bold'>Ganhos</h4>
+								{/* {veio ? <></> : ""} */}
+								<p className='bg-secondary d2 dado-relatorio'>{somaGanhos}</p>
+								<h4 className='text-danger fw-bold'>Gastos</h4>
+								<p className='bg-secondary d3 dado-relatorio'>{somaGastos}</p>
+								<h4 className='fw-bold' style={{ color: 'orange' }}>Saldo</h4>
+								<p className='bg-secondary d4 dado-relatorio'>R$ 10,00</p>
+
+								<p></p>
 							</div>
 						</Container>
 

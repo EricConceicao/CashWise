@@ -431,5 +431,28 @@ h5 {
     gap: 20px;
 }
 
+.dado-relatorio {
+    border-radius: 5px;
+    padding: 5px 0 5px 5px;
+    font-weight: lighter;
+    font-size: large;
+}
+
+.d1 {
+    border-bottom: 1px solid #fff;
+}
+
+.d2 {
+    border-bottom: 1px solid palegreen;
+}
+
+.d3 {
+    border-bottom: 1px solid red;
+}
+
+.d4 {
+    border-bottom: 1px solid orange;
+}
+
 
 /* Fim para estilo da Home */
