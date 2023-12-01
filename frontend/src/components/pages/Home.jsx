@@ -47,12 +47,6 @@ registerLocale('pt', pt);
 import React, { useRef } from 'react';
 import InputComIcone from '../utils/InputComIcone';
 
-
-
-
-
-
-
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 import IconShop from '../utils/IconShop';
@@ -88,26 +82,22 @@ const Home = () => {
 	const exp = useUserStore(state => state.exp);
 	const level = useUserStore(state => state.level);
 	const wiseCoins = useUserStore(state => state.wiseCoins);
-	
-	// Obter a data atual
-	const currentDate = new Date();
-
-	// Mapear o número do mês para o nome do mês
-	const months = [
-		'jan', 'fev', 'mar', 'abr', 'mai', 'jun',
-		'jul', 'ago', 'set', 'Out', 'nov', 'dez'
-	];
-
-	const currentMonth = months[currentDate.getMonth()];
-
-	// Obter o ano atual
-	const currentYear = currentDate.getFullYear();
 
 
-	// Controle mensal
-
+	// useStates
 	const [valorRecebido, setValorRecebido] = useState(0);
 	const [valorGasto, setValorGasto] = useState(0);
+	const [ganhos, setganhos] = useState([])
+	const [somatorioGanhos, setSomatorioGanhos] = useState(0);
+	const [somatorioGastos, setSomatorioGastos] = useState(0);
+
+	// Modais
+	const [showModalNovoGanho, setShowModalNovoGanho] = useState(false);
+	const [showModalNovoGasto, setShowModalNovoGasto] = useState(false);
+
+	// Controle mensal	
+
+	const MesAno = moment().format('MM/YYYY')	
 
 	const saldoAtual = (valorRecebido - valorGasto).toLocaleString('pt-BR', {
 		style: 'currency',
@@ -127,7 +117,7 @@ const Home = () => {
 
 	// Novo ganho
 
-	const [showModalNovoGanho, setShowModalNovoGanho] = useState(false);
+	
 
 	const [novaDescricaoGanho, setNovaDescricaoGanho] = useState('');
 	const [selectedFonte, setSelectedFonte] = useState("");
@@ -165,10 +155,7 @@ const Home = () => {
 			showConfirmationMessage("Novo ganho adicionado com sucesso!");
 		}
 	};
-
-
-	const [ganhos, setganhos] = useState([])
-	const [totalGanhosMes, setTotalGanhosMes] = useState(0);
+	
 
 	useEffect(() => {
 
@@ -177,55 +164,14 @@ const Home = () => {
 			const data = await response.json()
 			/*console.log(data.success)
 			console.log(data.ganhos)*/
-			console.log(data)
-			setganhos(data.ganhos)
+			console.log("ganhos",data)
+			setganhos(data)
 
 		}
 
 		getganhos()
 
 	}, [])
-
-
-	useEffect(() => {
-
-		const getGanhosTotais = async () => {
-			const response = await fetch('http://localhost:3000/ganhos/listar')
-			const data = await response.json()
-
-			// Filtrar os dados para incluir apenas aqueles do mês corrente
-			const ganhosPorData = data.filter(ganho => {
-				const dataGanho = new Date(ganho.data);
-				const dataAtual = new Date();
-
-				dataGanho.setMonth(dataGanho.getMonth() + 1);
-				dataAtual.setMonth(dataAtual.getMonth() + 1);
-
-				/*console.log(dataGanho.getMonth(), dataGanho.getFullYear())
-				console.log(dataAtual.getMonth(), dataAtual.getFullYear())*/
-
-
-				return (
-					dataGanho.getMonth() === dataAtual.getMonth() &&
-					dataGanho.getFullYear() === dataAtual.getFullYear()
-				);
-			});
-
-			// Extrair os valores correspondentes
-			const valoresDoMesCorrente = ganhosPorData.map(ganho => parseFloat(ganho.valor));
-			console.log(valoresDoMesCorrente)
-
-			// Somar os valores
-			const totalGanhosMes = valoresDoMesCorrente.reduce((total, valor) => total + valor, 0);
-			console.log(totalGanhosMes)
-
-			setTotalGanhosMes(totalGanhosMes);
-		};
-
-		getGanhosTotais();
-
-	}, []);
-
 
 	const handleSubmitNovoGanho = async (event) => {
 		event.preventDefault()
@@ -260,25 +206,16 @@ const Home = () => {
 			if (dataGanho.getMonth() === dataAtual.getMonth() &&
 				dataGanho.getFullYear() === dataAtual.getFullYear()) {
 
-				setTotalGanhosMes(totalGanhosMes + parseInt(data.ganho.valor));
+				setSomatorioGanhosMensal(somatorioGanhosMensal + parseInt(data.ganho.valor));
 			}
 		}
-
 	}
-
-	const GanhosMes = totalGanhosMes.toLocaleString('pt-BR', {
-		style: 'currency',
-		currency: 'BRL',
-	});
-
-
-
 
 
 
 	// Novo gasto
 
-	const [showModal6, setShowModal6] = useState(false);
+	
 
 	const [novoDescricao, setNovoDescricao] = useState('');
 	const [selectedCategoria, setSelectedCategoria] = useState("");
@@ -332,7 +269,6 @@ const Home = () => {
 
 
 	const [gastos, setgastos] = useState([])
-	const [totalGastosMes, setTotalGastosMes] = useState(0);
 
 	useEffect(() => {
 
@@ -351,42 +287,6 @@ const Home = () => {
 
 	}, [])
 
-	useEffect(() => {
-
-		const getGastosTotais = async () => {
-			const response = await fetch('http://localhost:3000/gastos/listar')
-			const data = await response.json()
-
-			// Filtrar os dados para incluir apenas aqueles do mês corrente
-			const dataDoMesCorrente = data.filter(gasto => {
-				const dataGasto = new Date(gasto.data);
-				const dataAtual = new Date();
-
-				dataGasto.setMonth(dataGasto.getMonth() + 1);
-				dataAtual.setMonth(dataAtual.getMonth() + 1);
-
-				/*console.log(dataGasto.getMonth(), dataGasto.getFullYear())
-				console.log(dataAtual.getMonth(), dataAtual.getFullYear())*/
-
-
-				return (
-					dataGasto.getMonth() === dataAtual.getMonth() &&
-					dataGasto.getFullYear() === dataAtual.getFullYear()
-				);
-			});
-
-			// Extrair os valores correspondentes
-			const valoresDoMesCorrente = dataDoMesCorrente.map(gasto => parseFloat(gasto.valor));
-
-			// Somar os valores
-			const totalGastosMes = valoresDoMesCorrente.reduce((total, valor) => total + valor, 0);
-
-			setTotalGastosMes(totalGastosMes);
-		};
-
-		getGastosTotais();
-
-	}, []);
 
 	const handleSubmitNovoGasto = async (event) => {
 		event.preventDefault()
@@ -422,22 +322,10 @@ const Home = () => {
 			if (dataGasto.getMonth() === dataAtual.getMonth() &&
 				dataGasto.getFullYear() === dataAtual.getFullYear()) {
 
-				setTotalGastosMes(totalGastosMes + parseInt(data.gasto.valor));
+				setSomatorioGastosMensal(somatorioGastosMensal + parseInt(data.gasto.valor));
 			}
-
 		}
-
 	}
-
-	const GastosMes = totalGastosMes.toLocaleString('pt-BR', {
-		style: 'currency',
-		currency: 'BRL',
-	});
-
-	const saldoMes = (totalGanhosMes - totalGastosMes).toLocaleString('pt-BR', {
-		style: 'currency',
-		currency: 'BRL',
-	});
 
 
 
@@ -491,25 +379,25 @@ const Home = () => {
 
 	const [showModalCategorias, setShowModalCategorias] = useState(false);
 	const [categoriasCadastradas, setCategoriasCadastradas] = useState([
-	"Alimentação",
-	"Saúde",
-	"Lazer",
-	"Impostos",
-	"Investimentos",
-	"Compras",
-	"Contas",
-	"Financiamento",
-	"Aluguel"]);
+		"Alimentação",
+		"Saúde",
+		"Lazer",
+		"Impostos",
+		"Investimentos",
+		"Compras",
+		"Contas",
+		"Financiamento",
+		"Aluguel"]);
 	const [categorias, setCategorias] = useState([]);
 	const [totaisDeGastos, setTotaisDeGastos] = useState([]);
 	const [novaCategoria, setNovaCategoria] = useState('');
 
-	
+
 
 
 	const adicionarCategoria = (novaCategoria) => {
 		setCategorias([...categoriasCadastradas, novaCategoria]);
-	};	
+	};
 
 	const handleAdicionarNovaCategoria = () => {
 		if (novaCategoria) {
@@ -954,8 +842,6 @@ const Home = () => {
 
 	const inputRef = useRef();
 
-	const [somatorioGanhos, setSomatorioGanhos] = useState(0);
-	const [somatorioGastos, setSomatorioGastos] = useState(0);
 
 
 
@@ -1028,6 +914,60 @@ const Home = () => {
 		style: 'currency',
 		currency: 'BRL',
 	});
+
+
+	const [somatorioGanhosMensal, setSomatorioGanhosMensal] = useState(0);
+	const [somatorioGastosMensal, setSomatorioGastosMensal] = useState(0);
+
+	useEffect(() => {
+
+		const getControleMensal = async () => {
+
+			const dataControle = {
+				data: moment().format('YYYY-MM'),
+			};
+
+
+			const response = await fetch(`http://localhost:3000/relatorio?data=${dataControle.data}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+
+			})
+
+			if (response.ok) {
+				const data = await response.json()
+				alert(data.success)
+				console.log('Somatório de Gastos Mensais:', data.somatorioGastos);
+				console.log('Somatório de Ganhos Mensais:', data.somatorioGanhos);
+				setSomatorioGanhosMensal(data.somatorioGanhos);
+				setSomatorioGastosMensal(data.somatorioGastos);
+			}
+			else {
+				console.error('Erro ao obter relatório:', response.statusText);
+			}
+		}
+
+		getControleMensal()
+
+	}, [])
+
+	const somaGanhosMensal = somatorioGanhosMensal.toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+	});
+
+	const somaGastosMensal = somatorioGastosMensal.toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+	});
+
+	const saldoTotalMensal = (somatorioGanhosMensal - somatorioGastosMensal).toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+	});
+
 
 
 
@@ -1217,15 +1157,15 @@ const Home = () => {
 
 							<div className="cartao-perfil col">
 								<div className='item'>
-									<h4>Mês e Ano</h4>
-									<span className='bg-secondary text-success'>{currentMonth} de {currentYear}</span>
+									<h4>Mês/Ano</h4>
+									<span className='bg-secondary text-success'>{MesAno}</span>
 								</div>
 							</div>
 
 							<div className="cartao-perfil col">
 								<div className="item">
 									<h4>Valor Recebido</h4>
-									<span className='bg-secondary text-success'>{GanhosMes}</span>
+									<span className='bg-secondary text-success'>{somaGanhosMensal}</span>
 									{/*<span>{Recebido}</span>*/}
 								</div>
 
@@ -1313,18 +1253,18 @@ const Home = () => {
 							<div className="cartao-perfil col">
 								<div className="item">
 									<h4>Valor Gasto</h4>
-									<span className='bg-secondary text-success'>{GastosMes}</span>
+									<span className='bg-secondary text-success'>{somaGastosMensal}</span>
 									{/*<span>{Gasto}</span>*/}
 								</div>
 
 								<div className="botao">
-									<Button as="button" variant="outline-success" onClick={() => setShowModal6(true)}>Novo</Button>
+									<Button as="button" variant="outline-success" onClick={() => setShowModalNovoGasto(true)}>Novo</Button>
 								</div>
 							</div>
 
 							<Modal
-								show={showModal6}
-								onHide={() => setShowModal6(false)}
+								show={showModalNovoGasto}
+								onHide={() => setShowModalNovoGasto(false)}
 								size="md"
 								aria-labelledby="contained-modal-title-vcenter"
 								centered
@@ -1397,7 +1337,7 @@ const Home = () => {
 							<div className="cartao-perfil col">
 								<div className='item'>
 									<h4>Saldo Atual</h4>
-									<span className='bg-secondary text-success'>{saldoMes}</span>
+									<span className='bg-secondary text-success'>{saldoTotalMensal}</span>
 									{/*<span>{saldoAtual}</span>*/}
 								</div>
 							</div>
@@ -1694,7 +1634,7 @@ const Home = () => {
 									</div> */}
 								</div>
 
-								
+
 
 								<div className='cartoes-categoria'>
 									{categorias.map((categoria, index) => (
@@ -2028,7 +1968,7 @@ const Home = () => {
 
 
 						{/* Fim de Relatório*/}
-						
+
 						{/* <div>
 							{categorias.map((categoria, index) => (
 								<div key={categoria}>
