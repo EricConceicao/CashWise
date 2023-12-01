@@ -222,6 +222,8 @@ function calcularTempoContribuicao(arrCampoAnoMes, periodoContribuicaoMinimo) {
   }
 }
 
+const teto = 7507.49; // Teto para o cálculo dos benefícios
+
 // Função para calcular o ValorAposentadoria
 async function calcularValorAposentadoria(simulacaoId) {
   const salarioAtualizado = await prisma.SalarioAtualizado.findFirst({
@@ -233,10 +235,39 @@ async function calcularValorAposentadoria(simulacaoId) {
     throw new Error('Não há valores de salário atualizado para calcular o benefício');
   }
 
-  const valorAposentadoria = new Big(salarioAtualizado.salario_atualizado).times(0.60).toFixed(2);
+  const genero = 'f'; // Defina o gênero apropriado (pode ser obtido da simulação)
+  const periodoContribuicaoMinimo = genero === 'f' ? 180 : 240; // Ajustado conforme instruções
+  const teto = 7507.49; // Teto para o cálculo dos benefícios
 
-  return valorAposentadoria;
+  // Usar o valor mínimo entre o salário atualizado e o teto
+  const salarioParaCalculo = Math.min(salarioAtualizado.salario_atualizado, teto);
+
+  // Calcular o índice base
+  let indice = 0.60;
+
+  // Verificar se a quantidade de salario_atualizado ultrapassa o período mínimo de contribuição
+  if (Object.keys(salarioAtualizado.salario_atualizado).length > periodoContribuicaoMinimo) {
+    // Calcular o número total de incrementos de 0.02
+    const quantidadeTotalIncrementos = Math.floor((Object.keys(salarioAtualizado.salario_atualizado).length - periodoContribuicaoMinimo) / 12) * 0.02;
+
+    // Adicionar os incrementos ao índice base
+    indice = 0.60 + quantidadeTotalIncrementos;
+  }
+
+  // Logar os valores de salarioParaCalculo e indice
+  console.log('salarioParaCalculo:', salarioParaCalculo);
+  console.log('indice:', indice);
+
+  // Verificar se salarioParaCalculo e indice são números
+  if (typeof salarioParaCalculo === 'number' && typeof indice === 'number' && !isNaN(indice)) {
+    const valorAposentadoria = new Big(salarioParaCalculo).times(indice).toFixed(2);
+    return valorAposentadoria;
+  } else {
+    console.error('Valores inválidos para calcular o benefício: ' + salarioParaCalculo + ', ' + indice);
+    return null;
+  }
 }
+
 
 // Função para calcular o ValorAuxilioDoenca
 async function calcularValorAuxilioDoenca(simulacaoId) {
@@ -249,11 +280,14 @@ async function calcularValorAuxilioDoenca(simulacaoId) {
     throw new Error('Não há valores de salário atualizado para calcular o benefício');
   }
 
-  const valorAuxilioDoenca = new Big(salarioAtualizado.salario_atualizado).times(0.91).toFixed(2);
+  
+  // Usar o valor mínimo entre o salário atualizado e o teto
+  const salarioParaCalculo = Math.min(salarioAtualizado.salario_atualizado, teto);
+
+  const valorAuxilioDoenca = new Big(salarioParaCalculo).times(0.91).toFixed(2);
 
   return valorAuxilioDoenca;
 }
-
 
 // Função principal do controlador
 const calcSimulacao = async (req, res) => {
