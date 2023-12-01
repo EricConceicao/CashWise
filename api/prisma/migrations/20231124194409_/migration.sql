@@ -1,3 +1,19 @@
+/*
+  Warnings:
+
+  - You are about to drop the `conta` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the `periodo` table. If the table is not empty, all the data it contains will be lost.
+
+*/
+-- DropForeignKey
+ALTER TABLE `periodo` DROP FOREIGN KEY `Periodo_contaId_fkey`;
+
+-- DropTable
+DROP TABLE `conta`;
+
+-- DropTable
+DROP TABLE `periodo`;
+
 -- CreateTable
 CREATE TABLE `atualizacao_monetaria` (
     `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,

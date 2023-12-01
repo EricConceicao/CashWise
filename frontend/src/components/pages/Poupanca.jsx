@@ -13,16 +13,15 @@ const Poupanca = () => {
 
 	const divStyle = {
 		width: '100%',
-		backgroundImage: 'url("img/moldura.png")',
 		backgroundSize: 'contain',
 		backgroundPosition: 'center',
 	}
-
 	const colorBody = {
-		backgroundImage: "linear-gradient(150deg, #fff, var(--cw-primary), #213740 )"
-	};
+        backgroundImage: 'url("img/moldura.png")',
+    }
 
 
+	
 	return (
 		<>
 			<Header />
@@ -31,7 +30,7 @@ const Poupanca = () => {
 					<h1 >Poupança</h1>
 					<h2 style={{ color: '#AEF2C6' }}>Conheça as vantagens e desvantagens de um dos investimentos mais tradicionais</h2>
 				</div>
-				<Container className="mt-5 mx-auto">
+				<Container className="mt-5 mb-5 mx-auto">
 					<Row className='bg-light px-1 py-3'>
 						<Col lg={6} md={6} className="mb-4">
 							<Card className="h-100" border="#213740" style={{ borderWidth: '3px' }}>

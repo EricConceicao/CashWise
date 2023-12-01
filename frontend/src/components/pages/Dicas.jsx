@@ -1,6 +1,6 @@
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
-import { Row, Col, Card } from 'react-bootstrap';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 import { FaMoneyBillWheat as Dica } from "react-icons/fa6";
 import CoinText from '../utils/CoinText';
 import './Artigos.css';
@@ -8,34 +8,35 @@ import './Artigos.css';
 const Dicas = () => {
 
     const card = {
-        minHeight: "20rem",
-        maxHeight: "60rem",
+        minHeight: "40rem",
+        maxHeight: "40rem",
         borderWidth: '3px',
+        padding: '10px',
+        overflow: 'auto'
 
     }
-
     const divStyle = {
         width: '100%',
         backgroundImage: 'url("img/moldura.png")',
         backgroundSize: 'contain',
         backgroundPosition: 'center',
 
-    };
-
+    }
+    const colorBody = {
+        backgroundImage: 'url("img/moldura.png")',
+    }
 
     return (
         <>
             <Header />
-            <main style={divStyle}>
-
-                <div className="bg-secondary text-white text-center py-5">
+            <div style={colorBody}>
+                <div className="bg-secondary text-white text-center py-5 p-1">
                     <h1>Dicas</h1>
                     <h2 style={{ color: '#AEF2C6' }}>Saiba Como Organizar suas Finanças</h2>
                 </div>
-                <div className="container p-3 bg-light text-justfy">
 
+                <Container className="mt-5 mb-5">
                     <Row className='bg-light px-1 py-3'>
-
                         <Col md={12} className="mb-4">
                             <Card style={card} >
                                 <Card.Body>
@@ -92,11 +93,12 @@ const Dicas = () => {
                             </Card>
                         </Col>
                     </Row>
-                </div>
-            </main>
-            <Footer />
+                </Container>
+                <Footer anchor="top" />
+            </div >
         </>
     );
 }
+
 
 export default Dicas;
