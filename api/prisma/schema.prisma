@@ -24,6 +24,7 @@ model User {
   creationDate DateTime    @default(now())
   sessions     Session[]
   UserIcons    UserIcons[]
+  CoinText     CoinText[]
 }
 
 // Tábela para envio de feedbacks da página contato
@@ -63,6 +64,14 @@ model UserIcons {
   obtained Boolean @default(false)
   user     User    @relation(fields: [userId], references: [id])
   icon     Icon    @relation(fields: [iconId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+// Tábela para registrar os textos chaves
+model CoinText {
+  id        String  @id
+  userId    Int
+  found     Boolean
+  User      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 // Tábela com os gastos registrados na agenda

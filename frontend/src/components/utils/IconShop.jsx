@@ -17,18 +17,14 @@ function IconShop() {
     // Hooks //
     const [showShop, setShowShop] = useState(false);
     const [data, setData] = useState([]);
-    const [pfp, setPfp] = useState(null);
-    const [coins, setCoins] = useState(null);
     const [feedback, setFeedback] = useState('');
+
     // Variáveis do Store //
     const wiseCoins = useUserStore(state => state.wiseCoins);
     const photo = useUserStore(state => state.photo);
     const token = useUserStore(state => state.userToken);
     const changePhoto = useUserStore(state => state.changePhoto);
     const refreshCoins = useUserStore(state => state.refreshCoins);
-
-    useEffect(() =>{setPfp(photo)}, [photo]);
-    useEffect(() =>{setCoins(wiseCoins)}, [wiseCoins]);
 
     // Função para requerir os dados com os ícones disponiveis no banco //
     useEffect(() => {
@@ -59,7 +55,7 @@ function IconShop() {
 
         // Espera o token receber os dados do loader para então chamar esta função
         if (token) getIcons();
-    }, [token, pfp]);
+    }, [token, photo]);
 
     // Compra ou altera ícones
     async function handleShop(photo) {
@@ -80,12 +76,10 @@ function IconShop() {
                 // Atualiza o store e atualiza os valores na página
                 if (data.newBalance != undefined) {
                     refreshCoins(data.newBalance);
-                    setCoins(data.newBalance);
                 }
                 changePhoto(photo);
-                setPfp(photo);
-
                 setFeedback(data.message);
+
                 return
             } else {
                 alert(data.message);
@@ -101,13 +95,16 @@ function IconShop() {
 
     function checkObtainedIcons(icon) {
         const result = data?.userIcons.find(user => user.iconId === icon.id)
-
         if (result?.obtained) {
-
             return <span>Selecionar ícone</span>
         } else {
-
-            return <> <span className="visually-hidden">Preço:</span> {icon.price} <img src="img/wisecoin.webp" width="20rem" /> </>
+            return (
+                <> 
+                    <span className="visually-hidden">Preço: </span> 
+                    {icon.price} 
+                    <img src="img/wisecoin.webp" width="20rem" /> 
+                </>
+            )
         }
     }
 
@@ -133,15 +130,15 @@ function IconShop() {
     return (
         <>
             <div id='img-overlay' onKeyDown={() => setShowShop(true)} onClick={() => setShowShop(true)} tabIndex={0}>
-                <img id='profile-img' src={pfp} alt="Sua foto de perfil" />
+                <img id='profile-img' src={photo} alt="Sua foto de perfil" />
             </div>
 
             <Modal show={showShop} onHide={() => setShowShop(false)} centered>
                 <Modal.Header className='bg-warning' closeButton><span className="display-6">Loja de icones</span></Modal.Header >
                 <Modal.Body>
                     <h1 className="h5">Selecione um ícone para comprar e usar no seu perfil!</h1>
-                    <p className="text-center bg-secondary text-white p-1 rounded-pill">Seu saldo: {coins} <img src="img/wisecoin.webp" width="24rem" /></p>
-                    <p>{feedback}</p>
+                    <p className="text-center bg-secondary text-white p-1 rounded-pill">Seu saldo: {wiseCoins} <img src="img/wisecoin.webp" width="24rem" /></p>
+                    <p className="text-center">{feedback}</p>
                     <Row>
                         {
                             data.icons && data.icons.map(icon => (
@@ -150,8 +147,8 @@ function IconShop() {
                                     <Card.Header className='fw-medium'>{icon.name}</Card.Header>
                                     <Card.Img style={cardImg} className='mb-2' src={icon.src} />
 
-                                    <Button disabled={pfp === icon.src || coins < icon.price && checkObtainedIcon(icon)} onClick={() => handleShop(icon.src)}>
-                                    { pfp === icon.src ? (
+                                    <Button disabled={photo === icon.src || wiseCoins < icon.price && checkObtainedIcon(icon)} onClick={() => handleShop(icon.src)}>
+                                    { photo === icon.src ? (
                                         "Selecionado"
                                     ) : (
                                         checkObtainedIcons(icon)

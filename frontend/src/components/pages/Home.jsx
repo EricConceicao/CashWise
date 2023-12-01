@@ -70,9 +70,8 @@ const Home = () => {
 
 	//Perfil do usuário
 
-	const [showModalEditarPerfil, setShowModalEditarPerfil] = useState(false)
-	const [showModalAlerta, setShowModalAlerta] = useState(false)
-
+	const [showModalEditarPerfil, setShowModalEditarPerfil] = useState(false);
+	const [showModalAlerta, setShowModalAlerta] = useState(false);
 
 	// Dados do store após o login do usuário //
 	const name = useUserStore(state => state.name);
@@ -81,7 +80,7 @@ const Home = () => {
 	const exp = useUserStore(state => state.exp);
 	const level = useUserStore(state => state.level);
 	const wiseCoins = useUserStore(state => state.wiseCoins);
-
+	
 	// Obter a data atual
 	const currentDate = new Date();
 

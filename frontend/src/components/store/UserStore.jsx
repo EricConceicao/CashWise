@@ -31,8 +31,8 @@ const useUserStore = create((set) => ({
 		userToken: null,
 		session: false,
 	}),
-	changePhoto: (newPhoto) => ({ photo: newPhoto }),
-	refreshCoins: (newBalance) => ({ wiseCoins: newBalance }),
+	changePhoto: (newPhoto) => set({ photo: newPhoto }),
+	refreshCoins: (newBalance) => set({ wiseCoins: newBalance }),
 })); 
 
 export default useUserStore

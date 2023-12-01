@@ -24,7 +24,7 @@ api.use(cookieParser());
 import authRouter from './routes/auth.routes.js';
 import contactRouter from './routes/contact.routes.js';
 import shopRouter from './routes/shop.routes.js';
-import coinsRouter from './routes/coins.routes.js';
+import coinTextRouter from './routes/coinText.routes.js';
 import gastosRouter from './routes/gastos.routes.js'
 import ganhosRouter from './routes/ganhos.routes.js'
 import contasRouter from './routes/contas.routes.js'
@@ -34,7 +34,7 @@ import simulacaoRouter from './routes/simulacao.routes.js';
 api.use('/auth', authRouter);
 api.use('/contact', contactRouter);
 api.use('/shop', shopRouter);
-api.use('/coins', coinsRouter);
+api.use('/coin', coinTextRouter);
 api.use('/gastos', gastosRouter);
 api.use('/ganhos', ganhosRouter);
 api.use('/contas', contasRouter);
