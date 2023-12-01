@@ -29,6 +29,8 @@ import { MdOutlineAddBox } from "react-icons/md";
 import { MdLibraryAdd } from "react-icons/md";
 import { FaPiggyBank } from "react-icons/fa";
 import moment from 'moment';
+import 'moment/locale/pt-br';
+moment.locale('pt-br');
 import { IoMdAddCircle } from "react-icons/io";
 import { MdOutlineUpdate } from "react-icons/md";
 import { IoCalendarOutline } from "react-icons/io5";
@@ -842,7 +844,7 @@ const Home = () => {
 			corFundo = 'bg-danger red';
 		} else if (diasRestantes >= 2 && diasRestantes <= 5) {
 			mensagem = `Vence em ${diasRestantes} dias!`;
-			corFundo = 'bg-warning yellow';
+			corFundo = 'bg-danger red';
 		} else {
 			mensagem = 'Fique tranquilo!';
 			corFundo = 'green';
@@ -922,9 +924,15 @@ const Home = () => {
 	const [relatorioVisivel, setRelatorioVisivel] = useState(false);
 
 	const abrirdivRelatorio = () => {
-		setRelatorioVisivel(!relatorioVisivel);
+		if (data) {
+			setRelatorioVisivel(true);
+		} else {
+			// Se a data não for válida, pode exibir uma mensagem de erro ou tomar outra ação necessária
+			setErroData('Por favor, selecione uma data.');
+		}
 	}
 
+	const [erroData, setErroData] = useState('');
 	const [data, setData] = useState(null);
 
 	const inputRef = useRef();
@@ -933,30 +941,43 @@ const Home = () => {
 	const [somatorioGastos, setSomatorioGastos] = useState(0);
 
 
+
 	const handleSubmitRelatorio = async (event) => {
 		event.preventDefault()
 
-		// const dataInputValue = event?.currentTarget?.dataInput?.value;
+		setRelatorioVisivel(false);
 
-		// if (!dataInputValue) {
-		//   console.error('Valor de dataInput não está definido.');
-		//   return;
-		// }
+		// Lógica de validação
+		if (!data) {
+			console.log('Erro: Por favor, selecione uma data.');
+			setErroData('Por favor, selecione uma data.');
+			return;
+		}
 
-		
+		// Validar se a data escolhida é maior que a data atual
+		const dataAtual = new Date();
+		if (data > dataAtual) {
+			console.log('Erro: Você não pode consultar datas futuras.');
+			setErroData('Você não pode consultar datas futuras.');
+			return;
+		}
+
+		// Se a data for válida, limpar qualquer mensagem de erro existente
+		setErroData('');
+
 
 		const dataRelatorio = {
 			data: moment(data).format('YYYY-MM'),
 		};
 
-		console.log("dataInput:",dataRelatorio)
+		console.log("dataInput:", dataRelatorio)
 
 		const response = await fetch(`http://localhost:3000/relatorio?data=${dataRelatorio.data}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
 			}
-			
+
 		})
 
 		if (response.ok) {
@@ -965,12 +986,14 @@ const Home = () => {
 			console.log('Somatório de Gastos:', data.somatorioGastos);
 			console.log('Somatório de Ganhos:', data.somatorioGanhos);
 			setSomatorioGanhos(data.somatorioGanhos);
-			setSomatorioGastos(data.somatorioGastos)
+			setSomatorioGastos(data.somatorioGastos);
+			abrirdivRelatorio();
 		}
 		else {
 			console.error('Erro ao obter relatório:', response.statusText);
 			// Lógica de tratamento de erro, se necessário
-		  }
+			setRelatorioVisivel(false);
+		}
 	}
 
 	const somaGanhos = somatorioGanhos.toLocaleString('pt-BR', {
@@ -979,6 +1002,11 @@ const Home = () => {
 	});
 
 	const somaGastos = somatorioGastos.toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+	});
+
+	const saldoTotal = (somatorioGanhos - somatorioGastos).toLocaleString('pt-BR', {
 		style: 'currency',
 		currency: 'BRL',
 	});
@@ -1950,29 +1978,40 @@ const Home = () => {
 											<DatePicker
 												name='dataInput'
 												selected={data}
-												onChange={(date) => setData(date)}
+												onChange={(date) => {
+													setData(date);
+													setErroData('');
+												}}
 												showMonthYearPicker
 												dateFormat="MM/yyyy"
 												customInput={<InputComIcone ref={inputRef} />}
-												className="form-control bg-secondary text-info"
+												className={`form-control bg-secondary text-info ${erroData ? 'is-invalid' : ''}`}
 												locale="pt"
 											/>
 										</Form.Group>
-										<Button as='button' type='submit' variant='outline-primary' size=''>Consultar</Button></div>
-								</Form>
-								<hr />
-								<h1>Resultados</h1>
-								<h4 className='fw-bold'>Referente</h4>
-								<p className='dado-relatorio d1 bg-secondary'>10/2023</p>
-								<h4 className='text-primary fw-bold'>Ganhos</h4>
-								{/* {veio ? <></> : ""} */}
-								<p className='bg-secondary d2 dado-relatorio'>{somaGanhos}</p>
-								<h4 className='text-danger fw-bold'>Gastos</h4>
-								<p className='bg-secondary d3 dado-relatorio'>{somaGastos}</p>
-								<h4 className='fw-bold' style={{ color: 'orange' }}>Saldo</h4>
-								<p className='bg-secondary d4 dado-relatorio'>R$ 10,00</p>
 
-								<p></p>
+										<Button as='button' type='submit' variant='outline-primary'>Consultar</Button>
+
+									</div>
+								</Form>
+								{erroData && <Form.Control.Feedback type="invalid">{erroData}</Form.Control.Feedback>}
+								<div className={`${relatorioVisivel && somaGanhos && somaGastos && saldoTotal ? 'visivel' : 'oculto'}`}>
+									<hr />
+									<p className='text-warning'><i>Resultados obtidos em {moment().format('DD/MM/YYYY [às] HH[:]mm')}</i></p>
+									<br />
+									<div className="row">
+										<h4 className='col-3'>Valor Ganho</h4>
+										<p className='bg-secondary dado-relatorio col'>{somaGanhos}</p>
+									</div>
+									<div className="row">
+										<h4 className='col-3'>Valor Gasto</h4>
+										<p className='bg-secondary dado-relatorio col'>{somaGastos}</p>
+									</div>
+									<div className="row">
+										<h4 className='col-3'>Saldo Total</h4>
+										<p className='bg-secondary dado-relatorio col'>{saldoTotal}</p>
+									</div>
+								</div>
 							</div>
 						</Container>
 

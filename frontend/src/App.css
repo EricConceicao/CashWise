@@ -64,6 +64,7 @@ h1 {
 
 .moeda {
     color: orange;
+    /* #ffc107 */
     width: 30px;
     height: 30px;
 }
@@ -245,7 +246,8 @@ h5 {
     align-items: center;
 }
 
-.painel, .relatorio {
+.painel,
+.relatorio {
     border-radius: 5px;
     padding: 50px 70px 30px 70px;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
@@ -255,8 +257,9 @@ h5 {
 
 }
 
-.painel h1, .relatorio h1 {
-    
+.painel h1,
+.relatorio h1 {
+
     color: #fff;
     text-align: center;
 }
@@ -382,7 +385,7 @@ h5 {
 }
 
 .yellow {
-    background-color:#d29e00;
+    background-color: #ffc107;
     border-radius: 10px;
     padding: 1px 5px;
     width: 150px;
@@ -402,7 +405,7 @@ h5 {
 }
 
 .green {
-    background-color: green;
+    background-color: #28a745;
     border-radius: 10px;
     padding: 1px 5px;
     width: 150px;
@@ -424,7 +427,8 @@ h5 {
     border: none;
 }
 
-.form-relatorio, .data-relatorio {
+.form-relatorio,
+.data-relatorio {
     display: flex;
     align-items: first baseline;
     justify-content: center;
@@ -433,26 +437,23 @@ h5 {
 
 .dado-relatorio {
     border-radius: 5px;
-    padding: 5px 0 5px 5px;
+    padding: 6px 0 6px 15px;
     font-weight: lighter;
-    font-size: large;
+    font-size: medium;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.d1 {
-    border-bottom: 1px solid #fff;
+.invalid-feedback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: oblique;
+    font-size: medium;
+    color: #dc3545;
+    border-radius: 5px;
 }
 
-.d2 {
-    border-bottom: 1px solid palegreen;
-}
 
-.d3 {
-    border-bottom: 1px solid red;
-}
-
-.d4 {
-    border-bottom: 1px solid orange;
-}
 
 
 /* Fim para estilo da Home */
