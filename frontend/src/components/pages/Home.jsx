@@ -409,6 +409,7 @@ const Home = () => {
 
 		if (response.ok) {
 			const data = await response.json()
+			showConfirmationMessage("Novo gasto adicionado com sucesso!");
 
 			const dataGasto = new Date(data.gasto.data);
 			const dataAtual = new Date();
@@ -490,24 +491,26 @@ const Home = () => {
 	// Categorias
 
 	const [showModalCategorias, setShowModalCategorias] = useState(false);
+	const [categoriasCadastradas, setCategoriasCadastradas] = useState([
+	"Alimentação",
+	"Saúde",
+	"Lazer",
+	"Impostos",
+	"Investimentos",
+	"Compras",
+	"Contas",
+	"Financiamento",
+	"Aluguel"]);
+	const [categorias, setCategorias] = useState([]);
+	const [totaisDeGastos, setTotaisDeGastos] = useState([]);
+	const [novaCategoria, setNovaCategoria] = useState('');
 
-	const [categorias, setCategorias] = useState([
-		"Alimentação",
-		"Saúde",
-		"Lazer",
-		"Impostos",
-		"Investimentos",
-		"Compras",
-		"Contas",
-		"Financiamento",
-		"Aluguel"]);
+	
 
 
 	const adicionarCategoria = (novaCategoria) => {
-		setCategorias([...categorias, novaCategoria]);
-	};
-
-	const [novaCategoria, setNovaCategoria] = useState('');
+		setCategorias([...categoriasCadastradas, novaCategoria]);
+	};	
 
 	const handleAdicionarNovaCategoria = () => {
 		if (novaCategoria) {
@@ -518,9 +521,9 @@ const Home = () => {
 	};
 
 	const handleExcluirCategoria = (index) => {
-		const novasCategorias = [...categorias];
+		const novasCategorias = [...categoriasCadastradas];
 		novasCategorias.splice(index, 1);
-		setCategorias(novasCategorias);
+		setCategoriasCadastradas(novasCategorias);
 	};
 
 
@@ -531,6 +534,21 @@ const Home = () => {
 		setCategoriaSelecionada(categoria);
 		setShowModalDetalhes(true);
 	};
+
+	useEffect(() => {
+
+		const getGastosPorCategoria = async () => {
+			const response = await fetch('http://localhost:3000/gastos/categorias')
+			const data = await response.json()
+			setCategorias(data.categorias);
+			setTotaisDeGastos(data.totaisDeGastos);
+			// console.log("categorias",data)
+			// setCategorias(data)
+		}
+
+		getGastosPorCategoria()
+
+	}, [])
 
 
 
@@ -924,7 +942,7 @@ const Home = () => {
 	const [relatorioVisivel, setRelatorioVisivel] = useState(false);
 
 	const abrirdivRelatorio = () => {
-		if (data) {
+		if (dataInput) {
 			setRelatorioVisivel(true);
 		} else {
 			// Se a data não for válida, pode exibir uma mensagem de erro ou tomar outra ação necessária
@@ -933,7 +951,7 @@ const Home = () => {
 	}
 
 	const [erroData, setErroData] = useState('');
-	const [data, setData] = useState(null);
+	const [dataInput, setDataInput] = useState(null);
 
 	const inputRef = useRef();
 
@@ -948,7 +966,7 @@ const Home = () => {
 		setRelatorioVisivel(false);
 
 		// Lógica de validação
-		if (!data) {
+		if (!dataInput) {
 			console.log('Erro: Por favor, selecione uma data.');
 			setErroData('Por favor, selecione uma data.');
 			return;
@@ -956,7 +974,8 @@ const Home = () => {
 
 		// Validar se a data escolhida é maior que a data atual
 		const dataAtual = new Date();
-		if (data > dataAtual) {
+
+		if (dataInput > dataAtual) {
 			console.log('Erro: Você não pode consultar datas futuras.');
 			setErroData('Você não pode consultar datas futuras.');
 			return;
@@ -967,7 +986,7 @@ const Home = () => {
 
 
 		const dataRelatorio = {
-			data: moment(data).format('YYYY-MM'),
+			data: moment(dataInput).format('YYYY-MM'),
 		};
 
 		console.log("dataInput:", dataRelatorio)
@@ -1324,7 +1343,7 @@ const Home = () => {
 												onChange={(e) => setSelectedCategoria(e.target.value)}
 											>
 												<option value="">Selecione</option>
-												{categorias.map((categoria, index) => (
+												{categoriasCadastradas.map((categoria, index) => (
 													<option key={index} value={categoria}>
 														{categoria}
 													</option>
@@ -1361,7 +1380,8 @@ const Home = () => {
 												/>
 											</div>
 										</Form.Group>
-										<Button as='button' variant="secondary" type='submit' onClick={handleAdicionarNovoGasto}>
+										{/* onClick={handleAdicionarNovoGasto} */}
+										<Button as='button' variant="secondary" type='submit'>
 											Adicionar
 										</Button>
 									</Form>
@@ -1622,7 +1642,7 @@ const Home = () => {
 							<Container className="categorias p-5 mb-5">
 								<div className="categorias-titulo">
 									<h1>Seus gastos por categoria</h1>
-									<div><Button as="button" variant="outline-primary" onClick={() => setShowModalCategorias(true)}>Criar nova categoria</Button>
+									{/* <div><Button as="button" variant="outline-primary" onClick={() => setShowModalCategorias(true)}>Criar nova categoria</Button>
 										<Modal
 											show={showModalCategorias}
 											onHide={() => setShowModalCategorias(false)}
@@ -1630,15 +1650,15 @@ const Home = () => {
 											aria-labelledby="contained-modal-title-vcenter"
 											centered
 										>
-											<Modal.Header className='bg-primary' closeButton>
+											<Modal.Header closeButton>
 												<Modal.Title id="contained-modal-title-vcenter">Nova categoria</Modal.Title>
 											</Modal.Header>
-											<Modal.Body className='bg-secondary text-light'>
+											<Modal.Body>
 												<Form>
 
 													<Form.Group className="mb-3">
 														<Form.Label>Veja alguns exemplos de categorias</Form.Label>
-														<Form.Control as="select" name="categoria" className='bg-secondary text-light'>
+														<Form.Control as="select" name="categoria">
 															<option value="">Lista de categorias</option>
 															{categorias.map((categoria, index) => (
 																<option key={index} value={categoria}>
@@ -1654,13 +1674,13 @@ const Home = () => {
 															type="text"
 															name="novaCategoria"
 															value={novaCategoria}
-															onChange={(e) => setNovaCategoria(e.target.value)} className='bg-secondary text-light' />
+															onChange={(e) => setNovaCategoria(e.target.value)} />
 													</Form.Group>
 
 												</Form>
 											</Modal.Body>
 
-											<Modal.Footer className='bg-primary'>
+											<Modal.Footer>
 												<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaCategoria} className='fw-bold'>
 													Criar
 												</Button>
@@ -1672,25 +1692,18 @@ const Home = () => {
 												</div>
 											)}
 										</Modal>
-									</div>
+									</div> */}
 								</div>
+
+								
 
 								<div className='cartoes-categoria'>
 									{categorias.map((categoria, index) => (
-										<div className="cartao-categoria" key={index}>
+										<div className="cartao-categoria" key={categoria}>
 											<div className="categoria">
 												<h4 className="fs-5">{categoria}</h4>
 												<p className='valor-categoria bg-secondary'>
-													{" "}
-													{gastosPorCategoria[categoria]
-														? gastosPorCategoria[categoria].reduce(
-															(total, gasto) => total + gasto.valor,
-															0
-														).toLocaleString('pt-BR', {
-															style: 'currency',
-															currency: 'BRL'
-														})
-														: 0}
+													{totaisDeGastos[index]}
 												</p>
 
 												{valorGasto > 0 && (
@@ -1740,7 +1753,7 @@ const Home = () => {
 								</div>
 
 
-								<Modal
+								{/* <Modal
 									show={showModalDetalhes}
 									onHide={() => setShowModalDetalhes(false)}
 									size="lg"
@@ -1777,13 +1790,13 @@ const Home = () => {
 											Fechar
 										</Button>
 									</Modal.Footer>
-								</Modal>
+								</Modal> */}
 
 
 							</Container>
 
 
-							{categoriasLegenda.length > 0 ? (
+							{/* {categoriasLegenda.length > 0 ? (
 								<Container className='grafico text-info'>
 									<h1>Perfil de gastos</h1>
 									<Pie className='grafico-torta'
@@ -1792,7 +1805,7 @@ const Home = () => {
 									/>
 								</Container>
 							) : null
-							}
+							} */}
 						</div>
 
 						<div className={`${fontesVisivel ? 'visivel' : 'oculto'}`}>
@@ -1808,15 +1821,15 @@ const Home = () => {
 											aria-labelledby="contained-modal-title-vcenter"
 											centered
 										>
-											<Modal.Header className='bg-primary' closeButton>
+											<Modal.Header closeButton>
 												<Modal.Title id="contained-modal-title-vcenter">Nova fonte de receita</Modal.Title>
 											</Modal.Header>
-											<Modal.Body className='bg-secondary text-light'>
+											<Modal.Body>
 												<Form>
 													<Form.Group className="mb-3">
 														<Form.Label>Veja alguns exemplos de fontes de receita</Form.Label>
-														<Form.Control as="select" name="categoria" className='bg-secondary text-light'>
-															<option value="">Lista de categorias</option>
+														<Form.Control as="select" name="categoria">
+															<option value="">Lista de fontes de receita</option>
 															{fontesdeReceita.map((fonte, index) => (
 																<option key={index} value={fonte}>
 																	{fonte}
@@ -1826,11 +1839,11 @@ const Home = () => {
 													</Form.Group>
 													<Form.Group className="mb-3">
 														<Form.Label>Adicione uma nova fonte de receita</Form.Label>
-														<Form.Control type="text" name="novaFonte" value={novaFonte} onChange={(e) => setNovaFonte(e.target.value)} className='bg-secondary text-light' />
+														<Form.Control type="text" name="novaFonte" value={novaFonte} onChange={(e) => setNovaFonte(e.target.value)} />
 													</Form.Group>
 												</Form>
 											</Modal.Body>
-											<Modal.Footer className='bg-primary'>
+											<Modal.Footer>
 												<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaFonte} className='fw-bold'>
 													Criar
 												</Button>
@@ -1848,7 +1861,7 @@ const Home = () => {
 									{fontesdeReceita.map((fonte, index) => (
 										<div className="cartao-categoria" key={index}>
 											<div className="categoria">
-												<p className="fw-bold fs-5">{fonte}</p>
+												<h4 className="fs-5">{fonte}</h4>
 												<p className='valor-categoria bg-secondary'>
 													{" "}
 													{ganhosPorFonte[fonte]
@@ -1958,7 +1971,6 @@ const Home = () => {
 						{/* Início de Relatório*/}
 
 
-						{/* className={`${relatorioVisivel ? 'visivel' : 'oculto'}`} */}
 						<Container className='relatorio'>
 							<div >
 								<h1>Relatório</h1>
@@ -1977,9 +1989,9 @@ const Home = () => {
 										/> */}
 											<DatePicker
 												name='dataInput'
-												selected={data}
+												selected={dataInput}
 												onChange={(date) => {
-													setData(date);
+													setDataInput(date);
 													setErroData('');
 												}}
 												showMonthYearPicker
@@ -2017,6 +2029,16 @@ const Home = () => {
 
 
 						{/* Fim de Relatório*/}
+						
+						{/* <div>
+							{categorias.map((categoria, index) => (
+								<div key={categoria}>
+									<p>Categoria: {categoria}</p>
+									<p>Total Gasto: {totaisDeGastos[index]}</p>
+									<hr />
+								</div>
+							))}
+						</div> */}
 
 
 
