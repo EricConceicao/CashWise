@@ -41,9 +41,11 @@ const Investodos = () => {
                                 <Card.Body className='py-5'>
                                     <Card.Img id='card-img' src="img/investtodos.png" alt="Imagem do artigo Investimento para todos" />
                                     <Card.Title className='fs-4 p-3 bg-info rounded-3' style={{ textAlign: "center" }}>Entenda Sobre os Conceitos dos Principais Investimentos</Card.Title>
-                                    <Card.Text className='fs-5 p-3' style={{ textAlign: "justify" }}>
-                                        <p>Investir é aplicar dinheiro em algum tipo de ativo, como ações, títulos, imóveis, entre outros, com o objetivo de obter um retorno financeiro. É importante investir porque permite que você faça o seu dinheiro trabalhar por você, gerando renda passiva e aumentando o seu patrimônio ao longo do tempo.</p>
-                                        <p>Outro aspecto fundamental do investimento é sua capacidade de transformar sonhos em realidade. Seja a compra de uma casa, a preparação para a aposentadoria ou até mesmo viagens e projetos pessoais, investir é a ferramenta que pode viabilizar esses objetivos financeiros. A disciplina e a constância nos investimentos contribuem significativamente para alcançar esses marcos importantes na vida.</p>
+                                    <Card.Text className='fs-5 p-2' style={{ textAlign: "justify" }}>
+                                        <p>Investir significa aplicar dinheiro em diferentes tipos de ativos, como ações, títulos, imóveis, entre outros, com o propósito de obter retorno financeiro.</p>
+                                        <p>É fundamental investir, pois permite que o dinheiro trabalhe a seu favor, gerando renda passiva e aumentando seu patrimônio ao longo do tempo.</p>
+                                        <p>Outro aspecto crucial do investimento é sua capacidade de transformar sonhos em realidade. Seja para adquirir uma casa, se preparar para a aposentadoria ou até mesmo para viagens e projetos pessoais, investir se torna a ferramenta viabilizadora desses objetivos financeiros.</p>
+                                        <p>A disciplina e a consistência nos investimentos contribuem significativamente para alcançar essas importantes metas na vida.</p>
                                     </Card.Text>
                                 </Card.Body>
                             </Card>
@@ -54,8 +56,8 @@ const Investodos = () => {
                                 <Card.Body>
                                     <Card.Img id='card-img' src="img/inv2.png" alt="Imagem do artigo Investimento para todos" />
                                     <Card.Title className='fs-4 p-4'>Renda Ativa</Card.Title>
-                                    <Card.Text className='fs-5' style={{ textAlign: "justify" }}>
-                                        <p>É aquela em que você precisa trabalhar ativamente para receber dinheiro. Isso inclui salários, honorários profissionais, renda de negócios próprios e qualquer outra atividade em que você esteja diretamente envolvido. Nesse caso, o seu tempo e esforço são necessários para gerar renda, sendo  forma de renda imediata e essencial para sustentar as despesas do dia a dia.</p>
+                                    <Card.Text className='fs-5 p-2' style={{ textAlign: "justify" }}>
+                                        <p>É aquela em que você precisa trabalhar ativamente para receber dinheiro. Isso inclui salários, honorários profissionais, renda de negócios próprios e qualquer outra atividade em que você esteja diretamente envolvido. Nesse caso, o seu tempo e esforço são necessários para gerar renda, sendo uma forma de renda imediata e essencial para sustentar as despesas do dia a dia.</p>
                                         <p>Esta modalidade de renda é frequentemente limitada pelo número de horas que você pode dedicar e pela capacidade individual de gerar receita. Seu crescimento está atrelado à disponibilidade de tempo e esforço. No entanto, ao investir em habilidades, automação ou expandir suas fontes de renda, é possível ampliar os ganhos provenientes dessa modalidade.</p>
                                         <p className='fs-5'>Características:</p>
                                         <ul>
@@ -74,13 +76,13 @@ const Investodos = () => {
                                 <Card.Body>
                                     <Card.Img id='card-img' src="img/inv1.png" alt="Imagem do artigo Investimento para todos" />
                                     <Card.Title className='fs-4 p-4'>Renda Passiva</Card.Title>
-                                    <Card.Text className='fs-5' style={{ textAlign: "justify" }}>
+                                    <Card.Text className='fs-5 p-2' style={{ textAlign: "justify" }}>
                                         <p>É aquela em que você recebe dinheiro sem precisar trabalhar ativamente. É uma forma de renda que é gerada por meio de investimentos, aluguéis, royalties, dividendos de ações e outros tipos de rendimentos financeiros. A renda passiva permite que você ganhe dinheiro mesmo quando não está trabalhando ativamente.</p>
                                         <p>Compreender e explorar a renda passiva pode ser um caminho valioso para complementar a renda ativa, proporcionar maior estabilidade financeira e alcançar uma independência financeira desejada no futuro.</p>
                                         <p className='fs-5'>Características:</p>
-                                        <ul>
+                                        <ul className='p-2'>
                                             <li>Não depende do seu trabalho ou esforço ativo;</li>
-                                            <li>Pode ser obtida a partir de investimentos em produtos do mercado financeiro, imóveis, royalties (quantia paga ao proprietário para usar, explorar, comercializar, enfim, usufruir de algo que é seu por direito, por exemplo, quantia paga a compositores e autores para usar sua música comercialmente), entre outros;</li>
+                                            <li>Pode ser obtida a partir de investimentos em produtos do mercado financeiro, imóveis, royalties (quantia paga ao proprietário para usar, explorar, comercializar.</li>
                                             <li>Não exige tempo e dedicação constante;</li>
                                             <li>Pode ser escalável, ou seja, pode crescer ao longo do tempo.</li>
                                         </ul>
@@ -93,10 +95,10 @@ const Investodos = () => {
                             <Card style={card}>
                                 <Card.Body>
                                     <Card.Title className='fs-4 p-3 bg-info rounded-3' style={{ textAlign: "center" }}>Qual é a Diferença entre Renda Ativa e Renda Passiva?</Card.Title>                                                                        <Card.Title></Card.Title>
-                                    <Card.Text className='fs-5 p-3' style={{ textAlign: "justify" }}>
-                                        <p>Ambos os tipos de renda têm suas vantagens e desvantagens. A renda ativa pode oferecer maior controle sobre seus ganhos e a possibilidade de aumentar sua renda com base no seu esforço. No entanto, ela também pode ser limitada pelo número de horas que você pode trabalhar e pela disponibilidade de oportunidades.</p>
-                                        <p>A renda passiva, por outro lado, pode oferecer a possibilidade de ganhos contínuos sem a necessidade de trabalhar ativamente. No entanto, ela geralmente requer um investimento inicial e pode levar tempo para gerar retornos significativos.</p>
-                                        <p>É importante entender que tanto a renda ativa quanto a renda passiva podem ser parte de uma estratégia financeira saudável. Muitas pessoas buscam diversificar suas fontes de renda, combinando trabalho ativo com investimentos que geram renda passiva.</p>
+                                    <Card.Text className='fs-5 p-2' style={{ textAlign: "justify" }}>
+                                        <p>Ambos os tipos de renda possuem nuances distintas, cada qual com suas vantagens e desvantagens. A renda ativa oferece a possibilidade de ter um controle mais direto sobre seus ganhos, permitindo aumentar sua renda em consonância com o esforço empregado. No entanto, essa modalidade pode ser limitada pelo número de horas disponíveis para o trabalho e pela escassez de oportunidades.</p>
+                                        <p>Por outro lado, a renda passiva apresenta-se como uma oportunidade de obter ganhos contínuos sem a necessidade de atuar diretamente. No entanto, geralmente requer um investimento inicial considerável e, muitas vezes, leva um período de tempo para gerar retornos financeiros significativos.</p>
+                                        <p>É crucial compreender que tanto a renda ativa quanto a passiva podem ser elementos integrantes de uma estratégia financeira saudável. Muitos indivíduos buscam diversificar suas fontes de renda, combinando esforços ativos, como trabalho convencional, consultoria ou negócios próprios, com investimentos capazes de gerar renda passiva, como aluguéis, dividendos de ações ou investimentos imobiliários.</p>
                                     </Card.Text>
                                 </Card.Body>
                             </Card>
@@ -107,9 +109,9 @@ const Investodos = () => {
                                 <Card.Body>
                                     <Card.Img id='card-img' src="img/inv4.png" alt="Imagem do artigo Investimento para todos" />
                                     <Card.Title className='fs-4 mt-3' style={{ textAlign: "center" }}>Renda Fixa</Card.Title>
-                                    <Card.Text className='fs-5 p-1' style={{ textAlign: "justify" }}>
-                                        <p>É uma categoria de investimento na qual os investidores direcionam recursos para instituições, sejam elas governamentais ou corporativas, em troca de um empréstimo; por meio da compra de títulos, como Tesouro Direto, CDBs (Certificados de Depósito Bancário), debêntures, entre outros; recebendo juros predefinidos e um prazo determinado para o retorno do capital emprestado, conhecido como vencimento </p>
-                                        <p> Esse tipo de investimento é considerado mais seguro do que muitas outras modalidades, pois oferece maior previsibilidade de retorno, já que os juros e o prazo são acordados no momento da aplicação; porém, a rentabilidade tende a ser mais estável e menor em comparação com investimentos de maior risco.</p>
+                                    <Card.Text className='fs-5 p-2' style={{ textAlign: "justify" }}>
+                                        <p>É uma categoria de investimento na qual os investidores alocam recursos em instituições, sejam elas governamentais ou corporativas, por meio da aquisição de títulos como Tesouro Direto, CDBs (Certificados de Depósito Bancário), debêntures, entre outros. Nesse formato, recebem juros predefinidos e estabelecem um prazo determinado para o retorno do capital emprestado, conhecido como vencimento. </p>
+                                        <p>Este tipo de investimento é considerado mais seguro em comparação com outras modalidades, pois proporciona maior previsibilidade de retorno. Os juros e o prazo são estabelecidos no momento da aplicação, o que oferece uma maior estabilidade. No entanto, é importante notar que a rentabilidade tende a ser mais estável e potencialmente menor em comparação com investimentos que envolvem um nível mais elevado de risco.</p>
                                     </Card.Text>
                                 </Card.Body>
                             </Card>
@@ -120,8 +122,8 @@ const Investodos = () => {
                                 <Card.Body className='p-1'>
                                     <Card.Title className='fs-4 mt-4' style={{ textAlign: "center" }}>Fontes de Renda Passiva para Pequenos Investidores:</Card.Title>
                                     <Card.Img className='' id='card-img' src="img/inv5.png" alt="Imagem do artigo Investimento para todos" />
-                                    <Card.Text className='fs-5 p-1 mt-4' style={{ textAlign: "justify" }}>
-                                        <ul>
+                                    <Card.Text className='fs-5 p-2 mt-4' style={{ textAlign: "justify" }}>
+                                        <ul className='p-3'>
                                             <li>Dividendos de Ações: Ao comprar ações de empresas, você pode receber uma parte dos lucros delas regularmente na forma de dividendos.</li>
                                             <li>Aluguéis de Imóveis: Se você tiver um imóvel para alugar, pode gerar renda passiva através dos aluguéis.</li>
                                             <li>Fundos Imobiliários (FIIs): Pequenos investidores podem comprar cotas de fundos que investem em imóveis, recebendo uma parte dos aluguéis e ganhos de capital.</li>
@@ -139,13 +141,12 @@ const Investodos = () => {
                                 <Card.Body>
                                     <Card.Img id='card-img' src="img/inv9.png" alt="Imagem do artigo Investimento para todos" />
                                     <Card.Title className='fs-4 mt-3' style={{ textAlign: "center" }}>Renda Variável</Card.Title>
-                                    <Card.Text className='fs-5 p-1' style={{ textAlign: "justify" }}>
-                                        <p>Renda Variável, por outro lado, é um tipo de investimento em que o retorno não pode ser previsto com certeza. Nesse caso, o investidor adquire uma participação em uma empresa ou fundo e espera obter lucro com a valorização desses ativos no mercado.</p>
-                                        <p>Nesse mercado, você compra partes de empresas (ações) ou investe em coisas como imóveis. O valor desses ativos pode subir ou descer e, portanto, é mais arriscado do que a renda fixa. No entanto, o potencial de lucro é maior.</p>
+                                    <Card.Text className='fs-5 p-2' style={{ textAlign: "justify" }}>
+                                        <p>Renda Variável é um tipo de investimento no qual o retorno não pode ser precisamente previsto. Nesse cenário, o investidor adquire uma participação em uma empresa ou fundo e busca obter lucro com a valorização desses ativos no mercado.</p>
+                                        <p>Nesse mercado, é possível adquirir partes de empresas (ações) ou investir em ativos como imóveis. O valor desses ativos pode flutuar, subindo ou descendo, tornando-se, portanto, mais arriscado em comparação com a renda fixa. No entanto, oferece um potencial de lucro mais elevado.</p>
 
-                                        <p>Podemos dizer então que o investimento é uma maneira importante de gerar renda passiva, mas não é sua única função.</p>
-                                        <p>Investir também pode envolver a busca por crescimento de capital, preservação de patrimônio e realização de objetivos financeiros de longo prazo. Renda passiva é dinheiro que você ganha regularmente sem precisar trabalhar ativamente por ele.</p>
-                                        <p>Como já vimos, podemos gerar renda passiva através de investimentos, aluguéis de imóveis, dividendos de ações ou até mesmo royalties (espécie de taxa paga pelo direito de usar, explorar ou comercializar um bem, como: livros, músicas, franquia, espaço, etc.).</p>
+                                        <p>Investir é, de fato, uma maneira significativa de gerar renda passiva, mas não se limita a essa função. Também pode envolver a busca pelo crescimento de capital, preservação de patrimônio e a realização de objetivos financeiros de longo prazo. Renda passiva é aquela renda que você obtém regularmente sem a necessidade de trabalhar ativamente para recebê-la.</p>
+                                        <p>Conforme mencionado, a geração de renda passiva pode ocorrer através de diversos meios, incluindo investimentos, aluguéis de imóveis, dividendos de ações e até mesmo royalties. Os royalties representam uma espécie de taxa paga pelo direito de usar, explorar ou comercializar um bem, como livros, músicas, franquias, espaço, entre outros.</p>
 
                                     </Card.Text>
                                 </Card.Body>

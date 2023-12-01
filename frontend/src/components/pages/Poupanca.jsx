@@ -18,9 +18,8 @@ const Poupanca = () => {
 	}
 	const colorBody = {
         backgroundImage: 'url("img/moldura.png")',
+		backgroundSize: 'contain',		
     }
-
-
 	
 	return (
 		<>
@@ -28,7 +27,7 @@ const Poupanca = () => {
 			<div style={colorBody}>
 				<div className="bg-secondary text-white text-center py-5">
 					<h1 >Poupança</h1>
-					<h2 style={{ color: '#AEF2C6' }}>Conheça as vantagens e desvantagens de um dos investimentos mais tradicionais</h2>
+					<h2 style={{ color: '#AEF2C6' }}>Conheça as Vantagens e Desvantagens de um dos Investimentos mais Tradicionais</h2>
 				</div>
 				<Container className="mt-5 mb-5 mx-auto">
 					<Row className='bg-light px-1 py-3'>
@@ -39,9 +38,9 @@ const Poupanca = () => {
 									<Card.Img className='w-60' src="img/cofrinho.png" alt="Imagem do artigo poupança" />
 
 									<Card.Text className='fs-5' style={{ textAlign: "justify" }}>
-										<p><Check size={35} className='text-primary' /> Segurança: <CoinText>A poupança é garantida pelo Fundo Garantidor de Créditos (FGC)</CoinText> até um determinado valor, proporcionando segurança aos seus fundos.</p>
+										<p><Check size={35} className='text-primary' /> Segurança: <CoinText>A poupança é garantida pelo Fundo Garantidor de Créditos (FGC)</CoinText> até um determinado valor, proporcionando segurança ao seu investimento.</p>
 
-										<p><Check size={35} className='text-primary' /> Acesso Fácil: É fácil abrir uma conta poupança, e a maioria dos bancos oferece serviços online, proporcionando acesso conveniente aos seus fundos.</p>
+										<p><Check size={35} className='text-primary' /> Acesso Fácil: É fácil abrir uma conta poupança, pois a maioria dos bancos oferecem serviços online, proporcionando acesso conveniente aos seus fundos.</p>
 
 										<p><Check size={35} className='text-primary' /> Liquidez: Você pode acessar seu dinheiro a qualquer momento, tornando a poupança uma escolha ideal para emergências e necessidades imediatas.</p>
 
@@ -67,7 +66,7 @@ const Poupanca = () => {
 
 										<p><Nocheck size={35} className='text-danger' /> Limites de Saque: Alguns bancos impõem limites aos saques da poupança, o que pode ser um problema em situações de emergência ou quando você precisa acessar grandes quantias.</p>
 
-										<p><Nocheck size={35} className='text-danger' /> Opções Limitadas: A poupança não oferece muitas opções de crescimento para seu dinheiro; é uma escolha conservadora, mas limitada em termos de potencial de ganhos.</p>
+										<p><Nocheck size={35} className='text-danger' /> Opções Limitadas: A poupança não oferece muitas opções de crescimento para seu dinheiro; é uma escolha conservadora e limitada, em termos de potenciais de ganhos.</p>
 
 										<p><Nocheck size={35} className='text-danger' /> Risco de Desvalorização: Em tempos de instabilidade econômica, a moeda pode desvalorizar, afetando indiretamente o valor real do seu dinheiro na poupança.</p>
 
