@@ -1,0 +1,65 @@
+/* Estilização do container principal */
+.blockquote-container {
+    width: 100%; /* Ocupa toda a largura da página */
+    display: flex;
+    flex-direction: row; /* Alinha os elementos na horizontal */
+    justify-content: center; /* Distribui os elementos horizontalmente */
+    align-items: center; /* Centraliza verticalmente os elementos */
+    background-color: #4382bd;
+    padding: 30px;
+  }
+  
+  blockquote {
+    max-width: 1000%; /* Define a largura máxima do bloco de citação */
+    font-size: 20px;
+    font-weight: 400;
+    color: #fff;
+  }
+  
+  
+  /* Estilização do texto dentro do bloco de citação */
+  .quote-text {
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: justify;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  
+  
+  /* Modelo de código CSS para estilização responsiva */
+  /* Para telas pequenas (máximo de 767px de largura) */
+  @media (max-width: 767px) {
+    .blockquote-container {
+      padding: 10px;
+      margin: 10px auto;
+    }
+  
+    .quote-text {
+      font-size: 14px;
+    }
+  }
+  
+  /* Modelo de código CSS para estilização de links dentro do texto */
+  .quote-text a {
+    color: #007bff; /* Cor padrão de links */
+    text-decoration: none; /* Remover sublinhado padrão */
+  }
+  
+  .quote-text a:hover {
+    text-decoration: underline; /* Sublinhar quando o mouse passar por cima */
+  }
+  
+  /* Modelo de código CSS para estilização de títulos em negrito */
+  .quote-text strong {
+    font-weight: bold;
+    color: #333; /* Cor de título em negrito */
+  }
+  
+  /* Modelo de código CSS para estilização de texto em itálico */
+  .quote-text i {
+    font-style: italic;
+    color: #777; /* Cor de texto em itálico */
+  }
+  

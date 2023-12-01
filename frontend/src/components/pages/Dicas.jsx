@@ -1,47 +1,49 @@
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
-import { Row, Col, Card } from 'react-bootstrap';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 import { FaMoneyBillWheat as Dica } from "react-icons/fa6";
+import CoinText from '../utils/CoinText';
 import './Artigos.css';
 
 const Dicas = () => {
 
     const card = {
-        minHeight: "20rem",
-        maxHeight: "60rem",
+        minHeight: "40rem",
+        maxHeight: "40rem",
         borderWidth: '3px',
+        padding: '10px',
+        overflow: 'auto'
 
     }
-
     const divStyle = {
         width: '100%',
         backgroundImage: 'url("img/moldura.png")',
         backgroundSize: 'contain',
         backgroundPosition: 'center',
 
-    };
-
+    }
+    const colorBody = {
+        backgroundImage: 'url("img/moldura.png")',
+    }
 
     return (
         <>
             <Header />
-            <main style={divStyle}>
-
-                <div className="bg-secondary text-white text-center py-5">
+            <div style={colorBody}>
+                <div className="bg-secondary text-white text-center py-5 p-1">
                     <h1>Dicas</h1>
                     <h2 style={{ color: '#AEF2C6' }}>Saiba Como Organizar suas Finanças</h2>
                 </div>
-                <div className="container p-3 bg-light text-justfy">
 
+                <Container className="mt-5 mb-5">
                     <Row className='bg-light px-1 py-3'>
-
                         <Col md={12} className="mb-4">
                             <Card style={card} >
                                 <Card.Body>
                                     <h2 className='fs-4 p-1 bg-info rounded-3 mb-3' style={{ textAlign: "center" }}>Gestão Financeira Pessoal</h2>
                                     <Card.Img id='card-img' src="img/dicasorg.png" alt="Imagem do artigo dicas" />
                                     <Card.Text className='fs-5' style={{ textAlign: "justify" }}>
-                                        <p>A economia financeira não se limita apenas a administrar o dinheiro, mas também envolve entender como cada escolha afeta nossas finanças a curto e longo prazo.</p>
+                                        <p>A economia financeira <CoinText>não se limita apenas a administrar o dinheiro</CoinText>, mas também envolve entender como cada escolha afeta nossas finanças a curto e longo prazo.</p>
                                         <p>Trata-se de um guia para uma vida financeira estável e próspera, onde cada passo é meticulosamente planejado para assegurar não apenas o bem-estar atual, mas também a segurança e o crescimento financeiro futuro.</p>
                                         <p>É o conjunto de estratégias inteligentes e hábitos responsáveis que pavimentam o caminho para alcançar metas, realizar sonhos e lidar com imprevistos sem comprometer o equilíbrio financeiro.</p>
                                         <p>Ao adotar essa mentalidade e cultivar essas práticas, não apenas se prepara para emergências financeiras, mas se desenvolve uma base sólida para aspirações maiores, permitindo a construção de um futuro financeiro seguro e a realização de uma variedade de metas, sejam elas a aquisição de bens, a liberdade para escolhas profissionais ou a construção de um legado para as próximas gerações.</p>
@@ -91,11 +93,12 @@ const Dicas = () => {
                             </Card>
                         </Col>
                     </Row>
-                </div>
-            </main>
-            <Footer />
+                </Container>
+                <Footer anchor="top" />
+            </div >
         </>
     );
 }
+
 
 export default Dicas;

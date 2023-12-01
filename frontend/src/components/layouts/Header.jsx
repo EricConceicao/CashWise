@@ -39,17 +39,17 @@ function Header() {
 
     return (
         <Navbar expand="md" className="position-sticky z-1 top-0 p-0 bg-primary">
-            <Container>
+            <Container fluid>
                 <Navbar.Brand href='/home'>
-                    <img className="rounded-pill" 
+                    <img className="rounded-pill p-1" 
                     src="/img/logo-cashwise.png" 
                     alt="Logo marca do CashWise"
                     title="CashWise. Educação Financeira"
-                    width="42%" />
+                    width="56%" />
                 </Navbar.Brand>
 
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse className="justify-content-end my-1" id="basic-navbar-nav">
+                <Navbar.Collapse className="justify-content-end my-1 px-3" id="basic-navbar-nav">
                     <Nav className="fw-bold gap-2 m-2" id="header-nav">
                         <NavLink className="nav-link" to="/home">Home</NavLink>
                         <NavLink className="nav-link" to="/boletim">Boletim Informativo</NavLink>

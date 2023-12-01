@@ -1,39 +1,57 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import useUserStore from '../store/UserStore';
 
 import Toast from 'react-bootstrap/Toast';
 
-function CoinText({children}) {
-	// Booleano para impedir mais clicks.
-	const [click, setClick] = useState(false);
+import useCoinTextStore from '../store/CoinTextStore';
 
+function CoinText({ textId, children }) {
 	// Altera a visibilidade do Toast
 	const [show, setShow] = useState(false);
 	const toggleShow = () => setShow(!show); 
 
+	// Stores //
+	const coinTexts = useCoinTextStore(state => state.coinTexts);
+	const setCoinText = useCoinTextStore(state => state.setCoinText);
+	const refreshCoins = useUserStore(state => state.refreshCoins);
+	const wiseCoins = useUserStore(state => state.wiseCoins);
 	const token = useUserStore(state => state.userToken);
 
-	async function handleClick() {
+	// Booleano para impedir mais clicks.
+	const [click, setClick] = useState(false);
+
+	useEffect(() => {
+		// Se não houver nada no store. Ele para.
+		console.log("passando: ", coinTexts);
+		if (!coinTexts) return
+
+		const result = coinTexts.find(item => item.id === textId);
+		console.log("passando a mais: ", result);
+		
+		result && setClick(result.found);
+
+	}, [coinTexts]);
+
+	async function handleClick(textId) {
 		if (click) return
-
 		setShow(true);
-		setClick(true);
-		console.log('passou')
 
-		const res = await fetch("http://localhost:3000/coins/add", {
+		const res = await fetch("http://localhost:3000/coin/add", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 				"Authorization": `Bearer: ${token}`
 			},
-			credentials: "include",
+			body: JSON.stringify({textId: textId})
 		});
 
 		if (res) {
 			const data = await res.json();
 
 			if (data.success) {
-				console.log('Deu bom' , data.message);
+				setClick(true);
+				refreshCoins(data.newBalance);
+				setCoinText([...coinTexts, { id: textId, found: true }]);
 				return
 			} else {
 				console.log('Falhou', data);
@@ -54,7 +72,7 @@ function CoinText({children}) {
 
 	return (
 		<>
-			<span className={click ? "bg-primary text-decoration-underline rounded-3 px-2" : ""} onClick={handleClick}>{children}</span>
+			<span className={click ? "bg-primary text-decoration-underline rounded-3 px-2" : ""} onClick={() => handleClick(textId)}>{children}</span>
 
 			<Toast style={toastStyle} className="border-2 border-secondary" show={show} onClose={toggleShow}>
 				<Toast.Header className="fw-medium bg-success justify-content-between">Palavra Chave Encontrada!</Toast.Header>

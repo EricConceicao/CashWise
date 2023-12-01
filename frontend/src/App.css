@@ -64,13 +64,14 @@ h1 {
 
 .moeda {
     color: orange;
+    /* #ffc107 */
     width: 30px;
     height: 30px;
 }
 
 .icone-conta {
-    width: 25px;
-    height: 25px;
+    width: 27px;
+    height: 27px;
 }
 
 h3,
@@ -185,7 +186,8 @@ h5 {
 
 .menu,
 .categorias,
-.contas, .relatorio {
+.contas,
+.relatorio {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -244,20 +246,21 @@ h5 {
     align-items: center;
 }
 
-.painel {
+.painel,
+.relatorio {
     border-radius: 5px;
     padding: 50px 70px 30px 70px;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    border-bottom: 4px solid orange;
+    border-bottom: 4px solid #fff;
     display: flex;
     flex-direction: column;
-    
+
 }
 
-.painel h1 {
-    font-weight: lighter;   
-    letter-spacing: 0.5px; 
-    color: orange;
+.painel h1,
+.relatorio h1 {
+
+    color: #fff;
     text-align: center;
 }
 
@@ -290,7 +293,7 @@ h5 {
 
 .tabela .titulo {
     border-radius: 5px;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);    
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     margin-bottom: 10px;
     font-size: 17px;
 }
@@ -298,7 +301,7 @@ h5 {
 .pagar {
     border-radius: 5px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    font-weight: lighter;        
+    font-weight: lighter;
     align-items: center;
     margin-bottom: 10px;
     font-size: 17px;
@@ -311,19 +314,15 @@ h5 {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.pagar:hover button {
-    color: orange;
-    border: none;
-    background-color: #fff;
-}
-
 .pagar:hover .moeda {
     color: #fff;
     border: none;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
-.pagar .col, .pagar .nova-despesa {
+.pagar .col,
+.pagar .nova-despesa,
+.pagar .col p {
     display: flex;
     align-items: center;
     gap: 9px;
@@ -381,7 +380,80 @@ h5 {
     width: 150px;
     text-align: center;
     font-weight: lighter;
-    padding: 10px;    
+    padding: 10px;
     border-radius: 5px;
 }
+
+.yellow {
+    background-color: #ffc107;
+    border-radius: 10px;
+    padding: 1px 5px;
+    width: 150px;
+    /* font-style: oblique; */
+}
+
+.red {
+    background-color: red;
+    border-radius: 10px;
+    padding: 1px 5px;
+    width: 150px;
+    /* font-style: oblique; */
+    /* display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px; */
+}
+
+.green {
+    background-color: #28a745;
+    border-radius: 10px;
+    padding: 1px 5px;
+    width: 150px;
+    /* font-style: oblique; */
+}
+
+.pagar span {
+    text-align: center;
+}
+
+.pagar button {
+    width: 35px;
+    border: none;
+    background-color: transparent;
+}
+
+.pagar:hover button {
+    color: #fff;
+    border: none;
+}
+
+.form-relatorio,
+.data-relatorio {
+    display: flex;
+    align-items: first baseline;
+    justify-content: center;
+    gap: 20px;
+}
+
+.dado-relatorio {
+    border-radius: 5px;
+    padding: 6px 0 6px 15px;
+    font-weight: lighter;
+    font-size: medium;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.relatorio .invalid-feedback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: oblique;
+    font-size: medium;
+    color: #dc3545;
+    border-radius: 5px;
+}
+
+
+
+
 /* Fim para estilo da Home */

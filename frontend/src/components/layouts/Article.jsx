@@ -22,7 +22,7 @@ const Article = ({ children, title, img, alt, dir }) => {
                 <Row className="align-items-center">
                     <Col sm={12}>
                         <h2 className="h3 mt-2 text-uppercase text-success fw-bolder">{title}</h2>
-                        <p className="fs-5 mt-2">{children}</p>
+                        <p className="mt-2">{children}</p>
                     </Col>
 
                     <Col sm={12} className="p-0">

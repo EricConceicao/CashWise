@@ -29,7 +29,26 @@ import { MdOutlineAddBox } from "react-icons/md";
 import { MdLibraryAdd } from "react-icons/md";
 import { FaPiggyBank } from "react-icons/fa";
 import moment from 'moment';
+import 'moment/locale/pt-br';
+moment.locale('pt-br');
 import { IoMdAddCircle } from "react-icons/io";
+import { MdOutlineUpdate } from "react-icons/md";
+import { IoCalendarOutline } from "react-icons/io5";
+import { CiBullhorn } from "react-icons/ci";
+import { CiDollar } from "react-icons/ci";
+import { CiCalendar } from "react-icons/ci";
+import { CiBag1 } from "react-icons/ci";
+import { MdEdit } from "react-icons/md";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { registerLocale } from 'react-datepicker';
+import pt from 'date-fns/locale/pt';
+registerLocale('pt', pt);
+import React, { useRef } from 'react';
+import InputComIcone from '../utils/InputComIcone';
+
+
+
 
 
 
@@ -59,9 +78,8 @@ const Home = () => {
 
 	//Perfil do usuário
 
-	const [showModalEditarPerfil, setShowModalEditarPerfil] = useState(false)
-	const [showModalAlerta, setShowModalAlerta] = useState(false)
-
+	const [showModalEditarPerfil, setShowModalEditarPerfil] = useState(false);
+	const [showModalAlerta, setShowModalAlerta] = useState(false);
 
 	// Dados do store após o login do usuário //
 	const name = useUserStore(state => state.name);
@@ -70,7 +88,7 @@ const Home = () => {
 	const exp = useUserStore(state => state.exp);
 	const level = useUserStore(state => state.level);
 	const wiseCoins = useUserStore(state => state.wiseCoins);
-
+	
 	// Obter a data atual
 	const currentDate = new Date();
 
@@ -390,6 +408,7 @@ const Home = () => {
 
 		if (response.ok) {
 			const data = await response.json()
+			showConfirmationMessage("Novo gasto adicionado com sucesso!");
 
 			const dataGasto = new Date(data.gasto.data);
 			const dataAtual = new Date();
@@ -471,24 +490,26 @@ const Home = () => {
 	// Categorias
 
 	const [showModalCategorias, setShowModalCategorias] = useState(false);
+	const [categoriasCadastradas, setCategoriasCadastradas] = useState([
+	"Alimentação",
+	"Saúde",
+	"Lazer",
+	"Impostos",
+	"Investimentos",
+	"Compras",
+	"Contas",
+	"Financiamento",
+	"Aluguel"]);
+	const [categorias, setCategorias] = useState([]);
+	const [totaisDeGastos, setTotaisDeGastos] = useState([]);
+	const [novaCategoria, setNovaCategoria] = useState('');
 
-	const [categorias, setCategorias] = useState([
-		"Alimentação",
-		"Saúde",
-		"Lazer",
-		"Impostos",
-		"Investimentos",
-		"Compras",
-		"Contas",
-		"Financiamento",
-		"Aluguel"]);
+	
 
 
 	const adicionarCategoria = (novaCategoria) => {
-		setCategorias([...categorias, novaCategoria]);
-	};
-
-	const [novaCategoria, setNovaCategoria] = useState('');
+		setCategorias([...categoriasCadastradas, novaCategoria]);
+	};	
 
 	const handleAdicionarNovaCategoria = () => {
 		if (novaCategoria) {
@@ -499,9 +520,9 @@ const Home = () => {
 	};
 
 	const handleExcluirCategoria = (index) => {
-		const novasCategorias = [...categorias];
+		const novasCategorias = [...categoriasCadastradas];
 		novasCategorias.splice(index, 1);
-		setCategorias(novasCategorias);
+		setCategoriasCadastradas(novasCategorias);
 	};
 
 
@@ -512,6 +533,21 @@ const Home = () => {
 		setCategoriaSelecionada(categoria);
 		setShowModalDetalhes(true);
 	};
+
+	useEffect(() => {
+
+		const getGastosPorCategoria = async () => {
+			const response = await fetch('http://localhost:3000/gastos/categorias')
+			const data = await response.json()
+			setCategorias(data.categorias);
+			setTotaisDeGastos(data.totaisDeGastos);
+			// console.log("categorias",data)
+			// setCategorias(data)
+		}
+
+		getGastosPorCategoria()
+
+	}, [])
 
 
 
@@ -653,6 +689,8 @@ const Home = () => {
 							vencimento: formatoData,
 						});
 
+						console.log("vish", formatoData)
+
 					} else if (conta.recorrencia === 'POR_PERIODO' && conta.periodo) {
 						// Se a recorrência for "POR_PERIODO" e houver um período associado
 						let dataAtual = new Date();
@@ -713,9 +751,10 @@ const Home = () => {
 
 					return dataVencimentoA - dataVencimentoB;
 				});
-				console.log(contasFiltradasOrdenadas);
+				/*console.log(contasFiltradasOrdenadas);*/
 
 				setContasAgenda(contasFiltradasOrdenadas);
+
 			} catch (error) {
 				console.error('Erro na requisição:', error);
 			}
@@ -723,7 +762,7 @@ const Home = () => {
 
 		getContasAgenda();
 
-	}, []);
+	}, [contas]);
 
 
 	const handleSubmitNovaConta = async (event) => {
@@ -755,12 +794,84 @@ const Home = () => {
 
 		if (response.ok) {
 			const data = await response.json()
-			alert(data.success)
+			/*alert(data.success)*/
 			showConfirmationMessage("Nova conta criada com sucesso!");
+			console.log("veja", data.conta)
 			setContas([...contas, data.conta])
-			setContasAgenda((prevContas) => [...prevContas, data.conta]);
+			setContasAgenda([...contasAgenda, data.conta]);
 		}
 	}
+
+
+	// Adicione esta função ao seu componente
+	/*const calcularDiasRestantes = (dataVencimento) => {
+		const dataAtual = moment();
+		const dataVencimentoFormatada = moment(dataVencimento, 'DD-MM-YYYY');
+
+		// Calcula a diferença em dias
+		const diasRestantes = dataVencimentoFormatada.diff(dataAtual, 'days');
+		console.log("faltam", diasRestantes)
+		console.log("data atual",dataAtual)
+		console.log("dataVencimentoFormatada",dataVencimentoFormatada)
+
+		let mensagem = '';
+		let corFundo = '';
+
+		if (diasRestantes === 0) {
+			mensagem = 'Vence hoje!';
+			corFundo = 'red';
+		} else if (diasRestantes === 1) {
+			mensagem = 'Vence amanhã!';
+			corFundo = 'red';
+		}
+		else if (diasRestantes >= 2 && diasRestantes <= 5) {
+			mensagem = `Vence em ${diasRestantes} dias!`;
+			corFundo = 'yellow';
+		}
+		else {
+			mensagem = 'Fique tranquilo!';
+			corFundo = 'green'
+		}
+
+		return { mensagem, corFundo };
+	};*/
+
+	const calcularDiasRestantes = (dataVencimento) => {
+		const dataAtual = new Date();
+		console.log('dados:  ', dataVencimento)
+		const partesDataVencimento = dataVencimento.split('-');
+		console.log(partesDataVencimento)
+		const dataVencimentoFormatada = new Date(partesDataVencimento[2], partesDataVencimento[1] - 1, partesDataVencimento[0]);
+
+		// Calcula a diferença em dias
+		const umDiaEmMilissegundos = 24 * 60 * 60 * 1000; // Número de milissegundos em um dia
+		const diferencaEmMilissegundos = dataVencimentoFormatada - dataAtual;
+		const diasRestantes = Math.ceil(diferencaEmMilissegundos / umDiaEmMilissegundos);
+
+		console.log("faltam", diasRestantes);
+
+		let mensagem = '';
+		let corFundo = '';
+
+		if (diasRestantes === 0) {
+			mensagem = 'Vence hoje!';
+			corFundo = 'bg-danger red';
+		} else if (diasRestantes === 1) {
+			mensagem = 'Vence amanhã!';
+			corFundo = 'bg-danger red';
+		} else if (diasRestantes >= 2 && diasRestantes <= 5) {
+			mensagem = `Vence em ${diasRestantes} dias!`;
+			corFundo = 'bg-danger red';
+		} else {
+			mensagem = 'Fique tranquilo!';
+			corFundo = 'green';
+		}
+
+		return { mensagem, corFundo };
+	};
+
+
+
 
 	const [showModalExcluirConta, setShowModalExcluirConta] = useState(false);
 	const [contaIdParaExcluir, setContaIdParaExcluir] = useState(null);
@@ -791,7 +902,10 @@ const Home = () => {
 			if (response.ok) {
 				// Atualize o estado ou realize alguma ação após a exclusão bem-sucedida
 				showConfirmationMessage("Conta excluída com sucesso!");
-				setShowModalExcluirConta(false);
+				setTimeout(() => {
+					setShowModalExcluirConta(false);
+				}, 2000);
+
 				setContasAgenda((prevContas) => prevContas.filter((conta) => conta.id !== contaIdParaExcluir));
 			} else {
 				// Trate o caso em que a exclusão falhou
@@ -827,16 +941,93 @@ const Home = () => {
 	const [relatorioVisivel, setRelatorioVisivel] = useState(false);
 
 	const abrirdivRelatorio = () => {
-		setRelatorioVisivel(!relatorioVisivel);
+		if (dataInput) {
+			setRelatorioVisivel(true);
+		} else {
+			// Se a data não for válida, pode exibir uma mensagem de erro ou tomar outra ação necessária
+			setErroData('Por favor, selecione uma data.');
+		}
 	}
 
+	const [erroData, setErroData] = useState('');
+	const [dataInput, setDataInput] = useState(null);
+
+	const inputRef = useRef();
+
+	const [somatorioGanhos, setSomatorioGanhos] = useState(0);
+	const [somatorioGastos, setSomatorioGastos] = useState(0);
 
 
 
+	const handleSubmitRelatorio = async (event) => {
+		event.preventDefault()
+
+		setRelatorioVisivel(false);
+
+		// Lógica de validação
+		if (!dataInput) {
+			console.log('Erro: Por favor, selecione uma data.');
+			setErroData('Por favor, selecione uma data.');
+			return;
+		}
+
+		// Validar se a data escolhida é maior que a data atual
+		const dataAtual = new Date();
+
+		if (dataInput > dataAtual) {
+			console.log('Erro: Você não pode consultar datas futuras.');
+			setErroData('Você não pode consultar datas futuras.');
+			return;
+		}
+
+		// Se a data for válida, limpar qualquer mensagem de erro existente
+		setErroData('');
 
 
+		const dataRelatorio = {
+			data: moment(dataInput).format('YYYY-MM'),
+		};
 
+		console.log("dataInput:", dataRelatorio)
 
+		const response = await fetch(`http://localhost:3000/relatorio?data=${dataRelatorio.data}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+
+		})
+
+		if (response.ok) {
+			const data = await response.json()
+			alert(data.success)
+			console.log('Somatório de Gastos:', data.somatorioGastos);
+			console.log('Somatório de Ganhos:', data.somatorioGanhos);
+			setSomatorioGanhos(data.somatorioGanhos);
+			setSomatorioGastos(data.somatorioGastos);
+			abrirdivRelatorio();
+		}
+		else {
+			console.error('Erro ao obter relatório:', response.statusText);
+			// Lógica de tratamento de erro, se necessário
+			setRelatorioVisivel(false);
+		}
+	}
+
+	const somaGanhos = somatorioGanhos.toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+	});
+
+	const somaGastos = somatorioGastos.toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+	});
+
+	const saldoTotal = (somatorioGanhos - somatorioGastos).toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+	});
 
 
 
@@ -1151,7 +1342,7 @@ const Home = () => {
 												onChange={(e) => setSelectedCategoria(e.target.value)}
 											>
 												<option value="">Selecione</option>
-												{categorias.map((categoria, index) => (
+												{categoriasCadastradas.map((categoria, index) => (
 													<option key={index} value={categoria}>
 														{categoria}
 													</option>
@@ -1188,7 +1379,8 @@ const Home = () => {
 												/>
 											</div>
 										</Form.Group>
-										<Button as='button' variant="secondary" type='submit' onClick={handleAdicionarNovoGasto}>
+										{/* onClick={handleAdicionarNovoGasto} */}
+										<Button as='button' variant="secondary" type='submit'>
 											Adicionar
 										</Button>
 									</Form>
@@ -1220,12 +1412,6 @@ const Home = () => {
 							<div className="row cartoes-menu">
 
 								<div className="col text-info">
-									<Button as='button' variant='secondary' className='botao-menu'>
-										<h4>Ganhos</h4>
-										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
-									</Button>
-								</div>
-								<div className="col text-info">
 									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivCategorias}>
 										<h4>Gastos por Categoria</h4>
 										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
@@ -1240,12 +1426,12 @@ const Home = () => {
 										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
 									</Button>
 								</div>
-								<div className="col text-info">
+								{/* <div className="col text-info">
 									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivRelatorio}>
 										<h4>Relatório</h4>
 										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
 									</Button>
-								</div>
+								</div> */}
 							</div>
 
 						</Container>
@@ -1268,49 +1454,65 @@ const Home = () => {
 								</div>
 
 								<div>
+									{contasAgenda.map((conta) => {
+										const { mensagem, corFundo } = calcularDiasRestantes(conta.vencimento);
 
+										return (
+											<div key={conta.id} className='pagar row pt-3 pb-3'>
 
-									{contasAgenda.map((conta) => (
-										<div key={conta.id} className='pagar row pt-3 pb-3'>
+												<div className="descricao-conta col fw-bold">
+													<FaPiggyBank className='moeda' />
+													{conta.descricao}
+												</div>
+												<div className="col">
+													<CiCalendar className='icone-conta' />
+													{conta.vencimento}
+												</div>
+												<div className="col"><span className={`${corFundo}`}>{mensagem}</span>
 
-											<div className="descricao-conta col fw-bold"><FaPiggyBank className='moeda' />{conta.descricao}</div>
-											<div className="col"><FaRegCalendarAlt className='icone-conta' />{conta.vencimento}</div>
-											<div className="col">Pagar</div>
-											<div className="col"><BsCoin className='icone-conta' />{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>
-											<div className="col-1"><Button variant='outline-info' title='Excluir' onClick={() => handleExcluirConta(conta.id)}><FaTrashAlt /></Button></div>
+												</div>
+												{/* <CiBullhorn className='icone-conta' /> */}
+												<div className="col">
+													<CiBag1 className='icone-conta' />
+													{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+												</div>
+												<div className="col-1">
+													<Button as='button' variant='outline-info' className='bg-transparent' title='Editar'><MdEdit /></Button>
+													<Button as='button' variant='outline-info' className='bg-transparent' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
+														<FaTrashAlt />
+													</Button>
+												</div>
 
-											<Modal
-												show={showModalExcluirConta}
-												onHide={() => setShowModalExcluirConta(false)}
-												size="md"
-												aria-labelledby="contained-modal-title-vcenter"
-												centered
-											>
-												<Modal.Header closeButton>
-
-												</Modal.Header>
-												<Modal.Body>
-													<Form onSubmit={handleSubmitExcluirConta}>
-														Tem certeza que quer excluir essa despesa?
-														<br />
-														<br />
-														<Button as='button' type='submit' variant="secondary">
-															Excluir
-														</Button>
-													</Form>
-												</Modal.Body>
-												{showConfirmation && (
-													<div className="alert alert-success alert-custom" role="alert">
-														{confirmationMessage}
-													</div>
-												)}
-											</Modal>
-
-										</div>
-									))}
-
+												<Modal
+													show={showModalExcluirConta}
+													onHide={() => setShowModalExcluirConta(false)}
+													size="md"
+													aria-labelledby="contained-modal-title-vcenter"
+													centered
+												>
+													<Modal.Header closeButton></Modal.Header>
+													<Modal.Body>
+														<Form onSubmit={handleSubmitExcluirConta}>
+															Tem certeza que quer excluir essa despesa?
+															<br />
+															<br />
+															<Button as='button' type='submit' variant="secondary">
+																Excluir
+															</Button>
+														</Form>
+													</Modal.Body>
+													{showConfirmation && (
+														<div className="alert alert-success alert-custom" role="alert">
+															{confirmationMessage}
+														</div>
+													)}
+												</Modal>
+											</div>
+										);
+									})}
 								</div>
 
+								<br />
 								<div className="pagar row pt-3 pb-3 border border-3">
 
 									<div className="linha col nova-despesa">
@@ -1321,7 +1523,7 @@ const Home = () => {
 									<div className="col"></div>
 									<div className="col"></div>
 									<div className="col-1">
-										<Button as="button" variant="outline-info" title='Criar' onClick={() => setShowModalContas(true)}className='border-'><IoMdAddCircle className='icone-conta'/>
+										<Button as="button" variant="outline-info" title='Criar' onClick={() => setShowModalContas(true)} className='mais'><IoMdAddCircle className='icone-conta' />
 										</Button>
 									</div>
 									<Modal
@@ -1439,7 +1641,7 @@ const Home = () => {
 							<Container className="categorias p-5 mb-5">
 								<div className="categorias-titulo">
 									<h1>Seus gastos por categoria</h1>
-									<div><Button as="button" variant="outline-primary" onClick={() => setShowModalCategorias(true)}>Criar nova categoria</Button>
+									{/* <div><Button as="button" variant="outline-primary" onClick={() => setShowModalCategorias(true)}>Criar nova categoria</Button>
 										<Modal
 											show={showModalCategorias}
 											onHide={() => setShowModalCategorias(false)}
@@ -1447,15 +1649,15 @@ const Home = () => {
 											aria-labelledby="contained-modal-title-vcenter"
 											centered
 										>
-											<Modal.Header className='bg-primary' closeButton>
+											<Modal.Header closeButton>
 												<Modal.Title id="contained-modal-title-vcenter">Nova categoria</Modal.Title>
 											</Modal.Header>
-											<Modal.Body className='bg-secondary text-light'>
+											<Modal.Body>
 												<Form>
 
 													<Form.Group className="mb-3">
 														<Form.Label>Veja alguns exemplos de categorias</Form.Label>
-														<Form.Control as="select" name="categoria" className='bg-secondary text-light'>
+														<Form.Control as="select" name="categoria">
 															<option value="">Lista de categorias</option>
 															{categorias.map((categoria, index) => (
 																<option key={index} value={categoria}>
@@ -1471,13 +1673,13 @@ const Home = () => {
 															type="text"
 															name="novaCategoria"
 															value={novaCategoria}
-															onChange={(e) => setNovaCategoria(e.target.value)} className='bg-secondary text-light' />
+															onChange={(e) => setNovaCategoria(e.target.value)} />
 													</Form.Group>
 
 												</Form>
 											</Modal.Body>
 
-											<Modal.Footer className='bg-primary'>
+											<Modal.Footer>
 												<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaCategoria} className='fw-bold'>
 													Criar
 												</Button>
@@ -1489,25 +1691,18 @@ const Home = () => {
 												</div>
 											)}
 										</Modal>
-									</div>
+									</div> */}
 								</div>
+
+								
 
 								<div className='cartoes-categoria'>
 									{categorias.map((categoria, index) => (
-										<div className="cartao-categoria" key={index}>
+										<div className="cartao-categoria" key={categoria}>
 											<div className="categoria">
-												<p className="fw-bold fs-5">{categoria}</p>
+												<h4 className="fs-5">{categoria}</h4>
 												<p className='valor-categoria bg-secondary'>
-													{" "}
-													{gastosPorCategoria[categoria]
-														? gastosPorCategoria[categoria].reduce(
-															(total, gasto) => total + gasto.valor,
-															0
-														).toLocaleString('pt-BR', {
-															style: 'currency',
-															currency: 'BRL'
-														})
-														: 0}
+													{totaisDeGastos[index]}
 												</p>
 
 												{valorGasto > 0 && (
@@ -1557,7 +1752,7 @@ const Home = () => {
 								</div>
 
 
-								<Modal
+								{/* <Modal
 									show={showModalDetalhes}
 									onHide={() => setShowModalDetalhes(false)}
 									size="lg"
@@ -1594,13 +1789,13 @@ const Home = () => {
 											Fechar
 										</Button>
 									</Modal.Footer>
-								</Modal>
+								</Modal> */}
 
 
 							</Container>
 
 
-							{categoriasLegenda.length > 0 ? (
+							{/* {categoriasLegenda.length > 0 ? (
 								<Container className='grafico text-info'>
 									<h1>Perfil de gastos</h1>
 									<Pie className='grafico-torta'
@@ -1609,7 +1804,7 @@ const Home = () => {
 									/>
 								</Container>
 							) : null
-							}
+							} */}
 						</div>
 
 						<div className={`${fontesVisivel ? 'visivel' : 'oculto'}`}>
@@ -1625,15 +1820,15 @@ const Home = () => {
 											aria-labelledby="contained-modal-title-vcenter"
 											centered
 										>
-											<Modal.Header className='bg-primary' closeButton>
+											<Modal.Header closeButton>
 												<Modal.Title id="contained-modal-title-vcenter">Nova fonte de receita</Modal.Title>
 											</Modal.Header>
-											<Modal.Body className='bg-secondary text-light'>
+											<Modal.Body>
 												<Form>
 													<Form.Group className="mb-3">
 														<Form.Label>Veja alguns exemplos de fontes de receita</Form.Label>
-														<Form.Control as="select" name="categoria" className='bg-secondary text-light'>
-															<option value="">Lista de categorias</option>
+														<Form.Control as="select" name="categoria">
+															<option value="">Lista de fontes de receita</option>
 															{fontesdeReceita.map((fonte, index) => (
 																<option key={index} value={fonte}>
 																	{fonte}
@@ -1643,11 +1838,11 @@ const Home = () => {
 													</Form.Group>
 													<Form.Group className="mb-3">
 														<Form.Label>Adicione uma nova fonte de receita</Form.Label>
-														<Form.Control type="text" name="novaFonte" value={novaFonte} onChange={(e) => setNovaFonte(e.target.value)} className='bg-secondary text-light' />
+														<Form.Control type="text" name="novaFonte" value={novaFonte} onChange={(e) => setNovaFonte(e.target.value)} />
 													</Form.Group>
 												</Form>
 											</Modal.Body>
-											<Modal.Footer className='bg-primary'>
+											<Modal.Footer>
 												<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaFonte} className='fw-bold'>
 													Criar
 												</Button>
@@ -1665,7 +1860,7 @@ const Home = () => {
 									{fontesdeReceita.map((fonte, index) => (
 										<div className="cartao-categoria" key={index}>
 											<div className="categoria">
-												<p className="fw-bold fs-5">{fonte}</p>
+												<h4 className="fs-5">{fonte}</h4>
 												<p className='valor-categoria bg-secondary'>
 													{" "}
 													{ganhosPorFonte[fonte]
@@ -1773,27 +1968,76 @@ const Home = () => {
 						{/* Fim de Fontes de Receita */}
 
 						{/* Início de Relatório*/}
-						{/*
-						<div className={`${relatorioVisivel ? 'visivel' : 'oculto'}`}>
-							<Container className='relatorio'>
+
+
+						<Container className='relatorio'>
+							<div >
 								<h1>Relatório</h1>
-								<p className='text-primary'><i>Selecione o mês e o ano para obter um resumo dos valores totais dos seus gastos e ganhos no período escolhido.</i></p>
-								<Form>
-									<Form.Group className="mb-3">
-										<Form.Label>Mês/Ano</Form.Label>
-										<Form.Control
+								<hr className='text-info' />
+								<p className='text-primary'><i>Selecione o mês e o ano e clique em "consultar" para obter um resumo dos valores totais dos seus gastos e ganhos.</i></p>
+								<br />
+								<Form onSubmit={handleSubmitRelatorio}>
+									<div className="form-relatorio">
+										<Form.Group className="mb-3 data-relatorio">
+											<Form.Label><h4>Mês/Ano</h4></Form.Label>
+											{/* <Form.Control
 											type="month"
 											name="mes"
-											value={descricao}
 											onChange={(e) => setDescricao(e.target.value)}
-											className="border border-primary"
-										/>
-									</Form.Group>
+											className="bg-secondary text-info"
+										/> */}
+											<DatePicker
+												name='dataInput'
+												selected={dataInput}
+												onChange={(date) => {
+													setDataInput(date);
+													setErroData('');
+												}}
+												showMonthYearPicker
+												dateFormat="MM/yyyy"
+												customInput={<InputComIcone ref={inputRef} />}
+												className={`form-control bg-secondary text-info ${erroData ? 'is-invalid' : ''}`}
+												locale="pt"
+											/>
+										</Form.Group>
+
+										<Button as='button' type='submit' variant='outline-primary'>Consultar</Button>
+
+									</div>
 								</Form>
-							</Container>
-						</div>
-												*/}
+								{erroData && <Form.Control.Feedback type="invalid">{erroData}</Form.Control.Feedback>}
+								<div className={`${relatorioVisivel && somaGanhos && somaGastos && saldoTotal ? 'visivel' : 'oculto'}`}>
+									<hr />
+									<p className='text-warning'><i>Resultados obtidos em {moment().format('DD/MM/YYYY [às] HH[:]mm')}</i></p>
+									<br />
+									<div className="row">
+										<h4 className='col-3'>Valor Ganho</h4>
+										<p className='bg-secondary dado-relatorio col'>{somaGanhos}</p>
+									</div>
+									<div className="row">
+										<h4 className='col-3'>Valor Gasto</h4>
+										<p className='bg-secondary dado-relatorio col'>{somaGastos}</p>
+									</div>
+									<div className="row">
+										<h4 className='col-3'>Saldo Total</h4>
+										<p className='bg-secondary dado-relatorio col'>{saldoTotal}</p>
+									</div>
+								</div>
+							</div>
+						</Container>
+
+
 						{/* Fim de Relatório*/}
+						
+						{/* <div>
+							{categorias.map((categoria, index) => (
+								<div key={categoria}>
+									<p>Categoria: {categoria}</p>
+									<p>Total Gasto: {totaisDeGastos[index]}</p>
+									<hr />
+								</div>
+							))}
+						</div> */}
 
 
 
