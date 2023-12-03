@@ -15,27 +15,16 @@ import { BsCoin } from 'react-icons/bs';
 import { HiOutlineCake } from 'react-icons/hi';
 import { MdOutlineEmojiPeople } from 'react-icons/md';
 import { BsStars } from 'react-icons/bs';
-import { AiOutlineSchedule } from 'react-icons/ai';
-import { GoArrowLeft } from 'react-icons/go'
-import { GoArrowRight } from 'react-icons/go'
-import { GoArrowSwitch } from "react-icons/go";
 import useUserStore from '../store/UserStore';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+ChartJS.register(ArcElement, Tooltip, Legend);
 import { Pie } from "react-chartjs-2";
-import { GiClick } from 'react-icons/gi'
 import { FaTrashAlt } from "react-icons/fa";
-import { FaRegCalendarAlt } from "react-icons/fa";
-import { MdOutlineAddBox } from "react-icons/md";
-import { MdLibraryAdd } from "react-icons/md";
 import { FaPiggyBank } from "react-icons/fa";
 import moment from 'moment';
 import 'moment/locale/pt-br';
 moment.locale('pt-br');
 import { IoMdAddCircle } from "react-icons/io";
-import { MdOutlineUpdate } from "react-icons/md";
-import { IoCalendarOutline } from "react-icons/io5";
-import { CiBullhorn } from "react-icons/ci";
-import { CiDollar } from "react-icons/ci";
 import { CiCalendar } from "react-icons/ci";
 import { CiBag1 } from "react-icons/ci";
 import { MdEdit } from "react-icons/md";
@@ -46,9 +35,6 @@ import pt from 'date-fns/locale/pt';
 registerLocale('pt', pt);
 import React, { useRef } from 'react';
 import InputComIcone from '../utils/InputComIcone';
-
-ChartJS.register(ArcElement, Tooltip, Legend);
-
 import IconShop from '../utils/IconShop';
 
 
@@ -89,7 +75,9 @@ const Home = () => {
 	const [valorGasto, setValorGasto] = useState(0);
 	const [ganhos, setganhos] = useState([])
 	const [somatorioGanhos, setSomatorioGanhos] = useState(0);
+	const [gastos, setgastos] = useState([])
 	const [somatorioGastos, setSomatorioGastos] = useState(0);
+	
 
 	// Modais
 	const [showModalNovoGanho, setShowModalNovoGanho] = useState(false);
@@ -97,7 +85,7 @@ const Home = () => {
 
 	// Controle mensal	
 
-	const MesAno = moment().format('MM/YYYY')	
+	const MesAno = moment().format('MM/YYYY')
 
 	const saldoAtual = (valorRecebido - valorGasto).toLocaleString('pt-BR', {
 		style: 'currency',
@@ -116,8 +104,6 @@ const Home = () => {
 
 
 	// Novo ganho
-
-	
 
 	const [novaDescricaoGanho, setNovaDescricaoGanho] = useState('');
 	const [selectedFonte, setSelectedFonte] = useState("");
@@ -155,7 +141,7 @@ const Home = () => {
 			showConfirmationMessage("Novo ganho adicionado com sucesso!");
 		}
 	};
-	
+
 
 	useEffect(() => {
 
@@ -164,7 +150,7 @@ const Home = () => {
 			const data = await response.json()
 			/*console.log(data.success)
 			console.log(data.ganhos)*/
-			console.log("ganhos",data)
+			// console.log("ganhos", data)
 			setganhos(data)
 
 		}
@@ -215,60 +201,59 @@ const Home = () => {
 
 	// Novo gasto
 
-	
 
 	const [novoDescricao, setNovoDescricao] = useState('');
 	const [selectedCategoria, setSelectedCategoria] = useState("");
 	const [novaData, setNovaData] = useState("");
 	const [novoValor1, setNovoValor1] = useState(0);
-	const [gastosPorCategoria, setGastosPorCategoria] = useState({});
+	// const [gastosPorCategoria, setGastosPorCategoria] = useState({});
 
 
-	const handleAdicionarNovoGasto = () => {
-		if (selectedCategoria && novoDescricao && novoValor1) {
+	// const handleAdicionarNovoGasto = () => {
+	// 	if (selectedCategoria && novoDescricao && novoValor1) {
 
-			// Adiciona o novo gasto com a categoria correspondente
-			const novoGasto = {
-				descricao: novoDescricao,
-				categoria: selectedCategoria,
-				valor: novoValor1,
-				data: novaData,
-			};
+	// 		// Adiciona o novo gasto com a categoria correspondente
+	// 		const novoGasto = {
+	// 			descricao: novoDescricao,
+	// 			categoria: selectedCategoria,
+	// 			valor: novoValor1,
+	// 			data: novaData,
+	// 		};
 
-			// Cria uma cópia do objeto gastosPorCategoria
-			const novosGastosPorCategoria = { ...gastosPorCategoria };
+	// 		// Cria uma cópia do objeto gastosPorCategoria
+	// 		const novosGastosPorCategoria = { ...gastosPorCategoria };
 
-			// Verifica se já existe um array de gastos para a categoria
-			if (!novosGastosPorCategoria[selectedCategoria]) {
-				novosGastosPorCategoria[selectedCategoria] = [];
-			}
+	// 		// Verifica se já existe um array de gastos para a categoria
+	// 		if (!novosGastosPorCategoria[selectedCategoria]) {
+	// 			novosGastosPorCategoria[selectedCategoria] = [];
+	// 		}
 
-			// Adiciona o novo gasto ao array de gastos da categoria
-			novosGastosPorCategoria[selectedCategoria].push(novoGasto);
+	// 		// Adiciona o novo gasto ao array de gastos da categoria
+	// 		novosGastosPorCategoria[selectedCategoria].push(novoGasto);
 
-			// Atualiza o estado com os novos gastos por categoria
-			setGastosPorCategoria(novosGastosPorCategoria);
+	// 		// Atualiza o estado com os novos gastos por categoria
+	// 		setGastosPorCategoria(novosGastosPorCategoria);
 
-			// Atualiza o valor total de gastos
-			setValorGasto(valorGasto + novoValor1);
+	// 		// Atualiza o valor total de gastos
+	// 		setValorGasto(valorGasto + novoValor1);
 
-			const percentuaisPorCategoria = {};
-			for (const categoria in novosGastosPorCategoria) {
-				const gastosCategoria = novosGastosPorCategoria[categoria];
-				const totalCategoria = gastosCategoria.reduce(
-					(total, gasto) => total + gasto.valor,
-					0
-				);
-				const percentual = (totalCategoria / valorGasto) * 100;
-				percentuaisPorCategoria[categoria] = percentual;
-			}
+	// 		const percentuaisPorCategoria = {};
+	// 		for (const categoria in novosGastosPorCategoria) {
+	// 			const gastosCategoria = novosGastosPorCategoria[categoria];
+	// 			const totalCategoria = gastosCategoria.reduce(
+	// 				(total, gasto) => total + gasto.valor,
+	// 				0
+	// 			);
+	// 			const percentual = (totalCategoria / valorGasto) * 100;
+	// 			percentuaisPorCategoria[categoria] = percentual;
+	// 		}
 
-			showConfirmationMessage("Novo gasto adicionado com sucesso!");
-		}
-	};
+	// 		showConfirmationMessage("Novo gasto adicionado com sucesso!");
+	// 	}
+	// };
 
 
-	const [gastos, setgastos] = useState([])
+	
 
 	useEffect(() => {
 
@@ -277,10 +262,8 @@ const Home = () => {
 			const data = await response.json()
 			/*console.log(data.success)
 			console.log(data.gastos)*/
-			console.log(data)
-			setgastos(data.gastos)
-
-
+			// console.log("todos os gastos", data)
+			setgastos(data)
 		}
 
 		getgastos()
@@ -316,8 +299,8 @@ const Home = () => {
 			dataGasto.setMonth(dataGasto.getMonth() + 1);
 			dataAtual.setMonth(dataAtual.getMonth() + 1);
 
-			console.log(dataGasto.getMonth(), dataGasto.getFullYear())
-			console.log(dataAtual.getMonth(), dataAtual.getFullYear())
+			// console.log(dataGasto.getMonth(), dataGasto.getFullYear())
+			// console.log(dataAtual.getMonth(), dataAtual.getFullYear())
 
 			if (dataGasto.getMonth() === dataAtual.getMonth() &&
 				dataGasto.getFullYear() === dataAtual.getFullYear()) {
@@ -332,8 +315,7 @@ const Home = () => {
 	// Fontes de receita
 
 	const [showModalNovaFonte, setShowModalNovaFonte] = useState(false);
-
-	const [fontesdeReceita, setFontesdeReceita] = useState([
+	const [fontesCadastradas, setFontesCadastradas] = useState([
 		"Salário",
 		"Décimo Terceiro",
 		"Férias",
@@ -344,12 +326,13 @@ const Home = () => {
 		"Rendimentos",
 		"Doação",
 		"Patrocínio"]);
+	const [fontes, setFontes] = useState([]);
+	const [novaFonte, setNovaFonte] = useState('');
+
 
 	const adicionarFonte = (novaFonte) => {
-		setFontesdeReceita([...fontesdeReceita, novaFonte]);
+		setFontesCadastradas([...fontesCadastradas, novaFonte]);
 	};
-
-	const [novaFonte, setNovaFonte] = useState('');
 
 	const handleAdicionarNovaFonte = () => {
 		if (novaFonte) {
@@ -360,9 +343,9 @@ const Home = () => {
 	};
 
 	const handleExcluirFonte = (index) => {
-		const novasFontes = [...fontesdeReceita];
+		const novasFontes = [...fontesCadastradas];
 		novasFontes.splice(index, 1);
-		setCategorias(novasFontes);
+		setFontes(novasFontes);
 	};
 
 	const [fonteSelecionada, setFonteSelecionada] = useState("");
@@ -372,6 +355,19 @@ const Home = () => {
 		setFonteSelecionada(fonte);
 		setShowModalDetalhesFontes(true);
 	};
+
+	useEffect(() => {
+
+		const getGanhosPorFonte = async () => {
+			const response = await fetch('http://localhost:3000/ganhos/fontes')
+			const data = await response.json()
+			// console.log("data", data)
+			setFontes(data);
+		}
+
+		getGanhosPorFonte()
+
+	}, [])
 
 
 
@@ -389,7 +385,6 @@ const Home = () => {
 		"Financiamento",
 		"Aluguel"]);
 	const [categorias, setCategorias] = useState([]);
-	const [totaisDeGastos, setTotaisDeGastos] = useState([]);
 	const [novaCategoria, setNovaCategoria] = useState('');
 
 
@@ -427,10 +422,8 @@ const Home = () => {
 		const getGastosPorCategoria = async () => {
 			const response = await fetch('http://localhost:3000/gastos/categorias')
 			const data = await response.json()
-			setCategorias(data.categorias);
-			setTotaisDeGastos(data.totaisDeGastos);
-			// console.log("categorias",data)
-			// setCategorias(data)
+			// console.log("data", data)
+			setCategorias(data);
 		}
 
 		getGastosPorCategoria()
@@ -470,11 +463,11 @@ const Home = () => {
 	const categoriasLegenda = []
 
 	categorias.map((categoria, index) => {
-		if (gastosPorCategoria[categoria]) {
-			categoriasLegenda.push(categoria)
-			labelsColors.push(colors[index])
-			valorCategorias.push(gastosPorCategoria[categoria].reduce((total, gasto) => total + gasto.valor, 0))
-		}
+
+		categoriasLegenda.push(categoria.categoria)
+		labelsColors.push(colors[index])
+		valorCategorias.push(categoria.totalGasto)
+
 	})
 
 	const dataMyChart = {
@@ -489,7 +482,6 @@ const Home = () => {
 	}
 
 	const options = {
-
 		plugins: {
 			legend: {
 				labels: {
@@ -529,9 +521,7 @@ const Home = () => {
 		const getcontas = async () => {
 			const response = await fetch('http://localhost:3000/contas/listar')
 			const data = await response.json()
-			/*console.log(data.success)
-			console.log(data.gastos)*/
-			console.log(data)
+			// console.log(data)
 			setContas(data)
 		}
 
@@ -569,7 +559,7 @@ const Home = () => {
 							vencimento.setMonth(vencimento.getMonth() + 1);
 						}
 
-						console.log("eita", vencimento)
+						// console.log("eita", vencimento)
 
 						const formatoData = moment(vencimento).format('DD-MM-YYYY');
 						acc.push({
@@ -577,7 +567,7 @@ const Home = () => {
 							vencimento: formatoData,
 						});
 
-						console.log("vish", formatoData)
+						// console.log("vish", formatoData)
 
 					} else if (conta.recorrencia === 'POR_PERIODO' && conta.periodo) {
 						// Se a recorrência for "POR_PERIODO" e houver um período associado
@@ -597,7 +587,7 @@ const Home = () => {
 						if (dataMoment >= inicioPeriodo && dataMoment <= fimPeriodo) {
 							// Se a data atual estiver dentro do período, definir vencimento
 							vencimento = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), conta.diaVencimento);
-							console.log("aqui", vencimento)
+							// console.log("aqui", vencimento)
 
 							let hoje = new Date;
 							if ((vencimento < hoje) && (conta.diaVencimento != diaDoMes)) {
@@ -620,15 +610,11 @@ const Home = () => {
 
 					}
 
-					// Formatando a data para "DD-MM-AAAA"
-
-
-
 					return acc;
 				}, []).filter(Boolean);
 
 				// Ordenar contas filtradas
-				console.log("Contas Filtradas: ", contasFiltradas)
+				// console.log("Contas Filtradas: ", contasFiltradas)
 				const contasFiltradasOrdenadas = contasFiltradas.sort((a, b) => {
 					const [diaA, mesA, anoA] = a.vencimento.split('-').map(Number);
 					const [diaB, mesB, anoB] = b.vencimento.split('-').map(Number);
@@ -684,7 +670,7 @@ const Home = () => {
 			const data = await response.json()
 			/*alert(data.success)*/
 			showConfirmationMessage("Nova conta criada com sucesso!");
-			console.log("veja", data.conta)
+			// console.log("veja", data.conta)
 			setContas([...contas, data.conta])
 			setContasAgenda([...contasAgenda, data.conta]);
 		}
@@ -726,9 +712,9 @@ const Home = () => {
 
 	const calcularDiasRestantes = (dataVencimento) => {
 		const dataAtual = new Date();
-		console.log('dados:  ', dataVencimento)
+		// console.log('dados:  ', dataVencimento)
 		const partesDataVencimento = dataVencimento.split('-');
-		console.log(partesDataVencimento)
+		// console.log(partesDataVencimento)
 		const dataVencimentoFormatada = new Date(partesDataVencimento[2], partesDataVencimento[1] - 1, partesDataVencimento[0]);
 
 		// Calcula a diferença em dias
@@ -736,7 +722,7 @@ const Home = () => {
 		const diferencaEmMilissegundos = dataVencimentoFormatada - dataAtual;
 		const diasRestantes = Math.ceil(diferencaEmMilissegundos / umDiaEmMilissegundos);
 
-		console.log("faltam", diasRestantes);
+		// console.log("faltam", diasRestantes);
 
 		let mensagem = '';
 		let corFundo = '';
@@ -812,21 +798,24 @@ const Home = () => {
 
 
 
-	const [categoriasVisivel, setCategoriasVisivel] = useState(false);
+	// const [categoriasVisivel, setCategoriasVisivel] = useState(false);
 
-	const abrirdivCategorias = () => {
+	// const abrirdivCategorias = () => {
 
-		setCategoriasVisivel(!categoriasVisivel);
-	}
+	// 	setCategoriasVisivel(!categoriasVisivel);
+	// }
 
-	const [fontesVisivel, setFontesVisivel] = useState(false);
+	// const [fontesVisivel, setFontesVisivel] = useState(false);
 
-	const abrirdivFontes = () => {
+	// const abrirdivFontes = () => {
 
-		setFontesVisivel(!fontesVisivel);
-	}
+	// 	setFontesVisivel(!fontesVisivel);
+	// }
 
 	const [relatorioVisivel, setRelatorioVisivel] = useState(false);
+	const [erroData, setErroData] = useState('');
+	const [dataInput, setDataInput] = useState(null);
+	const inputRef = useRef();
 
 	const abrirdivRelatorio = () => {
 		if (dataInput) {
@@ -835,14 +824,7 @@ const Home = () => {
 			// Se a data não for válida, pode exibir uma mensagem de erro ou tomar outra ação necessária
 			setErroData('Por favor, selecione uma data.');
 		}
-	}
-
-	const [erroData, setErroData] = useState('');
-	const [dataInput, setDataInput] = useState(null);
-
-	const inputRef = useRef();
-
-
+	}	
 
 
 	const handleSubmitRelatorio = async (event) => {
@@ -874,7 +856,7 @@ const Home = () => {
 			data: moment(dataInput).format('YYYY-MM'),
 		};
 
-		console.log("dataInput:", dataRelatorio)
+		// console.log("dataInput:", dataRelatorio)
 
 		const response = await fetch(`http://localhost:3000/relatorio?data=${dataRelatorio.data}`, {
 			method: 'GET',
@@ -886,9 +868,9 @@ const Home = () => {
 
 		if (response.ok) {
 			const data = await response.json()
-			alert(data.success)
-			console.log('Somatório de Gastos:', data.somatorioGastos);
-			console.log('Somatório de Ganhos:', data.somatorioGanhos);
+			// alert(data.success)
+			// console.log('Somatório de Gastos:', data.somatorioGastos);
+			// console.log('Somatório de Ganhos:', data.somatorioGanhos);
 			setSomatorioGanhos(data.somatorioGanhos);
 			setSomatorioGastos(data.somatorioGastos);
 			abrirdivRelatorio();
@@ -938,9 +920,9 @@ const Home = () => {
 
 			if (response.ok) {
 				const data = await response.json()
-				alert(data.success)
-				console.log('Somatório de Gastos Mensais:', data.somatorioGastos);
-				console.log('Somatório de Ganhos Mensais:', data.somatorioGanhos);
+				// alert(data.success)
+				// console.log('Somatório de Gastos Mensais:', data.somatorioGastos);
+				// console.log('Somatório de Ganhos Mensais:', data.somatorioGanhos);
 				setSomatorioGanhosMensal(data.somatorioGanhos);
 				setSomatorioGastosMensal(data.somatorioGastos);
 			}
@@ -1152,7 +1134,7 @@ const Home = () => {
 
 						<br />
 
-						<h1>Seu controle mensal</h1>
+						<h1>Controle Mensal</h1>
 						<Row>
 
 							<div className="cartao-perfil col">
@@ -1196,7 +1178,7 @@ const Home = () => {
 												onChange={(e) => setSelectedFonte(e.target.value)}
 											>
 												<option value="">Selecione</option>
-												{fontesdeReceita.map((fonte, index) => (
+												{fontesCadastradas.map((fonte, index) => (
 													<option key={index} value={fonte}>
 														{fonte}
 													</option>
@@ -1347,7 +1329,7 @@ const Home = () => {
 
 						<br />
 
-						<Container className='menu'>
+						{/* <Container className='menu'>
 							<h1 className='mb-5'>Seu menu</h1>
 							<div className="row cartoes-menu">
 
@@ -1366,20 +1348,18 @@ const Home = () => {
 										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
 									</Button>
 								</div>
-								{/* <div className="col text-info">
+								<div className="col text-info">
 									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivRelatorio}>
 										<h4>Relatório</h4>
 										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
 									</Button>
-								</div> */}
+								</div>
 							</div>
 
-						</Container>
-
-						<br />
+						</Container> */}
 
 
-						<Container className='painel mt-5 mb-5'>
+						<Container className='painel mt-5 mb-5 border'>
 							<h1>Agenda Financeira</h1>
 
 							<div className="tabela pt-5 pb-5">
@@ -1568,19 +1548,14 @@ const Home = () => {
 
 						</Container>
 
-						<br />
-
 						{/*style={{ backgroundColor: index % 2 === 0 ? '#fff' : '#D3D3D3' }}*/}
+						{/* className={`${categoriasVisivel ? 'visivel' : 'oculto'}`} */}
 
-
-
-						<br />
-
-						<div className={`${categoriasVisivel ? 'visivel' : 'oculto'}`}>
+						<div>
 
 							<Container className="categorias p-5 mb-5">
 								<div className="categorias-titulo">
-									<h1>Seus gastos por categoria</h1>
+									<h1>Gastos por Categoria</h1>
 									{/* <div><Button as="button" variant="outline-primary" onClick={() => setShowModalCategorias(true)}>Criar nova categoria</Button>
 										<Modal
 											show={showModalCategorias}
@@ -1638,11 +1613,14 @@ const Home = () => {
 
 								<div className='cartoes-categoria'>
 									{categorias.map((categoria, index) => (
-										<div className="cartao-categoria" key={categoria}>
+										<div className="cartao-categoria" key={index}>
 											<div className="categoria">
-												<h4 className="fs-5">{categoria}</h4>
+												<h4 className="fs-5">{categoria.categoria}</h4>
 												<p className='valor-categoria bg-secondary'>
-													{totaisDeGastos[index]}
+													{parseFloat(categoria.totalGasto).toLocaleString('pt-BR', {
+														style: 'currency',
+														currency: 'BRL',
+													})}
 												</p>
 
 												{valorGasto > 0 && (
@@ -1662,28 +1640,18 @@ const Home = () => {
 
 											<hr />
 
-											<div className="botoes">
+											<div>
 												<Button
 													as="button"
-													size="sm"
+													size=""
 													variant="outline-primary"
 													className="botao"
 													onClick={() => mostrarDetalhesCategoria(categoria)
 													}
 												>
-													Detalhar
+													Listar
 												</Button>
 
-
-												<Button
-													as="button"
-													size="sm"
-													variant="outline-danger"
-													className="botao"
-													onClick={() => handleExcluirCategoria(index)}
-												>
-													Excluir
-												</Button>
 											</div>
 
 										</div>
@@ -1735,7 +1703,7 @@ const Home = () => {
 							</Container>
 
 
-							{/* {categoriasLegenda.length > 0 ? (
+							{categoriasLegenda.length > 0 ? (
 								<Container className='grafico text-info'>
 									<h1>Perfil de gastos</h1>
 									<Pie className='grafico-torta'
@@ -1744,14 +1712,15 @@ const Home = () => {
 									/>
 								</Container>
 							) : null
-							} */}
+							}
 						</div>
 
-						<div className={`${fontesVisivel ? 'visivel' : 'oculto'}`}>
+						{/* className={`${fontesVisivel ? 'visivel' : 'oculto'}`} */}
+						<div>
 
 							<Container className="categorias p-5 mb-5">
 								<div className="categorias-titulo">
-									<h1>Seus ganhos por fonte de receita</h1>
+									<h1>Ganhos por Fonte de Receita</h1>
 									<div><Button as="button" variant="outline-primary" onClick={() => setShowModalNovaFonte(true)}>Criar nova fonte de receita</Button>
 										<Modal
 											show={showModalNovaFonte}
@@ -1769,7 +1738,7 @@ const Home = () => {
 														<Form.Label>Veja alguns exemplos de fontes de receita</Form.Label>
 														<Form.Control as="select" name="categoria">
 															<option value="">Lista de fontes de receita</option>
-															{fontesdeReceita.map((fonte, index) => (
+															{fontesCadastradas.map((fonte, index) => (
 																<option key={index} value={fonte}>
 																	{fonte}
 																</option>
@@ -1797,62 +1766,29 @@ const Home = () => {
 								</div>
 
 								<div className='cartoes-categoria'>
-									{fontesdeReceita.map((fonte, index) => (
+									{fontes.map((fonte, index) => (
 										<div className="cartao-categoria" key={index}>
 											<div className="categoria">
-												<h4 className="fs-5">{fonte}</h4>
+												<h4 className="fs-5">{fonte.fonte}</h4>
 												<p className='valor-categoria bg-secondary'>
-													{" "}
-													{ganhosPorFonte[fonte]
-														? ganhosPorFonte[fonte].reduce(
-															(total, ganho) => total + ganho.valor,
-															0
-														).toLocaleString('pt-BR', {
-															style: 'currency',
-															currency: 'BRL'
-														})
-														: 0}
+													{parseFloat(fonte.totalGanho).toLocaleString('pt-BR', {
+														style: 'currency',
+														currency: 'BRL',
+													})}
 												</p>
-												{/*
-												{valorGasto > 0 && (
-													<p className='percentual-categoria'>
-														{gastosPorCategoria[categoria]
-															? (
-																(gastosPorCategoria[categoria].reduce(
-																	(total, gasto) => total + gasto.valor,
-																	0
-																) / valorGasto) * 100
-															).toFixed(2) + "%"
-															: "0.00%"}
-													</p>
-												)}
-																*/}
-
 											</div>
 
 											<hr />
 
-											<div className="botoes">
+											<div>
 												<Button
 													as="button"
-													size="sm"
 													variant="outline-primary"
 													className="botao"
 													onClick={() => mostrarDetalhesFonte(fonte)
 													}
 												>
-													Detalhar
-												</Button>
-
-
-												<Button
-													as="button"
-													size="sm"
-													variant="outline-danger"
-													className="botao"
-													onClick={() => handleExcluirFonte(index)}
-												>
-													Excluir
+													Listar
 												</Button>
 											</div>
 
@@ -1908,8 +1844,6 @@ const Home = () => {
 						{/* Fim de Fontes de Receita */}
 
 						{/* Início de Relatório*/}
-
-
 						<Container className='relatorio'>
 							<div >
 								<h1>Relatório</h1>
@@ -1920,12 +1854,6 @@ const Home = () => {
 									<div className="form-relatorio">
 										<Form.Group className="mb-3 data-relatorio">
 											<Form.Label><h4>Mês/Ano</h4></Form.Label>
-											{/* <Form.Control
-											type="month"
-											name="mes"
-											onChange={(e) => setDescricao(e.target.value)}
-											className="bg-secondary text-info"
-										/> */}
 											<DatePicker
 												name='dataInput'
 												selected={dataInput}
@@ -1969,20 +1897,8 @@ const Home = () => {
 
 						{/* Fim de Relatório*/}
 
-						{/* <div>
-							{categorias.map((categoria, index) => (
-								<div key={categoria}>
-									<p>Categoria: {categoria}</p>
-									<p>Total Gasto: {totaisDeGastos[index]}</p>
-									<hr />
-								</div>
-							))}
-						</div> */}
-
-
 
 					</Container>
-
 
 
 				</Content >

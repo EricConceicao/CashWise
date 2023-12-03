@@ -49,12 +49,3 @@ export async function exibirRelatorio (req, res) {
         res.status(500).json({ error: 'Erro interno ao processar o relatório' });
       }
 }
-
-export async function exibirControleMensal (req, res) {
-  try {
-
-  }
-  catch {
-    
-  }
-}
