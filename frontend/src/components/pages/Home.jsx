@@ -1058,16 +1058,13 @@ const Home = () => {
 	*/
 
 	return (
-		<>
+		<div id='topo'>
 			<Header />
 
 			<div id="principal">
+					<Container fluid className="conteudo bg-secondary">
 
-				<Content>
-
-					<Container fluid className="conteudo bg-secondary p-5">
-
-						<h1 title='Consulte seu perfil'>Seu perfil</h1>
+						<h1 className='py-2' title='Consulte seu perfil'>Seu perfil</h1>
 
 						<div className='perfil'>
 
@@ -1192,9 +1189,9 @@ const Home = () => {
 						</div>
 
 						<br />
-						<Container className='controle border'>
+						<Container fluid className='controle border'>
 							<h1>Controle Mensal</h1>
-							<Row>
+							<Row className='px-3'>
 
 								<div className="cartao-perfil col">
 									<div className='item'>
@@ -1429,7 +1426,7 @@ const Home = () => {
 										)}
 									</Modal>
 								</div>
-								<div className=''><Button className='click' as="button" variant="secondary" style={{ display: "flex", alignItems: "center", gap: "5px", color: "#fff" }} onClick={() => setShowModalCategorias(true)}>Ver categorias de gastos<GiClick className='icone-click' /></Button>
+								<div><Button className='click' as="button" variant="secondary" style={{ display: "flex", alignItems: "center", gap: "5px", color: "#fff" }} onClick={() => setShowModalCategorias(true)}>Ver categorias de gastos<GiClick className='icone-click' /></Button>
 									<Modal
 										show={showModalCategorias}
 										onHide={() => setShowModalCategorias(false)}
@@ -1514,7 +1511,7 @@ const Home = () => {
 						</Container> */}
 
 
-						<Container className='painel mt-5 mb-5 border'>
+						<Container fluid className='painel mt-5 mb-5 border'>
 							<h1>Agenda Financeira</h1>
 
 							<div className="tabela pt-5 pb-5">
@@ -1784,7 +1781,7 @@ const Home = () => {
 
 						<div>
 
-							<Container className="categorias p-5 mb-5">
+							<Container fluid className="categorias p-3 mb-5">
 								<div className="categorias-titulo">
 									<h1>Gastos por Categoria</h1>
 								</div>
@@ -2037,13 +2034,10 @@ const Home = () => {
 
 
 					</Container>
-
-
-				</Content >
 			</div >
-			<Footer />
+			<Footer anchor='topo'/>
 
-		</>
+		</div>
 	);
 }
 

@@ -40,13 +40,14 @@ function Header() {
     return (
         <Navbar expand="md" className="position-sticky z-1 top-0 p-0 bg-primary">
             <Container fluid>
-                <Navbar.Brand href='/home'>
+                <figure className='d-flex align-items-center py-1'>
                     <img className="rounded-pill p-1" 
                     src="/img/logo-cashwise.png" 
                     alt="Logo marca do CashWise"
                     title="CashWise. Educação Financeira"
-                    width="56%" />
-                </Navbar.Brand>
+                    width="100rem" />
+                    <figcaption className='fs-5 fw-light'>CashWise</figcaption>
+                </figure>               
 
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse className="justify-content-end my-1 px-3" id="basic-navbar-nav">

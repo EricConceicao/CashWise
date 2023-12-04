@@ -27,18 +27,16 @@ h1 {
 }
 
 .conteudo {
-    width: 100vw;
     color: #fff;
-    padding: 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    gap: 60px;
+    gap: 1rem;
 }
 
 .perfil {
-    gap: 20px;
+    gap: 1rem;
     display: flex;
     flex-direction: column;
 }
@@ -53,7 +51,7 @@ h1 {
     padding: 50px 0px;
     border-bottom: 4px solid #fff;
     border-radius: 10px;
-    gap: 50px;
+    gap: 1rem;
 }
 
 .perfil2 {
@@ -239,9 +237,9 @@ h5 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 40px;
+    gap: 1rem;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    padding: 40px 0;
+    padding: 20px 0;
     border-radius: 5px;
 }
 
