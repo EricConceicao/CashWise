@@ -1,0 +1,9 @@
+.barra {
+    width: 70%;
+    .progress-bar-label {
+        color: #213740;
+        font-weight: bold;
+        font-size: medium;
+    }
+}
+

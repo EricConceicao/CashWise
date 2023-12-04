@@ -16,7 +16,6 @@ export async function vercontas(req, res) {
 export async function criarconta(req, res) {
   try {
     const { descricao, valor, diaVencimento, recorrencia, periodo } = req.body;
-    console.log({ descricao, valor, diaVencimento, recorrencia, periodo })
     // Cria a conta
 
     const objDados = {
@@ -83,7 +82,7 @@ export async function contasValidas(req, res) {
 }
 
 
-export async function deletarconta (req, res) {
+export async function deletarconta(req, res) {
   const contaId = parseInt(req.params.id);
 
   try {
@@ -116,6 +115,61 @@ export async function deletarconta (req, res) {
   } catch (error) {
     console.error('Erro ao excluir conta:', error);
     return res.status(500).json({ error: 'Erro interno no servidor' });
+  }
+};
+
+
+export async function editarconta(req, res) {
+
+  try {
+    const contaId = parseInt(req.params.id);
+
+    const conta = await prisma.conta.findUnique({
+      where: { id: contaId },
+    });
+
+    if (!conta) {
+      return res.status(404).json({ error: 'Conta não encontrada' });
+    }
+
+    const { descricao, valor, diaVencimento, recorrencia, periodo } = req.body;
+
+    const objDados = {
+      where: { id: contaId },
+      data: {
+        descricao,
+        valor,
+        diaVencimento,
+        recorrencia,
+        // Aqui você inclui o relacionamento com o período
+        periodo: {
+          create: {
+            inicio: periodo?.inicio,
+            fim: periodo?.fim,
+          },
+        },
+      },
+      include: {
+        // Aqui você inclui o relacionamento com o período na resposta
+        periodo: true,
+      },
+    }
+    if (recorrencia === 'MENSAL') {
+      delete objDados.data.periodo
+    }
+    const contaEditada = await prisma.conta.update(objDados);
+
+    res.status(200).json({
+      conta: contaEditada,
+      success: true,
+      message: "Editada com sucesso!",
+    });
+
+
+
+  } catch (error) {
+    console.error('Erro ao criar nova conta:', error);
+    res.status(500).json({ error: 'Erro interno no servidor' });
   }
 };
 

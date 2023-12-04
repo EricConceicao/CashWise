@@ -1,11 +1,47 @@
-//import React from 'react';
+// Imports de bibliotecas//
+import { useEffect } from 'react';
+
+// Imports de componentes do projeto //
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
+
+// Imports do BS //
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+
+// Stores //
+import useUserStore from '../store/UserStore';
+import useCoinTextStore from '../store/CoinTextStore';
+
 const BoletimInformativo = () => {
 
+  const setCoinText = useCoinTextStore(state => state.setCoinText);
+  const token = useUserStore(state => state.userToken);
 
+  useEffect(() => {
+    async function fetchData() {
+      const res = await fetch('http://localhost:3000/coin',{
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer: ${token}`
+        }
+      });
+
+      if (res) {
+        const data = await res.json();
+
+        if (data.success) {
+          console.log("Sucesso: ", data);
+          setCoinText(data.list);
+          return
+        } else {
+          console.log("Erro: ", data)
+        }
+      }
+    }
+    fetchData();
+  },[]);
+  
   const cardBody = {
     minHeight: "32rem",
     maxHeight: "32rem",

@@ -42,11 +42,11 @@ const Poupanca = () => {
 
 										<p><Check size={35} className='text-primary' /> Acesso Fácil: É fácil abrir uma conta poupança, pois a maioria dos bancos oferecem serviços online, proporcionando acesso conveniente aos seus fundos.</p>
 
-										<p><Check size={35} className='text-primary' /> Liquidez: Você pode acessar seu dinheiro a qualquer momento, tornando a poupança uma escolha ideal para emergências e necessidades imediatas.</p>
+										<p><Check size={35} className='text-primary' /> Liquidez: <CoinText textId="poup-2">Você pode acessar seu dinheiro a qualquer momento</CoinText>, tornando a poupança uma escolha ideal para emergências e necessidades imediatas.</p>
 
-										<p><Check size={35} className='text-primary' /> Rentabilidade Básica: A poupança oferece uma taxa de juros básica, permitindo que seu dinheiro cresça, mesmo que em um ritmo moderado.</p>
+										<p><Check size={35} className='text-primary' /> Rentabilidade Básica: A poupança <CoinText textId="poup-3">oferece uma taxa de juros básica</CoinText>, permitindo que seu dinheiro cresça, mesmo que em um ritmo moderado.</p>
 
-										<p><Check size={35} className='text-primary' /> Isenção de Impostos: Em muitos países, os rendimentos da poupança são isentos de impostos, o que significa que você mantém todo o dinheiro que ganha.</p>
+										<p><Check size={35} className='text-primary' /> Isenção de Impostos: <CoinText textId="poup-4">Em muitos países, os rendimentos da poupança são isentos de impostos</CoinText>, o que significa que você mantém todo o dinheiro que ganha.</p>
 									</Card.Text>
 								</Card.Body>
 							</Card>
@@ -60,7 +60,7 @@ const Poupanca = () => {
 
 
 									<Card.Text className='fs-5' style={{ textAlign: "justify" }}>
-										<p><Nocheck size={35} className='text-danger' /> Baixa Rentabilidade: Comparada a outras opções de investimento, a poupança oferece uma taxa de juros relativamente baixa, muitas vezes não acompanhando a inflação.</p>
+										<p><Nocheck size={35} className='text-danger' /> Baixa Rentabilidade: Comparada a outras opções de investimento, <CoinText textId="poup-5">poupança oferece uma taxa de juros relativamente baixa</CoinText>, muitas vezes não acompanhando a inflação.</p>
 
 										<p><Nocheck size={35} className='text-danger' /> Perda para Inflação: Se a taxa de inflação for maior do que a taxa de juros da poupança, o poder de compra do seu dinheiro diminuirá ao longo do tempo.</p>
 
