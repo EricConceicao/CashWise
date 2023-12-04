@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button"
 import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
 import Footer from '../layouts/Footer';
-import { Container } from 'react-bootstrap';
+import { Container, ProgressBar } from 'react-bootstrap';
 import { useEffect, useState } from "react"
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -36,6 +36,8 @@ registerLocale('pt', pt);
 import React, { useRef } from 'react';
 import InputComIcone from '../utils/InputComIcone';
 import IconShop from '../utils/IconShop';
+import { GiClick } from "react-icons/gi";
+import WithLabelExample from '../utils/ProgressBar';
 
 
 const Home = () => {
@@ -77,7 +79,9 @@ const Home = () => {
 	const [somatorioGanhos, setSomatorioGanhos] = useState(0);
 	const [gastos, setgastos] = useState([])
 	const [somatorioGastos, setSomatorioGastos] = useState(0);
-	
+	const [somatorioGanhosMensal, setSomatorioGanhosMensal] = useState(0);
+	const [somatorioGastosMensal, setSomatorioGastosMensal] = useState(0);
+
 
 	// Modais
 	const [showModalNovoGanho, setShowModalNovoGanho] = useState(false);
@@ -85,23 +89,7 @@ const Home = () => {
 
 	// Controle mensal	
 
-	const MesAno = moment().format('MM/YYYY')
-
-	const saldoAtual = (valorRecebido - valorGasto).toLocaleString('pt-BR', {
-		style: 'currency',
-		currency: 'BRL',
-	});
-
-	const Recebido = valorRecebido.toLocaleString('pt-BR', {
-		style: 'currency',
-		currency: 'BRL',
-	});
-
-	const Gasto = valorGasto.toLocaleString('pt-BR', {
-		style: 'currency',
-		currency: 'BRL',
-	});
-
+	const MesAno = moment().format('MM/YYYY');
 
 	// Novo ganho
 
@@ -112,35 +100,35 @@ const Home = () => {
 	const [ganhosPorFonte, setGanhosPorFonte] = useState({});
 
 
-	const handleAdicionarNovoGanho = () => {
-		if (selectedFonte && novaDescricaoGanho && novoValorGanho) {
+	// const handleAdicionarNovoGanho = () => {
+	// 	if (selectedFonte && novaDescricaoGanho && novoValorGanho) {
 
-			const novoGanho = {
-				descricao: novaDescricaoGanho,
-				fonte: selectedFonte,
-				valor: novoValorGanho,
-				data: novaDataGanho,
-			};
+	// 		const novoGanho = {
+	// 			descricao: novaDescricaoGanho,
+	// 			fonte: selectedFonte,
+	// 			valor: novoValorGanho,
+	// 			data: novaDataGanho,
+	// 		};
 
-			// Cria uma cópia do objeto gastosPorCategoria
-			const novosGanhosPorFonte = { ...ganhosPorFonte };
+	// 		// Cria uma cópia do objeto gastosPorCategoria
+	// 		const novosGanhosPorFonte = { ...ganhosPorFonte };
 
-			// Verifica se já existe um array de gastos para a categoria
-			if (!novosGanhosPorFonte[selectedFonte]) {
-				novosGanhosPorFonte[selectedFonte] = [];
-			}
+	// 		// Verifica se já existe um array de gastos para a categoria
+	// 		if (!novosGanhosPorFonte[selectedFonte]) {
+	// 			novosGanhosPorFonte[selectedFonte] = [];
+	// 		}
 
-			// Adiciona o novo gasto ao array de gastos da categoria
-			novosGanhosPorFonte[selectedFonte].push(novoGanho);
+	// 		// Adiciona o novo gasto ao array de gastos da categoria
+	// 		novosGanhosPorFonte[selectedFonte].push(novoGanho);
 
-			// Atualiza o estado com os novos gastos por categoria
-			setGanhosPorFonte(novosGanhosPorFonte);
+	// 		// Atualiza o estado com os novos gastos por categoria
+	// 		setGanhosPorFonte(novosGanhosPorFonte);
 
-			setValorRecebido(valorRecebido + novoValorGanho);
+	// 		setValorRecebido(valorRecebido + novoValorGanho);
 
-			showConfirmationMessage("Novo ganho adicionado com sucesso!");
-		}
-	};
+	// 		showConfirmationMessage("Novo ganho adicionado com sucesso!");
+	// 	}
+	// };
 
 
 	useEffect(() => {
@@ -253,7 +241,7 @@ const Home = () => {
 	// };
 
 
-	
+
 
 	useEffect(() => {
 
@@ -744,7 +732,77 @@ const Home = () => {
 		return { mensagem, corFundo };
 	};
 
+	// const [showModalEditarConta, setShowModalEditarConta] = useState(false);
+	// const [contaIdParaEditar, setContaIdParaEditar] = useState(null);
 
+	// const handleEditarConta = (contaId) => {
+
+	// 	setContaIdParaEditar(contaId);
+
+	// 	setShowModalEditarConta(true);
+	// }
+
+
+	// const handleSubmitEditarConta = async (event) => {
+	// 	event.preventDefault();
+
+	// 	if (!contaIdParaEditar) {
+	// 		console.error('ID da conta não definido.');
+	// 		return;
+	// 	}
+
+	// 	try {
+
+	// 		let novoPeriodo;
+	// 		event.target.recorrencia.value === 'MENSAL' ? (novoPeriodo = null) : (
+	// 			novoPeriodo = {
+	// 				inicio: event.target.inicioPeriodo.value,
+	// 				fim: event.target.fimPeriodo.value,
+	// 			})
+
+
+	// 		const contaEditada = {
+	// 			descricao: event.target.descricao.value,
+	// 			valor: event.target.valor.value,
+	// 			diaVencimento: parseInt(event.target.vencimento.value, 10),
+	// 			recorrencia: event.target.recorrencia.value,
+	// 			periodo: novoPeriodo,
+	// 		};
+
+	// 		const response = await fetch(`http://localhost:3000/contas/editar/${contaIdParaEditar}`, {
+	// 			method: 'PATCH',
+	// 			headers: {
+	// 				'Content-Type': 'application/json',
+	// 			  },
+	// 			  body: JSON.stringify(contaEditada),
+	// 		});
+
+	// 		if (response.ok) {
+	// 			const data = await response.json();
+	// 			// Atualize o estado ou realize alguma ação após a exclusão bem-sucedida
+	// 			showConfirmationMessage("Conta editada com sucesso!");
+	// 			setTimeout(() => {
+	// 				setShowModalEditarConta(false);
+	// 			}, 2000);
+
+	// 			setContasAgenda((prevContas) => prevContas.map((conta) => conta.id === contaIdParaEditar?
+	// 			{
+	// 				...conta,
+	// 				// Adicione dados específicos da resposta, se necessário
+	// 				dadosAdicionais: data.dadosAdicionais,
+	// 			  }
+	// 			: conta));
+	// 		} else {
+	// 			// Trate o caso em que a exclusão falhou
+	// 			console.error('Erro ao editar conta:', response.statusText);
+	// 			// Adicione lógica de tratamento de erro, se necessário
+	// 		}
+	// 	} catch (error) {
+	// 		// Trate qualquer erro que possa ocorrer durante a exclusão
+	// 		console.error('Erro ao editar conta:', error);
+	// 		// Adicione lógica de tratamento de erro, se necessário
+	// 	}
+	// };
 
 
 	const [showModalExcluirConta, setShowModalExcluirConta] = useState(false);
@@ -824,7 +882,7 @@ const Home = () => {
 			// Se a data não for válida, pode exibir uma mensagem de erro ou tomar outra ação necessária
 			setErroData('Por favor, selecione uma data.');
 		}
-	}	
+	}
 
 
 	const handleSubmitRelatorio = async (event) => {
@@ -898,8 +956,7 @@ const Home = () => {
 	});
 
 
-	const [somatorioGanhosMensal, setSomatorioGanhosMensal] = useState(0);
-	const [somatorioGastosMensal, setSomatorioGastosMensal] = useState(0);
+
 
 	useEffect(() => {
 
@@ -1062,7 +1119,8 @@ const Home = () => {
 											</Form>
 										</Modal.Body>
 										<Modal.Footer>
-											<Button as='button' variant="secondary" onClick={handleAdicionarNovoGanho}>
+											{/* onClick={handleAdicionarNovoGanho} */}
+											<Button as='button' variant="secondary">
 												Salvar
 											</Button>
 										</Modal.Footer>
@@ -1089,6 +1147,7 @@ const Home = () => {
 									{/* Fim do botão de Alerta */}
 
 								</div>
+								<WithLabelExample />
 
 							</div>
 
@@ -1133,200 +1192,296 @@ const Home = () => {
 						</div>
 
 						<br />
+						<Container className='controle border'>
+							<h1>Controle Mensal</h1>
+							<Row>
 
-						<h1>Controle Mensal</h1>
-						<Row>
-
-							<div className="cartao-perfil col">
-								<div className='item'>
-									<h4>Mês/Ano</h4>
-									<span className='bg-secondary text-success'>{MesAno}</span>
-								</div>
-							</div>
-
-							<div className="cartao-perfil col">
-								<div className="item">
-									<h4>Valor Recebido</h4>
-									<span className='bg-secondary text-success'>{somaGanhosMensal}</span>
-									{/*<span>{Recebido}</span>*/}
-								</div>
-
-								<div className="botao">
-									<Button as="button" variant="outline-success" onClick={() => setShowModalNovoGanho(true)}>Novo</Button>
-								</div>
-
-							</div>
-
-							<Modal
-								show={showModalNovoGanho}
-								onHide={() => setShowModalNovoGanho(false)}
-								size="md"
-								aria-labelledby="contained-modal-title-vcenter"
-								centered
-							>
-								<Modal.Header closeButton>
-									<Modal.Title id="contained-modal-title-vcenter">Novo Ganho</Modal.Title>
-								</Modal.Header>
-								<Modal.Body>
-									<Form onSubmit={handleSubmitNovoGanho}>
-										<Form.Group className="campo mb-4">
-											<Form.Label>Fonte de Receita</Form.Label>
-											<Form.Select
-												className='caixa'
-												name='fonte'
-												value={selectedFonte}
-												onChange={(e) => setSelectedFonte(e.target.value)}
-											>
-												<option value="">Selecione</option>
-												{fontesCadastradas.map((fonte, index) => (
-													<option key={index} value={fonte}>
-														{fonte}
-													</option>
-												))}
-											</Form.Select>
-										</Form.Group>
-										<Form.Group className="campo mb-4">
-											<Form.Label>Descrição</Form.Label>
-											<Form.Control
-												className='caixa'
-												type="text"
-												name="descricao"
-												value={novaDescricaoGanho}
-												onChange={(e) => setNovaDescricaoGanho(e.target.value)}
-											/>
-										</Form.Group>
-										<Form.Group className="campo mb-4">
-											<Form.Label>Data</Form.Label>
-											<Form.Control
-												className='caixa'
-												type="date"
-												name="data"
-												value={novaDataGanho}
-												onChange={(e) => setNovaDataGanho(e.target.value)}
-											/>
-										</Form.Group>
-										<Form.Group className='campo mb-4'>
-											<Form.Label>Valor a ser adicionado</Form.Label>
-											<div className="input-group caixa">
-												<span className="input-group-text">R$</span>
-												<Form.Control
-													type="number"
-													step="0.01"  // Permita valores fracionados com duas casas decimais
-													name='valor'
-													value={novoValorGanho}
-													onChange={(event) => setNovoValorGanho(parseFloat(event.target.value))}
-												/>
-											</div>
-										</Form.Group>
-										<Button as='button' variant="secondary" type='submit' onClick={handleAdicionarNovoGanho}>
-											Adicionar
-										</Button>
-									</Form>
-								</Modal.Body>
-								{showConfirmation && (
-									<div className="alert alert-success alert-custom" role="alert">
-										{confirmationMessage}
+								<div className="cartao-perfil col">
+									<div className='item'>
+										<h4>Mês/Ano</h4>
+										<span className='bg-secondary text-success'>{MesAno}</span>
 									</div>
-								)}
-							</Modal>
-
-
-
-							<div className="cartao-perfil col">
-								<div className="item">
-									<h4>Valor Gasto</h4>
-									<span className='bg-secondary text-success'>{somaGastosMensal}</span>
-									{/*<span>{Gasto}</span>*/}
 								</div>
 
-								<div className="botao">
-									<Button as="button" variant="outline-success" onClick={() => setShowModalNovoGasto(true)}>Novo</Button>
-								</div>
-							</div>
-
-							<Modal
-								show={showModalNovoGasto}
-								onHide={() => setShowModalNovoGasto(false)}
-								size="md"
-								aria-labelledby="contained-modal-title-vcenter"
-								centered
-							>
-								<Modal.Header closeButton>
-									<Modal.Title id="contained-modal-title-vcenter">Novo Gasto</Modal.Title>
-								</Modal.Header>
-								<Modal.Body>
-									<Form onSubmit={handleSubmitNovoGasto}>
-										<Form.Group className="mb-3">
-											<Form.Label>Categoria</Form.Label>
-											<Form.Select
-												name='categoria'
-												value={selectedCategoria}
-												onChange={(e) => setSelectedCategoria(e.target.value)}
-											>
-												<option value="">Selecione</option>
-												{categoriasCadastradas.map((categoria, index) => (
-													<option key={index} value={categoria}>
-														{categoria}
-													</option>
-												))}
-											</Form.Select>
-										</Form.Group>
-										<Form.Group className="mb-3">
-											<Form.Label>Descrição</Form.Label>
-											<Form.Control
-												type="text"
-												name='descricao'
-												value={novoDescricao}
-												onChange={(e) => setNovoDescricao(e.target.value)} />
-										</Form.Group>
-										<Form.Group className="mb-3">
-											<Form.Label>Data</Form.Label>
-											<Form.Control
-												type="date"
-												name='data'
-												value={novaData}
-												onChange={(e) => setNovaData(e.target.value)}
-											/>
-										</Form.Group>
-										<Form.Group>
-											<Form.Label>Valor a ser adicionado</Form.Label>
-											<div className="input-group">
-												<span className="input-group-text">R$</span>
-												<Form.Control
-													type="number"
-													step="0.01"  // Permita valores fracionados com duas casas decimais
-													name='valor'
-													value={novoValor1}
-													onChange={(event) => setNovoValor1(parseFloat(event.target.value))}
-												/>
-											</div>
-										</Form.Group>
-										{/* onClick={handleAdicionarNovoGasto} */}
-										<Button as='button' variant="secondary" type='submit'>
-											Adicionar
-										</Button>
-									</Form>
-								</Modal.Body>
-
-								{showConfirmation && (
-									<div className="alert alert-success alert-custom" role="alert">
-										{confirmationMessage}
+								<div className="cartao-perfil col">
+									<div className="item">
+										<h4>Valor Recebido</h4>
+										<span className='bg-secondary text-success'>{somaGanhosMensal}</span>
+										{/*<span>{Recebido}</span>*/}
 									</div>
-								)}
-							</Modal>
+
+									<div className="botao">
+										<Button as="button" variant="outline-success" onClick={() => setShowModalNovoGanho(true)}>Novo</Button>
+									</div>
+
+								</div>
+
+								<Modal
+									show={showModalNovoGanho}
+									onHide={() => setShowModalNovoGanho(false)}
+									size="md"
+									aria-labelledby="contained-modal-title-vcenter"
+									centered
+								>
+									<Modal.Header closeButton>
+										<Modal.Title id="contained-modal-title-vcenter">Novo Ganho</Modal.Title>
+									</Modal.Header>
+									<Modal.Body>
+										<Form onSubmit={handleSubmitNovoGanho}>
+											<Form.Group className="campo mb-4">
+												<Form.Label>Fonte de Receita</Form.Label>
+												<Form.Select
+													className='caixa'
+													name='fonte'
+													value={selectedFonte}
+													onChange={(e) => setSelectedFonte(e.target.value)}
+												>
+													<option value="">Selecione</option>
+													{fontesCadastradas.map((fonte, index) => (
+														<option key={index} value={fonte}>
+															{fonte}
+														</option>
+													))}
+												</Form.Select>
+											</Form.Group>
+											<Form.Group className="campo mb-4">
+												<Form.Label>Descrição</Form.Label>
+												<Form.Control
+													className='caixa'
+													type="text"
+													name="descricao"
+													value={novaDescricaoGanho}
+													onChange={(e) => setNovaDescricaoGanho(e.target.value)}
+												/>
+											</Form.Group>
+											<Form.Group className="campo mb-4">
+												<Form.Label>Data</Form.Label>
+												<Form.Control
+													className='caixa'
+													type="date"
+													name="data"
+													value={novaDataGanho}
+													onChange={(e) => setNovaDataGanho(e.target.value)}
+												/>
+											</Form.Group>
+											<Form.Group className='campo mb-4'>
+												<Form.Label>Valor a ser adicionado</Form.Label>
+												<div className="input-group caixa">
+													<span className="input-group-text">R$</span>
+													<Form.Control
+														type="number"
+														step="0.01"  // Permita valores fracionados com duas casas decimais
+														name='valor'
+														value={novoValorGanho}
+														onChange={(event) => setNovoValorGanho(parseFloat(event.target.value))}
+													/>
+												</div>
+											</Form.Group>
+											{/* onClick={handleAdicionarNovoGanho} */}
+											<Button as='button' variant="secondary" type='submit'>
+												Adicionar
+											</Button>
+										</Form>
+									</Modal.Body>
+									{showConfirmation && (
+										<div className="alert alert-success alert-custom" role="alert">
+											{confirmationMessage}
+										</div>
+									)}
+								</Modal>
 
 
-							<div className="cartao-perfil col">
-								<div className='item'>
-									<h4>Saldo Atual</h4>
-									<span className='bg-secondary text-success'>{saldoTotalMensal}</span>
-									{/*<span>{saldoAtual}</span>*/}
+
+								<div className="cartao-perfil col">
+									<div className="item">
+										<h4>Valor Gasto</h4>
+										<span className='bg-secondary text-success'>{somaGastosMensal}</span>
+										{/*<span>{Gasto}</span>*/}
+									</div>
+
+									<div className="botao">
+										<Button as="button" variant="outline-success" onClick={() => setShowModalNovoGasto(true)}>Novo</Button>
+									</div>
+								</div>
+
+								<Modal
+									show={showModalNovoGasto}
+									onHide={() => setShowModalNovoGasto(false)}
+									size="md"
+									aria-labelledby="contained-modal-title-vcenter"
+									centered
+								>
+									<Modal.Header closeButton>
+										<Modal.Title id="contained-modal-title-vcenter">Novo Gasto</Modal.Title>
+									</Modal.Header>
+									<Modal.Body>
+										<Form onSubmit={handleSubmitNovoGasto}>
+											<Form.Group className="mb-3">
+												<Form.Label>Categoria</Form.Label>
+												<Form.Select
+													name='categoria'
+													value={selectedCategoria}
+													onChange={(e) => setSelectedCategoria(e.target.value)}
+												>
+													<option value="">Selecione</option>
+													{categoriasCadastradas.map((categoria, index) => (
+														<option key={index} value={categoria}>
+															{categoria}
+														</option>
+													))}
+												</Form.Select>
+											</Form.Group>
+											<Form.Group className="mb-3">
+												<Form.Label>Descrição</Form.Label>
+												<Form.Control
+													type="text"
+													name='descricao'
+													value={novoDescricao}
+													onChange={(e) => setNovoDescricao(e.target.value)} />
+											</Form.Group>
+											<Form.Group className="mb-3">
+												<Form.Label>Data</Form.Label>
+												<Form.Control
+													type="date"
+													name='data'
+													value={novaData}
+													onChange={(e) => setNovaData(e.target.value)}
+												/>
+											</Form.Group>
+											<Form.Group>
+												<Form.Label>Valor a ser adicionado</Form.Label>
+												<div className="input-group">
+													<span className="input-group-text">R$</span>
+													<Form.Control
+														type="number"
+														step="0.01"  // Permita valores fracionados com duas casas decimais
+														name='valor'
+														value={novoValor1}
+														onChange={(event) => setNovoValor1(parseFloat(event.target.value))}
+													/>
+												</div>
+											</Form.Group>
+											{/* onClick={handleAdicionarNovoGasto} */}
+											<Button as='button' variant="secondary" type='submit'>
+												Adicionar
+											</Button>
+										</Form>
+									</Modal.Body>
+
+									{showConfirmation && (
+										<div className="alert alert-success alert-custom" role="alert">
+											{confirmationMessage}
+										</div>
+									)}
+								</Modal>
+
+
+								<div className="cartao-perfil col">
+									<div className='item'>
+										<h4>Saldo Atual</h4>
+										<span className='bg-secondary text-success'>{saldoTotalMensal}</span>
+										{/*<span>{saldoAtual}</span>*/}
+									</div>
+								</div>
+
+							</Row>
+
+							<div className='botoes'>
+								<div className=''><Button className='click' as="button" variant="secondary" style={{ display: "flex", alignItems: "center", gap: "10px", color: "#fff" }} onClick={() => setShowModalNovaFonte(true)}>Ver fontes de receita<GiClick className='icone-click' /></Button>
+									<Modal
+										show={showModalNovaFonte}
+										onHide={() => setShowModalNovaFonte(false)}
+										size="md"
+										aria-labelledby="contained-modal-title-vcenter"
+										centered
+									>
+										<Modal.Header closeButton>
+											<Modal.Title id="contained-modal-title-vcenter">Nova fonte de receita</Modal.Title>
+										</Modal.Header>
+										<Modal.Body>
+											<Form>
+												<Form.Group className="mb-3">
+													<Form.Label>Veja alguns exemplos de fontes de receita</Form.Label>
+													<Form.Control as="select" name="categoria">
+														<option value="">Lista de fontes de receita</option>
+														{fontesCadastradas.map((fonte, index) => (
+															<option key={index} value={fonte}>
+																{fonte}
+															</option>
+														))}
+													</Form.Control>
+												</Form.Group>
+												<Form.Group className="mb-3">
+													<Form.Label>Adicione uma nova fonte de receita</Form.Label>
+													<Form.Control type="text" name="novaFonte" value={novaFonte} onChange={(e) => setNovaFonte(e.target.value)} />
+												</Form.Group>
+											</Form>
+										</Modal.Body>
+										<Modal.Footer>
+											<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaFonte} className='fw-bold'>
+												Criar
+											</Button>
+										</Modal.Footer>
+										{showConfirmation && (
+											<div className="alert alert-success alert-custom" role="alert">
+												{confirmationMessage}
+											</div>
+										)}
+									</Modal>
+								</div>
+								<div className=''><Button className='click' as="button" variant="secondary" style={{ display: "flex", alignItems: "center", gap: "5px", color: "#fff" }} onClick={() => setShowModalCategorias(true)}>Ver categorias de gastos<GiClick className='icone-click' /></Button>
+									<Modal
+										show={showModalCategorias}
+										onHide={() => setShowModalCategorias(false)}
+										size="md"
+										aria-labelledby="contained-modal-title-vcenter"
+										centered
+									>
+										<Modal.Header closeButton>
+											<Modal.Title id="contained-modal-title-vcenter">Nova categoria</Modal.Title>
+										</Modal.Header>
+										<Modal.Body>
+											<Form>
+
+												<Form.Group className="mb-3">
+													<Form.Label>Veja alguns exemplos de categorias</Form.Label>
+													<Form.Control as="select" name="categoria">
+														<option value="">Lista de categorias</option>
+														{categoriasCadastradas.map((categoria, index) => (
+															<option key={index} value={categoria}>
+																{categoria}
+															</option>
+														))}
+													</Form.Control>
+												</Form.Group>
+
+												<Form.Group className="mb-3">
+													<Form.Label>Adicione uma nova categoria</Form.Label>
+													<Form.Control
+														type="text"
+														name="novaCategoria"
+														value={novaCategoria}
+														onChange={(e) => setNovaCategoria(e.target.value)} />
+												</Form.Group>
+
+											</Form>
+										</Modal.Body>
+
+										<Modal.Footer>
+											<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaCategoria} className='fw-bold'>
+												Criar
+											</Button>
+										</Modal.Footer>
+
+										{showConfirmation && (
+											<div className="alert alert-success alert-custom" role="alert">
+												{confirmationMessage}
+											</div>
+										)}
+									</Modal>
 								</div>
 							</div>
-
-
-						</Row>
-
+						</Container>
 						<br />
 
 						{/* <Container className='menu'>
@@ -1380,7 +1535,7 @@ const Home = () => {
 										return (
 											<div key={conta.id} className='pagar row pt-3 pb-3'>
 
-												<div className="descricao-conta col fw-bold">
+												<div className="descricao-conta col">
 													<FaPiggyBank className='moeda' />
 													{conta.descricao}
 												</div>
@@ -1397,11 +1552,96 @@ const Home = () => {
 													{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
 												</div>
 												<div className="col-1">
-													<Button as='button' variant='outline-info' className='bg-transparent' title='Editar'><MdEdit /></Button>
+													{/* <Button as='button' variant='outline-info' className='bg-transparent' title='Editar' onClick={handleEditarConta(conta.id)}><MdEdit /></Button> */}
 													<Button as='button' variant='outline-info' className='bg-transparent' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
 														<FaTrashAlt />
 													</Button>
 												</div>
+
+
+												{/* <Modal
+													show={showModalEditarConta}
+													onHide={() => setShowModalEditarConta(false)}
+													size="md"
+													aria-labelledby="contained-modal-title-vcenter"
+													centered
+												>
+													<Modal.Header closeButton>
+														<Modal.Title id="contained-modal-title-vcenter">Editar despesa</Modal.Title>
+													</Modal.Header>
+													<Modal.Body>
+														<Form onSubmit={handleSubmitEditarConta}>
+
+															<Form.Group className="mb-3">
+																<Form.Label>Descrição</Form.Label>
+																<Form.Control
+																	type="text"
+																	name='descricao'
+																/>
+															</Form.Group>
+
+															<Form.Group className="mb-3">
+																<Form.Label>Valor</Form.Label>
+																<div className="input-group">
+																	<span className="input-group-text">R$</span>
+																	<Form.Control
+																		type="number"
+																		step="0.01"  // Permita valores fracionados com duas casas decimais
+																		name='valor'
+																	/>
+																</div>
+															</Form.Group>
+
+															<Form.Group className="mb-3">
+																<Form.Label>Dia de vencimento</Form.Label>
+																<Form.Control
+																	type="number"
+																	name='vencimento'
+																/>
+															</Form.Group>
+
+															<Form.Group className="mb-3">
+																<Form.Label>Recorrência</Form.Label>
+																<Form.Select
+																	name='recorrencia'
+																	value={recorrenciaConta}
+																	onChange={(e) => setRecorrenciaConta(e.target.value)}
+																>
+																	<option value="MENSAL">Mensal</option>
+																	<option value="POR_PERIODO">Por Período</option>
+																</Form.Select>
+															</Form.Group>
+
+															{recorrenciaConta === 'POR_PERIODO' && (
+																<>
+																	<Form.Group className="mb-3">
+																		<Form.Label>Início do Período</Form.Label>
+																		<Form.Control
+																			type="month"
+																			name='inicioPeriodo'
+																		/>
+																	</Form.Group>
+
+																	<Form.Group className="mb-3">
+																		<Form.Label>Fim do Período</Form.Label>
+																		<Form.Control
+																			type="month"
+																			name='fimPeriodo'
+																		/>
+																	</Form.Group>
+																</>
+															)}
+															<Button as='button' type='submit' variant="secondary">
+																Salvar
+															</Button>
+														</Form>
+													</Modal.Body>
+													{showConfirmation && (
+														<div className="alert alert-success alert-custom" role="alert">
+															{confirmationMessage}
+														</div>
+													)}
+												</Modal> */}
 
 												<Modal
 													show={showModalExcluirConta}
@@ -1433,19 +1673,10 @@ const Home = () => {
 								</div>
 
 								<br />
-								<div className="pagar row pt-3 pb-3 border border-3">
 
-									<div className="linha col nova-despesa">
-										<FaPiggyBank className='moeda' />
-										Nova Despesa
-									</div>
-									<div className="col"></div>
-									<div className="col"></div>
-									<div className="col"></div>
-									<div className="col-1">
-										<Button as="button" variant="outline-info" title='Criar' onClick={() => setShowModalContas(true)} className='mais'><IoMdAddCircle className='icone-conta' />
-										</Button>
-									</div>
+								<div className="botao-painel">
+									<Button as="button" variant="secondary" onClick={() => setShowModalContas(true)} style={{ display: "flex", alignItems: "center", gap: "10px", color: "#fff" }}>Nova despesa<GiClick className='icone-click' /></Button>
+
 									<Modal
 										show={showModalContas}
 										onHide={() => setShowModalContas(false)}
@@ -1540,9 +1771,9 @@ const Home = () => {
 											</div>
 										)}
 									</Modal>
-
-
 								</div>
+
+
 							</div>
 
 
@@ -1556,57 +1787,6 @@ const Home = () => {
 							<Container className="categorias p-5 mb-5">
 								<div className="categorias-titulo">
 									<h1>Gastos por Categoria</h1>
-									{/* <div><Button as="button" variant="outline-primary" onClick={() => setShowModalCategorias(true)}>Criar nova categoria</Button>
-										<Modal
-											show={showModalCategorias}
-											onHide={() => setShowModalCategorias(false)}
-											size="md"
-											aria-labelledby="contained-modal-title-vcenter"
-											centered
-										>
-											<Modal.Header closeButton>
-												<Modal.Title id="contained-modal-title-vcenter">Nova categoria</Modal.Title>
-											</Modal.Header>
-											<Modal.Body>
-												<Form>
-
-													<Form.Group className="mb-3">
-														<Form.Label>Veja alguns exemplos de categorias</Form.Label>
-														<Form.Control as="select" name="categoria">
-															<option value="">Lista de categorias</option>
-															{categorias.map((categoria, index) => (
-																<option key={index} value={categoria}>
-																	{categoria}
-																</option>
-															))}
-														</Form.Control>
-													</Form.Group>
-
-													<Form.Group className="mb-3">
-														<Form.Label>Adicione uma nova categoria</Form.Label>
-														<Form.Control
-															type="text"
-															name="novaCategoria"
-															value={novaCategoria}
-															onChange={(e) => setNovaCategoria(e.target.value)} />
-													</Form.Group>
-
-												</Form>
-											</Modal.Body>
-
-											<Modal.Footer>
-												<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaCategoria} className='fw-bold'>
-													Criar
-												</Button>
-											</Modal.Footer>
-
-											{showConfirmation && (
-												<div className="alert alert-success alert-custom" role="alert">
-													{confirmationMessage}
-												</div>
-											)}
-										</Modal>
-									</div> */}
 								</div>
 
 
@@ -1721,48 +1901,6 @@ const Home = () => {
 							<Container className="categorias p-5 mb-5">
 								<div className="categorias-titulo">
 									<h1>Ganhos por Fonte de Receita</h1>
-									<div><Button as="button" variant="outline-primary" onClick={() => setShowModalNovaFonte(true)}>Criar nova fonte de receita</Button>
-										<Modal
-											show={showModalNovaFonte}
-											onHide={() => setShowModalNovaFonte(false)}
-											size="md"
-											aria-labelledby="contained-modal-title-vcenter"
-											centered
-										>
-											<Modal.Header closeButton>
-												<Modal.Title id="contained-modal-title-vcenter">Nova fonte de receita</Modal.Title>
-											</Modal.Header>
-											<Modal.Body>
-												<Form>
-													<Form.Group className="mb-3">
-														<Form.Label>Veja alguns exemplos de fontes de receita</Form.Label>
-														<Form.Control as="select" name="categoria">
-															<option value="">Lista de fontes de receita</option>
-															{fontesCadastradas.map((fonte, index) => (
-																<option key={index} value={fonte}>
-																	{fonte}
-																</option>
-															))}
-														</Form.Control>
-													</Form.Group>
-													<Form.Group className="mb-3">
-														<Form.Label>Adicione uma nova fonte de receita</Form.Label>
-														<Form.Control type="text" name="novaFonte" value={novaFonte} onChange={(e) => setNovaFonte(e.target.value)} />
-													</Form.Group>
-												</Form>
-											</Modal.Body>
-											<Modal.Footer>
-												<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaFonte} className='fw-bold'>
-													Criar
-												</Button>
-											</Modal.Footer>
-											{showConfirmation && (
-												<div className="alert alert-success alert-custom" role="alert">
-													{confirmationMessage}
-												</div>
-											)}
-										</Modal>
-									</div>
 								</div>
 
 								<div className='cartoes-categoria'>

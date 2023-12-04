@@ -150,19 +150,14 @@ h4 {
     border-bottom: 4px solid orange;
 }
 
-.menu-icone {
-    color: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    width: 30px;
-    height: 30px;
-}
+/* .click {
+    width: 200px;
+} */
 
-.botao-menu div {
-    padding: 2px;
-    border-radius: 50%;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    border: 4px solid orange;
+.icone-click {
     width: 25px;
     height: 25px;
+    margin-top: px;
 }
 
 h5 {
@@ -244,6 +239,16 @@ h5 {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 40px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    padding: 40px 0;
+    border-radius: 5px;
+}
+
+.controle .botoes {
+    display: flex;
+    gap: 10px;
+    font-weight: lighter;
 }
 
 .painel,
@@ -254,12 +259,16 @@ h5 {
     border-bottom: 4px solid #fff;
     display: flex;
     flex-direction: column;
+}
 
+.painel .botao-painel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .painel h1,
 .relatorio h1 {
-
     color: #fff;
     text-align: center;
 }
@@ -305,6 +314,7 @@ h5 {
     align-items: center;
     margin-bottom: 10px;
     font-size: 17px;
+    letter-spacing: 0.5px;
 }
 
 .pagar:hover {
@@ -336,11 +346,6 @@ h5 {
 .botao {
     width: 70px;
     font-weight: lighter;
-}
-
-.controle .botoes {
-    display: flex;
-    justify-content: space-around;
 }
 
 .grafico {
