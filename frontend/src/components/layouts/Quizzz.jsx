@@ -31,7 +31,6 @@ function Quiz() {
 		);
 		setQuestions(updatedQuestions);
 	};
-
 	//controla perguntas
 	const handleNextQuestion = () => {
 		if (currentQuestionIndex < questions.length - 1) {
@@ -59,11 +58,11 @@ function Quiz() {
 
 			if (questions[0].answer < sumAnswers) {
 				setShowRes(true);
-				setQuizRes('Vamos reavaliar os gastos! Fazendo controle dos gastos, sobrará dinheiro para investir em algum projeto e no seu futuro. ')
+				setQuizRes('Vamos reavaliar os gastos! Fazendo controle dos gastos, sobrará dinheiro para investir em algum projeto e no seu futuro.')
 			}
 		}
 	};
-	//
+	
 	const restartQuiz = () => {
 		setCurrentQuestionIndex(0);
 		// Limpar respostas se necessário
@@ -111,7 +110,7 @@ function Quiz() {
 
 			</Modal>
 
-			<Modal show={showRes} onHide={() => setShowRes(false)} centered>
+			<Modal show={showRes} onHide={() => setShowRes(false)}  centered>
 				{/* <Modal.Header closeButton>Tralálá</Modal.Header> */}
 				<Modal.Body className="border-3 border-secondary bg-info p-5 fs-4">{
 					quizRes
