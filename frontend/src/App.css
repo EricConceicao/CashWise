@@ -456,6 +456,24 @@ h5 {
     border-radius: 5px;
 }
 
+.grafico-relatorio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    height: 650px;
+    background: #fff;
+    padding: 40px 0 100px 0;
+    border-bottom: 4px solid #fff;
+    gap: 30px;
+}
+
+
+.grafico-barra {
+    color: #fff;
+}
+
+
 
 
 

@@ -9,6 +9,6 @@ router.get('/listar', vercontas)
 router.post('/', criarconta)
 router.get('/agenda', contasValidas)
 router.delete('/deletar/:id', deletarconta)
-router.patch('/editar', editarconta)
+router.patch('/editar/:id', editarconta)
 
 export default router
