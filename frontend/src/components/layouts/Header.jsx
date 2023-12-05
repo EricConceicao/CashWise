@@ -40,7 +40,7 @@ function Header() {
     return (
         <Navbar expand="md" className="position-sticky z-1 top-0 p-0 bg-primary">
             <Container fluid>
-                <figure className='d-flex align-items-center py-1'>
+                <figure className='d-flex align-items-center py-1 m-0'>
                     <img className="rounded-pill p-1" 
                     src="/img/logo-cashwise.png" 
                     alt="Logo marca do CashWise"

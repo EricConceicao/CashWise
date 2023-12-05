@@ -1564,50 +1564,48 @@ const Home = () => {
 						</Container> */}
 
 
-					<Container fluid className='painel mt-5 mb-5 border'>
-						<h1>Agenda Financeira</h1>
+					<Container fluid className='painel my-5 border table-responsive'>
+						<h1 className='mt-3 mb-4'>Agenda Financeira</h1>
 
-						<div className="tabela pt-5 pb-5">
-							<div className="bg-secondary titulo row pt-4 pb-4">
-
-								<div className="linha col">Descrição</div>
-								<div className="linha col">Vencimento</div>
-								<div className="linha col">Status</div>
-								<div className="linha col">Valor</div>
-								<div className="linha col-1">Ação</div>
-
-							</div>
-
-							<div>
+						<table className="tabela mb-2 text-center text-nowrap">
+							<thead className="bg-secondary titulo fs-5">
+								<tr>
+									<th className='px-3 py-3'>Descrição</th>
+									<th className='px-3 py-3'>Vencimento</th>
+									<th className='px-3 py-3'>Status</th>
+									<th className='px-3 py-3'>Valor</th>
+									<th className='px-3 py-3'>Ação</th>
+								</tr>
+							</thead>
 								{contasAgenda.map((conta) => {
 									const { mensagem, corFundo } = calcularDiasRestantes(conta.vencimento);
 
 									return (
-										<div key={conta.id} className='pagar row pt-3 pb-3'>
+										<tbody key={conta.id} className='pagar'>
+											<tr>
+												<td className="descricao-conta p-3">
+													<FaPiggyBank className='moeda' />{' '}
+													{conta.descricao}
+												</td>
+												<td className='p-3'>
+													<CiCalendar className='icone-conta' />{' '}
+													{conta.vencimento}
+												</td>
+												<td className='p-3'>
+													<span className={`${corFundo}`}>{mensagem}</span>
+												</td>
+												<td className='p-3'>
+													<CiBag1 className='icone-conta' />
+													{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+												</td>
 
-											<div className="descricao-conta col">
-												<FaPiggyBank className='moeda' />
-												{conta.descricao}
-											</div>
-											<div className="col">
-												<CiCalendar className='icone-conta' />
-												{conta.vencimento}
-											</div>
-											<div className="col"><span className={`${corFundo}`}>{mensagem}</span>
-
-											</div>
-											{/* <CiBullhorn className='icone-conta' /> */}
-											<div className="col">
-												<CiBag1 className='icone-conta' />
-												{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-											</div>
-											<div className="col-1">
-												<Button as='button' variant='outline-info' className='bg-transparent' title='Editar' onClick={() => handleEditarConta(conta.id)}><MdEdit /></Button>
-												<Button as='button' variant='outline-info' className='bg-transparent' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
-													<FaTrashAlt />
-												</Button>
-											</div>
-
+												<td className='p-3'>
+													<Button variant='outline-info' className='text-warning' title='Editar' onClick={() => handleEditarConta(conta.id)}><MdEdit /></Button>
+													<Button variant='outline-info' className='text-danger' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
+														<FaTrashAlt />
+													</Button>
+												</td>
+											</tr>
 
 											<Modal
 												show={showModalEditarConta}
@@ -1717,15 +1715,14 @@ const Home = () => {
 													</div>
 												)}
 											</Modal>
-										</div>
+										</tbody>
 									);
 								})}
-							</div>
 
 							<br />
 
 							<div className="botao-painel">
-								<Button className='click' as="button" variant="secondary" onClick={() => setShowModalContas(true)} style={{ display: "flex", alignItems: "center", gap: "10px", color: "#fff" }}>Nova despesa<GiClick className='icone-click' /></Button>
+								<Button className='click' variant="secondary" onClick={() => setShowModalContas(true)}>Nova despesa<GiClick className='icone-click' /></Button>
 
 								<Modal
 									show={showModalContas}
@@ -1822,9 +1819,7 @@ const Home = () => {
 									)}
 								</Modal>
 							</div>
-
-
-						</div>
+						</table>
 
 
 					</Container>

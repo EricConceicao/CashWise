@@ -252,7 +252,6 @@ h5 {
 .painel,
 .relatorio {
     border-radius: 5px;
-    padding: 50px 70px 30px 70px;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     border-bottom: 4px solid #fff;
     display: flex;
@@ -301,8 +300,6 @@ h5 {
 .tabela .titulo {
     border-radius: 5px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    margin-bottom: 10px;
-    font-size: 17px;
 }
 
 .pagar {
@@ -310,15 +307,12 @@ h5 {
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     font-weight: lighter;
     align-items: center;
-    margin-bottom: 10px;
-    font-size: 17px;
     letter-spacing: 0.5px;
 }
 
 .pagar:hover {
-    background-color: rgba(255, 166, 0, 0.914);
+    background-color: rgba(255, 166, 0, 0.5);
     color: #fff;
-    font-weight: bold;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
