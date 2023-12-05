@@ -16,9 +16,29 @@ import { HiOutlineCake } from 'react-icons/hi';
 import { MdOutlineEmojiPeople } from 'react-icons/md';
 import { BsStars } from 'react-icons/bs';
 import useUserStore from '../store/UserStore';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import {
+    Chart as ChartJS,
+    ArcElement,
+    Tooltip,
+    Legend,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+} from 'chart.js';
 ChartJS.register(ArcElement, Tooltip, Legend);
 import { Pie } from "react-chartjs-2";
+
+import { Bar } from 'react-chartjs-2';
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+);
+
 import { FaTrashAlt } from "react-icons/fa";
 import { FaPiggyBank } from "react-icons/fa";
 import moment from 'moment';
@@ -481,7 +501,41 @@ const Home = () => {
 		}
 	};
 
+	const valorFontes = []
+	const fontesLegenda = []
 
+	fontes.map((fonte, index) => {
+
+		fontesLegenda.push(fonte.fonte)
+		labelsColors.push(colors[index])
+		valorFontes.push(fonte.totalGanho)
+
+	})
+
+	const graficoFontes = {
+		labels: fontesLegenda,
+		datasets: [{
+			label: ' Ganhos (R$)',
+			data: valorFontes,
+			backgroundColor: labelsColors,
+			borderWidth: 2,
+			hoverOffset: 4
+		}]
+	}
+
+	const valorRelatorio = [somatorioGanhos, somatorioGastos]
+	const relatorioLegenda = ['Ganhos', 'Gastos']
+
+	const graficoRelatorio = {
+		labels: relatorioLegenda,
+		datasets: [{
+			label: ' Valor em Reais ',
+			data: valorRelatorio,
+			backgroundColor: labelsColors,
+			borderWidth: 1,
+			hoverOffset: 4
+		}]
+	}
 
 
 
@@ -660,7 +714,8 @@ const Home = () => {
 			showConfirmationMessage("Nova conta criada com sucesso!");
 			// console.log("veja", data.conta)
 			setContas([...contas, data.conta])
-			setContasAgenda([...contasAgenda, data.conta]);
+			// setContasAgenda([...contasAgenda, data.conta]);
+			getContasAgenda();
 		}
 	}
 
@@ -732,77 +787,77 @@ const Home = () => {
 		return { mensagem, corFundo };
 	};
 
-	// const [showModalEditarConta, setShowModalEditarConta] = useState(false);
-	// const [contaIdParaEditar, setContaIdParaEditar] = useState(null);
+	const [showModalEditarConta, setShowModalEditarConta] = useState(false);
+	const [contaIdParaEditar, setContaIdParaEditar] = useState(null);
 
-	// const handleEditarConta = (contaId) => {
+	const handleEditarConta = (contaId) => {
 
-	// 	setContaIdParaEditar(contaId);
+		setContaIdParaEditar(contaId);
 
-	// 	setShowModalEditarConta(true);
-	// }
-
-
-	// const handleSubmitEditarConta = async (event) => {
-	// 	event.preventDefault();
-
-	// 	if (!contaIdParaEditar) {
-	// 		console.error('ID da conta não definido.');
-	// 		return;
-	// 	}
-
-	// 	try {
-
-	// 		let novoPeriodo;
-	// 		event.target.recorrencia.value === 'MENSAL' ? (novoPeriodo = null) : (
-	// 			novoPeriodo = {
-	// 				inicio: event.target.inicioPeriodo.value,
-	// 				fim: event.target.fimPeriodo.value,
-	// 			})
+		setShowModalEditarConta(true);
+	}
 
 
-	// 		const contaEditada = {
-	// 			descricao: event.target.descricao.value,
-	// 			valor: event.target.valor.value,
-	// 			diaVencimento: parseInt(event.target.vencimento.value, 10),
-	// 			recorrencia: event.target.recorrencia.value,
-	// 			periodo: novoPeriodo,
-	// 		};
+	const handleSubmitEditarConta = async (event) => {
+		event.preventDefault();
 
-	// 		const response = await fetch(`http://localhost:3000/contas/editar/${contaIdParaEditar}`, {
-	// 			method: 'PATCH',
-	// 			headers: {
-	// 				'Content-Type': 'application/json',
-	// 			  },
-	// 			  body: JSON.stringify(contaEditada),
-	// 		});
+		if (!contaIdParaEditar) {
+			console.error('ID da conta não definido.');
+			return;
+		}
 
-	// 		if (response.ok) {
-	// 			const data = await response.json();
-	// 			// Atualize o estado ou realize alguma ação após a exclusão bem-sucedida
-	// 			showConfirmationMessage("Conta editada com sucesso!");
-	// 			setTimeout(() => {
-	// 				setShowModalEditarConta(false);
-	// 			}, 2000);
+		try {
 
-	// 			setContasAgenda((prevContas) => prevContas.map((conta) => conta.id === contaIdParaEditar?
-	// 			{
-	// 				...conta,
-	// 				// Adicione dados específicos da resposta, se necessário
-	// 				dadosAdicionais: data.dadosAdicionais,
-	// 			  }
-	// 			: conta));
-	// 		} else {
-	// 			// Trate o caso em que a exclusão falhou
-	// 			console.error('Erro ao editar conta:', response.statusText);
-	// 			// Adicione lógica de tratamento de erro, se necessário
-	// 		}
-	// 	} catch (error) {
-	// 		// Trate qualquer erro que possa ocorrer durante a exclusão
-	// 		console.error('Erro ao editar conta:', error);
-	// 		// Adicione lógica de tratamento de erro, se necessário
-	// 	}
-	// };
+			let novoPeriodo;
+			event.target.recorrencia.value === 'MENSAL' ? (novoPeriodo = null) : (
+				novoPeriodo = {
+					inicio: event.target.inicioPeriodo.value,
+					fim: event.target.fimPeriodo.value,
+				})
+
+
+			const contaEditada = {
+				descricao: event.target.descricao.value,
+				valor: event.target.valor.value,
+				diaVencimento: parseInt(event.target.vencimento.value, 10),
+				recorrencia: event.target.recorrencia.value,
+				periodo: novoPeriodo,
+			};
+
+			const response = await fetch(`http://localhost:3000/contas/editar/${contaIdParaEditar}`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(contaEditada),
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				// Atualize o estado ou realize alguma ação após a exclusão bem-sucedida
+				showConfirmationMessage("Conta editada com sucesso!");
+				setTimeout(() => {
+					setShowModalEditarConta(false);
+				}, 2000);
+
+				setContasAgenda((prevContas) => prevContas.map((conta) => conta.id === contaIdParaEditar ?
+					{
+						...conta,
+						// Adicione dados específicos da resposta, se necessário
+						dadosAdicionais: data.dadosAdicionais,
+					}
+					: conta));
+			} else {
+				// Trate o caso em que a exclusão falhou
+				console.error('Erro ao editar conta:', response.statusText);
+				// Adicione lógica de tratamento de erro, se necessário
+			}
+		} catch (error) {
+			// Trate qualquer erro que possa ocorrer durante a exclusão
+			console.error('Erro ao editar conta:', error);
+			// Adicione lógica de tratamento de erro, se necessário
+		}
+	};
 
 
 	const [showModalExcluirConta, setShowModalExcluirConta] = useState(false);
@@ -1552,14 +1607,14 @@ const Home = () => {
 													{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
 												</div>
 												<div className="col-1">
-													{/* <Button as='button' variant='outline-info' className='bg-transparent' title='Editar' onClick={handleEditarConta(conta.id)}><MdEdit /></Button> */}
+													<Button as='button' variant='outline-info' className='bg-transparent' title='Editar' onClick={() => handleEditarConta(conta.id)}><MdEdit /></Button>
 													<Button as='button' variant='outline-info' className='bg-transparent' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
 														<FaTrashAlt />
 													</Button>
 												</div>
 
 
-												{/* <Modal
+												<Modal
 													show={showModalEditarConta}
 													onHide={() => setShowModalEditarConta(false)}
 													size="md"
@@ -1641,7 +1696,7 @@ const Home = () => {
 															{confirmationMessage}
 														</div>
 													)}
-												</Modal> */}
+												</Modal>
 
 												<Modal
 													show={showModalExcluirConta}
@@ -1675,7 +1730,7 @@ const Home = () => {
 								<br />
 
 								<div className="botao-painel">
-									<Button as="button" variant="secondary" onClick={() => setShowModalContas(true)} style={{ display: "flex", alignItems: "center", gap: "10px", color: "#fff" }}>Nova despesa<GiClick className='icone-click' /></Button>
+									<Button className='click' as="button" variant="secondary" onClick={() => setShowModalContas(true)} style={{ display: "flex", alignItems: "center", gap: "10px", color: "#fff" }}>Nova despesa<GiClick className='icone-click' /></Button>
 
 									<Modal
 										show={showModalContas}
@@ -1978,6 +2033,17 @@ const Home = () => {
 
 							</Container>
 
+							{categoriasLegenda.length > 0 ? (
+								<Container className='grafico text-info'>
+									<h1>Perfil de ganhos</h1>
+									<Pie className='grafico-torta'
+										data={graficoFontes}
+										options={options}
+									/>
+								</Container>
+							) : null
+							}
+
 						</div>
 						{/* Fim de Fontes de Receita */}
 
@@ -2031,6 +2097,11 @@ const Home = () => {
 								</div>
 							</div>
 						</Container>
+						<Bar
+							options={options}
+							data={graficoRelatorio}
+							
+						/>
 
 
 						{/* Fim de Relatório*/}

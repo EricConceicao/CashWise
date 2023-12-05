@@ -150,9 +150,9 @@ h4 {
     border-bottom: 4px solid orange;
 }
 
-/* .click {
-    width: 200px;
-} */
+.click {
+    border-radius: 30px;
+}
 
 .icone-click {
     width: 25px;
