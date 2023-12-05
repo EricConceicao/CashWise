@@ -1,5 +1,5 @@
-import Header from '../layouts/Header';
-import Footer from '../layouts/Footer';
+import Header from '../../layouts/Header';
+import Footer from '../../layouts/Footer';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 
 const Prev = () => {

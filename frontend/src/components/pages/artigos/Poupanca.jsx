@@ -1,6 +1,6 @@
-import Header from '../layouts/Header';
-import Footer from '../layouts/Footer';
-import CoinText from '../utils/CoinText';
+import Header from '../../layouts/Header';
+import Footer from '../../layouts/Footer';
+import CoinText from '../../utils/CoinText';
 
 import { Container, Row, Col, Card } from 'react-bootstrap';
 

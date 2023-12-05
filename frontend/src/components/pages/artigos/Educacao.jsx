@@ -1,6 +1,6 @@
 //import React from 'react';
-import Header from '../layouts/Header';
-import Footer from '../layouts/Footer';
+import Header from '../../layouts/Header';
+import Footer from '../../layouts/Footer';
 import { Container, Row, Col, Card, } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FcMoneyTransfer as Money } from "react-icons/fc";

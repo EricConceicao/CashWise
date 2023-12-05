@@ -1,8 +1,8 @@
-import Header from '../layouts/Header';
-import Footer from '../layouts/Footer';
+import Header from '../../layouts/Header';
+import Footer from '../../layouts/Footer';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { FaMoneyBillWheat as Dica } from "react-icons/fa6";
-import CoinText from '../utils/CoinText';
+import CoinText from '../../utils/CoinText';
 import './Artigos.css';
 
 const Dicas = () => {

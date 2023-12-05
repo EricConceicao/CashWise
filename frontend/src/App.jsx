@@ -14,12 +14,12 @@ import Resultado from './components/layouts/Resultado';
 
 // Páginas do Boletim informativo //
 import BoletimInformativo from './components/pages/BoletimInformativo';
-import Poupanca from './components/pages/Poupanca';
-import Investimentos from './components/pages/Investimentos';
-import Investodos from './components/pages/Investodos';
-import Prev from './components/pages/Prev';
-import Educacao from './components/pages/Educacao';
-import Dicas from './components/pages/Dicas';
+import Poupanca from './components/pages/artigos/Poupanca';
+import Investimentos from './components/pages/artigos/Investimentos';
+import Investodos from './components/pages/artigos/Investodos';
+import Prev from './components/pages/artigos/Prev';
+import Educacao from './components/pages/artigos/Educacao';
+import Dicas from './components/pages/artigos/Dicas';
 
 // Importações de componentes //
 import Loader from './components/utils/Loader';
