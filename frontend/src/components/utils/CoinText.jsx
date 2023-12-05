@@ -22,14 +22,10 @@ function CoinText({ textId, children }) {
 
 	useEffect(() => {
 		// Se não houver nada no store. Ele para.
-		console.log("passando: ", coinTexts);
 		if (!coinTexts) return
 
 		const result = coinTexts.find(item => item.id === textId);
-		console.log("passando a mais: ", result);
-		
 		result && setClick(result.found);
-
 	}, [coinTexts]);
 
 	async function handleClick(textId) {
@@ -72,7 +68,7 @@ function CoinText({ textId, children }) {
 
 	return (
 		<>
-			<span className={click ? "bg-primary text-decoration-underline rounded-3 px-2" : ""} onClick={() => handleClick(textId)}>{children}</span>
+			<span className={click ? "bg-primary rounded-1 px-2" : ""} onClick={() => handleClick(textId)}>{children}</span>
 
 			<Toast style={toastStyle} className="border-2 border-secondary" show={show} onClose={toggleShow}>
 				<Toast.Header className="fw-medium bg-success justify-content-between">Palavra Chave Encontrada!</Toast.Header>

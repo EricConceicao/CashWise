@@ -56,7 +56,7 @@ registerLocale('pt', pt);
 import React, { useRef } from 'react';
 import InputComIcone from '../utils/InputComIcone';
 import IconShop from '../utils/IconShop';
-import { GiClick } from "react-icons/gi";
+import { GiClick, GiConsoleController } from "react-icons/gi";
 import WithLabelExample from '../utils/ProgressBar';
 
 
@@ -417,12 +417,15 @@ const Home = () => {
 	};
 
 
-	const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
+	const [detalhesCategoria, setDetalhesCategoria] = useState(null);
 	const [showModalDetalhes, setShowModalDetalhes] = useState(false);
 
-	const mostrarDetalhesCategoria = (categoria) => {
-		setCategoriaSelecionada(categoria);
-		setShowModalDetalhes(true);
+	const mostrarDetalhesCategoria = async (categoria) => {
+		// try {
+
+		// }
+		// setCategoriaSelecionada(categoria);
+		// setShowModalDetalhes(true);
 	};
 
 	useEffect(() => {
@@ -556,6 +559,10 @@ const Home = () => {
 	const [inicioPeriodoConta, setInicioPeriodoConta] = useState("");
 	const [fimPeriodoConta, setFimPeriodoConta] = useState("");
 
+
+
+	console.log(contas)
+	console.log(contasAgenda)
 
 
 	useEffect(() => {
@@ -712,7 +719,8 @@ const Home = () => {
 			const data = await response.json()
 			/*alert(data.success)*/
 			showConfirmationMessage("Nova conta criada com sucesso!");
-			// console.log("veja", data.conta)
+			console.log("veja", data.conta)
+
 			setContas([...contas, data.conta])
 			// setContasAgenda([...contasAgenda, data.conta]);
 			getContasAgenda();
@@ -755,7 +763,7 @@ const Home = () => {
 
 	const calcularDiasRestantes = (dataVencimento) => {
 		const dataAtual = new Date();
-		// console.log('dados:  ', dataVencimento)
+		console.log('dados:  ', dataVencimento)
 		const partesDataVencimento = dataVencimento.split('-');
 		// console.log(partesDataVencimento)
 		const dataVencimentoFormatada = new Date(partesDataVencimento[2], partesDataVencimento[1] - 1, partesDataVencimento[0]);
@@ -1113,16 +1121,13 @@ const Home = () => {
 	*/
 
 	return (
-		<>
+		<div id='topo'>
 			<Header />
 
 			<div id="principal">
+					<Container fluid className="conteudo bg-secondary">
 
-				<Content>
-
-					<Container fluid className="conteudo bg-secondary p-5">
-
-						<h1 title='Consulte seu perfil'>Seu perfil</h1>
+						<h1 className='py-2' title='Consulte seu perfil'>Seu perfil</h1>
 
 						<div className='perfil'>
 
@@ -1247,9 +1252,9 @@ const Home = () => {
 						</div>
 
 						<br />
-						<Container className='controle border'>
+						<Container fluid className='controle border'>
 							<h1>Controle Mensal</h1>
-							<Row>
+							<Row className='px-3'>
 
 								<div className="cartao-perfil col">
 									<div className='item'>
@@ -1484,7 +1489,7 @@ const Home = () => {
 										)}
 									</Modal>
 								</div>
-								<div className=''><Button className='click' as="button" variant="secondary" style={{ display: "flex", alignItems: "center", gap: "5px", color: "#fff" }} onClick={() => setShowModalCategorias(true)}>Ver categorias de gastos<GiClick className='icone-click' /></Button>
+								<div><Button className='click' as="button" variant="secondary" style={{ display: "flex", alignItems: "center", gap: "5px", color: "#fff" }} onClick={() => setShowModalCategorias(true)}>Ver categorias de gastos<GiClick className='icone-click' /></Button>
 									<Modal
 										show={showModalCategorias}
 										onHide={() => setShowModalCategorias(false)}
@@ -1569,7 +1574,7 @@ const Home = () => {
 						</Container> */}
 
 
-						<Container className='painel mt-5 mb-5 border'>
+						<Container fluid className='painel mt-5 mb-5 border'>
 							<h1>Agenda Financeira</h1>
 
 							<div className="tabela pt-5 pb-5">
@@ -1839,7 +1844,7 @@ const Home = () => {
 
 						<div>
 
-							<Container className="categorias p-5 mb-5">
+							<Container fluid className="categorias p-3 mb-5">
 								<div className="categorias-titulo">
 									<h1>Gastos por Categoria</h1>
 								</div>
@@ -1857,19 +1862,6 @@ const Home = () => {
 														currency: 'BRL',
 													})}
 												</p>
-
-												{valorGasto > 0 && (
-													<p className='percentual-categoria'>
-														{gastosPorCategoria[categoria]
-															? (
-																(gastosPorCategoria[categoria].reduce(
-																	(total, gasto) => total + gasto.valor,
-																	0
-																) / valorGasto) * 100
-															).toFixed(2) + "%"
-															: "0.00%"}
-													</p>
-												)}
 
 											</div>
 
@@ -2108,13 +2100,10 @@ const Home = () => {
 
 
 					</Container>
-
-
-				</Content >
 			</div >
-			<Footer />
+			<Footer anchor='topo'/>
 
-		</>
+		</div>
 	);
 }
 
