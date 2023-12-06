@@ -1077,92 +1077,16 @@ const Home = () => {
 
 					<h1 className='py-2' title='Consulte seu perfil'>Seu perfil</h1>
 
-					<div className='perfil'>
+					<div className='perfil w-100'>
 
 						<div className="perfil1">
-
 							<IconShop className="mb-5" />
 
 							<h1 className='text-primary'><i>{name} {sname}</i></h1>
-
-							<div className="botoes">
-
-
-								{/* Início do botão de Editar perfil */}
-								<Button as="button" className="editar fw-bold" title='Editar perfil' variant="outline-primary" onClick={() => setShowModalEditarPerfil(true)}><FiEdit />
-								</Button>
-
-								<Modal
-									show={showModalEditarPerfil}
-									onHide={() => setShowModalEditarPerfil(false)}
-									size="md"
-									aria-labelledby="contained-modal-title-vcenter"
-									centered
-								>
-									<Modal.Header closeButton>
-										<Modal.Title id="contained-modal-title-vcenter">Editar perfil</Modal.Title>
-									</Modal.Header>
-									<Modal.Body>
-										<Form>
-											<Form.Group className="mb-3">
-												<Form.Label>Nome</Form.Label>
-												<Form.Control type="text" name="name" />
-											</Form.Group>
-											<Form.Group className="mb-3">
-												<Form.Label>Sobrenome</Form.Label>
-												<Form.Control type="text" name="sname" />
-											</Form.Group>
-											<Form.Group className="mb-3">
-												<Form.Label>E-mail</Form.Label>
-												<Form.Control type="text" name="email" />
-											</Form.Group>
-											<Form.Group className="mb-3">
-												<Form.Label>Data de nascimento</Form.Label>
-												<Form.Control type="date" name="email" />
-											</Form.Group>
-											<Form.Group className="mb-3">
-												<Form.Label>Foto</Form.Label>
-												<Form.Control type="file" name="foto" />
-											</Form.Group>
-										</Form>
-									</Modal.Body>
-									<Modal.Footer>
-										{/* onClick={handleAdicionarNovoGanho} */}
-										<Button as='button' variant="secondary">
-											Salvar
-										</Button>
-									</Modal.Footer>
-								</Modal>
-								{/* Fim do botão de Editar perfil */}
-
-
-								{/* Início do botão de Alerta */}
-								<Button as="button" className='editar fw-bold' title='Avisos' variant="outline-danger" onClick={() => setShowModalAlerta(true)}><AiOutlineAlert className='alerta' /></Button>
-
-								<Modal
-									show={showModalAlerta}
-									onHide={() => setShowModalAlerta(false)}
-									size="lg"
-									aria-labelledby="contained-modal-title-vcenter"
-									centered
-								>
-									<Modal.Header closeButton>
-										<Modal.Title id="contained-modal-title-vcenter">Avisos</Modal.Title>
-									</Modal.Header>
-									<Modal.Body>
-									</Modal.Body>
-								</Modal>
-								{/* Fim do botão de Alerta */}
-
-							</div>
 							<WithLabelExample />
-
 						</div>
 
-
-
-
-						<Row>
+						<Row className='justify-content-center my-4'>
 							<div className="cartao-perfil1">
 								<div className="item">
 									<h4 className=''>Idade</h4>
@@ -1203,7 +1127,6 @@ const Home = () => {
 					<Container fluid className='controle border'>
 						<h1>Controle Mensal</h1>
 						<Row className='px-3'>
-
 							<div className="cartao-perfil col">
 								<div className='item'>
 									<h4>Mês/Ano</h4>
@@ -1520,7 +1443,7 @@ const Home = () => {
 						</Container> */}
 
 
-					<Container fluid className='painel my-5 border table-responsive'>
+					<Container fluid className='painel my-5 px-5 border table-responsive'>
 						<h1 className='mt-3 mb-4'>Agenda Financeira</h1>
 
 						<table className="tabela mb-2 text-center text-nowrap">
@@ -1569,7 +1492,7 @@ const Home = () => {
 							})}
 						</table>
 
-						<div className="botao-painel">
+						<div className="botao-painel my-3">
 							<Button className='click' variant="secondary" onClick={() => setShowModalContas(true)}>Nova despesa<GiClick className='icone-click' /></Button>
 						</div>
 
@@ -1784,13 +1707,10 @@ const Home = () => {
 					{/* className={`${categoriasVisivel ? 'visivel' : 'oculto'}`} */}
 
 					<div>
-
-						<Container fluid className="categorias p-3 mb-5">
+						{categorias.length > 0 && <Container fluid className="categorias p-3 mb-5">
 							<div className="categorias-titulo">
 								<h1>Gastos por Categoria</h1>
 							</div>
-
-
 
 							<div className='cartoes-categoria'>
 								{categorias.map((categoria, index) => (
@@ -1871,7 +1791,7 @@ const Home = () => {
 							</Modal>
 
 
-						</Container>
+						</Container>}
 
 
 						{categoriasLegenda.length > 0 ? (
