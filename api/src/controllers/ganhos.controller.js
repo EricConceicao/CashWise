@@ -16,7 +16,7 @@ export async function verganhos (req, res) {
 export async function adicionarganho (req, res) {
     try {
       const novoGanho = req.body;
-      console.log(novoGanho) 
+      console.log("Novo ganho: ", novoGanho) 
       const despesaCriada = await prisma.ganho.create({
         data: novoGanho,
       });
