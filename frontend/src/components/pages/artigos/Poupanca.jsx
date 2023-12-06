@@ -2,7 +2,10 @@ import Header from '../../layouts/Header';
 import Footer from '../../layouts/Footer';
 import CoinText from '../../utils/CoinText';
 
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
 
 import './Artigos.css';
 
@@ -33,7 +36,7 @@ const Poupanca = () => {
 				</header>
 
 				<main className="container mt-5 mb-5 mx-auto">
-					<Row className='bg-light px-1 py-3'>
+					<Row className='px-1 py-3'>
 						<Col lg={6} md={6} className="mb-4">
 							<section>
 								<Card className="h-100" border="#213740" style={{ borderWidth: '3px' }}>

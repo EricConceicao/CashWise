@@ -1,9 +1,14 @@
 import Header from '../../layouts/Header';
 import Footer from '../../layouts/Footer';
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
+
 // Ícones //
 import { BsCheck2Circle as Check } from 'react-icons/bs';
 import { VscError as Nocheck } from 'react-icons/vsc';
+
 import './Artigos.css';
 
 
@@ -39,7 +44,7 @@ const Investimentos = () => {
 				</header>
 
 				<main className='container mt-5 mb-5'>
-					<Row className='bg-light px-1 py-3'>
+					<Row className='px-1 py-3'>
 						<Col lg={4} md={6} className="mb-4">
 							<article>
 								<Card style={card}>
