@@ -72,6 +72,8 @@ export async function gastosPorCategoria(req, res) {
       },
       select: {
         categoria: true,
+        descricao: true,
+        data: true,
         valor: true,
         // Adicione outros campos do gasto que você deseja retornar
       },

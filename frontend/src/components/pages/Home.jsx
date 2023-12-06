@@ -356,13 +356,10 @@ const Home = () => {
 		setFontes(novasFontes);
 	};
 
-	const [fonteSelecionada, setFonteSelecionada] = useState("");
 	const [showModalDetalhesFontes, setShowModalDetalhesFontes] = useState(false);
+	const [ganhosFonteAtual, setGanhosFonteAtual] = useState([]);
+	const [fonteAtual, setFonteAtual] = useState("");
 
-	const mostrarDetalhesFonte = (fonte) => {
-		setFonteSelecionada(fonte);
-		setShowModalDetalhesFontes(true);
-	};
 
 	useEffect(() => {
 
@@ -417,16 +414,12 @@ const Home = () => {
 	};
 
 
-	const [detalhesCategoria, setDetalhesCategoria] = useState(null);
-	const [showModalDetalhes, setShowModalDetalhes] = useState(false);
+	const [showModalDetalhesCategoria, setShowModalDetalhesCategoria] = useState(false);
+	const [gastosCategoriaAtual, setGastosCategoriaAtual] = useState([]);
+	const [categoriaAtual, setCategoriaAtual] = useState("");
 
-	const mostrarDetalhesCategoria = async (categoria) => {
-		// try {
 
-		// }
-		// setCategoriaSelecionada(categoria);
-		// setShowModalDetalhes(true);
-	};
+
 
 	useEffect(() => {
 
@@ -440,6 +433,8 @@ const Home = () => {
 		getGastosPorCategoria()
 
 	}, [])
+
+
 
 
 
@@ -576,11 +571,6 @@ const Home = () => {
 	const [fimPeriodoConta, setFimPeriodoConta] = useState("");
 
 
-
-	console.log(contas)
-	console.log(contasAgenda)
-
-
 	useEffect(() => {
 
 		const getcontas = async () => {
@@ -670,7 +660,7 @@ const Home = () => {
 						}
 
 						else {
-							console.log(`A conta ${conta.id} não está dentro do período e não será adicionada.`);
+							// console.log(`A conta ${conta.id} não está dentro do período e não será adicionada.`);
 						}
 
 					}
@@ -743,43 +733,9 @@ const Home = () => {
 		}
 	}
 
-
-	// Adicione esta função ao seu componente
-	/*const calcularDiasRestantes = (dataVencimento) => {
-		const dataAtual = moment();
-		const dataVencimentoFormatada = moment(dataVencimento, 'DD-MM-YYYY');
-
-		// Calcula a diferença em dias
-		const diasRestantes = dataVencimentoFormatada.diff(dataAtual, 'days');
-		console.log("faltam", diasRestantes)
-		console.log("data atual",dataAtual)
-		console.log("dataVencimentoFormatada",dataVencimentoFormatada)
-
-		let mensagem = '';
-		let corFundo = '';
-
-		if (diasRestantes === 0) {
-			mensagem = 'Vence hoje!';
-			corFundo = 'red';
-		} else if (diasRestantes === 1) {
-			mensagem = 'Vence amanhã!';
-			corFundo = 'red';
-		}
-		else if (diasRestantes >= 2 && diasRestantes <= 5) {
-			mensagem = `Vence em ${diasRestantes} dias!`;
-			corFundo = 'yellow';
-		}
-		else {
-			mensagem = 'Fique tranquilo!';
-			corFundo = 'green'
-		}
-
-		return { mensagem, corFundo };
-	};*/
-
 	const calcularDiasRestantes = (dataVencimento) => {
 		const dataAtual = new Date();
-		console.log('dados:  ', dataVencimento)
+		// console.log('dados:  ', dataVencimento)
 		const partesDataVencimento = dataVencimento.split('-');
 		// console.log(partesDataVencimento)
 		const dataVencimentoFormatada = new Date(partesDataVencimento[2], partesDataVencimento[1] - 1, partesDataVencimento[0]);
@@ -840,7 +796,7 @@ const Home = () => {
 			const recorrencia = event.target.recorrencia.value;
 			const inicioPeriodo = (event.target.inicioPeriodo?.value) ?? '';
 			const fimPeriodo = (event.target.fimPeriodo?.value) ?? '';
-			console.log("o vencimento é",vencimento)
+			console.log("o vencimento é", vencimento)
 
 			// Construa o objeto contaEditada apenas com os campos preenchidos
 			const contaEditada = {};
@@ -895,7 +851,7 @@ const Home = () => {
 						dadosAdicionais: data.dadosAdicionais,
 					}
 					: conta));
-					getContasAgenda();
+				getContasAgenda();
 			} else {
 				// Trate o caso em que a exclusão falhou
 				console.error('Erro ao editar conta:', response.statusText);
@@ -1577,249 +1533,249 @@ const Home = () => {
 									<th className='px-3 py-3'>Ação</th>
 								</tr>
 							</thead>
-								{contasAgenda.map((conta) => {
-									const { mensagem, corFundo } = calcularDiasRestantes(conta.vencimento);
+							{contasAgenda.map((conta) => {
+								const { mensagem, corFundo } = calcularDiasRestantes(conta.vencimento);
 
-									return (
-										<tbody key={conta.id} className='pagar'>
-											<tr>
-												<td className="descricao-conta p-3">
-													<FaPiggyBank className='moeda' />{' '}
-													{conta.descricao}
-												</td>
-												<td className='p-3'>
-													<CiCalendar className='icone-conta' />{' '}
-													{conta.vencimento}
-												</td>
-												<td className='p-3'>
-													<span className={`${corFundo}`}>{mensagem}</span>
-												</td>
-												<td className='p-3'>
-													<CiBag1 className='icone-conta' />
-													{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-												</td>
+								return (
+									<tbody key={conta.id} className='pagar'>
+										<tr>
+											<td className="descricao-conta p-3">
+												<FaPiggyBank className='moeda' />{' '}
+												{conta.descricao}
+											</td>
+											<td className='p-3'>
+												<CiCalendar className='icone-conta' />{' '}
+												{conta.vencimento}
+											</td>
+											<td className='p-3'>
+												<span className={`${corFundo}`}>{mensagem}</span>
+											</td>
+											<td className='p-3'>
+												<CiBag1 className='icone-conta' />
+												{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+											</td>
 
-												<td className='p-3'>
-													<Button variant='outline-info' className='text-warning' title='Editar' onClick={() => handleEditarConta(conta.id)}><MdEdit /></Button>
-													<Button variant='outline-info' className='text-danger' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
-														<FaTrashAlt />
-													</Button>
-												</td>
-											</tr>
+											<td className='p-3'>
+												<Button variant='outline-info' className='text-warning' title='Editar' onClick={() => handleEditarConta(conta.id)}><MdEdit /></Button>
+												<Button variant='outline-info' className='text-danger' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
+													<FaTrashAlt />
+												</Button>
+											</td>
+										</tr>
 
-											<Modal
-												show={showModalEditarConta}
-												onHide={() => setShowModalEditarConta(false)}
-												size="md"
-												aria-labelledby="contained-modal-title-vcenter"
-												centered
-											>
-												<Modal.Header closeButton>
-													<Modal.Title id="contained-modal-title-vcenter">Editar despesa</Modal.Title>
-												</Modal.Header>
-												<Modal.Body>
-													<Form onSubmit={handleSubmitEditarConta}>
 
-														<Form.Group className="mb-3">
-															<Form.Label>Descrição</Form.Label>
-															<Form.Control
-																type="text"
-																name='descricao'
-															/>
-														</Form.Group>
-
-														<Form.Group className="mb-3">
-															<Form.Label>Valor</Form.Label>
-															<div className="input-group">
-																<span className="input-group-text">R$</span>
-																<Form.Control
-																	type="number"
-																	step="0.01"  // Permita valores fracionados com duas casas decimais
-																	name='valor'
-																/>
-															</div>
-														</Form.Group>
-
-														<Form.Group className="mb-3">
-															<Form.Label>Dia de vencimento</Form.Label>
-															<Form.Control
-																type="number"
-																name='vencimento'
-															/>
-														</Form.Group>
-
-														<Form.Group className="mb-3">
-															<Form.Label>Recorrência</Form.Label>
-															<Form.Select
-																name='recorrencia'
-																value={recorrenciaConta}
-																onChange={(e) => setRecorrenciaConta(e.target.value)}
-															>
-																<option value="MENSAL">Mensal</option>
-																<option value="POR_PERIODO">Por Período</option>
-															</Form.Select>
-														</Form.Group>
-
-														{recorrenciaConta === 'POR_PERIODO' && (
-															<>
-																<Form.Group className="mb-3">
-																	<Form.Label>Início do Período</Form.Label>
-																	<Form.Control
-																		type="month"
-																		name='inicioPeriodo'
-																	/>
-																</Form.Group>
-
-																<Form.Group className="mb-3">
-																	<Form.Label>Fim do Período</Form.Label>
-																	<Form.Control
-																		type="month"
-																		name='fimPeriodo'
-																	/>
-																</Form.Group>
-															</>
-														)}
-														<Button as='button' type='submit' variant="secondary">
-															Salvar
-														</Button>
-													</Form>
-												</Modal.Body>
-												{showConfirmation && (
-													<div className="alert alert-success alert-custom" role="alert">
-														{confirmationMessage}
-													</div>
-												)}
-											</Modal>
-
-											<Modal
-												show={showModalExcluirConta}
-												onHide={() => setShowModalExcluirConta(false)}
-												size="md"
-												aria-labelledby="contained-modal-title-vcenter"
-												centered
-											>
-												<Modal.Header closeButton></Modal.Header>
-												<Modal.Body>
-													<Form onSubmit={handleSubmitExcluirConta}>
-														Tem certeza que quer excluir essa despesa?
-														<br />
-														<br />
-														<Button as='button' type='submit' variant="secondary">
-															Excluir
-														</Button>
-													</Form>
-												</Modal.Body>
-												{showConfirmation && (
-													<div className="alert alert-success alert-custom" role="alert">
-														{confirmationMessage}
-													</div>
-												)}
-											</Modal>
-										</tbody>
-									);
-								})}
-
-							<br />
-
-							<div className="botao-painel">
-								<Button className='click' variant="secondary" onClick={() => setShowModalContas(true)}>Nova despesa<GiClick className='icone-click' /></Button>
-
-								<Modal
-									show={showModalContas}
-									onHide={() => setShowModalContas(false)}
-									size="md"
-									aria-labelledby="contained-modal-title-vcenter"
-									centered
-								>
-									<Modal.Header closeButton>
-										<Modal.Title id="contained-modal-title-vcenter">Nova despesa</Modal.Title>
-									</Modal.Header>
-									<Modal.Body>
-										<Form onSubmit={handleSubmitNovaConta}>
-
-											<Form.Group className="mb-3">
-												<Form.Label>Descrição</Form.Label>
-												<Form.Control
-													type="text"
-													name='descricao'
-													value={descricaoConta}
-													onChange={(e) => setDescricaoConta(e.target.value)}
-
-												/>
-											</Form.Group>
-
-											<Form.Group className="mb-3">
-												<Form.Label>Valor</Form.Label>
-												<div className="input-group">
-													<span className="input-group-text">R$</span>
-													<Form.Control
-														type="number"
-														step="0.01"  // Permita valores fracionados com duas casas decimais
-														name='valor'
-														value={valorConta}
-														onChange={(e) => setValorConta(e.target.value)}
-													/>
-												</div>
-											</Form.Group>
-
-											<Form.Group className="mb-3">
-												<Form.Label>Dia de vencimento</Form.Label>
-												<Form.Control
-													type="number"
-													name='vencimento'
-													value={vencimentoConta}
-													onChange={(e) => setVencimentoConta(e.target.value)}
-												/>
-											</Form.Group>
-
-											<Form.Group className="mb-3">
-												<Form.Label>Recorrência</Form.Label>
-												<Form.Select
-													name='recorrencia'
-													value={recorrenciaConta}
-													onChange={(e) => setRecorrenciaConta(e.target.value)}
-												>
-													<option value="MENSAL">Mensal</option>
-													<option value="POR_PERIODO">Por Período</option>
-												</Form.Select>
-											</Form.Group>
-
-											{recorrenciaConta === 'POR_PERIODO' && (
-												<>
-													<Form.Group className="mb-3">
-														<Form.Label>Início do Período</Form.Label>
-														<Form.Control
-															type="month"
-															name='inicioPeriodo'
-															value={inicioPeriodoConta}
-															onChange={(e) => setInicioPeriodoConta(e.target.value)}
-														/>
-													</Form.Group>
-
-													<Form.Group className="mb-3">
-														<Form.Label>Fim do Período</Form.Label>
-														<Form.Control
-															type="month"
-															name='fimPeriodo'
-															value={fimPeriodoConta}
-															onChange={(e) => setFimPeriodoConta(e.target.value)}
-														/>
-													</Form.Group>
-												</>
-											)}
-											<Button as='button' type='submit' variant="secondary">
-												Criar
-											</Button>
-										</Form>
-									</Modal.Body>
-									{showConfirmation && (
-										<div className="alert alert-success alert-custom" role="alert">
-											{confirmationMessage}
-										</div>
-									)}
-								</Modal>
-							</div>
+									</tbody>
+								);
+							})}
 						</table>
+
+						<div className="botao-painel">
+							<Button className='click' variant="secondary" onClick={() => setShowModalContas(true)}>Nova despesa<GiClick className='icone-click' /></Button>
+						</div>
+
+						<Modal
+							show={showModalEditarConta}
+							onHide={() => setShowModalEditarConta(false)}
+							size="md"
+							aria-labelledby="contained-modal-title-vcenter"
+							centered
+						>
+							<Modal.Header closeButton>
+								<Modal.Title id="contained-modal-title-vcenter">Editar despesa</Modal.Title>
+							</Modal.Header>
+							<Modal.Body>
+								<Form onSubmit={handleSubmitEditarConta}>
+
+									<Form.Group className="mb-3">
+										<Form.Label>Descrição</Form.Label>
+										<Form.Control
+											type="text"
+											name='descricao'
+										/>
+									</Form.Group>
+
+									<Form.Group className="mb-3">
+										<Form.Label>Valor</Form.Label>
+										<div className="input-group">
+											<span className="input-group-text">R$</span>
+											<Form.Control
+												type="number"
+												step="0.01"  // Permita valores fracionados com duas casas decimais
+												name='valor'
+											/>
+										</div>
+									</Form.Group>
+
+									<Form.Group className="mb-3">
+										<Form.Label>Dia de vencimento</Form.Label>
+										<Form.Control
+											type="number"
+											name='vencimento'
+										/>
+									</Form.Group>
+
+									<Form.Group className="mb-3">
+										<Form.Label>Recorrência</Form.Label>
+										<Form.Select
+											name='recorrencia'
+											value={recorrenciaConta}
+											onChange={(e) => setRecorrenciaConta(e.target.value)}
+										>
+											<option value="MENSAL">Mensal</option>
+											<option value="POR_PERIODO">Por Período</option>
+										</Form.Select>
+									</Form.Group>
+
+									{recorrenciaConta === 'POR_PERIODO' && (
+										<>
+											<Form.Group className="mb-3">
+												<Form.Label>Início do Período</Form.Label>
+												<Form.Control
+													type="month"
+													name='inicioPeriodo'
+												/>
+											</Form.Group>
+
+											<Form.Group className="mb-3">
+												<Form.Label>Fim do Período</Form.Label>
+												<Form.Control
+													type="month"
+													name='fimPeriodo'
+												/>
+											</Form.Group>
+										</>
+									)}
+									<Button as='button' type='submit' variant="secondary">
+										Salvar
+									</Button>
+								</Form>
+							</Modal.Body>
+							{showConfirmation && (
+								<div className="alert alert-success alert-custom" role="alert">
+									{confirmationMessage}
+								</div>
+							)}
+						</Modal>
+
+						<Modal
+							show={showModalExcluirConta}
+							onHide={() => setShowModalExcluirConta(false)}
+							size="md"
+							aria-labelledby="contained-modal-title-vcenter"
+							centered
+						>
+							<Modal.Header closeButton></Modal.Header>
+							<Modal.Body>
+								<Form onSubmit={handleSubmitExcluirConta}>
+									Tem certeza que quer excluir essa despesa?
+									<br />
+									<br />
+									<Button as='button' type='submit' variant="secondary">
+										Excluir
+									</Button>
+								</Form>
+							</Modal.Body>
+							{showConfirmation && (
+								<div className="alert alert-success alert-custom" role="alert">
+									{confirmationMessage}
+								</div>
+							)}
+						</Modal>
+
+						<Modal
+							show={showModalContas}
+							onHide={() => setShowModalContas(false)}
+							size="md"
+							aria-labelledby="contained-modal-title-vcenter"
+							centered
+						>
+							<Modal.Header closeButton>
+								<Modal.Title id="contained-modal-title-vcenter">Nova despesa</Modal.Title>
+							</Modal.Header>
+							<Modal.Body>
+								<Form onSubmit={handleSubmitNovaConta}>
+
+									<Form.Group className="mb-3">
+										<Form.Label>Descrição</Form.Label>
+										<Form.Control
+											type="text"
+											name='descricao'
+											value={descricaoConta}
+											onChange={(e) => setDescricaoConta(e.target.value)}
+
+										/>
+									</Form.Group>
+
+									<Form.Group className="mb-3">
+										<Form.Label>Valor</Form.Label>
+										<div className="input-group">
+											<span className="input-group-text">R$</span>
+											<Form.Control
+												type="number"
+												step="0.01"  // Permita valores fracionados com duas casas decimais
+												name='valor'
+												value={valorConta}
+												onChange={(e) => setValorConta(e.target.value)}
+											/>
+										</div>
+									</Form.Group>
+
+									<Form.Group className="mb-3">
+										<Form.Label>Dia de vencimento</Form.Label>
+										<Form.Control
+											type="number"
+											name='vencimento'
+											value={vencimentoConta}
+											onChange={(e) => setVencimentoConta(e.target.value)}
+										/>
+									</Form.Group>
+
+									<Form.Group className="mb-3">
+										<Form.Label>Recorrência</Form.Label>
+										<Form.Select
+											name='recorrencia'
+											value={recorrenciaConta}
+											onChange={(e) => setRecorrenciaConta(e.target.value)}
+										>
+											<option value="MENSAL">Mensal</option>
+											<option value="POR_PERIODO">Por Período</option>
+										</Form.Select>
+									</Form.Group>
+
+									{recorrenciaConta === 'POR_PERIODO' && (
+										<>
+											<Form.Group className="mb-3">
+												<Form.Label>Início do Período</Form.Label>
+												<Form.Control
+													type="month"
+													name='inicioPeriodo'
+													value={inicioPeriodoConta}
+													onChange={(e) => setInicioPeriodoConta(e.target.value)}
+												/>
+											</Form.Group>
+
+											<Form.Group className="mb-3">
+												<Form.Label>Fim do Período</Form.Label>
+												<Form.Control
+													type="month"
+													name='fimPeriodo'
+													value={fimPeriodoConta}
+													onChange={(e) => setFimPeriodoConta(e.target.value)}
+												/>
+											</Form.Group>
+										</>
+									)}
+									<Button as='button' type='submit' variant="secondary">
+										Criar
+									</Button>
+								</Form>
+							</Modal.Body>
+							{showConfirmation && (
+								<div className="alert alert-success alert-custom" role="alert">
+									{confirmationMessage}
+								</div>
+							)}
+						</Modal>
 
 
 					</Container>
@@ -1858,8 +1814,11 @@ const Home = () => {
 												size=""
 												variant="outline-primary"
 												className="botao"
-												onClick={() => mostrarDetalhesCategoria(categoria)
-												}
+												onClick={() => {
+													setCategoriaAtual(categoria.categoria);
+													setGastosCategoriaAtual(categoria.gastos);
+													setShowModalDetalhesCategoria(true);
+												}}
 											>
 												Listar
 											</Button>
@@ -1872,44 +1831,44 @@ const Home = () => {
 							</div>
 
 
-							{/* <Modal
-									show={showModalDetalhes}
-									onHide={() => setShowModalDetalhes(false)}
-									size="lg"
-									aria-labelledby="contained-modal-title-vcenter"
-									centered
-								>
-									<Modal.Header closeButton>
-										<Modal.Title id="contained-modal-title-vcenter">
-											Meus gastos com {categoriaSelecionada}
-										</Modal.Title>
-									</Modal.Header>
-									<Modal.Body>
-										<div className="row">
-											<div className="col fw-bold">Descrição</div>
-											<div className="col fw-bold">Data</div>
-											<div className="col fw-bold">Valor</div>
+							<Modal
+								show={showModalDetalhesCategoria}
+								onHide={() => setShowModalDetalhesCategoria(false)}
+								size="lg"
+								aria-labelledby="contained-modal-title-vcenter"
+								centered
+							>
+								<Modal.Header closeButton>
+									<Modal.Title id="contained-modal-title-vcenter">
+										Meus gastos com {categoriaAtual}
+									</Modal.Title>
+								</Modal.Header>
+								<Modal.Body>
+									<div className="row">
+										<div className="col fw-bold">Descrição</div>
+										<div className="col fw-bold">Data</div>
+										<div className="col fw-bold">Valor</div>
+									</div>
+									<br />
+									{gastosCategoriaAtual.map((gasto, index) => (
+										<div className="row" key={index}>
+											<div className="col">{gasto.descricao}</div>
+											<div className="col">{moment(gasto.data).format('DD/MM/YYYY')}</div>
+											<div className="col">
+												{parseFloat(gasto.valor).toLocaleString('pt-BR', {
+													style: 'currency',
+													currency: 'BRL',
+												})}
+											</div>
 										</div>
-										<br />
-										{categoriaSelecionada && (
-											<ul>
-												{gastosPorCategoria[categoriaSelecionada]?.map((gasto, index) => (
-													<li key={index} className='row'>
-														<p className='col'>{gasto.descricao}</p>
-														<p className='col'>{gasto.data}</p>
-														<p className='col'>{gasto.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-														<br />
-													</li>
-												))}
-											</ul>
-										)}
-									</Modal.Body>
-									<Modal.Footer>
-										<Button as="button" variant="secondary" onClick={() => setShowModalDetalhes(false)}>
-											Fechar
-										</Button>
-									</Modal.Footer>
-								</Modal> */}
+									))}
+								</Modal.Body>
+								<Modal.Footer>
+									<Button as="button" variant="secondary" onClick={() => setShowModalDetalhesCategoria(false)}>
+										Fechar
+									</Button>
+								</Modal.Footer>
+							</Modal>
 
 
 						</Container>
@@ -1953,10 +1912,14 @@ const Home = () => {
 										<div>
 											<Button
 												as="button"
+												size=""
 												variant="outline-primary"
 												className="botao"
-												onClick={() => mostrarDetalhesFonte(fonte)
-												}
+												onClick={() => {
+													setFonteAtual(fonte.fonte);
+													setGanhosFonteAtual(fonte.ganhos);
+													setShowModalDetalhesFontes(true);
+												}}
 											>
 												Listar
 											</Button>
@@ -1977,7 +1940,7 @@ const Home = () => {
 							>
 								<Modal.Header closeButton>
 									<Modal.Title id="contained-modal-title-vcenter">
-										Meus gastos com {fonteSelecionada}
+										Meus gastos com {fonteAtual}
 									</Modal.Title>
 								</Modal.Header>
 								<Modal.Body>
@@ -1987,18 +1950,18 @@ const Home = () => {
 										<div className="col fw-bold">Valor</div>
 									</div>
 									<br />
-									{fonteSelecionada && (
-										<ul>
-											{ganhosPorFonte[fonteSelecionada]?.map((ganho, index) => (
-												<li key={index} className='row'>
-													<p className='col'>{ganho.descricao}</p>
-													<p className='col'>{ganho.data}</p>
-													<p className='col'>{ganho.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-													<br />
-												</li>
-											))}
-										</ul>
-									)}
+									{ganhosFonteAtual.map((ganho, index) => (
+										<div className="row" key={index}>
+											<div className="col">{ganho.descricao}</div>
+											<div className="col">{moment(ganho.data).format('DD/MM/YYYY')}</div>
+											<div className="col">
+												{parseFloat(ganho.valor).toLocaleString('pt-BR', {
+													style: 'currency',
+													currency: 'BRL',
+												})}
+											</div>
+										</div>
+									))}
 								</Modal.Body>
 								<Modal.Footer>
 									<Button as="button" variant="secondary" onClick={() => setShowModalDetalhesFontes(false)}>
@@ -2091,7 +2054,7 @@ const Home = () => {
 			</div >
 			<Footer anchor='topo' />
 
-		</div>
+		</div >
 	);
 }
 

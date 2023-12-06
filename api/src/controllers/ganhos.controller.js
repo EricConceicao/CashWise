@@ -62,14 +62,31 @@ export async function adicionarganho (req, res) {
           valor: true,
         },
       });
+
+      const todosGanhosPorFonte = await prisma.ganho.findMany({
+        where: {
+          data: {
+            startsWith: dataAtual,
+          }
+        },
+        select: {
+          fonte: true,
+          descricao: true,
+          data: true,
+          valor: true,
+          // Adicione outros campos do gasto que você deseja retornar
+        },
+      });
   
       const resultado = fontes.map((fonte) => {
         const fonteAtual = fonte.fonte;
         const somatorio = somatorioPorFonte.find((item) => item.fonte === fonteAtual);
+        const ganhosFonte = todosGanhosPorFonte.filter((ganho) => ganho.fonte === fonteAtual);
   
         return {
           fonte: fonteAtual,
           totalGanho: somatorio ? somatorio._sum.valor : 0,
+          ganhos: ganhosFonte,
         };
       });
   
