@@ -63,7 +63,7 @@ function SimulePage() {
   function GeneroSelection({ genero, handleGeneroChange }) {
     return (
       <div className='my-2'>
-        <h2 className='h3 text-center'>Selecione o seu Gênero</h2>
+        <p className='text-center fs-5'>Selecione o seu Gênero</p>
         <div className="d-flex gap-3 justify-content-center flex-nowrap">
           <div>
             <label className='p-1'>Masculino</label>
@@ -99,8 +99,8 @@ function SimulePage() {
 
   function DataNascimentoInput() {
     return (
-      <Form.Group>
-        <Form.Label>Insira a sua Data de Nascimento</Form.Label>
+      <Form.Group className='d-flex justify-content-center flex-wrap'>
+        <Form.Label className='fs-5'>Insira a sua Data de Nascimento</Form.Label>
         <Form.Control type='date' name='dataNascimento' />
       </Form.Group>
     );
@@ -145,12 +145,12 @@ function SimulePage() {
 
             <Col sm={12} md={6} className='my-2'>
               <form className='bg-primary border rounded-2' onSubmit={handleFormSubmit}>
-                <div className='d-flex flex-column rounded-2 p-2 bg-light'>
+                <div className='d-flex flex-column rounded-2 p-4 bg-light'>
                   <div className="d-flex flex-column justify-content-center align-items-center">
-                    <h3 className='h4 text-center'>Informe o salário recebido correspondente ao mês/ano trabalhado</h3>
+                    <p className='fs-5 text-center'>Informe o salário recebido correspondente ao mês/ano trabalhado</p>
                     <table>
                       <thead>
-                        <tr>
+                        <tr className='text-center'>
                           <th>MÊS / ANO</th>
                           <th>SALÁRIO (R$)</th>
                         </tr>
@@ -211,8 +211,5 @@ function SimulePage() {
     </>
   );
 }
-
-
-
 
 export default SimulePage;

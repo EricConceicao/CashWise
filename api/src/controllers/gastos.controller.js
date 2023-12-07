@@ -17,7 +17,7 @@ export async function vergastos(req, res) {
 export async function adicionargasto(req, res) {
   try {
     const novoGasto = req.body;
-    console.log(novoGasto)
+    console.log("Novo gasto: ",novoGasto)
     const despesaCriada = await prisma.gasto.create({
       data: novoGasto,
     });
@@ -64,13 +64,30 @@ export async function gastosPorCategoria(req, res) {
       },
     });
 
+    const todosGastosPorCategoria = await prisma.gasto.findMany({
+      where: {
+        data: {
+          startsWith: dataAtual,
+        }
+      },
+      select: {
+        categoria: true,
+        descricao: true,
+        data: true,
+        valor: true,
+        // Adicione outros campos do gasto que você deseja retornar
+      },
+    });
+
     const resultado = categorias.map((categoria) => {
       const categoriaAtual = categoria.categoria;
       const somatorio = somatorioPorCategoria.find((item) => item.categoria === categoriaAtual);
+      const gastosCategoria = todosGastosPorCategoria.filter((gasto) => gasto.categoria === categoriaAtual);
 
       return {
         categoria: categoriaAtual,
         totalGasto: somatorio ? somatorio._sum.valor : 0,
+        gastos: gastosCategoria,
       };
     });
 

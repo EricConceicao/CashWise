@@ -69,8 +69,8 @@ const BoletimInformativo = () => {
       <Header />
       <div style={colorBody}>
         <div className="bg-secondary text-white text-center py-5 p-1">
-          <h1>Boletim Informativo</h1>
-          <h2 style={{ color: '#AEF2C6' }}>Artigos Interessantes Sobre Investimentos para Você</h2>
+          <h1 className="display-2">Boletim Informativo</h1>
+          <h2 className="" style={{ color: '#AEF2C6' }}>Artigos Interessantes Sobre Investimentos para Você</h2>
         </div>
 
         <Container className="mt-5">

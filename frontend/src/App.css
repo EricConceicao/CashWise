@@ -27,18 +27,16 @@ h1 {
 }
 
 .conteudo {
-    width: 100vw;
     color: #fff;
-    padding: 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    gap: 60px;
+    gap: 1rem;
 }
 
 .perfil {
-    gap: 20px;
+    gap: 1rem;
     display: flex;
     flex-direction: column;
 }
@@ -53,7 +51,7 @@ h1 {
     padding: 50px 0px;
     border-bottom: 4px solid #fff;
     border-radius: 10px;
-    gap: 50px;
+    gap: 1rem;
 }
 
 .perfil2 {
@@ -150,9 +148,9 @@ h4 {
     border-bottom: 4px solid orange;
 }
 
-/* .click {
-    width: 200px;
-} */
+.click {
+    border-radius: 30px;
+}
 
 .icone-click {
     width: 25px;
@@ -239,9 +237,9 @@ h5 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 40px;
+    gap: 1rem;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    padding: 40px 0;
+    padding: 20px 0;
     border-radius: 5px;
 }
 
@@ -254,7 +252,6 @@ h5 {
 .painel,
 .relatorio {
     border-radius: 5px;
-    padding: 50px 70px 30px 70px;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     border-bottom: 4px solid #fff;
     display: flex;
@@ -303,8 +300,6 @@ h5 {
 .tabela .titulo {
     border-radius: 5px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    margin-bottom: 10px;
-    font-size: 17px;
 }
 
 .pagar {
@@ -312,15 +307,12 @@ h5 {
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     font-weight: lighter;
     align-items: center;
-    margin-bottom: 10px;
-    font-size: 17px;
     letter-spacing: 0.5px;
 }
 
 .pagar:hover {
-    background-color: rgba(255, 166, 0, 0.914);
+    background-color: rgba(255, 166, 0, 0.5);
     color: #fff;
-    font-weight: bold;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -457,6 +449,28 @@ h5 {
     color: #dc3545;
     border-radius: 5px;
 }
+
+.grafico-relatorio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    height: 650px;
+    background: #fff;
+    padding: 40px 0 100px 0;
+    border-bottom: 4px solid #fff;
+    gap: 30px;
+}
+
+
+.grafico-barra {
+    color: #fff;
+}
+
+.pagar td {
+align-items: left;
+}
+
 
 
 

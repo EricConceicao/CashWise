@@ -16,9 +16,29 @@ import { HiOutlineCake } from 'react-icons/hi';
 import { MdOutlineEmojiPeople } from 'react-icons/md';
 import { BsStars } from 'react-icons/bs';
 import useUserStore from '../store/UserStore';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import {
+	Chart as ChartJS,
+	ArcElement,
+	Tooltip,
+	Legend,
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	Title,
+} from 'chart.js';
 ChartJS.register(ArcElement, Tooltip, Legend);
 import { Pie } from "react-chartjs-2";
+
+import { Bar } from 'react-chartjs-2';
+ChartJS.register(
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	Title,
+	Tooltip,
+	Legend
+);
+
 import { FaTrashAlt } from "react-icons/fa";
 import { FaPiggyBank } from "react-icons/fa";
 import moment from 'moment';
@@ -36,7 +56,7 @@ registerLocale('pt', pt);
 import React, { useRef } from 'react';
 import InputComIcone from '../utils/InputComIcone';
 import IconShop from '../utils/IconShop';
-import { GiClick } from "react-icons/gi";
+import { GiClick, GiConsoleController } from "react-icons/gi";
 import WithLabelExample from '../utils/ProgressBar';
 
 
@@ -336,13 +356,10 @@ const Home = () => {
 		setFontes(novasFontes);
 	};
 
-	const [fonteSelecionada, setFonteSelecionada] = useState("");
 	const [showModalDetalhesFontes, setShowModalDetalhesFontes] = useState(false);
+	const [ganhosFonteAtual, setGanhosFonteAtual] = useState([]);
+	const [fonteAtual, setFonteAtual] = useState("");
 
-	const mostrarDetalhesFonte = (fonte) => {
-		setFonteSelecionada(fonte);
-		setShowModalDetalhesFontes(true);
-	};
 
 	useEffect(() => {
 
@@ -397,13 +414,12 @@ const Home = () => {
 	};
 
 
-	const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
-	const [showModalDetalhes, setShowModalDetalhes] = useState(false);
+	const [showModalDetalhesCategoria, setShowModalDetalhesCategoria] = useState(false);
+	const [gastosCategoriaAtual, setGastosCategoriaAtual] = useState([]);
+	const [categoriaAtual, setCategoriaAtual] = useState("");
 
-	const mostrarDetalhesCategoria = (categoria) => {
-		setCategoriaSelecionada(categoria);
-		setShowModalDetalhes(true);
-	};
+
+
 
 	useEffect(() => {
 
@@ -417,6 +433,8 @@ const Home = () => {
 		getGastosPorCategoria()
 
 	}, [])
+
+
 
 
 
@@ -481,7 +499,57 @@ const Home = () => {
 		}
 	};
 
+	const valorFontes = []
+	const fontesLegenda = []
 
+	fontes.map((fonte, index) => {
+
+		fontesLegenda.push(fonte.fonte)
+		labelsColors.push(colors[index])
+		valorFontes.push(fonte.totalGanho)
+
+	})
+
+	const graficoFontes = {
+		labels: fontesLegenda,
+		datasets: [{
+			label: ' Ganhos (R$)',
+			data: valorFontes,
+			backgroundColor: labelsColors,
+			borderWidth: 2,
+			hoverOffset: 4
+		}]
+	}
+
+	const valorRelatorio = [somatorioGanhos, somatorioGastos]
+	const relatorioLegenda = ['Ganhos', 'Gastos']
+
+	const graficoRelatorio = {
+		labels: relatorioLegenda,
+		datasets: [{
+			label: ' Valor em Reais ',
+			data: valorRelatorio,
+			backgroundColor: labelsColors,
+			borderColor: '#fff',
+			borderWidth: 2,
+			hoverOffset: 4,
+			labels: {
+				color: labelsColors,
+			},
+		}]
+	}
+
+	const options1 = {
+		plugins: {
+			legend: {
+				labels: {
+					color: 'white',
+				},
+				position:
+					'left',
+			}
+		}
+	};
 
 
 
@@ -501,7 +569,6 @@ const Home = () => {
 	const [recorrenciaConta, setRecorrenciaConta] = useState("Mensal");
 	const [inicioPeriodoConta, setInicioPeriodoConta] = useState("");
 	const [fimPeriodoConta, setFimPeriodoConta] = useState("");
-
 
 
 	useEffect(() => {
@@ -593,7 +660,7 @@ const Home = () => {
 						}
 
 						else {
-							console.log(`A conta ${conta.id} não está dentro do período e não será adicionada.`);
+							// console.log(`A conta ${conta.id} não está dentro do período e não será adicionada.`);
 						}
 
 					}
@@ -658,45 +725,13 @@ const Home = () => {
 			const data = await response.json()
 			/*alert(data.success)*/
 			showConfirmationMessage("Nova conta criada com sucesso!");
-			// console.log("veja", data.conta)
+			console.log("veja", data.conta)
+
 			setContas([...contas, data.conta])
-			setContasAgenda([...contasAgenda, data.conta]);
+			// setContasAgenda([...contasAgenda, data.conta]);
+			getContasAgenda();
 		}
 	}
-
-
-	// Adicione esta função ao seu componente
-	/*const calcularDiasRestantes = (dataVencimento) => {
-		const dataAtual = moment();
-		const dataVencimentoFormatada = moment(dataVencimento, 'DD-MM-YYYY');
-
-		// Calcula a diferença em dias
-		const diasRestantes = dataVencimentoFormatada.diff(dataAtual, 'days');
-		console.log("faltam", diasRestantes)
-		console.log("data atual",dataAtual)
-		console.log("dataVencimentoFormatada",dataVencimentoFormatada)
-
-		let mensagem = '';
-		let corFundo = '';
-
-		if (diasRestantes === 0) {
-			mensagem = 'Vence hoje!';
-			corFundo = 'red';
-		} else if (diasRestantes === 1) {
-			mensagem = 'Vence amanhã!';
-			corFundo = 'red';
-		}
-		else if (diasRestantes >= 2 && diasRestantes <= 5) {
-			mensagem = `Vence em ${diasRestantes} dias!`;
-			corFundo = 'yellow';
-		}
-		else {
-			mensagem = 'Fique tranquilo!';
-			corFundo = 'green'
-		}
-
-		return { mensagem, corFundo };
-	};*/
 
 	const calcularDiasRestantes = (dataVencimento) => {
 		const dataAtual = new Date();
@@ -732,77 +767,102 @@ const Home = () => {
 		return { mensagem, corFundo };
 	};
 
-	// const [showModalEditarConta, setShowModalEditarConta] = useState(false);
-	// const [contaIdParaEditar, setContaIdParaEditar] = useState(null);
+	const [showModalEditarConta, setShowModalEditarConta] = useState(false);
+	const [contaIdParaEditar, setContaIdParaEditar] = useState(null);
 
-	// const handleEditarConta = (contaId) => {
+	const handleEditarConta = (contaId) => {
 
-	// 	setContaIdParaEditar(contaId);
+		setContaIdParaEditar(contaId);
 
-	// 	setShowModalEditarConta(true);
-	// }
-
-
-	// const handleSubmitEditarConta = async (event) => {
-	// 	event.preventDefault();
-
-	// 	if (!contaIdParaEditar) {
-	// 		console.error('ID da conta não definido.');
-	// 		return;
-	// 	}
-
-	// 	try {
-
-	// 		let novoPeriodo;
-	// 		event.target.recorrencia.value === 'MENSAL' ? (novoPeriodo = null) : (
-	// 			novoPeriodo = {
-	// 				inicio: event.target.inicioPeriodo.value,
-	// 				fim: event.target.fimPeriodo.value,
-	// 			})
+		setShowModalEditarConta(true);
+	}
 
 
-	// 		const contaEditada = {
-	// 			descricao: event.target.descricao.value,
-	// 			valor: event.target.valor.value,
-	// 			diaVencimento: parseInt(event.target.vencimento.value, 10),
-	// 			recorrencia: event.target.recorrencia.value,
-	// 			periodo: novoPeriodo,
-	// 		};
+	const handleSubmitEditarConta = async (event) => {
+		event.preventDefault();
 
-	// 		const response = await fetch(`http://localhost:3000/contas/editar/${contaIdParaEditar}`, {
-	// 			method: 'PATCH',
-	// 			headers: {
-	// 				'Content-Type': 'application/json',
-	// 			  },
-	// 			  body: JSON.stringify(contaEditada),
-	// 		});
+		if (!contaIdParaEditar) {
+			console.error('ID da conta não definido.');
+			return;
+		}
 
-	// 		if (response.ok) {
-	// 			const data = await response.json();
-	// 			// Atualize o estado ou realize alguma ação após a exclusão bem-sucedida
-	// 			showConfirmationMessage("Conta editada com sucesso!");
-	// 			setTimeout(() => {
-	// 				setShowModalEditarConta(false);
-	// 			}, 2000);
+		console.log("id da conta", contaIdParaEditar)
 
-	// 			setContasAgenda((prevContas) => prevContas.map((conta) => conta.id === contaIdParaEditar?
-	// 			{
-	// 				...conta,
-	// 				// Adicione dados específicos da resposta, se necessário
-	// 				dadosAdicionais: data.dadosAdicionais,
-	// 			  }
-	// 			: conta));
-	// 		} else {
-	// 			// Trate o caso em que a exclusão falhou
-	// 			console.error('Erro ao editar conta:', response.statusText);
-	// 			// Adicione lógica de tratamento de erro, se necessário
-	// 		}
-	// 	} catch (error) {
-	// 		// Trate qualquer erro que possa ocorrer durante a exclusão
-	// 		console.error('Erro ao editar conta:', error);
-	// 		// Adicione lógica de tratamento de erro, se necessário
-	// 	}
-	// };
+		try {
+
+			const descricao = event.target.descricao.value;
+			const valor = event.target.valor.value;
+			const vencimento = parseInt(event.target.vencimento.value, 10);
+			const recorrencia = event.target.recorrencia.value;
+			const inicioPeriodo = (event.target.inicioPeriodo?.value) ?? '';
+			const fimPeriodo = (event.target.fimPeriodo?.value) ?? '';
+			console.log("o vencimento é", vencimento)
+
+			// Construa o objeto contaEditada apenas com os campos preenchidos
+			const contaEditada = {};
+
+			if (descricao) {
+				contaEditada.descricao = descricao;
+			}
+
+			if (valor) {
+				contaEditada.valor = valor;
+			}
+
+			if (vencimento) {
+				contaEditada.diaVencimento = parseInt(vencimento, 10);
+			}
+
+			if (recorrencia) {
+				contaEditada.recorrencia = recorrencia;
+
+				// Adicione o período se ambos os campos estiverem preenchidos
+				if (recorrencia === 'POR_PERIODO' && inicioPeriodo && fimPeriodo) {
+					contaEditada.periodo = {
+						inicio: inicioPeriodo,
+						fim: fimPeriodo,
+					};
+				}
+			}
+
+			console.log("dados editados", contaEditada)
+
+			const response = await fetch(`http://localhost:3000/contas/editar/${contaIdParaEditar}`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(contaEditada),
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				console.log("conta editada", data)
+				// Atualize o estado ou realize alguma ação após a exclusão bem-sucedida
+				showConfirmationMessage("Conta editada com sucesso!");
+				setTimeout(() => {
+					setShowModalEditarConta(false);
+				}, 2000);
+
+				setContas((prevContas) => prevContas.map((conta) => conta.id === contaIdParaEditar ?
+					{
+						...conta,
+						// Adicione dados específicos da resposta, se necessário
+						dadosAdicionais: data.dadosAdicionais,
+					}
+					: conta));
+				getContasAgenda();
+			} else {
+				// Trate o caso em que a exclusão falhou
+				console.error('Erro ao editar conta:', response.statusText);
+				// Adicione lógica de tratamento de erro, se necessário
+			}
+		} catch (error) {
+			// Trate qualquer erro que possa ocorrer durante a exclusão
+			console.error('Erro ao editar conta:', error);
+			// Adicione lógica de tratamento de erro, se necessário
+		}
+	};
 
 
 	const [showModalExcluirConta, setShowModalExcluirConta] = useState(false);
@@ -1008,365 +1068,339 @@ const Home = () => {
 	});
 
 
-
-
-
-
-	/*
-		const [users, setUsers] = useState([])
-		const [showModal, setShowModal] = useState(false)
-	
-		useEffect(() => {
-	
-			const getUsers = async () => {
-				const response = await fetch('http://localhost:3300/user/list')
-				const data = await response.json()
-				console.log(data.success)
-				console.log(data.users)
-				setUsers(data.users)
-			}
-	
-			getUsers()
-	
-		}, [])
-	
-		const handleSubmit = async (event) => {
-			event.preventDefault()
-	
-			const newUser = {
-				name: event.target.name.value,
-				email: event.target.email.value,
-				pass: event.target.pass.value,
-				photo: event.target.photo.value
-			}
-	
-			const response = await fetch('http://localhost:3300/user', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(newUser)
-			})
-	
-			if (response.ok) {
-				const data = await response.json()
-				alert(data.success)
-				setShowModal(false)
-				setUsers([...users, data.user])
-			}
-		} 
-	*/
-
 	return (
-		<>
+		<div id='topo'>
 			<Header />
 
 			<div id="principal">
+				<Container fluid className="conteudo bg-secondary">
 
-				<Content>
+					<h1 className='py-2' title='Consulte seu perfil'>Seu perfil</h1>
 
-					<Container fluid className="conteudo bg-secondary p-5">
+					<div className='perfil w-100'>
 
-						<h1 title='Consulte seu perfil'>Seu perfil</h1>
+						<div className="perfil1">
+							<IconShop className="mb-5" />
 
-						<div className='perfil'>
+							<h1 className='text-primary'><i>{name} {sname}</i></h1>
+							<WithLabelExample />
+						</div>
 
-							<div className="perfil1">
-
-								<IconShop className="mb-5" />
-
-								<h1 className='text-primary'><i>{name} {sname}</i></h1>
-
-								<div className="botoes">
-
-
-									{/* Início do botão de Editar perfil */}
-									<Button as="button" className="editar fw-bold" title='Editar perfil' variant="outline-primary" onClick={() => setShowModalEditarPerfil(true)}><FiEdit />
-									</Button>
-
-									<Modal
-										show={showModalEditarPerfil}
-										onHide={() => setShowModalEditarPerfil(false)}
-										size="md"
-										aria-labelledby="contained-modal-title-vcenter"
-										centered
-									>
-										<Modal.Header closeButton>
-											<Modal.Title id="contained-modal-title-vcenter">Editar perfil</Modal.Title>
-										</Modal.Header>
-										<Modal.Body>
-											<Form>
-												<Form.Group className="mb-3">
-													<Form.Label>Nome</Form.Label>
-													<Form.Control type="text" name="name" />
-												</Form.Group>
-												<Form.Group className="mb-3">
-													<Form.Label>Sobrenome</Form.Label>
-													<Form.Control type="text" name="sname" />
-												</Form.Group>
-												<Form.Group className="mb-3">
-													<Form.Label>E-mail</Form.Label>
-													<Form.Control type="text" name="email" />
-												</Form.Group>
-												<Form.Group className="mb-3">
-													<Form.Label>Data de nascimento</Form.Label>
-													<Form.Control type="date" name="email" />
-												</Form.Group>
-												<Form.Group className="mb-3">
-													<Form.Label>Foto</Form.Label>
-													<Form.Control type="file" name="foto" />
-												</Form.Group>
-											</Form>
-										</Modal.Body>
-										<Modal.Footer>
-											{/* onClick={handleAdicionarNovoGanho} */}
-											<Button as='button' variant="secondary">
-												Salvar
-											</Button>
-										</Modal.Footer>
-									</Modal>
-									{/* Fim do botão de Editar perfil */}
-
-
-									{/* Início do botão de Alerta */}
-									<Button as="button" className='editar fw-bold' title='Avisos' variant="outline-danger" onClick={() => setShowModalAlerta(true)}><AiOutlineAlert className='alerta' /></Button>
-
-									<Modal
-										show={showModalAlerta}
-										onHide={() => setShowModalAlerta(false)}
-										size="lg"
-										aria-labelledby="contained-modal-title-vcenter"
-										centered
-									>
-										<Modal.Header closeButton>
-											<Modal.Title id="contained-modal-title-vcenter">Avisos</Modal.Title>
-										</Modal.Header>
-										<Modal.Body>
-										</Modal.Body>
-									</Modal>
-									{/* Fim do botão de Alerta */}
-
+						<Row className='justify-content-center my-4'>
+							<div className="cartao-perfil1">
+								<div className="item">
+									<h4 className=''>Idade</h4>
+									<span className='bg-secondary'>30 anos</span>
 								</div>
-								<WithLabelExample />
+								<HiOutlineCake className='moeda' />
+							</div>
+
+							<div className="cartao-perfil1">
+								<div className="item">
+									<h4 className=''>Perfil</h4>
+									<span className='bg-secondary'>{level}</span>
+								</div>
+								<MdOutlineEmojiPeople className='moeda' />
+							</div>
+
+							<div className="cartao-perfil1">
+								<div className="item">
+									<h4 className=''>WiseCoins</h4>
+									<span className='bg-secondary'>{wiseCoins}</span>
+								</div>
+								<BsCoin className='moeda' />
+							</div>
+
+							<div className="cartao-perfil1">
+								<div className="item">
+									<h4 className=''>Experiência</h4>
+									<span className='bg-secondary'>Empresário</span>
+								</div>
+								<BsStars className='moeda' />
+							</div>
+
+						</Row>
+
+					</div>
+
+					<br />
+					<Container fluid className='controle border'>
+						<h1>Controle Mensal</h1>
+						<Row className='px-3'>
+							<div className="cartao-perfil col">
+								<div className='item'>
+									<h4>Mês/Ano</h4>
+									<span className='bg-secondary text-success'>{MesAno}</span>
+								</div>
+							</div>
+
+							<div className="cartao-perfil col">
+								<div className="item">
+									<h4>Valor Recebido</h4>
+									<span className='bg-secondary text-success'>{somaGanhosMensal}</span>
+									{/*<span>{Recebido}</span>*/}
+								</div>
+
+								<div className="botao">
+									<Button as="button" variant="outline-success" onClick={() => setShowModalNovoGanho(true)}>Novo</Button>
+								</div>
 
 							</div>
 
-
-
-
-							<Row>
-								<div className="cartao-perfil1">
-									<div className="item">
-										<h4 className=''>Idade</h4>
-										<span className='bg-secondary'>30 anos</span>
+							<Modal
+								show={showModalNovoGanho}
+								onHide={() => setShowModalNovoGanho(false)}
+								size="md"
+								aria-labelledby="contained-modal-title-vcenter"
+								centered
+							>
+								<Modal.Header closeButton>
+									<Modal.Title id="contained-modal-title-vcenter">Novo Ganho</Modal.Title>
+								</Modal.Header>
+								<Modal.Body>
+									<Form onSubmit={handleSubmitNovoGanho}>
+										<Form.Group className="mb-4">
+											<Form.Label>Fonte de Receita</Form.Label>
+											<Form.Select
+												name='fonte'
+												value={selectedFonte}
+												onChange={(e) => setSelectedFonte(e.target.value)}
+											>
+												<option value="">Selecione</option>
+												{fontesCadastradas.map((fonte, index) => (
+													<option key={index} value={fonte}>
+														{fonte}
+													</option>
+												))}
+											</Form.Select>
+										</Form.Group>
+										<Form.Group className="mb-4">
+											<Form.Label>Descrição</Form.Label>
+											<Form.Control
+												type="text"
+												name="descricao"
+												value={novaDescricaoGanho}
+												onChange={(e) => setNovaDescricaoGanho(e.target.value)}
+											/>
+										</Form.Group>
+										<Form.Group className="mb-4">
+											<Form.Label>Data</Form.Label>
+											<Form.Control
+												type="date"
+												name="data"
+												value={novaDataGanho}
+												onChange={(e) => setNovaDataGanho(e.target.value)}
+											/>
+										</Form.Group>
+										<Form.Group className='mb-4'>
+											<Form.Label>Valor a ser adicionado</Form.Label>
+											<div className="input-group">
+												<span className="input-group-text">R$</span>
+												<Form.Control
+													type="number"
+													step="0.01"  // Permita valores fracionados com duas casas decimais
+													name='valor'
+													value={novoValorGanho}
+													onChange={(event) => setNovoValorGanho(parseFloat(event.target.value))}
+												/>
+											</div>
+										</Form.Group>
+										{/* onClick={handleAdicionarNovoGanho} */}
+										<Button as='button' variant="secondary" type='submit'>
+											Adicionar
+										</Button>
+									</Form>
+								</Modal.Body>
+								{showConfirmation && (
+									<div className="alert alert-success alert-custom" role="alert">
+										{confirmationMessage}
 									</div>
-									<HiOutlineCake className='moeda' />
+								)}
+							</Modal>
+
+
+
+							<div className="cartao-perfil col">
+								<div className="item">
+									<h4>Valor Gasto</h4>
+									<span className='bg-secondary text-success'>{somaGastosMensal}</span>
+									{/*<span>{Gasto}</span>*/}
 								</div>
 
-								<div className="cartao-perfil1">
-									<div className="item">
-										<h4 className=''>Perfil</h4>
-										<span className='bg-secondary'>{level}</span>
-									</div>
-									<MdOutlineEmojiPeople className='moeda' />
+								<div className="botao">
+									<Button as="button" variant="outline-success" onClick={() => setShowModalNovoGasto(true)}>Novo</Button>
 								</div>
+							</div>
 
-								<div className="cartao-perfil1">
-									<div className="item">
-										<h4 className=''>WiseCoins</h4>
-										<span className='bg-secondary'>{wiseCoins}</span>
+							<Modal
+								show={showModalNovoGasto}
+								onHide={() => setShowModalNovoGasto(false)}
+								size="md"
+								aria-labelledby="contained-modal-title-vcenter"
+								centered
+								className='home-modal'
+							>
+								<Modal.Header closeButton>
+									<Modal.Title id="contained-modal-title-vcenter">Novo Gasto</Modal.Title>
+								</Modal.Header>
+								<Modal.Body>
+									<Form onSubmit={handleSubmitNovoGasto}>
+										<Form.Group className="mb-3">
+											<Form.Label>Categoria</Form.Label>
+											<Form.Select
+												name='categoria'
+												value={selectedCategoria}
+												onChange={(e) => setSelectedCategoria(e.target.value)}
+											>
+												<option value="">Selecione</option>
+												{categoriasCadastradas.map((categoria, index) => (
+													<option key={index} value={categoria}>
+														{categoria}
+													</option>
+												))}
+											</Form.Select>
+										</Form.Group>
+										<Form.Group className="mb-3">
+											<Form.Label>Descrição</Form.Label>
+											<Form.Control
+												type="text"
+												name='descricao'
+												value={novoDescricao}
+												onChange={(e) => setNovoDescricao(e.target.value)} />
+										</Form.Group>
+										<Form.Group className="mb-3">
+											<Form.Label>Data</Form.Label>
+											<Form.Control
+												type="date"
+												name='data'
+												value={novaData}
+												onChange={(e) => setNovaData(e.target.value)}
+											/>
+										</Form.Group>
+										<Form.Group>
+											<Form.Label>Valor a ser adicionado</Form.Label>
+											<div className="input-group">
+												<span className="input-group-text">R$</span>
+												<Form.Control
+													type="number"
+													step="0.01"  // Permita valores fracionados com duas casas decimais
+													name='valor'
+													value={novoValor1}
+													onChange={(event) => setNovoValor1(parseFloat(event.target.value))}
+												/>
+											</div>
+										</Form.Group>
+										{/* onClick={handleAdicionarNovoGasto} */}
+										<Button as='button' variant="secondary" type='submit'>
+											Adicionar
+										</Button>
+									</Form>
+								</Modal.Body>
+
+								{showConfirmation && (
+									<div className="alert alert-success alert-custom" role="alert">
+										{confirmationMessage}
 									</div>
-									<BsCoin className='moeda' />
+								)}
+							</Modal>
+
+
+							<div className="cartao-perfil col">
+								<div className='item'>
+									<h4>Saldo Atual</h4>
+									<span className='bg-secondary text-success'>{saldoTotalMensal}</span>
+									{/*<span>{saldoAtual}</span>*/}
 								</div>
+							</div>
 
-								<div className="cartao-perfil1">
-									<div className="item">
-										<h4 className=''>Experiência</h4>
-										<span className='bg-secondary'>Empresário</span>
-									</div>
-									<BsStars className='moeda' />
-								</div>
+						</Row>
 
-							</Row>
-
-						</div>
-
-						<br />
-						<Container className='controle border'>
-							<h1>Controle Mensal</h1>
-							<Row>
-
-								<div className="cartao-perfil col">
-									<div className='item'>
-										<h4>Mês/Ano</h4>
-										<span className='bg-secondary text-success'>{MesAno}</span>
-									</div>
-								</div>
-
-								<div className="cartao-perfil col">
-									<div className="item">
-										<h4>Valor Recebido</h4>
-										<span className='bg-secondary text-success'>{somaGanhosMensal}</span>
-										{/*<span>{Recebido}</span>*/}
-									</div>
-
-									<div className="botao">
-										<Button as="button" variant="outline-success" onClick={() => setShowModalNovoGanho(true)}>Novo</Button>
-									</div>
-
-								</div>
-
+						<div className='botoes'>
+							<div className=''><Button className='click' as="button" variant="secondary" style={{ display: "flex", alignItems: "center", gap: "10px", color: "#fff" }} onClick={() => setShowModalNovaFonte(true)}>Ver fontes de receita<GiClick className='icone-click' /></Button>
 								<Modal
-									show={showModalNovoGanho}
-									onHide={() => setShowModalNovoGanho(false)}
+									show={showModalNovaFonte}
+									onHide={() => setShowModalNovaFonte(false)}
 									size="md"
 									aria-labelledby="contained-modal-title-vcenter"
 									centered
 								>
 									<Modal.Header closeButton>
-										<Modal.Title id="contained-modal-title-vcenter">Novo Ganho</Modal.Title>
+										<Modal.Title id="contained-modal-title-vcenter">Nova fonte de receita</Modal.Title>
 									</Modal.Header>
 									<Modal.Body>
-										<Form onSubmit={handleSubmitNovoGanho}>
-											<Form.Group className="campo mb-4">
-												<Form.Label>Fonte de Receita</Form.Label>
-												<Form.Select
-													className='caixa'
-													name='fonte'
-													value={selectedFonte}
-													onChange={(e) => setSelectedFonte(e.target.value)}
-												>
-													<option value="">Selecione</option>
+										<Form>
+											<Form.Group className="mb-3">
+												<Form.Label>Veja alguns exemplos de fontes de receita</Form.Label>
+												<Form.Control as="select" name="categoria">
+													<option value="">Lista de fontes de receita</option>
 													{fontesCadastradas.map((fonte, index) => (
 														<option key={index} value={fonte}>
 															{fonte}
 														</option>
 													))}
-												</Form.Select>
+												</Form.Control>
 											</Form.Group>
-											<Form.Group className="campo mb-4">
-												<Form.Label>Descrição</Form.Label>
-												<Form.Control
-													className='caixa'
-													type="text"
-													name="descricao"
-													value={novaDescricaoGanho}
-													onChange={(e) => setNovaDescricaoGanho(e.target.value)}
-												/>
+											<Form.Group className="mb-3">
+												<Form.Label>Adicione uma nova fonte de receita</Form.Label>
+												<Form.Control type="text" name="novaFonte" value={novaFonte} onChange={(e) => setNovaFonte(e.target.value)} />
 											</Form.Group>
-											<Form.Group className="campo mb-4">
-												<Form.Label>Data</Form.Label>
-												<Form.Control
-													className='caixa'
-													type="date"
-													name="data"
-													value={novaDataGanho}
-													onChange={(e) => setNovaDataGanho(e.target.value)}
-												/>
-											</Form.Group>
-											<Form.Group className='campo mb-4'>
-												<Form.Label>Valor a ser adicionado</Form.Label>
-												<div className="input-group caixa">
-													<span className="input-group-text">R$</span>
-													<Form.Control
-														type="number"
-														step="0.01"  // Permita valores fracionados com duas casas decimais
-														name='valor'
-														value={novoValorGanho}
-														onChange={(event) => setNovoValorGanho(parseFloat(event.target.value))}
-													/>
-												</div>
-											</Form.Group>
-											{/* onClick={handleAdicionarNovoGanho} */}
-											<Button as='button' variant="secondary" type='submit'>
-												Adicionar
-											</Button>
 										</Form>
 									</Modal.Body>
+									<Modal.Footer>
+										<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaFonte} className='fw-bold'>
+											Criar
+										</Button>
+									</Modal.Footer>
 									{showConfirmation && (
 										<div className="alert alert-success alert-custom" role="alert">
 											{confirmationMessage}
 										</div>
 									)}
 								</Modal>
-
-
-
-								<div className="cartao-perfil col">
-									<div className="item">
-										<h4>Valor Gasto</h4>
-										<span className='bg-secondary text-success'>{somaGastosMensal}</span>
-										{/*<span>{Gasto}</span>*/}
-									</div>
-
-									<div className="botao">
-										<Button as="button" variant="outline-success" onClick={() => setShowModalNovoGasto(true)}>Novo</Button>
-									</div>
-								</div>
-
+							</div>
+							<div><Button className='click' as="button" variant="secondary" style={{ display: "flex", alignItems: "center", gap: "5px", color: "#fff" }} onClick={() => setShowModalCategorias(true)}>Ver categorias de gastos<GiClick className='icone-click' /></Button>
 								<Modal
-									show={showModalNovoGasto}
-									onHide={() => setShowModalNovoGasto(false)}
+									show={showModalCategorias}
+									onHide={() => setShowModalCategorias(false)}
 									size="md"
 									aria-labelledby="contained-modal-title-vcenter"
 									centered
 								>
 									<Modal.Header closeButton>
-										<Modal.Title id="contained-modal-title-vcenter">Novo Gasto</Modal.Title>
+										<Modal.Title id="contained-modal-title-vcenter">Nova categoria</Modal.Title>
 									</Modal.Header>
 									<Modal.Body>
-										<Form onSubmit={handleSubmitNovoGasto}>
+										<Form>
+
 											<Form.Group className="mb-3">
-												<Form.Label>Categoria</Form.Label>
-												<Form.Select
-													name='categoria'
-													value={selectedCategoria}
-													onChange={(e) => setSelectedCategoria(e.target.value)}
-												>
-													<option value="">Selecione</option>
+												<Form.Label>Veja alguns exemplos de categorias</Form.Label>
+												<Form.Control as="select" name="categoria">
+													<option value="">Lista de categorias</option>
 													{categoriasCadastradas.map((categoria, index) => (
 														<option key={index} value={categoria}>
 															{categoria}
 														</option>
 													))}
-												</Form.Select>
+												</Form.Control>
 											</Form.Group>
+
 											<Form.Group className="mb-3">
-												<Form.Label>Descrição</Form.Label>
+												<Form.Label>Adicione uma nova categoria</Form.Label>
 												<Form.Control
 													type="text"
-													name='descricao'
-													value={novoDescricao}
-													onChange={(e) => setNovoDescricao(e.target.value)} />
+													name="novaCategoria"
+													value={novaCategoria}
+													onChange={(e) => setNovaCategoria(e.target.value)} />
 											</Form.Group>
-											<Form.Group className="mb-3">
-												<Form.Label>Data</Form.Label>
-												<Form.Control
-													type="date"
-													name='data'
-													value={novaData}
-													onChange={(e) => setNovaData(e.target.value)}
-												/>
-											</Form.Group>
-											<Form.Group>
-												<Form.Label>Valor a ser adicionado</Form.Label>
-												<div className="input-group">
-													<span className="input-group-text">R$</span>
-													<Form.Control
-														type="number"
-														step="0.01"  // Permita valores fracionados com duas casas decimais
-														name='valor'
-														value={novoValor1}
-														onChange={(event) => setNovoValor1(parseFloat(event.target.value))}
-													/>
-												</div>
-											</Form.Group>
-											{/* onClick={handleAdicionarNovoGasto} */}
-											<Button as='button' variant="secondary" type='submit'>
-												Adicionar
-											</Button>
+
 										</Form>
 									</Modal.Body>
+
+									<Modal.Footer>
+										<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaCategoria} className='fw-bold'>
+											Criar
+										</Button>
+									</Modal.Footer>
 
 									{showConfirmation && (
 										<div className="alert alert-success alert-custom" role="alert">
@@ -1374,117 +1408,12 @@ const Home = () => {
 										</div>
 									)}
 								</Modal>
-
-
-								<div className="cartao-perfil col">
-									<div className='item'>
-										<h4>Saldo Atual</h4>
-										<span className='bg-secondary text-success'>{saldoTotalMensal}</span>
-										{/*<span>{saldoAtual}</span>*/}
-									</div>
-								</div>
-
-							</Row>
-
-							<div className='botoes'>
-								<div className=''><Button className='click' as="button" variant="secondary" style={{ display: "flex", alignItems: "center", gap: "10px", color: "#fff" }} onClick={() => setShowModalNovaFonte(true)}>Ver fontes de receita<GiClick className='icone-click' /></Button>
-									<Modal
-										show={showModalNovaFonte}
-										onHide={() => setShowModalNovaFonte(false)}
-										size="md"
-										aria-labelledby="contained-modal-title-vcenter"
-										centered
-									>
-										<Modal.Header closeButton>
-											<Modal.Title id="contained-modal-title-vcenter">Nova fonte de receita</Modal.Title>
-										</Modal.Header>
-										<Modal.Body>
-											<Form>
-												<Form.Group className="mb-3">
-													<Form.Label>Veja alguns exemplos de fontes de receita</Form.Label>
-													<Form.Control as="select" name="categoria">
-														<option value="">Lista de fontes de receita</option>
-														{fontesCadastradas.map((fonte, index) => (
-															<option key={index} value={fonte}>
-																{fonte}
-															</option>
-														))}
-													</Form.Control>
-												</Form.Group>
-												<Form.Group className="mb-3">
-													<Form.Label>Adicione uma nova fonte de receita</Form.Label>
-													<Form.Control type="text" name="novaFonte" value={novaFonte} onChange={(e) => setNovaFonte(e.target.value)} />
-												</Form.Group>
-											</Form>
-										</Modal.Body>
-										<Modal.Footer>
-											<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaFonte} className='fw-bold'>
-												Criar
-											</Button>
-										</Modal.Footer>
-										{showConfirmation && (
-											<div className="alert alert-success alert-custom" role="alert">
-												{confirmationMessage}
-											</div>
-										)}
-									</Modal>
-								</div>
-								<div className=''><Button className='click' as="button" variant="secondary" style={{ display: "flex", alignItems: "center", gap: "5px", color: "#fff" }} onClick={() => setShowModalCategorias(true)}>Ver categorias de gastos<GiClick className='icone-click' /></Button>
-									<Modal
-										show={showModalCategorias}
-										onHide={() => setShowModalCategorias(false)}
-										size="md"
-										aria-labelledby="contained-modal-title-vcenter"
-										centered
-									>
-										<Modal.Header closeButton>
-											<Modal.Title id="contained-modal-title-vcenter">Nova categoria</Modal.Title>
-										</Modal.Header>
-										<Modal.Body>
-											<Form>
-
-												<Form.Group className="mb-3">
-													<Form.Label>Veja alguns exemplos de categorias</Form.Label>
-													<Form.Control as="select" name="categoria">
-														<option value="">Lista de categorias</option>
-														{categoriasCadastradas.map((categoria, index) => (
-															<option key={index} value={categoria}>
-																{categoria}
-															</option>
-														))}
-													</Form.Control>
-												</Form.Group>
-
-												<Form.Group className="mb-3">
-													<Form.Label>Adicione uma nova categoria</Form.Label>
-													<Form.Control
-														type="text"
-														name="novaCategoria"
-														value={novaCategoria}
-														onChange={(e) => setNovaCategoria(e.target.value)} />
-												</Form.Group>
-
-											</Form>
-										</Modal.Body>
-
-										<Modal.Footer>
-											<Button as='button' variant="outline-secondary" onClick={handleAdicionarNovaCategoria} className='fw-bold'>
-												Criar
-											</Button>
-										</Modal.Footer>
-
-										{showConfirmation && (
-											<div className="alert alert-success alert-custom" role="alert">
-												{confirmationMessage}
-											</div>
-										)}
-									</Modal>
-								</div>
 							</div>
-						</Container>
-						<br />
+						</div>
+					</Container>
+					<br />
 
-						{/* <Container className='menu'>
+					{/* <Container className='menu'>
 							<h1 className='mb-5'>Seu menu</h1>
 							<div className="row cartoes-menu">
 
@@ -1514,536 +1443,538 @@ const Home = () => {
 						</Container> */}
 
 
-						<Container className='painel mt-5 mb-5 border'>
-							<h1>Agenda Financeira</h1>
+					<Container fluid className='painel my-5 px-5 border table-responsive'>
+						<h1 className='mt-3 mb-4'>Agenda Financeira</h1>
 
-							<div className="tabela pt-5 pb-5">
-								<div className="bg-secondary titulo row pt-4 pb-4">
+						<table className="tabela mb-2 text-center text-nowrap">
+							<thead className="bg-secondary titulo fs-5">
+								<tr>
+									<th className='px-3 py-3'>Descrição</th>
+									<th className='px-3 py-3'>Vencimento</th>
+									<th className='px-3 py-3'>Status</th>
+									<th className='px-3 py-3'>Valor</th>
+									<th className='px-3 py-3'>Ação</th>
+								</tr>
+							</thead>
+							{contasAgenda.map((conta) => {
+								const { mensagem, corFundo } = calcularDiasRestantes(conta.vencimento);
 
-									<div className="linha col">Descrição</div>
-									<div className="linha col">Vencimento</div>
-									<div className="linha col">Status</div>
-									<div className="linha col">Valor</div>
-									<div className="linha col-1">Ação</div>
+								return (
+									<tbody key={conta.id} className='pagar'>
+										<tr>
+											<td className="descricao-conta p-3">
+												<FaPiggyBank className='moeda' />{' '}
+												{conta.descricao}
+											</td>
+											<td className='p-3'>
+												<CiCalendar className='icone-conta' />{' '}
+												{conta.vencimento}
+											</td>
+											<td className='p-3'>
+												<span className={`${corFundo}`}>{mensagem}</span>
+											</td>
+											<td className='p-3'>
+												<CiBag1 className='icone-conta' />
+												{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+											</td>
 
-								</div>
-
-								<div>
-									{contasAgenda.map((conta) => {
-										const { mensagem, corFundo } = calcularDiasRestantes(conta.vencimento);
-
-										return (
-											<div key={conta.id} className='pagar row pt-3 pb-3'>
-
-												<div className="descricao-conta col">
-													<FaPiggyBank className='moeda' />
-													{conta.descricao}
-												</div>
-												<div className="col">
-													<CiCalendar className='icone-conta' />
-													{conta.vencimento}
-												</div>
-												<div className="col"><span className={`${corFundo}`}>{mensagem}</span>
-
-												</div>
-												{/* <CiBullhorn className='icone-conta' /> */}
-												<div className="col">
-													<CiBag1 className='icone-conta' />
-													{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-												</div>
-												<div className="col-1">
-													{/* <Button as='button' variant='outline-info' className='bg-transparent' title='Editar' onClick={handleEditarConta(conta.id)}><MdEdit /></Button> */}
-													<Button as='button' variant='outline-info' className='bg-transparent' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
-														<FaTrashAlt />
-													</Button>
-												</div>
-
-
-												{/* <Modal
-													show={showModalEditarConta}
-													onHide={() => setShowModalEditarConta(false)}
-													size="md"
-													aria-labelledby="contained-modal-title-vcenter"
-													centered
-												>
-													<Modal.Header closeButton>
-														<Modal.Title id="contained-modal-title-vcenter">Editar despesa</Modal.Title>
-													</Modal.Header>
-													<Modal.Body>
-														<Form onSubmit={handleSubmitEditarConta}>
-
-															<Form.Group className="mb-3">
-																<Form.Label>Descrição</Form.Label>
-																<Form.Control
-																	type="text"
-																	name='descricao'
-																/>
-															</Form.Group>
-
-															<Form.Group className="mb-3">
-																<Form.Label>Valor</Form.Label>
-																<div className="input-group">
-																	<span className="input-group-text">R$</span>
-																	<Form.Control
-																		type="number"
-																		step="0.01"  // Permita valores fracionados com duas casas decimais
-																		name='valor'
-																	/>
-																</div>
-															</Form.Group>
-
-															<Form.Group className="mb-3">
-																<Form.Label>Dia de vencimento</Form.Label>
-																<Form.Control
-																	type="number"
-																	name='vencimento'
-																/>
-															</Form.Group>
-
-															<Form.Group className="mb-3">
-																<Form.Label>Recorrência</Form.Label>
-																<Form.Select
-																	name='recorrencia'
-																	value={recorrenciaConta}
-																	onChange={(e) => setRecorrenciaConta(e.target.value)}
-																>
-																	<option value="MENSAL">Mensal</option>
-																	<option value="POR_PERIODO">Por Período</option>
-																</Form.Select>
-															</Form.Group>
-
-															{recorrenciaConta === 'POR_PERIODO' && (
-																<>
-																	<Form.Group className="mb-3">
-																		<Form.Label>Início do Período</Form.Label>
-																		<Form.Control
-																			type="month"
-																			name='inicioPeriodo'
-																		/>
-																	</Form.Group>
-
-																	<Form.Group className="mb-3">
-																		<Form.Label>Fim do Período</Form.Label>
-																		<Form.Control
-																			type="month"
-																			name='fimPeriodo'
-																		/>
-																	</Form.Group>
-																</>
-															)}
-															<Button as='button' type='submit' variant="secondary">
-																Salvar
-															</Button>
-														</Form>
-													</Modal.Body>
-													{showConfirmation && (
-														<div className="alert alert-success alert-custom" role="alert">
-															{confirmationMessage}
-														</div>
-													)}
-												</Modal> */}
-
-												<Modal
-													show={showModalExcluirConta}
-													onHide={() => setShowModalExcluirConta(false)}
-													size="md"
-													aria-labelledby="contained-modal-title-vcenter"
-													centered
-												>
-													<Modal.Header closeButton></Modal.Header>
-													<Modal.Body>
-														<Form onSubmit={handleSubmitExcluirConta}>
-															Tem certeza que quer excluir essa despesa?
-															<br />
-															<br />
-															<Button as='button' type='submit' variant="secondary">
-																Excluir
-															</Button>
-														</Form>
-													</Modal.Body>
-													{showConfirmation && (
-														<div className="alert alert-success alert-custom" role="alert">
-															{confirmationMessage}
-														</div>
-													)}
-												</Modal>
-											</div>
-										);
-									})}
-								</div>
-
-								<br />
-
-								<div className="botao-painel">
-									<Button as="button" variant="secondary" onClick={() => setShowModalContas(true)} style={{ display: "flex", alignItems: "center", gap: "10px", color: "#fff" }}>Nova despesa<GiClick className='icone-click' /></Button>
-
-									<Modal
-										show={showModalContas}
-										onHide={() => setShowModalContas(false)}
-										size="md"
-										aria-labelledby="contained-modal-title-vcenter"
-										centered
-									>
-										<Modal.Header closeButton>
-											<Modal.Title id="contained-modal-title-vcenter">Nova despesa</Modal.Title>
-										</Modal.Header>
-										<Modal.Body>
-											<Form onSubmit={handleSubmitNovaConta}>
-
-												<Form.Group className="mb-3">
-													<Form.Label>Descrição</Form.Label>
-													<Form.Control
-														type="text"
-														name='descricao'
-														value={descricaoConta}
-														onChange={(e) => setDescricaoConta(e.target.value)}
-
-													/>
-												</Form.Group>
-
-												<Form.Group className="mb-3">
-													<Form.Label>Valor</Form.Label>
-													<div className="input-group">
-														<span className="input-group-text">R$</span>
-														<Form.Control
-															type="number"
-															step="0.01"  // Permita valores fracionados com duas casas decimais
-															name='valor'
-															value={valorConta}
-															onChange={(e) => setValorConta(e.target.value)}
-														/>
-													</div>
-												</Form.Group>
-
-												<Form.Group className="mb-3">
-													<Form.Label>Dia de vencimento</Form.Label>
-													<Form.Control
-														type="number"
-														name='vencimento'
-														value={vencimentoConta}
-														onChange={(e) => setVencimentoConta(e.target.value)}
-													/>
-												</Form.Group>
-
-												<Form.Group className="mb-3">
-													<Form.Label>Recorrência</Form.Label>
-													<Form.Select
-														name='recorrencia'
-														value={recorrenciaConta}
-														onChange={(e) => setRecorrenciaConta(e.target.value)}
-													>
-														<option value="MENSAL">Mensal</option>
-														<option value="POR_PERIODO">Por Período</option>
-													</Form.Select>
-												</Form.Group>
-
-												{recorrenciaConta === 'POR_PERIODO' && (
-													<>
-														<Form.Group className="mb-3">
-															<Form.Label>Início do Período</Form.Label>
-															<Form.Control
-																type="month"
-																name='inicioPeriodo'
-																value={inicioPeriodoConta}
-																onChange={(e) => setInicioPeriodoConta(e.target.value)}
-															/>
-														</Form.Group>
-
-														<Form.Group className="mb-3">
-															<Form.Label>Fim do Período</Form.Label>
-															<Form.Control
-																type="month"
-																name='fimPeriodo'
-																value={fimPeriodoConta}
-																onChange={(e) => setFimPeriodoConta(e.target.value)}
-															/>
-														</Form.Group>
-													</>
-												)}
-												<Button as='button' type='submit' variant="secondary">
-													Criar
+											<td className='p-3'>
+												<Button variant='outline-info' className='text-warning' title='Editar' onClick={() => handleEditarConta(conta.id)}><MdEdit /></Button>
+												<Button variant='outline-info' className='text-danger' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
+													<FaTrashAlt />
 												</Button>
-											</Form>
-										</Modal.Body>
-										{showConfirmation && (
-											<div className="alert alert-success alert-custom" role="alert">
-												{confirmationMessage}
-											</div>
-										)}
-									</Modal>
-								</div>
+											</td>
+										</tr>
 
 
-							</div>
+									</tbody>
+								);
+							})}
+						</table>
 
-
-						</Container>
-
-						{/*style={{ backgroundColor: index % 2 === 0 ? '#fff' : '#D3D3D3' }}*/}
-						{/* className={`${categoriasVisivel ? 'visivel' : 'oculto'}`} */}
-
-						<div>
-
-							<Container className="categorias p-5 mb-5">
-								<div className="categorias-titulo">
-									<h1>Gastos por Categoria</h1>
-								</div>
-
-
-
-								<div className='cartoes-categoria'>
-									{categorias.map((categoria, index) => (
-										<div className="cartao-categoria" key={index}>
-											<div className="categoria">
-												<h4 className="fs-5">{categoria.categoria}</h4>
-												<p className='valor-categoria bg-secondary'>
-													{parseFloat(categoria.totalGasto).toLocaleString('pt-BR', {
-														style: 'currency',
-														currency: 'BRL',
-													})}
-												</p>
-
-												{valorGasto > 0 && (
-													<p className='percentual-categoria'>
-														{gastosPorCategoria[categoria]
-															? (
-																(gastosPorCategoria[categoria].reduce(
-																	(total, gasto) => total + gasto.valor,
-																	0
-																) / valorGasto) * 100
-															).toFixed(2) + "%"
-															: "0.00%"}
-													</p>
-												)}
-
-											</div>
-
-											<hr />
-
-											<div>
-												<Button
-													as="button"
-													size=""
-													variant="outline-primary"
-													className="botao"
-													onClick={() => mostrarDetalhesCategoria(categoria)
-													}
-												>
-													Listar
-												</Button>
-
-											</div>
-
-										</div>
-									))}
-
-								</div>
-
-
-								{/* <Modal
-									show={showModalDetalhes}
-									onHide={() => setShowModalDetalhes(false)}
-									size="lg"
-									aria-labelledby="contained-modal-title-vcenter"
-									centered
-								>
-									<Modal.Header closeButton>
-										<Modal.Title id="contained-modal-title-vcenter">
-											Meus gastos com {categoriaSelecionada}
-										</Modal.Title>
-									</Modal.Header>
-									<Modal.Body>
-										<div className="row">
-											<div className="col fw-bold">Descrição</div>
-											<div className="col fw-bold">Data</div>
-											<div className="col fw-bold">Valor</div>
-										</div>
-										<br />
-										{categoriaSelecionada && (
-											<ul>
-												{gastosPorCategoria[categoriaSelecionada]?.map((gasto, index) => (
-													<li key={index} className='row'>
-														<p className='col'>{gasto.descricao}</p>
-														<p className='col'>{gasto.data}</p>
-														<p className='col'>{gasto.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-														<br />
-													</li>
-												))}
-											</ul>
-										)}
-									</Modal.Body>
-									<Modal.Footer>
-										<Button as="button" variant="secondary" onClick={() => setShowModalDetalhes(false)}>
-											Fechar
-										</Button>
-									</Modal.Footer>
-								</Modal> */}
-
-
-							</Container>
-
-
-							{categoriasLegenda.length > 0 ? (
-								<Container className='grafico text-info'>
-									<h1>Perfil de gastos</h1>
-									<Pie className='grafico-torta'
-										data={dataMyChart}
-										options={options}
-									/>
-								</Container>
-							) : null
-							}
+						<div className="botao-painel my-3">
+							<Button className='click' variant="secondary" onClick={() => setShowModalContas(true)}>Nova despesa<GiClick className='icone-click' /></Button>
 						</div>
 
-						{/* className={`${fontesVisivel ? 'visivel' : 'oculto'}`} */}
-						<div>
+						<Modal
+							show={showModalEditarConta}
+							onHide={() => setShowModalEditarConta(false)}
+							size="md"
+							aria-labelledby="contained-modal-title-vcenter"
+							centered
+						>
+							<Modal.Header closeButton>
+								<Modal.Title id="contained-modal-title-vcenter">Editar despesa</Modal.Title>
+							</Modal.Header>
+							<Modal.Body>
+								<Form onSubmit={handleSubmitEditarConta}>
 
-							<Container className="categorias p-5 mb-5">
-								<div className="categorias-titulo">
-									<h1>Ganhos por Fonte de Receita</h1>
-								</div>
+									<Form.Group className="mb-3">
+										<Form.Label>Descrição</Form.Label>
+										<Form.Control
+											type="text"
+											name='descricao'
+										/>
+									</Form.Group>
 
-								<div className='cartoes-categoria'>
-									{fontes.map((fonte, index) => (
-										<div className="cartao-categoria" key={index}>
-											<div className="categoria">
-												<h4 className="fs-5">{fonte.fonte}</h4>
-												<p className='valor-categoria bg-secondary'>
-													{parseFloat(fonte.totalGanho).toLocaleString('pt-BR', {
-														style: 'currency',
-														currency: 'BRL',
-													})}
-												</p>
-											</div>
-
-											<hr />
-
-											<div>
-												<Button
-													as="button"
-													variant="outline-primary"
-													className="botao"
-													onClick={() => mostrarDetalhesFonte(fonte)
-													}
-												>
-													Listar
-												</Button>
-											</div>
-
-										</div>
-									))}
-
-								</div>
-
-
-								<Modal
-									show={showModalDetalhesFontes}
-									onHide={() => setShowModalDetalhesFontes(false)}
-									size="lg"
-									aria-labelledby="contained-modal-title-vcenter"
-									centered
-								>
-									<Modal.Header closeButton>
-										<Modal.Title id="contained-modal-title-vcenter">
-											Meus gastos com {fonteSelecionada}
-										</Modal.Title>
-									</Modal.Header>
-									<Modal.Body>
-										<div className="row">
-											<div className="col fw-bold">Descrição</div>
-											<div className="col fw-bold">Data</div>
-											<div className="col fw-bold">Valor</div>
-										</div>
-										<br />
-										{fonteSelecionada && (
-											<ul>
-												{ganhosPorFonte[fonteSelecionada]?.map((ganho, index) => (
-													<li key={index} className='row'>
-														<p className='col'>{ganho.descricao}</p>
-														<p className='col'>{ganho.data}</p>
-														<p className='col'>{ganho.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-														<br />
-													</li>
-												))}
-											</ul>
-										)}
-									</Modal.Body>
-									<Modal.Footer>
-										<Button as="button" variant="secondary" onClick={() => setShowModalDetalhesFontes(false)}>
-											Fechar
-										</Button>
-									</Modal.Footer>
-								</Modal>
-
-
-							</Container>
-
-						</div>
-						{/* Fim de Fontes de Receita */}
-
-						{/* Início de Relatório*/}
-						<Container className='relatorio'>
-							<div >
-								<h1>Relatório</h1>
-								<hr className='text-info' />
-								<p className='text-primary'><i>Selecione o mês e o ano e clique em "consultar" para obter um resumo dos valores totais dos seus gastos e ganhos.</i></p>
-								<br />
-								<Form onSubmit={handleSubmitRelatorio}>
-									<div className="form-relatorio">
-										<Form.Group className="mb-3 data-relatorio">
-											<Form.Label><h4>Mês/Ano</h4></Form.Label>
-											<DatePicker
-												name='dataInput'
-												selected={dataInput}
-												onChange={(date) => {
-													setDataInput(date);
-													setErroData('');
-												}}
-												showMonthYearPicker
-												dateFormat="MM/yyyy"
-												customInput={<InputComIcone ref={inputRef} />}
-												className={`form-control bg-secondary text-info ${erroData ? 'is-invalid' : ''}`}
-												locale="pt"
+									<Form.Group className="mb-3">
+										<Form.Label>Valor</Form.Label>
+										<div className="input-group">
+											<span className="input-group-text">R$</span>
+											<Form.Control
+												type="number"
+												step="0.01"  // Permita valores fracionados com duas casas decimais
+												name='valor'
 											/>
-										</Form.Group>
+										</div>
+									</Form.Group>
 
-										<Button as='button' type='submit' variant='outline-primary'>Consultar</Button>
+									<Form.Group className="mb-3">
+										<Form.Label>Dia de vencimento</Form.Label>
+										<Form.Control
+											type="number"
+											name='vencimento'
+										/>
+									</Form.Group>
 
-									</div>
+									<Form.Group className="mb-3">
+										<Form.Label>Recorrência</Form.Label>
+										<Form.Select
+											name='recorrencia'
+											value={recorrenciaConta}
+											onChange={(e) => setRecorrenciaConta(e.target.value)}
+										>
+											<option value="MENSAL">Mensal</option>
+											<option value="POR_PERIODO">Por Período</option>
+										</Form.Select>
+									</Form.Group>
+
+									{recorrenciaConta === 'POR_PERIODO' && (
+										<>
+											<Form.Group className="mb-3">
+												<Form.Label>Início do Período</Form.Label>
+												<Form.Control
+													type="month"
+													name='inicioPeriodo'
+												/>
+											</Form.Group>
+
+											<Form.Group className="mb-3">
+												<Form.Label>Fim do Período</Form.Label>
+												<Form.Control
+													type="month"
+													name='fimPeriodo'
+												/>
+											</Form.Group>
+										</>
+									)}
+									<Button as='button' type='submit' variant="secondary">
+										Salvar
+									</Button>
 								</Form>
-								{erroData && <Form.Control.Feedback type="invalid">{erroData}</Form.Control.Feedback>}
-								<div className={`${relatorioVisivel && somaGanhos && somaGastos && saldoTotal ? 'visivel' : 'oculto'}`}>
-									<hr />
-									<p className='text-warning'><i>Resultados obtidos em {moment().format('DD/MM/YYYY [às] HH[:]mm')}</i></p>
-									<br />
-									<div className="row">
-										<h4 className='col-3'>Valor Ganho</h4>
-										<p className='bg-secondary dado-relatorio col'>{somaGanhos}</p>
-									</div>
-									<div className="row">
-										<h4 className='col-3'>Valor Gasto</h4>
-										<p className='bg-secondary dado-relatorio col'>{somaGastos}</p>
-									</div>
-									<div className="row">
-										<h4 className='col-3'>Saldo Total</h4>
-										<p className='bg-secondary dado-relatorio col'>{saldoTotal}</p>
-									</div>
+							</Modal.Body>
+							{showConfirmation && (
+								<div className="alert alert-success alert-custom" role="alert">
+									{confirmationMessage}
 								</div>
-							</div>
-						</Container>
+							)}
+						</Modal>
 
+						<Modal
+							show={showModalExcluirConta}
+							onHide={() => setShowModalExcluirConta(false)}
+							size="md"
+							aria-labelledby="contained-modal-title-vcenter"
+							centered
+						>
+							<Modal.Header closeButton></Modal.Header>
+							<Modal.Body>
+								<Form onSubmit={handleSubmitExcluirConta}>
+									Tem certeza que quer excluir essa despesa?
+									<br />
+									<br />
+									<Button as='button' type='submit' variant="secondary">
+										Excluir
+									</Button>
+								</Form>
+							</Modal.Body>
+							{showConfirmation && (
+								<div className="alert alert-success alert-custom" role="alert">
+									{confirmationMessage}
+								</div>
+							)}
+						</Modal>
 
-						{/* Fim de Relatório*/}
+						<Modal
+							show={showModalContas}
+							onHide={() => setShowModalContas(false)}
+							size="md"
+							aria-labelledby="contained-modal-title-vcenter"
+							centered
+						>
+							<Modal.Header closeButton>
+								<Modal.Title id="contained-modal-title-vcenter">Nova despesa</Modal.Title>
+							</Modal.Header>
+							<Modal.Body>
+								<Form onSubmit={handleSubmitNovaConta}>
+
+									<Form.Group className="mb-3">
+										<Form.Label>Descrição</Form.Label>
+										<Form.Control
+											type="text"
+											name='descricao'
+											value={descricaoConta}
+											onChange={(e) => setDescricaoConta(e.target.value)}
+
+										/>
+									</Form.Group>
+
+									<Form.Group className="mb-3">
+										<Form.Label>Valor</Form.Label>
+										<div className="input-group">
+											<span className="input-group-text">R$</span>
+											<Form.Control
+												type="number"
+												step="0.01"  // Permita valores fracionados com duas casas decimais
+												name='valor'
+												value={valorConta}
+												onChange={(e) => setValorConta(e.target.value)}
+											/>
+										</div>
+									</Form.Group>
+
+									<Form.Group className="mb-3">
+										<Form.Label>Dia de vencimento</Form.Label>
+										<Form.Control
+											type="number"
+											name='vencimento'
+											value={vencimentoConta}
+											onChange={(e) => setVencimentoConta(e.target.value)}
+										/>
+									</Form.Group>
+
+									<Form.Group className="mb-3">
+										<Form.Label>Recorrência</Form.Label>
+										<Form.Select
+											name='recorrencia'
+											value={recorrenciaConta}
+											onChange={(e) => setRecorrenciaConta(e.target.value)}
+										>
+											<option value="MENSAL">Mensal</option>
+											<option value="POR_PERIODO">Por Período</option>
+										</Form.Select>
+									</Form.Group>
+
+									{recorrenciaConta === 'POR_PERIODO' && (
+										<>
+											<Form.Group className="mb-3">
+												<Form.Label>Início do Período</Form.Label>
+												<Form.Control
+													type="month"
+													name='inicioPeriodo'
+													value={inicioPeriodoConta}
+													onChange={(e) => setInicioPeriodoConta(e.target.value)}
+												/>
+											</Form.Group>
+
+											<Form.Group className="mb-3">
+												<Form.Label>Fim do Período</Form.Label>
+												<Form.Control
+													type="month"
+													name='fimPeriodo'
+													value={fimPeriodoConta}
+													onChange={(e) => setFimPeriodoConta(e.target.value)}
+												/>
+											</Form.Group>
+										</>
+									)}
+									<Button as='button' type='submit' variant="secondary">
+										Criar
+									</Button>
+								</Form>
+							</Modal.Body>
+							{showConfirmation && (
+								<div className="alert alert-success alert-custom" role="alert">
+									{confirmationMessage}
+								</div>
+							)}
+						</Modal>
 
 
 					</Container>
 
+					{/*style={{ backgroundColor: index % 2 === 0 ? '#fff' : '#D3D3D3' }}*/}
+					{/* className={`${categoriasVisivel ? 'visivel' : 'oculto'}`} */}
 
-				</Content >
+					<div>
+						{categorias.length > 0 && <Container fluid className="categorias p-3 mb-5">
+							<div className="categorias-titulo">
+								<h1>Gastos por Categoria</h1>
+							</div>
+
+							<div className='cartoes-categoria'>
+								{categorias.map((categoria, index) => (
+									<div className="cartao-categoria" key={index}>
+										<div className="categoria">
+											<h4 className="fs-5">{categoria.categoria}</h4>
+											<p className='valor-categoria bg-secondary'>
+												{parseFloat(categoria.totalGasto).toLocaleString('pt-BR', {
+													style: 'currency',
+													currency: 'BRL',
+												})}
+											</p>
+
+										</div>
+
+										<hr />
+
+										<div>
+											<Button
+												as="button"
+												size=""
+												variant="outline-primary"
+												className="botao"
+												onClick={() => {
+													setCategoriaAtual(categoria.categoria);
+													setGastosCategoriaAtual(categoria.gastos);
+													setShowModalDetalhesCategoria(true);
+												}}
+											>
+												Listar
+											</Button>
+
+										</div>
+
+									</div>
+								))}
+
+							</div>
+
+
+							<Modal
+								show={showModalDetalhesCategoria}
+								onHide={() => setShowModalDetalhesCategoria(false)}
+								size="lg"
+								aria-labelledby="contained-modal-title-vcenter"
+								centered
+							>
+								<Modal.Header closeButton>
+									<Modal.Title id="contained-modal-title-vcenter">
+										Meus gastos com {categoriaAtual}
+									</Modal.Title>
+								</Modal.Header>
+								<Modal.Body>
+									<div className="row">
+										<div className="col fw-bold">Descrição</div>
+										<div className="col fw-bold">Data</div>
+										<div className="col fw-bold">Valor</div>
+									</div>
+									<br />
+									{gastosCategoriaAtual.map((gasto, index) => (
+										<div className="row" key={index}>
+											<div className="col">{gasto.descricao}</div>
+											<div className="col">{moment(gasto.data).format('DD/MM/YYYY')}</div>
+											<div className="col">
+												{parseFloat(gasto.valor).toLocaleString('pt-BR', {
+													style: 'currency',
+													currency: 'BRL',
+												})}
+											</div>
+										</div>
+									))}
+								</Modal.Body>
+								<Modal.Footer>
+									<Button as="button" variant="secondary" onClick={() => setShowModalDetalhesCategoria(false)}>
+										Fechar
+									</Button>
+								</Modal.Footer>
+							</Modal>
+
+
+						</Container>}
+
+
+						{categoriasLegenda.length > 0 ? (
+							<Container className='grafico text-info'>
+								<h1>Perfil de gastos</h1>
+								<Pie className='grafico-torta'
+									data={dataMyChart}
+									options={options}
+								/>
+							</Container>
+						) : null
+						}
+					</div>
+
+					{/* className={`${fontesVisivel ? 'visivel' : 'oculto'}`} */}
+					<div>
+
+						<Container className="categorias p-5 mb-5">
+							<div className="categorias-titulo">
+								<h1>Ganhos por Fonte de Receita</h1>
+							</div>
+
+							<div className='cartoes-categoria'>
+								{fontes.map((fonte, index) => (
+									<div className="cartao-categoria" key={index}>
+										<div className="categoria">
+											<h4 className="fs-5">{fonte.fonte}</h4>
+											<p className='valor-categoria bg-secondary'>
+												{parseFloat(fonte.totalGanho).toLocaleString('pt-BR', {
+													style: 'currency',
+													currency: 'BRL',
+												})}
+											</p>
+										</div>
+
+										<hr />
+
+										<div>
+											<Button
+												as="button"
+												size=""
+												variant="outline-primary"
+												className="botao"
+												onClick={() => {
+													setFonteAtual(fonte.fonte);
+													setGanhosFonteAtual(fonte.ganhos);
+													setShowModalDetalhesFontes(true);
+												}}
+											>
+												Listar
+											</Button>
+										</div>
+
+									</div>
+								))}
+
+							</div>
+
+
+							<Modal
+								show={showModalDetalhesFontes}
+								onHide={() => setShowModalDetalhesFontes(false)}
+								size="lg"
+								aria-labelledby="contained-modal-title-vcenter"
+								centered
+							>
+								<Modal.Header closeButton>
+									<Modal.Title id="contained-modal-title-vcenter">
+										Meus gastos com {fonteAtual}
+									</Modal.Title>
+								</Modal.Header>
+								<Modal.Body>
+									<div className="row">
+										<div className="col fw-bold">Descrição</div>
+										<div className="col fw-bold">Data</div>
+										<div className="col fw-bold">Valor</div>
+									</div>
+									<br />
+									{ganhosFonteAtual.map((ganho, index) => (
+										<div className="row" key={index}>
+											<div className="col">{ganho.descricao}</div>
+											<div className="col">{moment(ganho.data).format('DD/MM/YYYY')}</div>
+											<div className="col">
+												{parseFloat(ganho.valor).toLocaleString('pt-BR', {
+													style: 'currency',
+													currency: 'BRL',
+												})}
+											</div>
+										</div>
+									))}
+								</Modal.Body>
+								<Modal.Footer>
+									<Button as="button" variant="secondary" onClick={() => setShowModalDetalhesFontes(false)}>
+										Fechar
+									</Button>
+								</Modal.Footer>
+							</Modal>
+
+
+						</Container>
+
+						{categoriasLegenda.length > 0 ? (
+							<Container className='grafico text-info'>
+								<h1>Perfil de ganhos</h1>
+								<Pie className='grafico-torta'
+									data={graficoFontes}
+									options={options}
+								/>
+							</Container>
+						) : null
+						}
+
+					</div>
+					{/* Fim de Fontes de Receita */}
+
+					{/* Início de Relatório*/}
+					<Container className='relatorio'>
+						<div >
+							<h1>Relatório</h1>
+							<hr className='text-info' />
+							<p className='text-primary'><i>Selecione o mês e o ano e clique em "consultar" para obter um resumo dos valores totais dos seus gastos e ganhos.</i></p>
+							<br />
+							<Form onSubmit={handleSubmitRelatorio}>
+								<div className="form-relatorio">
+									<Form.Group className="mb-3 data-relatorio">
+										<Form.Label><h4>Mês/Ano</h4></Form.Label>
+										<DatePicker
+											name='dataInput'
+											selected={dataInput}
+											onChange={(date) => {
+												setDataInput(date);
+												setErroData('');
+											}}
+											showMonthYearPicker
+											dateFormat="MM/yyyy"
+											customInput={<InputComIcone ref={inputRef} />}
+											className={`form-control bg-secondary text-info ${erroData ? 'is-invalid' : ''}`}
+											locale="pt"
+										/>
+									</Form.Group>
+
+									<Button as='button' type='submit' variant='outline-primary'>Consultar</Button>
+
+								</div>
+							</Form>
+							{erroData && <Form.Control.Feedback type="invalid">{erroData}</Form.Control.Feedback>}
+							<div className={`${relatorioVisivel && somaGanhos && somaGastos && saldoTotal ? 'visivel' : 'oculto'}`}>
+								<hr />
+								<p className='text-warning'><i>Resultados obtidos em {moment().format('DD/MM/YYYY [às] HH[:]mm')}</i></p>
+								<br />
+								<div className="row">
+									<h4 className='col-3'>Valor Ganho</h4>
+									<p className='bg-secondary dado-relatorio col'>{somaGanhos}</p>
+								</div>
+								<div className="row">
+									<h4 className='col-3'>Valor Gasto</h4>
+									<p className='bg-secondary dado-relatorio col'>{somaGastos}</p>
+								</div>
+								<div className="row">
+									<h4 className='col-3'>Saldo Total</h4>
+									<p className='bg-secondary dado-relatorio col'>{saldoTotal}</p>
+								</div>
+							</div>
+						</div>
+					</Container>
+
+					<Container className='grafico-relatorio text-secondary'>
+						<h1 className='text-secondary'>Ganhos e Gastos</h1>
+						<Bar
+							options={options1}
+							data={graficoRelatorio}
+							className='grafico-barra'
+						/>
+					</Container>
+
+					{/* Fim de Relatório*/}
+
+
+				</Container>
 			</div >
-			<Footer />
+			<Footer anchor='topo' />
 
-		</>
+		</div >
 	);
 }
 

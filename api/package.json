@@ -22,7 +22,7 @@
   "dependencies": {
     "@prisma/client": "^5.6.0",
     "bcrypt": "^5.1.1",
-    "big": "^0.5.2",
+    "big": "^0.3.1",
     "big.js": "^6.2.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

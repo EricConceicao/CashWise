@@ -121,8 +121,9 @@ export async function deletarconta(req, res) {
 
 export async function editarconta(req, res) {
 
-  try {
-    const contaId = parseInt(req.params.id);
+  const contaId = parseInt(req.params.id);
+
+  try {    
 
     const conta = await prisma.conta.findUnique({
       where: { id: contaId },
