@@ -2,6 +2,7 @@ import { useState } from "react";
 import { GiNotebook } from 'react-icons/gi';
 import { MdOutlineQuiz } from 'react-icons/md';
 import { Form, Modal } from 'react-bootstrap';
+import useUserStore from '../store/UserStore';
 import EmojiPicker from 'emoji-picker-react';
 
 //componente - ícone
@@ -12,17 +13,15 @@ function Quiz() {
 
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [questions, setQuestions] = useState([
-		{ id: 1, text: 'Qual é a sua renda mensal?', answer: '', type: 'number' },
-		{ id: 2, text: 'Valor gasto com moradia?', answer: '', type: 'number' },
-		{ id: 3, text: 'Valor gasto com alimentação?', answer: '', type: 'number' },
-		{ id: 4, text: 'Valor gasto com transporte?', answer: '', type: 'number' },
-		{ id: 5, text: 'Valor gasto com lazer?', answer: '', type: 'number' },
-		{ id: 6, text: 'Valor gasto com saúde?', answer: '', type: 'number' },
-		{ id: 7, text: 'Valor gasto com educação?', answer: '', type: 'number' },
-		{ id: 8, text: 'Valor total gasto com outras dívidas ?', answer: '', type: 'number' },
-		{ id: 9, text: 'Valor que pretende investir por mês?', answer: '', type: 'number' },
-		{ id: 10, text: 'Qual é o seu objetivo financeiro de longo prazo?', answer: '', type: 'text' },
-		{ id: 11, text: 'Tem algum objetivo financeiro de médio prazo?', answer: '', type: 'text' },
+		{ id: 1, tipo: 'Salário', text: 'Qual é a sua renda mensal', answer: '', type: 'number' },
+		{ id: 2, tipo: 'Aluguél/Financiamento', text: 'Valor gasto com moradia', answer: '', type: 'number' },
+		{ id: 3, tipo: 'alimentação', text: 'Valor gasto com alimentação', answer: '', type: 'number' },
+		{ id: 4, tipo: 'Transporte', text: 'Valor gasto com transporte', answer: '', type: 'number' },
+		{ id: 5, tipo: 'Lazer', text: 'Valor gasto com lazer', answer: '', type: 'number' },
+		{ id: 6, tipo: 'Saúde', text: 'Valor gasto com saúde', answer: '', type: 'number' },
+		{ id: 7, tipo: 'Educação', text: 'Valor gasto com educação', answer: '', type: 'number' },
+		{ id: 8, tipo: 'Outros', text: 'Valor total gasto com outras dívidas ', answer: '', type: 'number' },
+		{ id: 9, tipo: 'Investimento', text: 'Valor que pretende investir por mês', answer: '', type: 'number' },
 	]);
 
 	const handleAnswerChange = (e, questionId) => {
@@ -32,7 +31,7 @@ function Quiz() {
 		setQuestions(updatedQuestions);
 	};
 	//controla perguntas
-	const handleNextQuestion = () => {
+	const handleNextQuestion = (event) => {
 		if (currentQuestionIndex < questions.length - 1) {
 			setCurrentQuestionIndex(currentQuestionIndex + 1);
 			// colocar aqui para enviá-las para um servidor
@@ -43,6 +42,7 @@ function Quiz() {
 				.reduce((acc, val) => acc + val, 0);
 
 			console.log('Respostas:', questions);
+			handleQuizSubmit(event);
 			restartQuiz();
 			setShow(false);
 
@@ -69,6 +69,52 @@ function Quiz() {
 		const resetQuestions = questions.map(q => ({ ...q, answer: '' }));
 		setQuestions(resetQuestions);
 	};
+
+	function handleQuizSubmit(e) {
+		e.preventDefault();
+
+		console.log("questions: ",questions);
+		const data = new Date();
+		const dataFormatada = `${data.getFullYear()}-${data.getMonth() + 1}-${data.getDate()}`;
+		console.log(dataFormatada);
+
+		questions.map(async question => {
+			const valor = Number(question.answer).toFixed(2)
+			console.log(valor)
+			if (question.id > 1 ) {
+				const questionData = {
+					descricao: question.text,
+					categoria: question.tipo,
+					data: dataFormatada,
+					valor
+				}
+
+				const res = await fetch('http://localhost:3000/gastos', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(questionData),
+				});
+
+			} else {
+				const questionData = {
+					descricao: question.text,
+					fonte: question.tipo,
+					data: dataFormatada,
+					valor
+				}
+
+				const res = await fetch('http://localhost:3000/ganhos', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(questionData),
+				});
+			} 
+		});
+	}
 
 	const buttonStyle = {
 		margin: '10px',
@@ -104,7 +150,7 @@ function Quiz() {
 								autoFocus
 							/>
 						</Form.Group>
-						<button onClick={handleNextQuestion} type="button" style={buttonStyle} centered onKeyPress={(e) => {
+						<button onClick={handleNextQuestion} type='button' style={buttonStyle} onKeyPress={(e) => {
 							if (e.key === 'Enter') {
 								handleNextQuestion();
 							}
