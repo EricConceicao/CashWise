@@ -116,7 +116,7 @@ function SimulePage() {
       <Header id="topo" />
 
       <main>
-        <h1 className='display-1 bg-secondary text-light text-center py-3 px-2 m-0'>Previdência Social</h1>
+        <h1 className='display-1 bg-secondary text-light text-center py-3 px-2 m-0'>Simulação Previdenciária</h1>
 
         <section className='container-fluid px-3 pb-3 pt-4 mb-5 bg-light border-bottom border-2'>
           <p>
