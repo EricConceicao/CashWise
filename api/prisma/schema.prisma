@@ -25,6 +25,9 @@ model User {
   sessions     Session[]
   UserIcons    UserIcons[]
   CoinText     CoinText[]
+  gastos       Gasto[]
+  ganhos       Ganho[]
+  contas       Conta[]
 }
 
 // Tábela para envio de feedbacks da página contato
@@ -68,10 +71,10 @@ model UserIcons {
 
 // Tábela para registrar os textos chaves
 model CoinText {
-  id        String  @id
-  userId    Int
-  found     Boolean
-  User      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id     String  @id
+  userId Int
+  found  Boolean
+  User   User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 // Tábela com os gastos registrados na agenda
@@ -81,15 +84,19 @@ model Gasto {
   categoria String  @db.VarChar(50)
   data      String
   valor     Decimal @db.Decimal(10, 2)
+  User      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    Int
 }
 
 // Tabela com os ganhos registrados na agenda
 model Ganho {
   id        Int     @id @default(autoincrement())
-  descricao String  @db.VarChar(255)
+  descricao String?  @db.VarChar(255)
   fonte     String  @db.VarChar(50)
   data      String
   valor     Decimal @db.Decimal(10, 2)
+  User      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    Int
 }
 
 // Tabela para armazenar informações sobre contas
@@ -100,6 +107,8 @@ model Conta {
   diaVencimento Int
   recorrencia   Recorrencia
   periodo       Periodo?
+  User          User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId        Int
 }
 
 // Enum para representar a recorrência da conta (mensal ou por período)
@@ -111,8 +120,8 @@ enum Recorrencia {
 // Modelo para representar o período, caso a conta tenha recorrência por período
 model Periodo {
   id      Int    @id @default(autoincrement())
-  inicio  String 
-  fim     String 
+  inicio  String
+  fim     String
   conta   Conta  @relation(fields: [contaId], references: [id])
   contaId Int    @unique
 }
@@ -120,16 +129,16 @@ model Periodo {
 // Schema do sistema previdência //
 
 model atualizacao_monetaria {
-  id        Int       @id @default(autoincrement()) @db.UnsignedInt
-  mes_ano   String    @db.VarChar(7)
-  indice    Decimal   @db.Decimal(10, 6)
+  id      Int     @id @default(autoincrement()) @db.UnsignedInt
+  mes_ano String  @db.VarChar(7)
+  indice  Decimal @db.Decimal(10, 6)
 }
 
 model SimulacaoBeneficio {
   id                          Int                          @id @default(autoincrement()) @db.UnsignedInt
   genero                      simulacao_beneficio_genero
   data_nascimento             DateTime                     @db.Date
-  salario_atualizado          SalarioAtualizado?           @relation(fields: [salario_atualizado_id], references: [id])  
+  salario_atualizado          SalarioAtualizado?           @relation(fields: [salario_atualizado_id], references: [id])
   salario_atualizado_id       Int?                         @unique
   idade                       Int?
   tempo_contribuicao_mes      Int?
@@ -142,25 +151,26 @@ model SimulacaoBeneficio {
   valor_auxilio_doenca        Decimal?                     @db.Decimal(10, 2)
   simulacao_periodo_trabalho  simulacao_periodo_trabalho[]
 }
+
 enum simulacao_beneficio_genero {
   m
   f
 }
 
 model simulacao_periodo_trabalho {
-  id                     Int                 @id @default(autoincrement()) @db.UnsignedInt
+  id                     Int                @id @default(autoincrement()) @db.UnsignedInt
   mes                    Int
   ano                    Int
-  salario                Decimal             @db.Decimal(10, 2)
-  mes_ano                String              @db.VarChar(7)
-  simulacao_beneficio_id Int                 @db.UnsignedInt
-  simulacao_beneficio    SimulacaoBeneficio  @relation(fields: [simulacao_beneficio_id], references: [id])
+  salario                Decimal            @db.Decimal(10, 2)
+  mes_ano                String             @db.VarChar(7)
+  simulacao_beneficio_id Int                @db.UnsignedInt
+  simulacao_beneficio    SimulacaoBeneficio @relation(fields: [simulacao_beneficio_id], references: [id])
 }
 
 model SalarioAtualizado {
-  id                      Int                @id @default(autoincrement())
-  mes_ano                 DateTime
-  salario_atualizado      Float
-  simulacao_beneficio     SimulacaoBeneficio?   
-  simulacao_beneficio_id  Int?                
+  id                     Int                 @id @default(autoincrement())
+  mes_ano                DateTime
+  salario_atualizado     Float
+  simulacao_beneficio    SimulacaoBeneficio?
+  simulacao_beneficio_id Int?
 }

@@ -5,7 +5,12 @@ import moment from 'moment';
 
 export async function vergastos(req, res) {
   try {
-    const gastos = await prisma.gasto.findMany();
+    const userId = req.accessToken.id;
+    const gastos = await prisma.gasto.findMany({
+      where: {
+        userId
+      }
+    });
     res.json(gastos);
   } catch (error) {
     console.error('Erro ao adicionar nova despesa:', error);
@@ -16,11 +21,16 @@ export async function vergastos(req, res) {
 
 export async function adicionargasto(req, res) {
   try {
+    const userId = req.accessToken.id;
     const novoGasto = req.body;
-    console.log(novoGasto)
+    
     const despesaCriada = await prisma.gasto.create({
-      data: novoGasto,
+      data: {
+        ...novoGasto, 
+        userId,
+      } ,
     });
+    console.log(despesaCriada)
 
     res.status(200).json({
       gasto: despesaCriada,
@@ -36,11 +46,13 @@ export async function adicionargasto(req, res) {
 
 export async function gastosPorCategoria(req, res) {
   try {
+    const userId = req.accessToken.id;
     const dataAtual = moment().format('YYYY-MM');
 
     // Consulta as categorias distintas presentes na coluna 'categoria'
     const categorias = await prisma.gasto.findMany({
       where: {
+        userId: userId,
         data: {
           startsWith: dataAtual,
         }
@@ -55,6 +67,7 @@ export async function gastosPorCategoria(req, res) {
     const somatorioPorCategoria = await prisma.gasto.groupBy({
       by: ['categoria'],
       where: {
+        userId: userId,
         data: {
           startsWith: dataAtual,
         }
@@ -66,6 +79,7 @@ export async function gastosPorCategoria(req, res) {
 
     const todosGastosPorCategoria = await prisma.gasto.findMany({
       where: {
+        userId: userId,
         data: {
           startsWith: dataAtual,
         }

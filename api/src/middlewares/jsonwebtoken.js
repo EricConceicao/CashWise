@@ -11,7 +11,7 @@ export async function authenticate(req, res, next) {
 		const data = jwt.verify(token, process.env.SECRET_KEY);
 
 		req.accessToken = data;
-		
+
 		next();
 	} catch (err) {
 		res.status(401).json({

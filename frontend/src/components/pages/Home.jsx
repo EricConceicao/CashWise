@@ -84,6 +84,7 @@ const Home = () => {
 	const [showModalAlerta, setShowModalAlerta] = useState(false);
 
 	// Dados do store após o login do usuário //
+	const token = useUserStore(state => state.userToken)
 	const name = useUserStore(state => state.name);
 	const sname = useUserStore(state => state.sname);
 	const photo = useUserStore(state => state.photo);
@@ -91,238 +92,40 @@ const Home = () => {
 	const level = useUserStore(state => state.level);
 	const wiseCoins = useUserStore(state => state.wiseCoins);
 
+	// 	const sessionToken = await createSession(user.id, req, res);
+	// if (sessionToken) {
+	//     const userToken = await createToken(user.id);
+	//     return res.status(200).json({
+	//         success: true,
+	//         message: 'Usuário autenticado com sucesso.',
+	//         userData: {
+	//             id: user.id,
+	//             name: user.name,
+	//             sname: user.sname,
+	//             photo: user.photo,
+	//             wiseCoins: user.wiseCoins,
+	//             level: user.level,
+	//             exp: user.exp,
+	//         },
+	//         userToken,
+	//     });
+	// }
+
+	// const handleLogin = async () => {
+	//     // Lógica de autenticação...
+	//     const response = await login(userInput);
+	//     const userId = response.userData.id;
+	//     // Restante do código...
+	// }
+
 
 	// useStates
-	const [valorRecebido, setValorRecebido] = useState(0);
-	const [valorGasto, setValorGasto] = useState(0);
 	const [ganhos, setganhos] = useState([])
 	const [somatorioGanhos, setSomatorioGanhos] = useState(0);
 	const [gastos, setgastos] = useState([])
 	const [somatorioGastos, setSomatorioGastos] = useState(0);
 	const [somatorioGanhosMensal, setSomatorioGanhosMensal] = useState(0);
 	const [somatorioGastosMensal, setSomatorioGastosMensal] = useState(0);
-
-
-	// Modais
-	const [showModalNovoGanho, setShowModalNovoGanho] = useState(false);
-	const [showModalNovoGasto, setShowModalNovoGasto] = useState(false);
-
-	// Controle mensal	
-
-	const MesAno = moment().format('MM/YYYY');
-
-	// Novo ganho
-
-	const [novaDescricaoGanho, setNovaDescricaoGanho] = useState('');
-	const [selectedFonte, setSelectedFonte] = useState("");
-	const [novaDataGanho, setNovaDataGanho] = useState("");
-	const [novoValorGanho, setNovoValorGanho] = useState(0);
-	const [ganhosPorFonte, setGanhosPorFonte] = useState({});
-
-
-	// const handleAdicionarNovoGanho = () => {
-	// 	if (selectedFonte && novaDescricaoGanho && novoValorGanho) {
-
-	// 		const novoGanho = {
-	// 			descricao: novaDescricaoGanho,
-	// 			fonte: selectedFonte,
-	// 			valor: novoValorGanho,
-	// 			data: novaDataGanho,
-	// 		};
-
-	// 		// Cria uma cópia do objeto gastosPorCategoria
-	// 		const novosGanhosPorFonte = { ...ganhosPorFonte };
-
-	// 		// Verifica se já existe um array de gastos para a categoria
-	// 		if (!novosGanhosPorFonte[selectedFonte]) {
-	// 			novosGanhosPorFonte[selectedFonte] = [];
-	// 		}
-
-	// 		// Adiciona o novo gasto ao array de gastos da categoria
-	// 		novosGanhosPorFonte[selectedFonte].push(novoGanho);
-
-	// 		// Atualiza o estado com os novos gastos por categoria
-	// 		setGanhosPorFonte(novosGanhosPorFonte);
-
-	// 		setValorRecebido(valorRecebido + novoValorGanho);
-
-	// 		showConfirmationMessage("Novo ganho adicionado com sucesso!");
-	// 	}
-	// };
-
-
-	useEffect(() => {
-
-		const getganhos = async () => {
-			const response = await fetch('http://localhost:3000/ganhos/listar')
-			const data = await response.json()
-			/*console.log(data.success)
-			console.log(data.ganhos)*/
-			// console.log("ganhos", data)
-			setganhos(data)
-
-		}
-
-		getganhos()
-
-	}, [])
-
-	const handleSubmitNovoGanho = async (event) => {
-		event.preventDefault()
-		const novoGanho = {
-			descricao: event.target.descricao.value,
-			fonte: event.target.fonte.value,
-			data: event.target.data.value,
-			valor: event.target.valor.value
-		}
-		console.log(novoGanho);
-
-		const response = await fetch('http://localhost:3000/ganhos', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(novoGanho)
-		})
-
-		if (response.ok) {
-			const data = await response.json()
-
-			const dataGanho = new Date(data.ganho.data);
-			const dataAtual = new Date();
-
-			dataGanho.setMonth(dataGanho.getMonth() + 1);
-			dataAtual.setMonth(dataAtual.getMonth() + 1);
-
-			/*console.log(dataGanho.getMonth(), dataGanho.getFullYear())
-			console.log(dataAtual.getMonth(), dataAtual.getFullYear())*/
-
-			if (dataGanho.getMonth() === dataAtual.getMonth() &&
-				dataGanho.getFullYear() === dataAtual.getFullYear()) {
-
-				setSomatorioGanhosMensal(somatorioGanhosMensal + parseInt(data.ganho.valor));
-			}
-		}
-	}
-
-
-
-	// Novo gasto
-
-
-	const [novoDescricao, setNovoDescricao] = useState('');
-	const [selectedCategoria, setSelectedCategoria] = useState("");
-	const [novaData, setNovaData] = useState("");
-	const [novoValor1, setNovoValor1] = useState(0);
-	// const [gastosPorCategoria, setGastosPorCategoria] = useState({});
-
-
-	// const handleAdicionarNovoGasto = () => {
-	// 	if (selectedCategoria && novoDescricao && novoValor1) {
-
-	// 		// Adiciona o novo gasto com a categoria correspondente
-	// 		const novoGasto = {
-	// 			descricao: novoDescricao,
-	// 			categoria: selectedCategoria,
-	// 			valor: novoValor1,
-	// 			data: novaData,
-	// 		};
-
-	// 		// Cria uma cópia do objeto gastosPorCategoria
-	// 		const novosGastosPorCategoria = { ...gastosPorCategoria };
-
-	// 		// Verifica se já existe um array de gastos para a categoria
-	// 		if (!novosGastosPorCategoria[selectedCategoria]) {
-	// 			novosGastosPorCategoria[selectedCategoria] = [];
-	// 		}
-
-	// 		// Adiciona o novo gasto ao array de gastos da categoria
-	// 		novosGastosPorCategoria[selectedCategoria].push(novoGasto);
-
-	// 		// Atualiza o estado com os novos gastos por categoria
-	// 		setGastosPorCategoria(novosGastosPorCategoria);
-
-	// 		// Atualiza o valor total de gastos
-	// 		setValorGasto(valorGasto + novoValor1);
-
-	// 		const percentuaisPorCategoria = {};
-	// 		for (const categoria in novosGastosPorCategoria) {
-	// 			const gastosCategoria = novosGastosPorCategoria[categoria];
-	// 			const totalCategoria = gastosCategoria.reduce(
-	// 				(total, gasto) => total + gasto.valor,
-	// 				0
-	// 			);
-	// 			const percentual = (totalCategoria / valorGasto) * 100;
-	// 			percentuaisPorCategoria[categoria] = percentual;
-	// 		}
-
-	// 		showConfirmationMessage("Novo gasto adicionado com sucesso!");
-	// 	}
-	// };
-
-
-
-
-	useEffect(() => {
-
-		const getgastos = async () => {
-			const response = await fetch('http://localhost:3000/gastos/listar')
-			const data = await response.json()
-			/*console.log(data.success)
-			console.log(data.gastos)*/
-			// console.log("todos os gastos", data)
-			setgastos(data)
-		}
-
-		getgastos()
-
-	}, [])
-
-
-	const handleSubmitNovoGasto = async (event) => {
-		event.preventDefault()
-		const novoGasto = {
-			descricao: event.target.descricao.value,
-			categoria: event.target.categoria.value,
-			data: event.target.data.value,
-			valor: event.target.valor.value
-		}
-		console.log(novoGasto);
-
-		const response = await fetch('http://localhost:3000/gastos', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(novoGasto)
-		})
-
-		if (response.ok) {
-			const data = await response.json()
-			showConfirmationMessage("Novo gasto adicionado com sucesso!");
-
-			const dataGasto = new Date(data.gasto.data);
-			const dataAtual = new Date();
-
-			dataGasto.setMonth(dataGasto.getMonth() + 1);
-			dataAtual.setMonth(dataAtual.getMonth() + 1);
-
-			// console.log(dataGasto.getMonth(), dataGasto.getFullYear())
-			// console.log(dataAtual.getMonth(), dataAtual.getFullYear())
-
-			if (dataGasto.getMonth() === dataAtual.getMonth() &&
-				dataGasto.getFullYear() === dataAtual.getFullYear()) {
-
-				setSomatorioGastosMensal(somatorioGastosMensal + parseInt(data.gasto.valor));
-			}
-		}
-	}
-
-
-
-	// Fontes de receita
-
-	const [showModalNovaFonte, setShowModalNovaFonte] = useState(false);
 	const [fontesCadastradas, setFontesCadastradas] = useState([
 		"Salário",
 		"Décimo Terceiro",
@@ -336,49 +139,8 @@ const Home = () => {
 		"Patrocínio"]);
 	const [fontes, setFontes] = useState([]);
 	const [novaFonte, setNovaFonte] = useState('');
-
-
-	const adicionarFonte = (novaFonte) => {
-		setFontesCadastradas([...fontesCadastradas, novaFonte]);
-	};
-
-	const handleAdicionarNovaFonte = () => {
-		if (novaFonte) {
-			adicionarFonte(novaFonte);
-			showConfirmationMessage("Nova fonte de receita criada com sucesso!");
-			setNovaFonte('');
-		}
-	};
-
-	const handleExcluirFonte = (index) => {
-		const novasFontes = [...fontesCadastradas];
-		novasFontes.splice(index, 1);
-		setFontes(novasFontes);
-	};
-
-	const [showModalDetalhesFontes, setShowModalDetalhesFontes] = useState(false);
 	const [ganhosFonteAtual, setGanhosFonteAtual] = useState([]);
 	const [fonteAtual, setFonteAtual] = useState("");
-
-
-	useEffect(() => {
-
-		const getGanhosPorFonte = async () => {
-			const response = await fetch('http://localhost:3000/ganhos/fontes')
-			const data = await response.json()
-			// console.log("data", data)
-			setFontes(data);
-		}
-
-		getGanhosPorFonte()
-
-	}, [])
-
-
-
-	// Categorias
-
-	const [showModalCategorias, setShowModalCategorias] = useState(false);
 	const [categoriasCadastradas, setCategoriasCadastradas] = useState([
 		"Alimentação",
 		"Saúde",
@@ -393,7 +155,282 @@ const Home = () => {
 	const [novaCategoria, setNovaCategoria] = useState('');
 
 
+	// Modais
+	const [showModalNovoGanho, setShowModalNovoGanho] = useState(false);
+	const [showModalNovoGasto, setShowModalNovoGasto] = useState(false);
+	const [showModalDetalhesFontes, setShowModalDetalhesFontes] = useState(false);
+	const [showModalNovaFonte, setShowModalNovaFonte] = useState(false);
+	const [showModalCategorias, setShowModalCategorias] = useState(false);
 
+	// Controle mensal	
+
+	const MesAno = moment().format('MM/YYYY');
+
+	// Novo ganho
+
+	useEffect(() => {
+
+		const getganhos = async () => {
+			const response = await fetch('http://localhost:3000/ganhos/listar')
+			const data = await response.json();
+			setganhos(data);
+		}
+
+		getganhos()
+
+	}, [])
+
+
+	const getGanhosPorFonte = async () => {
+		const response = await fetch('http://localhost:3000/ganhos/fontes');
+		const data = await response.json();
+		setFontes(data);
+		console.log("fontes", fontes);
+	};
+
+	const handleSubmitNovoGanho = async (event) => {
+		event.preventDefault();
+		const novoGanho = {
+			descricao: event.target.descricao.value,
+			fonte: event.target.fonte.value,
+			data: event.target.data.value,
+			valor: event.target.valor.value,
+			//   userId: userId,
+		};
+		console.log(novoGanho);
+
+		const response = await fetch('http://localhost:3000/ganhos', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(novoGanho),
+		});
+
+		if (response.ok) {
+			const data = await response.json();
+			showConfirmationMessage("Novo ganho adicionado com sucesso!");
+
+			const dataGanho = new Date(data.ganho.data);
+			const dataAtual = new Date();
+
+			dataGanho.setMonth(dataGanho.getMonth() + 1);
+			dataAtual.setMonth(dataAtual.getMonth() + 1);
+
+			if (
+				dataGanho.getMonth() === dataAtual.getMonth() &&
+				dataGanho.getFullYear() === dataAtual.getFullYear()
+			) {
+				setSomatorioGanhosMensal(
+					somatorioGanhosMensal + parseInt(data.ganho.valor)
+				);
+			}
+
+			setganhos([...ganhos, data.ganho]);
+
+			setFontes((prevFontes) => {
+				const fonteExistente = prevFontes.find((f) => f.fonte === novoGanho.fonte);
+
+				if (fonteExistente) {
+					// Atualiza o total de ganhos para a fonte existente
+					fonteExistente.totalGanho = parseFloat(fonteExistente.totalGanho) + parseFloat(novoGanho.valor);
+					return [...prevFontes];
+				} else {
+					// Adiciona uma nova fonte
+					return [
+						...prevFontes,
+						{
+							fonte: novoGanho.fonte,
+							totalGanho: parseFloat(novoGanho.valor), // Certifique-se de converter para número
+							ganhos: [data.ganho], // Inicializa com um array contendo o novo ganho
+						},
+					];
+				}
+			});
+
+
+			getGanhosPorFonte();
+		}
+	};
+
+	useEffect(() => {
+		getGanhosPorFonte();
+	}, []);
+
+
+
+
+	// Novo gasto
+
+	useEffect(() => {
+
+		const getgastos = async () => {
+			if (!token) return 
+			const response = await fetch('http://localhost:3000/gastos/listar', {
+				headers: {
+					"Authorization": `Bearer: ${token}`
+				}
+			});
+			const data = await response.json();
+			setgastos(data);
+		}
+
+		getgastos()
+
+	}, [token])
+
+
+	const getGastosPorCategoria = async () => {
+		if (!token) return 
+		console.log('token',token)
+		const response = await fetch('http://localhost:3000/gastos/categorias', {
+			headers: {
+				"Authorization": `Bearer: ${token}`
+			}
+		});
+		const data = await response.json();
+		setCategorias(data);
+		console.log("categorias", categorias);
+	};
+
+	const handleSubmitNovoGasto = async (event) => {
+		event.preventDefault();
+		if (!token) return 
+		const novoGasto = {
+			descricao: event.target.descricao.value,
+			categoria: event.target.categoria.value,
+			data: event.target.data.value,
+			valor: event.target.valor.value,
+		};
+		console.log(novoGasto);
+
+		const response = await fetch('http://localhost:3000/gastos', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				"Authorization": `Bearer: ${token}`
+			},
+			body: JSON.stringify(novoGasto),
+		});
+
+		if (response.ok) {
+			const data = await response.json();
+			showConfirmationMessage("Novo gasto adicionado com sucesso!");
+
+			const dataGasto = new Date(data.gasto.data);
+			const dataAtual = new Date();
+
+			dataGasto.setMonth(dataGasto.getMonth() + 1);
+			dataAtual.setMonth(dataAtual.getMonth() + 1);
+
+			if (
+				dataGasto.getMonth() === dataAtual.getMonth() &&
+				dataGasto.getFullYear() === dataAtual.getFullYear()
+			) {
+				setSomatorioGastosMensal(
+					somatorioGastosMensal + parseInt(data.gasto.valor)
+				);
+			}
+
+			setgastos([...gastos, data.gasto]);
+
+			setCategorias((prevCategorias) => {
+				const categoriaExistente = prevCategorias.find((f) => f.categoria === novoGasto.categoria);
+
+				if (categoriaExistente) {
+					// Atualiza o total de gastos para a categoria existente
+					categoriaExistente.totalGasto = parseFloat(categoriaExistente.totalGasto) + parseFloat(novoGasto.valor);
+					return [...prevCategorias];
+				} else {
+					// Adiciona uma nova categoria
+					return [
+						...prevCategorias,
+						{
+							categoria: novoGasto.categoria,
+							totalGasto: parseFloat(novoGasto.valor), // Certifique-se de converter para número
+							gastos: [data.gasto], // Inicializa com um array contendo o novo gasto
+						},
+					];
+				}
+			});
+
+
+			getGastosPorCategoria();
+		}
+	};
+
+	useEffect(() => {
+		getGastosPorCategoria();
+	}, [token]);
+
+
+	// useEffect(() => {
+
+	// 	const getgastos = async () => {
+	// 		const response = await fetch('http://localhost:3000/gastos/listar')
+	// 		const data = await response.json();
+	// 		setgastos(data);
+	// 	}
+
+	// 	getgastos()
+
+	// }, [])
+
+
+	// const handleSubmitNovoGasto = async (event) => {
+	// 	event.preventDefault()
+	// 	const novoGasto = {
+	// 		descricao: event.target.descricao.value,
+	// 		categoria: event.target.categoria.value,
+	// 		data: event.target.data.value,
+	// 		valor: event.target.valor.value
+	// 	}
+	// 	console.log(novoGasto);
+
+	// 	const response = await fetch('http://localhost:3000/gastos', {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Content-Type': 'application/json'
+	// 		},
+	// 		body: JSON.stringify(novoGasto)
+	// 	})
+
+	// 	if (response.ok) {
+	// 		const data = await response.json()
+	// 		showConfirmationMessage("Novo gasto adicionado com sucesso!");
+
+	// 		const dataGasto = new Date(data.gasto.data);
+	// 		const dataAtual = new Date();
+
+	// 		dataGasto.setMonth(dataGasto.getMonth() + 1);
+	// 		dataAtual.setMonth(dataAtual.getMonth() + 1);
+
+	// 		if (dataGasto.getMonth() === dataAtual.getMonth() &&
+	// 			dataGasto.getFullYear() === dataAtual.getFullYear()) {
+
+	// 			setSomatorioGastosMensal(somatorioGastosMensal + parseInt(data.gasto.valor));
+	// 		}
+	// 	}
+	// }
+
+
+
+	// Fontes de receita
+
+	const adicionarFonte = (novaFonte) => {
+		setFontesCadastradas([...fontesCadastradas, novaFonte]);
+	};
+
+	const handleAdicionarNovaFonte = () => {
+		if (novaFonte) {
+			adicionarFonte(novaFonte);
+			showConfirmationMessage("Nova fonte de receita criada com sucesso!");
+			setNovaFonte('');
+		}
+	};
+
+
+	// Categorias
 
 	const adicionarCategoria = (novaCategoria) => {
 		setCategorias([...categoriasCadastradas, novaCategoria]);
@@ -407,32 +444,22 @@ const Home = () => {
 		}
 	};
 
-	const handleExcluirCategoria = (index) => {
-		const novasCategorias = [...categoriasCadastradas];
-		novasCategorias.splice(index, 1);
-		setCategoriasCadastradas(novasCategorias);
-	};
-
-
 	const [showModalDetalhesCategoria, setShowModalDetalhesCategoria] = useState(false);
 	const [gastosCategoriaAtual, setGastosCategoriaAtual] = useState([]);
 	const [categoriaAtual, setCategoriaAtual] = useState("");
 
 
+	// useEffect(() => {
 
+	// 	const getGastosPorCategoria = async () => {
+	// 		const response = await fetch('http://localhost:3000/gastos/categorias')
+	// 		const data = await response.json()
+	// 		setCategorias(data);
+	// 	}
 
-	useEffect(() => {
+	// 	getGastosPorCategoria()
 
-		const getGastosPorCategoria = async () => {
-			const response = await fetch('http://localhost:3000/gastos/categorias')
-			const data = await response.json()
-			// console.log("data", data)
-			setCategorias(data);
-		}
-
-		getGastosPorCategoria()
-
-	}, [])
+	// }, [])
 
 
 
@@ -468,7 +495,7 @@ const Home = () => {
 	const valorCategorias = []
 	const categoriasLegenda = []
 
-	categorias.map((categoria, index) => {
+	categorias?.map((categoria, index) => {
 
 		categoriasLegenda.push(categoria.categoria)
 		labelsColors.push(colors[index])
@@ -576,7 +603,6 @@ const Home = () => {
 		const getcontas = async () => {
 			const response = await fetch('http://localhost:3000/contas/listar')
 			const data = await response.json()
-			// console.log(data)
 			setContas(data)
 		}
 
@@ -594,10 +620,10 @@ const Home = () => {
 				}
 				const contas = await response.json();
 
-				// Ordenar contas por dia de vencimento
+				// Ordena contas por dia de vencimento
 				const contasOrdenadas = contas.sort((a, b) => a.diaVencimento - b.diaVencimento);
 
-				// Filtrar contas válidas
+				// Filtra contas válidas
 				const contasFiltradas = contasOrdenadas.reduce((acc, conta) => {
 					let vencimento;
 
@@ -614,25 +640,18 @@ const Home = () => {
 							vencimento.setMonth(vencimento.getMonth() + 1);
 						}
 
-						// console.log("eita", vencimento)
-
 						const formatoData = moment(vencimento).format('DD-MM-YYYY');
 						acc.push({
 							...conta,
 							vencimento: formatoData,
 						});
 
-						// console.log("vish", formatoData)
 
 					} else if (conta.recorrencia === 'POR_PERIODO' && conta.periodo) {
 						// Se a recorrência for "POR_PERIODO" e houver um período associado
 						let dataAtual = new Date();
 						let formatoDataAtual = `${dataAtual.getFullYear()}-${(dataAtual.getMonth() + 1).toString().padStart(2, '0')}`;
 						const dataMoment = moment(formatoDataAtual, 'YYYY-MM');
-
-
-						// const inicioPeriodo = new Date(conta.periodo.inicio);
-						// const fimPeriodo = new Date(conta.periodo.fim);
 
 						const inicioPeriodo = moment(conta.periodo.inicio, 'YYYY-MM');
 						const fimPeriodo = moment(conta.periodo.fim, 'YYYY-MM');
@@ -642,7 +661,6 @@ const Home = () => {
 						if (dataMoment >= inicioPeriodo && dataMoment <= fimPeriodo) {
 							// Se a data atual estiver dentro do período, definir vencimento
 							vencimento = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), conta.diaVencimento);
-							// console.log("aqui", vencimento)
 
 							let hoje = new Date;
 							if ((vencimento < hoje) && (conta.diaVencimento != diaDoMes)) {
@@ -668,19 +686,17 @@ const Home = () => {
 					return acc;
 				}, []).filter(Boolean);
 
-				// Ordenar contas filtradas
-				// console.log("Contas Filtradas: ", contasFiltradas)
+				// Ordena contas filtradas
 				const contasFiltradasOrdenadas = contasFiltradas.sort((a, b) => {
 					const [diaA, mesA, anoA] = a.vencimento.split('-').map(Number);
 					const [diaB, mesB, anoB] = b.vencimento.split('-').map(Number);
 
-					// Criar objetos Date a partir dos valores extraídos
+					// Cria objetos Date a partir dos valores extraídos
 					const dataVencimentoA = new Date(anoA, mesA - 1, diaA); // O mês é base 0 no objeto Date
 					const dataVencimentoB = new Date(anoB, mesB - 1, diaB);
 
 					return dataVencimentoA - dataVencimentoB;
 				});
-				/*console.log(contasFiltradasOrdenadas);*/
 
 				setContasAgenda(contasFiltradasOrdenadas);
 
@@ -725,27 +741,20 @@ const Home = () => {
 			const data = await response.json()
 			/*alert(data.success)*/
 			showConfirmationMessage("Nova conta criada com sucesso!");
-			console.log("veja", data.conta)
-
 			setContas([...contas, data.conta])
-			// setContasAgenda([...contasAgenda, data.conta]);
 			getContasAgenda();
 		}
 	}
 
 	const calcularDiasRestantes = (dataVencimento) => {
 		const dataAtual = new Date();
-		// console.log('dados:  ', dataVencimento)
 		const partesDataVencimento = dataVencimento.split('-');
-		// console.log(partesDataVencimento)
 		const dataVencimentoFormatada = new Date(partesDataVencimento[2], partesDataVencimento[1] - 1, partesDataVencimento[0]);
 
 		// Calcula a diferença em dias
 		const umDiaEmMilissegundos = 24 * 60 * 60 * 1000; // Número de milissegundos em um dia
 		const diferencaEmMilissegundos = dataVencimentoFormatada - dataAtual;
 		const diasRestantes = Math.ceil(diferencaEmMilissegundos / umDiaEmMilissegundos);
-
-		// console.log("faltam", diasRestantes);
 
 		let mensagem = '';
 		let corFundo = '';
@@ -771,9 +780,7 @@ const Home = () => {
 	const [contaIdParaEditar, setContaIdParaEditar] = useState(null);
 
 	const handleEditarConta = (contaId) => {
-
 		setContaIdParaEditar(contaId);
-
 		setShowModalEditarConta(true);
 	}
 
@@ -796,9 +803,8 @@ const Home = () => {
 			const recorrencia = event.target.recorrencia.value;
 			const inicioPeriodo = (event.target.inicioPeriodo?.value) ?? '';
 			const fimPeriodo = (event.target.fimPeriodo?.value) ?? '';
-			console.log("o vencimento é", vencimento)
 
-			// Construa o objeto contaEditada apenas com os campos preenchidos
+			// Constroi o objeto contaEditada apenas com os campos preenchidos
 			const contaEditada = {};
 
 			if (descricao) {
@@ -853,14 +859,10 @@ const Home = () => {
 					: conta));
 				getContasAgenda();
 			} else {
-				// Trate o caso em que a exclusão falhou
 				console.error('Erro ao editar conta:', response.statusText);
-				// Adicione lógica de tratamento de erro, se necessário
 			}
 		} catch (error) {
-			// Trate qualquer erro que possa ocorrer durante a exclusão
 			console.error('Erro ao editar conta:', error);
-			// Adicione lógica de tratamento de erro, se necessário
 		}
 	};
 
@@ -869,10 +871,7 @@ const Home = () => {
 	const [contaIdParaExcluir, setContaIdParaExcluir] = useState(null);
 
 	const handleExcluirConta = (contaId) => {
-		// Define o ID da conta no estado ou em outro local, se necessário
 		setContaIdParaExcluir(contaId);
-
-		// Abre o modal de confirmação
 		setShowModalExcluirConta(true);
 	};
 
@@ -892,7 +891,6 @@ const Home = () => {
 			});
 
 			if (response.ok) {
-				// Atualize o estado ou realize alguma ação após a exclusão bem-sucedida
 				showConfirmationMessage("Conta excluída com sucesso!");
 				setTimeout(() => {
 					setShowModalExcluirConta(false);
@@ -900,14 +898,10 @@ const Home = () => {
 
 				setContasAgenda((prevContas) => prevContas.filter((conta) => conta.id !== contaIdParaExcluir));
 			} else {
-				// Trate o caso em que a exclusão falhou
 				console.error('Erro ao excluir conta:', response.statusText);
-				// Adicione lógica de tratamento de erro, se necessário
 			}
 		} catch (error) {
-			// Trate qualquer erro que possa ocorrer durante a exclusão
 			console.error('Erro ao excluir conta:', error);
-			// Adicione lógica de tratamento de erro, se necessário
 		}
 	};
 
@@ -1037,9 +1031,6 @@ const Home = () => {
 
 			if (response.ok) {
 				const data = await response.json()
-				// alert(data.success)
-				// console.log('Somatório de Gastos Mensais:', data.somatorioGastos);
-				// console.log('Somatório de Ganhos Mensais:', data.somatorioGanhos);
 				setSomatorioGanhosMensal(data.somatorioGanhos);
 				setSomatorioGastosMensal(data.somatorioGastos);
 			}
@@ -1075,56 +1066,55 @@ const Home = () => {
 			<div id="principal">
 				<Container fluid className="conteudo bg-secondary">
 
-					<h1 className='py-2' title='Consulte seu perfil'>Seu perfil</h1>
-
-					<div className='perfil w-100'>
+					<div className='perfil w-100 mt-2'>
 
 						<div className="perfil1">
 							<IconShop className="mb-5" />
 
-							<h1 className='text-primary'><i>{name} {sname}</i></h1>
-							<WithLabelExample />
+							<h1 className='text-primary mt-4'><i>{name} {sname}</i></h1>
+
+							<Row className='justify-content-center my-3'>
+								<div className="cartao-perfil1">
+									<div className="item">
+										<h4 className=''>Idade<HiOutlineCake className='moeda' /></h4>
+										<span className='bg-secondary'>30 anos</span>
+									</div>
+
+								</div>
+
+								<div className="cartao-perfil1">
+									<div className="item">
+										<h4 className=''>Perfil<MdOutlineEmojiPeople className='moeda' /></h4>
+										<span className='bg-secondary'>{level}</span>
+									</div>
+
+								</div>
+
+								<div className="cartao-perfil1">
+									<div className="item">
+										<h4 className=''>WiseCoins<BsCoin className='moeda' /></h4>
+										<span className='bg-secondary'>{wiseCoins}</span>
+									</div>
+
+								</div>
+
+								<div className="cartao-perfil1">
+									<div className="item">
+										<h4 className=''>Experiência<BsStars className='moeda' /></h4>
+										<span className='bg-secondary'>Empresário</span>
+									</div>
+
+								</div>
+
+							</Row>
+
+							{/* <WithLabelExample /> */}
 						</div>
-
-						<Row className='justify-content-center my-4'>
-							<div className="cartao-perfil1">
-								<div className="item">
-									<h4 className=''>Idade</h4>
-									<span className='bg-secondary'>30 anos</span>
-								</div>
-								<HiOutlineCake className='moeda' />
-							</div>
-
-							<div className="cartao-perfil1">
-								<div className="item">
-									<h4 className=''>Perfil</h4>
-									<span className='bg-secondary'>{level}</span>
-								</div>
-								<MdOutlineEmojiPeople className='moeda' />
-							</div>
-
-							<div className="cartao-perfil1">
-								<div className="item">
-									<h4 className=''>WiseCoins</h4>
-									<span className='bg-secondary'>{wiseCoins}</span>
-								</div>
-								<BsCoin className='moeda' />
-							</div>
-
-							<div className="cartao-perfil1">
-								<div className="item">
-									<h4 className=''>Experiência</h4>
-									<span className='bg-secondary'>Empresário</span>
-								</div>
-								<BsStars className='moeda' />
-							</div>
-
-						</Row>
 
 					</div>
 
 					<br />
-					<Container fluid className='controle border'>
+					<Container fluid className='controle mt-5 pt-5 pb-5'>
 						<h1>Controle Mensal</h1>
 						<Row className='px-3'>
 							<div className="cartao-perfil col">
@@ -1154,18 +1144,14 @@ const Home = () => {
 								aria-labelledby="contained-modal-title-vcenter"
 								centered
 							>
-								<Modal.Header closeButton>
-									<Modal.Title id="contained-modal-title-vcenter">Novo Ganho</Modal.Title>
+								<Modal.Header className='bg-primary' closeButton>
+									<span className="display-6 text-info">Novo Ganho</span>
 								</Modal.Header>
-								<Modal.Body>
+								<Modal.Body className='modal-body'>
 									<Form onSubmit={handleSubmitNovoGanho}>
 										<Form.Group className="mb-4">
 											<Form.Label>Fonte de Receita</Form.Label>
-											<Form.Select
-												name='fonte'
-												value={selectedFonte}
-												onChange={(e) => setSelectedFonte(e.target.value)}
-											>
+											<Form.Select name='fonte' >
 												<option value="">Selecione</option>
 												{fontesCadastradas.map((fonte, index) => (
 													<option key={index} value={fonte}>
@@ -1179,8 +1165,7 @@ const Home = () => {
 											<Form.Control
 												type="text"
 												name="descricao"
-												value={novaDescricaoGanho}
-												onChange={(e) => setNovaDescricaoGanho(e.target.value)}
+												placeholder='Opcional'
 											/>
 										</Form.Group>
 										<Form.Group className="mb-4">
@@ -1188,8 +1173,6 @@ const Home = () => {
 											<Form.Control
 												type="date"
 												name="data"
-												value={novaDataGanho}
-												onChange={(e) => setNovaDataGanho(e.target.value)}
 											/>
 										</Form.Group>
 										<Form.Group className='mb-4'>
@@ -1199,20 +1182,20 @@ const Home = () => {
 												<Form.Control
 													type="number"
 													step="0.01"  // Permita valores fracionados com duas casas decimais
+													min="0"
 													name='valor'
-													value={novoValorGanho}
-													onChange={(event) => setNovoValorGanho(parseFloat(event.target.value))}
 												/>
 											</div>
 										</Form.Group>
-										{/* onClick={handleAdicionarNovoGanho} */}
-										<Button as='button' variant="secondary" type='submit'>
-											Adicionar
-										</Button>
+										<Modal.Footer>
+											<Button as='button' variant="primary" className='modal-button text-info' type='submit'>
+												Adicionar
+											</Button>
+										</Modal.Footer>
 									</Form>
 								</Modal.Body>
 								{showConfirmation && (
-									<div className="alert alert-success alert-custom" role="alert">
+									<div className="alert alert-custom" role="alert">
 										{confirmationMessage}
 									</div>
 								)}
@@ -1224,7 +1207,6 @@ const Home = () => {
 								<div className="item">
 									<h4>Valor Gasto</h4>
 									<span className='bg-secondary text-success'>{somaGastosMensal}</span>
-									{/*<span>{Gasto}</span>*/}
 								</div>
 
 								<div className="botao">
@@ -1249,8 +1231,6 @@ const Home = () => {
 											<Form.Label>Categoria</Form.Label>
 											<Form.Select
 												name='categoria'
-												value={selectedCategoria}
-												onChange={(e) => setSelectedCategoria(e.target.value)}
 											>
 												<option value="">Selecione</option>
 												{categoriasCadastradas.map((categoria, index) => (
@@ -1264,17 +1244,13 @@ const Home = () => {
 											<Form.Label>Descrição</Form.Label>
 											<Form.Control
 												type="text"
-												name='descricao'
-												value={novoDescricao}
-												onChange={(e) => setNovoDescricao(e.target.value)} />
+												name='descricao' />
 										</Form.Group>
 										<Form.Group className="mb-3">
 											<Form.Label>Data</Form.Label>
 											<Form.Control
 												type="date"
 												name='data'
-												value={novaData}
-												onChange={(e) => setNovaData(e.target.value)}
 											/>
 										</Form.Group>
 										<Form.Group>
@@ -1285,8 +1261,6 @@ const Home = () => {
 													type="number"
 													step="0.01"  // Permita valores fracionados com duas casas decimais
 													name='valor'
-													value={novoValor1}
-													onChange={(event) => setNovoValor1(parseFloat(event.target.value))}
 												/>
 											</div>
 										</Form.Group>
@@ -1316,7 +1290,7 @@ const Home = () => {
 						</Row>
 
 						<div className='botoes'>
-							<div className=''><Button className='click' as="button" variant="secondary" style={{ display: "flex", alignItems: "center", gap: "10px", color: "#fff" }} onClick={() => setShowModalNovaFonte(true)}>Ver fontes de receita<GiClick className='icone-click' /></Button>
+							<div className=''><Button className='click' as="button" variant="secondary" style={{ display: "flex", alignItems: "center", gap: "10px", color: "#fff" }} onClick={() => setShowModalNovaFonte(true)}>Nova fonte de receita<GiClick className='icone-click' /></Button>
 								<Modal
 									show={showModalNovaFonte}
 									onHide={() => setShowModalNovaFonte(false)}
@@ -1358,7 +1332,7 @@ const Home = () => {
 									)}
 								</Modal>
 							</div>
-							<div><Button className='click' as="button" variant="secondary" style={{ display: "flex", alignItems: "center", gap: "5px", color: "#fff" }} onClick={() => setShowModalCategorias(true)}>Ver categorias de gastos<GiClick className='icone-click' /></Button>
+							<div><Button className='click' as="button" variant="secondary" style={{ display: "flex", alignItems: "center", gap: "5px", color: "#fff" }} onClick={() => setShowModalCategorias(true)}>Nova categoria de gasto<GiClick className='icone-click' /></Button>
 								<Modal
 									show={showModalCategorias}
 									onHide={() => setShowModalCategorias(false)}
@@ -1413,41 +1387,12 @@ const Home = () => {
 					</Container>
 					<br />
 
-					{/* <Container className='menu'>
-							<h1 className='mb-5'>Seu menu</h1>
-							<div className="row cartoes-menu">
 
-								<div className="col text-info">
-									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivCategorias}>
-										<h4>Gastos por Categoria</h4>
-										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
-									</Button>
-								</div>
-							</div>
-
-							<div className='row cartoes-menu'>
-								<div className="col text-info">
-									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivFontes}>
-										<h4>Fontes de Receita</h4>
-										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
-									</Button>
-								</div>
-								<div className="col text-info">
-									<Button as='button' variant='secondary' className='botao-menu' onClick={abrirdivRelatorio}>
-										<h4>Relatório</h4>
-										<div className='bg-secondary'><GiClick className='menu-icone' /></div>
-									</Button>
-								</div>
-							</div>
-
-						</Container> */}
-
-
-					<Container fluid className='painel my-5 px-5 border table-responsive'>
-						<h1 className='mt-3 mb-4'>Agenda Financeira</h1>
+					<Container fluid className='painel my-5 px-5 table-responsive'>
+						<h1 className='mt-4 mb-4'>Agenda Financeira</h1>
 
 						<table className="tabela mb-2 text-center text-nowrap">
-							<thead className="bg-secondary titulo fs-5">
+							<thead className="bg-secondary fs-5 border border-secondary border-3">
 								<tr>
 									<th className='px-3 py-3'>Descrição</th>
 									<th className='px-3 py-3'>Vencimento</th>
@@ -1460,10 +1405,10 @@ const Home = () => {
 								const { mensagem, corFundo } = calcularDiasRestantes(conta.vencimento);
 
 								return (
-									<tbody key={conta.id} className='pagar'>
-										<tr>
-											<td className="descricao-conta p-3">
-												<FaPiggyBank className='moeda' />{' '}
+									<tbody key={conta.id} className='pagar fs-5'>
+										<tr className='border border-secondary border-3'>
+											<td className="vertical-align-center p-3">
+												{' '}
 												{conta.descricao}
 											</td>
 											<td className='p-3'>
@@ -1474,13 +1419,13 @@ const Home = () => {
 												<span className={`${corFundo}`}>{mensagem}</span>
 											</td>
 											<td className='p-3'>
-												<CiBag1 className='icone-conta' />
+												<CiBag1 className='icone-conta' />{' '}
 												{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
 											</td>
 
 											<td className='p-3'>
-												<Button variant='outline-info' className='text-warning' title='Editar' onClick={() => handleEditarConta(conta.id)}><MdEdit /></Button>
-												<Button variant='outline-info' className='text-danger' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
+												<Button variant='outline-info' title='Editar' onClick={() => handleEditarConta(conta.id)}><MdEdit /></Button>{' '}
+												<Button variant='outline-info' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
 													<FaTrashAlt />
 												</Button>
 											</td>
@@ -1860,7 +1805,7 @@ const Home = () => {
 							>
 								<Modal.Header closeButton>
 									<Modal.Title id="contained-modal-title-vcenter">
-										Meus gastos com {fonteAtual}
+										Ganhos: {fonteAtual}
 									</Modal.Title>
 								</Modal.Header>
 								<Modal.Body>
@@ -1956,15 +1901,6 @@ const Home = () => {
 								</div>
 							</div>
 						</div>
-					</Container>
-
-					<Container className='grafico-relatorio text-secondary'>
-						<h1 className='text-secondary'>Ganhos e Gastos</h1>
-						<Bar
-							options={options1}
-							data={graficoRelatorio}
-							className='grafico-barra'
-						/>
 					</Container>
 
 					{/* Fim de Relatório*/}
