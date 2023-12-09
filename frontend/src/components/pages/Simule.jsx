@@ -63,8 +63,8 @@ function SimulePage() {
   function GeneroSelection({ genero, handleGeneroChange }) {
     return (
       <div className='my-2'>
-        <p className='text-center fs-5'>Selecione o seu Gênero</p>
-        <div className="d-flex gap-3 justify-content-center flex-nowrap">
+        <p className='text-center fs-5 m-1 fw-medium'>Selecione o seu Gênero</p>
+        <div className="d-flex gap-2 justify-content-center flex-nowrap">
           <div>
             <label className='p-1'>Masculino</label>
             <input
@@ -100,7 +100,7 @@ function SimulePage() {
   function DataNascimentoInput() {
     return (
       <Form.Group className='d-flex justify-content-center flex-wrap'>
-        <Form.Label className='fs-5'>Insira a sua Data de Nascimento</Form.Label>
+        <Form.Label className='fs-5 fw-normal'>Insira a sua Data de Nascimento</Form.Label>
         <Form.Control type='date' name='dataNascimento' />
       </Form.Group>
     );
@@ -112,8 +112,8 @@ function SimulePage() {
   };
 
   return (
-    <>
-      <Header id="topo" />
+    <div id="topo">
+      <Header />
 
       <main>
         <h1 className='display-1 bg-secondary text-light text-center py-3 px-2 m-0'>Simulação Previdenciária</h1>
@@ -129,13 +129,15 @@ function SimulePage() {
           <Link to="/prev" className='btn btn-outline-primary'>Saiba mais</Link>
         </section>
 
-        <Container className='my-2'>
-          <header className='text-center my-3 border-bottom'>
+        <Container fluid className='p-3'>
+          <header className='my-2 text-center border-bottom'>
             <h2 className='display-2'>Simule Aqui!</h2>
           </header>
-          <Row>
-            <Col sm={12} md={6} style={{height: "fit-content"}} className='align-items-center bg-info border border rounded-2 my-2'>
+
+          <Row className='my-2'>
+            <Col sm={12} md={6} style={{height: "fit-content"}} className='align-items-center bg-info border rounded-2'>
               <h3 className='h3 p-1 text-center text-underline-light'>Informações sobre o formulário</h3>
+              
               <article>
                 <p>
                   Neste formulário, disponibilizamos um recurso que ajudará o beneficiário da previdência a fazer uma simulação de cálculo do seu benefício, devendo para tanto, preencher os dados necessários (salários de contribuição, data de nascimento e sexo) e clicar em (Enviar dados e Simular).
@@ -143,7 +145,7 @@ function SimulePage() {
               </article>
             </Col>
 
-            <Col sm={12} md={6} className='my-2'>
+            <Col sm={12} md={6} className='px-1'>
               <form className='bg-primary border rounded-2' onSubmit={handleFormSubmit}>
                 <div className='d-flex flex-column rounded-2 p-4 bg-light'>
                   <div className="d-flex flex-column justify-content-center align-items-center">
@@ -208,7 +210,7 @@ function SimulePage() {
         </Container>
       </main>
       <Footer anchor="topo" />
-    </>
+    </div>
   );
 }
 

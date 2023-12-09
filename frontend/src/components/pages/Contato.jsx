@@ -99,19 +99,19 @@ function Contato() {
     }
 
     const gradientBkg = {
-        backgroundImage: 'linear-gradient(180deg, var(--cw-primary) 30%, var(--cw-secondary) 20%)'
+        backgroundImage: 'linear-gradient(180deg, var(--cw-primary) 26%, var(--cw-secondary) 20%)'
     }
 
     return (
         <>
             <Header />
 
-            <Container>
+            <Container className='mt-3'>
                 <Row style={{ minHeight: "80vh" }}>
                     <Col sm="6" md="12" lg="8" id='form-img'></Col>
 
                     <Col sm="6" md="12" lg="4" className='d-flex p-0 align-items-center justify-content-center'>
-                        <Form className='w-100 p-3 mb-3 rounded-3' noValidate onSubmit={handleSubmit} style={gradientBkg}>
+                        <Form className='w-100 p-3 mb-3 mx-2 rounded-3' noValidate onSubmit={handleSubmit} style={gradientBkg}>
                             <fieldset>
                                 <legend>Envie seu Feedback!</legend>
                                 <span className='d-block'>{showMessage}</span>

@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
+import CoinText from '../../utils/CoinText';
 
 // Ícones //
 import { BsCheck2Circle as Check } from 'react-icons/bs';
@@ -60,14 +61,14 @@ const Investimentos = () => {
 											<ul className='list-unstyled'>
 												<li>Segurança: Garantido pelo Fundo Garantidor de Créditos (FGC) até um determinado valor.</li>
 
-												<li>Variedade de Prazos: CDBs podem ter diferentes prazos, permitindo escolher uma opção que se alinhe com seus objetivos financeiros.</li>
+												<li>Variedade de Prazos: CDBs podem ter <CoinText textId="inv-1">diferentes prazos</CoinText>, permitindo escolher uma opção que se alinhe com seus objetivos financeiros.</li>
 
-												<li>Rentabilidade: Oferece taxas de juros mais atrativas do que a poupança, dependendo do prazo e do banco emissor.</li>
+												<li>Rentabilidade: Oferece <CoinText textId="inv-2">taxas de juros mais atrativas</CoinText> do que a poupança, dependendo do prazo e do banco emissor.</li>
 											</ul>
 
 											<p className='fs-5'><Nocheck size={30} className='text-danger' /> Desvantagens:</p>
 											<ul className='list-unstyled'>
-												<li>Imposto de Renda: Sujeito à tributação de Imposto de Renda, com alíquotas decrescentes conforme o tempo de investimento.
+												<li>Imposto de Renda: <CoinText textId="inv-3">Sujeito à tributação</CoinText> de Imposto de Renda, com alíquotas decrescentes conforme o tempo de investimento.
 												</li>
 											</ul>
 										</Card.Text>
@@ -89,17 +90,17 @@ const Investimentos = () => {
 											<Card.Img style={{ minHeight: "15rem", maxHeight: "14rem" }} className='w-100 mb-3 ' src="img/inv6.png" alt="Imagem do artigo investimentos" />
 											<p className='fs-5'><Check size={30} className='text-primary' /> Vantagens:</p>
 											<ul className='list-unstyled'>
-												<li>Segurança: Investimento em títulos públicos, considerados de baixo risco.</li>
+												<li>Segurança: Investimento em títulos públicos, considerados de <CoinText textId="inv-4">baixo risco</CoinText>.</li>
 
 												<li>Acessibilidade: Investidores individuais podem comprar títulos do Tesouro Direto com baixo valor inicial.</li>
 
-												<li>Diversidade: Diferentes tipos de títulos, como Tesouro Selic, Tesouro IPCA+ e Tesouro Prefixado, oferecendo opções para diferentes perfis de investidores.</li>
+												<li>Diversidade: Diferentes <CoinText textId="inv-5">tipos de títulos</CoinText>, como Tesouro Selic, Tesouro IPCA+ e Tesouro Prefixado, oferecendo opções para diferentes perfis de investidores.</li>
 											</ul>
 
 											<p className='fs-5'><Nocheck size={30} className='text-danger' /> Desvantagens:</p>
 											<ul className='list-unstyled'>
-												<li>Flutuação de Preços: Os preços dos títulos podem variar no mercado secundário, impactando o valor dos investimentos antes do vencimento.</li>
-												<li>Tributação: Incide Imposto de Renda sobre os rendimentos, seguindo uma tabela regressiva.</li>
+												<li>Flutuação de Preços: Os preços dos títulos podem variar no mercado secundário, impactando o <CoinText textId="inv-6">valor dos investimentos</CoinText> antes do vencimento.</li>
+												<li>Tributação: Incide <CoinText textId="inv-7">Imposto de Renda</CoinText> sobre os rendimentos, seguindo uma tabela regressiva.</li>
 											</ul>
 										</Card.Text>
 									</Card.Body>
@@ -125,13 +126,13 @@ const Investimentos = () => {
 											<ul className='list-unstyled'> 
 												<li>Isenção de Imposto de Renda: Rendimentos são isentos de Imposto de Renda para pessoas físicas.</li>
 												<li>Segurança: Garantidos pelo Fundo Garantidor de Créditos (FGC) em caso de falência da instituição financeira emissora.</li>
-												<li>Específicos: LCI está atrelada a financiamentos imobiliários; LCA está relacionada ao agronegócio.</li>
+												<li>Específicos: LCI está atrelada a <CoinText textId="inv-8">financiamentos imobiliários</CoinText>; LCA está relacionada ao agronegócio.</li>
 											</ul>
 
 											<p className='fs-5'><Nocheck size={30} className='text-danger' /> Desvantagens:</p>
 											<ul className='list-unstyled'>
 												<li>Liquidez: Alguns títulos têm prazos mínimos de carência, limitando a disponibilidade do dinheiro antes do vencimento.</li>
-												<li>Rendimento Menor: Em geral, oferecem taxas de juros um pouco menores em comparação com CDBs de bancos médios e grandes.</li>
+												<li>Rendimento Menor: Em geral, oferecem taxas de juros um pouco menores em <CoinText textId="inv-9">comparação com CDBs</CoinText> de bancos médios e grandes.</li>
 											</ul>
 											</Card.Text>
 									</Card.Body>

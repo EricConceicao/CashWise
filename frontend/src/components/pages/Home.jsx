@@ -282,7 +282,7 @@ const Home = () => {
 
 	const getGastosPorCategoria = async () => {
 		if (!token) return 
-		console.log('token',token)
+
 		const response = await fetch('http://localhost:3000/gastos/categorias', {
 			headers: {
 				"Authorization": `Bearer: ${token}`

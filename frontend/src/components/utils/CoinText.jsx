@@ -68,7 +68,7 @@ function CoinText({ textId, children }) {
 
 	return (
 		<>
-			<span className={click ? "bg-primary rounded-1 px-2" : ""} onClick={() => handleClick(textId)}>{children}</span>
+			<span className={click ? "bg-primary rounded-1" : ""} onClick={() => handleClick(textId)}>{children}</span>
 
 			<Toast style={toastStyle} className="border-2 border-secondary" show={show} onClose={toggleShow}>
 				<Toast.Header className="fw-medium bg-success justify-content-between">Palavra Chave Encontrada!</Toast.Header>
