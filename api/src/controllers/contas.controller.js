@@ -4,7 +4,12 @@ const prisma = new PrismaClient();
 
 export async function vercontas(req, res) {
   try {
-    const contas = await prisma.conta.findMany();
+    const userId = req.accessToken.id;
+    const contas = await prisma.conta.findMany({
+      where: {
+        userId
+      }
+    });
     res.json(contas);
   } catch (error) {
     console.error('Erro ao adicionar nova despesa:', error);
@@ -15,6 +20,7 @@ export async function vercontas(req, res) {
 
 export async function criarconta(req, res) {
   try {
+    const userId = req.accessToken.id;
     const { descricao, valor, diaVencimento, recorrencia, periodo } = req.body;
     // Cria a conta
 
@@ -24,6 +30,7 @@ export async function criarconta(req, res) {
         valor,
         diaVencimento,
         recorrencia,
+        userId,
         // Aqui você inclui o relacionamento com o período
         periodo: {
           create: {
@@ -56,7 +63,11 @@ export async function criarconta(req, res) {
 
 export async function contasValidas(req, res) {
   try {
+    const userId = req.accessToken.id;
     const contas = await prisma.conta.findMany({
+      where: {
+        userId: userId,
+      },
       include: {
         periodo: true,
       },
@@ -83,15 +94,25 @@ export async function contasValidas(req, res) {
 
 
 export async function deletarconta(req, res) {
+  const userId = req.accessToken.id;
   const contaId = parseInt(req.params.id);
 
   try {
     const conta = await prisma.conta.findUnique({
       where: { id: contaId },
+      include: {
+        // Inclua o relacionamento com o usuário para verificar se a conta pertence ao usuário autenticado
+        User: true,
+      },
     });
 
     if (!conta) {
       return res.status(404).json({ error: 'Conta não encontrada' });
+    }
+
+    // Verifique se a conta pertence ao usuário autenticado
+    if (conta.User.id !== userId) {
+      return res.status(403).json({ error: 'Não autorizado a excluir esta conta' });
     }
 
     if (conta.recorrencia === 'MENSAL') {
@@ -121,16 +142,25 @@ export async function deletarconta(req, res) {
 
 export async function editarconta(req, res) {
 
+  const userId = req.accessToken.id;
   const contaId = parseInt(req.params.id);
 
-  try {    
+  try {
 
     const conta = await prisma.conta.findUnique({
       where: { id: contaId },
+      include: {
+        User: true,
+      },
     });
 
     if (!conta) {
       return res.status(404).json({ error: 'Conta não encontrada' });
+    }
+
+    // Verifique se a conta pertence ao usuário autenticado
+    if (conta.User.id !== userId) {
+      return res.status(403).json({ error: 'Não autorizado a editar esta conta' });
     }
 
     const { descricao, valor, diaVencimento, recorrencia, periodo } = req.body;

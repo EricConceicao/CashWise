@@ -23,11 +23,7 @@ export async function adicionargasto(req, res) {
   try {
     const userId = req.accessToken.id;
     const novoGasto = req.body;
-<<<<<<< HEAD
     
-=======
-    console.log("Novo gasto: ",novoGasto)
->>>>>>> bd48a80e3f95efb47fd6188988d93e07f308f06b
     const despesaCriada = await prisma.gasto.create({
       data: {
         ...novoGasto, 
