@@ -4,7 +4,12 @@ import moment from 'moment';
 
 export async function verganhos (req, res) {
   try {
-    const ganhos = await prisma.ganho.findMany();
+    const userId = req.accessToken.id;
+    const ganhos = await prisma.ganho.findMany({
+      where: {
+        userId
+      }
+    });
     res.json(ganhos);
   } catch (error) {
     console.error('Erro ao adicionar novo ganho:', error);
@@ -15,10 +20,13 @@ export async function verganhos (req, res) {
 
 export async function adicionarganho (req, res) {
     try {
-      const novoGanho = req.body;
-      console.log("Novo ganho: ", novoGanho) 
+      const userId = req.accessToken.id;
+      const novoGanho = req.body; 
       const despesaCriada = await prisma.ganho.create({
-        data: novoGanho,
+        data: {
+          ...novoGanho, 
+          userId,
+        },
       });
       
       res.status(200).json({
@@ -35,11 +43,13 @@ export async function adicionarganho (req, res) {
 
   export async function ganhosPorFonte(req, res) {
     try {
+      const userId = req.accessToken.id;
       const dataAtual = moment().format('YYYY-MM');
 
       // Consulta as fontes distintas presentes na coluna 'fonte'
       const fontes = await prisma.ganho.findMany({
         where: {
+          userId: userId,
           data: {
             startsWith: dataAtual,
           }
@@ -54,6 +64,7 @@ export async function adicionarganho (req, res) {
       const somatorioPorFonte = await prisma.ganho.groupBy({
         by: ['fonte'],
         where: {
+          userId: userId,
           data: {
             startsWith: dataAtual,
           }
@@ -65,6 +76,7 @@ export async function adicionarganho (req, res) {
 
       const todosGanhosPorFonte = await prisma.ganho.findMany({
         where: {
+          userId: userId,
           data: {
             startsWith: dataAtual,
           }
