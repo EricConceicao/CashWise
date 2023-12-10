@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 import moment from 'moment';
 
 
-export async function vergastos(req, res) {
+export async function verGastos(req, res) {
   try {
     const userId = req.accessToken.id;
     const gastos = await prisma.gasto.findMany({
@@ -19,7 +19,7 @@ export async function vergastos(req, res) {
 };
 
 
-export async function adicionargasto(req, res) {
+export async function adicionarGasto(req, res) {
   try {
     const userId = req.accessToken.id;
     const novoGasto = req.body;
@@ -85,6 +85,7 @@ export async function gastosPorCategoria(req, res) {
         }
       },
       select: {
+        id: true,
         categoria: true,
         descricao: true,
         data: true,
@@ -109,5 +110,48 @@ export async function gastosPorCategoria(req, res) {
   } catch (error) {
     console.error('Erro ao obter categorias e somatório de gastos:', error);
     res.status(500).json({ error: 'Erro interno do servidor ao obter categorias e somatório de gastos' });
+  }
+}
+
+export async function deletarGasto(req, res) {
+  try {
+    const userId = req.accessToken.id;
+    const gastoId = parseInt(req.params.id); // Assumindo que o ID do gasto está nos parâmetros da URL
+    await prisma.gasto.delete({
+      where: {
+        id: gastoId,
+        userId: userId,
+      },
+    });
+    res.status(200).json({
+      success: true,
+      message: "Gasto deletado com sucesso!",
+    });
+  } catch (error) {
+    console.error('Erro ao deletar gasto:', error);
+    res.status(500).json({ error: 'Erro interno do servidor ao deletar gasto' });
+  }
+}
+
+export async function editarGasto(req, res) {
+  try {
+    const userId = req.accessToken.id;
+    const gastoId = parseInt(req.params.id); // Assumindo que o ID do gasto está nos parâmetros da URL
+    const novoDadosGasto = req.body;
+    const gastoAtualizado = await prisma.gasto.update({
+      where: {
+        id: gastoId,
+        userId: userId,
+      },
+      data: novoDadosGasto,
+    });
+    res.status(200).json({
+      gasto: gastoAtualizado,
+      success: true,
+      message: "Gasto atualizado com sucesso!",
+    });
+  } catch (error) {
+    console.error('Erro ao editar gasto:', error);
+    res.status(500).json({ error: 'Erro interno do servidor ao editar gasto' });
   }
 }

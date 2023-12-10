@@ -60,17 +60,10 @@ h3,
 h4,
 h5 {
     display: flex;
-    justify-content: center;
     align-items: center;
     gap: 5px;
     font-weight: lighter;
 }
-
-/* h5 {
-    font-weight: lighter;
-    letter-spacing: 0.5px;
-    font-style: oblique;
-} */
 
 .conteudo {
     color: #fff;
@@ -98,6 +91,14 @@ h5 {
     gap: 1rem;
 }
 
+.perfil span {
+    border-radius: 5px;
+    padding: 0 5px;
+    width: auto;
+    display: flex;
+    justify-content: end;
+}
+
 .moeda {
     color: orange;
     /* #ffc107 */
@@ -123,10 +124,6 @@ h5 {
     display: flex;
     gap: 10px;
     justify-self: end;
-}
-
-.cartoes {
-    display: flex;
 }
 
 .cartao-perfil {
@@ -195,6 +192,18 @@ h5 {
     margin-top: 5px;
 }
 
+.controle h4 {
+    justify-content: center;
+}
+
+.controle span {
+    border-radius: 5px;
+    padding: 0 10px;
+    width: auto;
+    display: flex;
+    justify-content: center;
+}
+
 .agenda {
     display: flex;
     flex-direction: column;
@@ -206,7 +215,7 @@ h5 {
 }
 
 table {
-    border-collapse: collapse;    
+    border-collapse: collapse;
 }
 
 .agenda table {
@@ -215,8 +224,8 @@ table {
 
 .agenda tr {
     border-radius: 10px;
-    border: 1px solid #fff;
-    
+    border: 1px solid #ccc;
+
 }
 
 .agenda th {
@@ -261,13 +270,15 @@ table {
     border-top: 10px solid red;
 }
 
-.menu,
-.categorias,
-.contas,
-.relatorio {
+.categorias {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    padding: 20px 0;
+    border-radius: 5px;
 }
 
 .categorias-titulo,
@@ -276,39 +287,31 @@ table {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 100px;
     gap: 20px;
 }
 
-.categorias .botoes {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
+.cartoes-categoria {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(200px, 1fr));
+    grid-gap: 16px;
 }
 
 .cartao-categoria {
-    width: 300px;
+    width: 100%;
+    height: 100px;
     border-radius: 10px;
     display: flex;
-    justify-content: space-between;
     padding: 20px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #fff;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    border-bottom: 4px solid #fff;
-}
-
-.categorias .cartoes-categoria,
-.contas .cartoes-conta {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
 }
 
 .valor-categoria {
-    width: 100px;
+    width: 200px;
     border-radius: 5px;
-    padding-left: 3px;
+    padding-left: 5px;
+    font-weight: lighter;
+    font-size: large;
 }
 
 .relatorio {
@@ -320,19 +323,9 @@ table {
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.painel h1,
 .relatorio h1 {
     color: #fff;
     text-align: center;
-}
-
-.perfil span,
-.controle span {
-    border-radius: 5px;
-    padding: 0 10px;
-    width: auto;
-    display: flex;
-    justify-content: center;
 }
 
 .pontuacao {
@@ -352,20 +345,6 @@ table {
     font-size: 35px;
 }
 
-.agenda-conta {
-    font-size: 17px;
-    font-weight: lighter;
-    border: 1px solid #fff;
-    border-radius: 5px;
-    align-items: center;
-    letter-spacing: 0.5px;
-}
-
-.seta {
-    width: 35px;
-    height: 35px;
-}
-
 .botao {
     display: flex;
     align-items: center;
@@ -378,13 +357,8 @@ table {
 }
 
 .grafico {
-    display: flex;
-    justify-content: space-evenly;
-    border-radius: 5px;
-    height: 650px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    padding-top: 50px;
-    border-bottom: 4px solid #fff;
+   width: 600px;
+   height: 600px;
 }
 
 .visivel {
@@ -423,7 +397,6 @@ table {
     border-radius: 10px;
     padding: 1px 5px;
     width: 150px;
-    /* font-style: oblique; */
 }
 
 .red {
@@ -431,11 +404,6 @@ table {
     border-radius: 10px;
     padding: 1px 5px;
     width: 150px;
-    /* font-style: oblique; */
-    /* display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px; */
 }
 
 .green {
@@ -471,25 +439,5 @@ table {
     color: #dc3545;
     border-radius: 5px;
 }
-
-.grafico-relatorio {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-radius: 5px;
-    height: 650px;
-    background: #fff;
-    padding: 40px 0 100px 0;
-    border-bottom: 4px solid #fff;
-    gap: 30px;
-}
-
-
-.grafico-barra {
-    color: #fff;
-}
-
-
-
 
 /* Fim para estilo da Home */

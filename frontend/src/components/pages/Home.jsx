@@ -125,6 +125,7 @@ const Home = () => {
 	const [contas, setContas] = useState([]);
 	const [contasAgenda, setContasAgenda] = useState([]);
 	const [recorrenciaConta, setRecorrenciaConta] = useState("Mensal");
+	const [contaEditada, setContaEditada] = useState({});
 	const [gastosCategoriaAtual, setGastosCategoriaAtual] = useState([]);
 	const [categoriaAtual, setCategoriaAtual] = useState("");
 
@@ -142,6 +143,54 @@ const Home = () => {
 	// Controle mensal	
 
 	const MesAno = moment().format('MM/YYYY');
+
+	const getControleMensal = async () => {
+
+		if (!token) return
+
+		const dataControle = {
+			data: moment().format('YYYY-MM'),
+		};
+
+
+		const response = await fetch(`http://localhost:3000/relatorio?data=${dataControle.data}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${token}`
+			}
+		})
+
+		if (response.ok) {
+			const data = await response.json()
+			setSomatorioGanhosMensal(data.somatorioGanhos);
+			setSomatorioGastosMensal(data.somatorioGastos);
+		}
+		else {
+			console.error('Erro ao obter relatório:', response.statusText);
+		}
+	}
+
+	useEffect(() => {
+
+		getControleMensal()
+
+	}, [token])
+
+	const somaGanhosMensal = somatorioGanhosMensal.toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+	});
+
+	const somaGastosMensal = somatorioGastosMensal.toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+	});
+
+	const saldoTotalMensal = (somatorioGanhosMensal - somatorioGastosMensal).toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+	});
 
 	// Novo ganho
 
@@ -344,55 +393,135 @@ const Home = () => {
 		getGastosPorCategoria();
 	}, [token]);
 
+	const [showModalEditarGasto, setShowModalEditarGasto] = useState(false);
+	const [gastoIdParaEditar, setGastoIdParaEditar] = useState(null);
 
-	// useEffect(() => {
-
-	// 	const getgastos = async () => {
-	// 		const response = await fetch('http://localhost:3000/gastos/listar')
-	// 		const data = await response.json();
-	// 		setgastos(data);
-	// 	}
-
-	// 	getgastos()
-
-	// }, [])
+	const handleEditarGasto = (gastoId) => {
+		setGastoIdParaEditar(gastoId);
+		setShowModalEditarGasto(true);
+	}
 
 
-	// const handleSubmitNovoGasto = async (event) => {
-	// 	event.preventDefault()
-	// 	const novoGasto = {
-	// 		descricao: event.target.descricao.value,
-	// 		categoria: event.target.categoria.value,
-	// 		data: event.target.data.value,
-	// 		valor: event.target.valor.value
-	// 	}
-	// 	console.log(novoGasto);
+	const handleSubmitEditarGasto = async (event) => {
+		event.preventDefault();
 
-	// 	const response = await fetch('http://localhost:3000/gastos', {
-	// 		method: 'POST',
-	// 		headers: {
-	// 			'Content-Type': 'application/json'
-	// 		},
-	// 		body: JSON.stringify(novoGasto)
-	// 	})
+		if (!token) return
 
-	// 	if (response.ok) {
-	// 		const data = await response.json()
-	// 		showConfirmationMessage("Novo gasto adicionado com sucesso!");
+		if (!gastoIdParaEditar) {
+			console.error('ID do gasto não definido.');
+			return;
+		}
 
-	// 		const dataGasto = new Date(data.gasto.data);
-	// 		const dataAtual = new Date();
+		console.log("id do gasto", gastoIdParaEditar)
 
-	// 		dataGasto.setMonth(dataGasto.getMonth() + 1);
-	// 		dataAtual.setMonth(dataAtual.getMonth() + 1);
+		try {
 
-	// 		if (dataGasto.getMonth() === dataAtual.getMonth() &&
-	// 			dataGasto.getFullYear() === dataAtual.getFullYear()) {
+			const descricao = event.target.descricao.value;
+			const categoria = event.target.categoria.value;
+			const data = event.target.data.value;
+			const valor = event.target.valor.value;
 
-	// 			setSomatorioGastosMensal(somatorioGastosMensal + parseInt(data.gasto.valor));
-	// 		}
-	// 	}
-	// }
+			// Constroi o objeto contaEditada apenas com os campos preenchidos
+			const gastoEditado = {};
+
+			if (descricao) {
+				gastoEditado.descricao = descricao;
+			}
+
+			if (categoria) {
+				gastoEditado.categoria = categoria;
+			}
+
+			if (data) {
+				gastoEditado.data = data;
+			}
+
+			if (valor) {
+				gastoEditado.valor = valor;
+			}
+
+
+			console.log("requisição gasto editado", gastoEditado)
+
+			const response = await fetch(`http://localhost:3000/gastos/editar/${gastoIdParaEditar}`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+					"Authorization": `Bearer: ${token}`
+				},
+				body: JSON.stringify(gastoEditado),
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				console.log("resposta gasto editado", data)
+				// Atualize o estado ou realize alguma ação após a exclusão bem-sucedida
+				showConfirmationMessage("Gasto editado com sucesso!");
+				setTimeout(() => {
+					setShowModalEditarGasto(false);
+				}, 2000);
+				setgastos((prevGastos) =>
+					prevGastos.map((g) => (g.id === gastoIdParaEditar ? data.gasto : g))
+				);
+
+				setGastosCategoriaAtual((prevGastos) =>
+					prevGastos.map((g) => (g.id === gastoIdParaEditar ? data.gasto : g))
+				);
+
+				getControleMensal();
+				getGastosPorCategoria();
+
+			} else {
+				console.error('Erro ao editar gasto:', response.statusText);
+			}
+		} catch (error) {
+			console.error('Erro ao editar gasto:', error);
+		}
+	};
+
+	const [showModalExcluirGasto, setShowModalExcluirGasto] = useState(false);
+	const [gastoIdParaExcluir, setGastoIdParaExcluir] = useState(null);
+
+	const handleExcluirGasto = (gastoId) => {
+		setGastoIdParaExcluir(gastoId);
+		setShowModalExcluirGasto(true);
+	};
+
+	const handleSubmitExcluirGasto = async (event) => {
+		event.preventDefault();
+
+		if (!token) return
+
+		if (!gastoIdParaExcluir) {
+			console.error('ID do gasto não definido.');
+			return;
+		}
+
+		try {
+			const response = await fetch(`http://localhost:3000/gastos/deletar/${gastoIdParaExcluir}`, {
+				method: 'DELETE',
+				headers: {
+					"Authorization": `Bearer: ${token}`
+				}
+			});
+
+			if (response.ok) {
+				showConfirmationMessage("Gasto excluído com sucesso!");
+				setTimeout(() => {
+					setShowModalExcluirGasto(false);
+				}, 2000);
+
+				setgastos((prevGastos) => prevGastos.filter((gasto) => gasto.id !== gastoIdParaExcluir));
+
+				getControleMensal();
+				getGastosPorCategoria();
+			} else {
+				console.error('Erro ao excluir conta:', response.statusText);
+			}
+		} catch (error) {
+			console.error('Erro ao excluir conta:', error);
+		}
+	};
 
 
 
@@ -455,7 +584,7 @@ const Home = () => {
 	const valorCategorias = []
 	const categoriasLegenda = []
 
-	categorias?.map((categoria, index) => {
+	categorias.map((categoria, index) => {
 
 		categoriasLegenda.push(categoria.categoria)
 		labelsColors.push(colors[index])
@@ -663,7 +792,7 @@ const Home = () => {
 		}
 	};
 
-	useEffect(() => {		
+	useEffect(() => {
 
 		getContasAgenda();
 
@@ -743,6 +872,8 @@ const Home = () => {
 	const [contaIdParaEditar, setContaIdParaEditar] = useState(null);
 
 	const handleEditarConta = (contaId) => {
+		const contaAtual = contas.find((conta) => conta.id === contaId);
+		setContaEditada(contaAtual);
 		setContaIdParaEditar(contaId);
 		setShowModalEditarConta(true);
 	}
@@ -878,25 +1009,6 @@ const Home = () => {
 		}
 	};
 
-
-
-
-
-
-	// const [categoriasVisivel, setCategoriasVisivel] = useState(false);
-
-	// const abrirdivCategorias = () => {
-
-	// 	setCategoriasVisivel(!categoriasVisivel);
-	// }
-
-	// const [fontesVisivel, setFontesVisivel] = useState(false);
-
-	// const abrirdivFontes = () => {
-
-	// 	setFontesVisivel(!fontesVisivel);
-	// }
-
 	const [relatorioVisivel, setRelatorioVisivel] = useState(false);
 	const [erroData, setErroData] = useState('');
 	const [dataInput, setDataInput] = useState(null);
@@ -985,57 +1097,6 @@ const Home = () => {
 	});
 
 
-
-
-	useEffect(() => {
-
-		const getControleMensal = async () => {
-
-			if (!token) return
-
-			const dataControle = {
-				data: moment().format('YYYY-MM'),
-			};
-
-
-			const response = await fetch(`http://localhost:3000/relatorio?data=${dataControle.data}`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': `Bearer ${token}`
-				}
-			})
-
-			if (response.ok) {
-				const data = await response.json()
-				setSomatorioGanhosMensal(data.somatorioGanhos);
-				setSomatorioGastosMensal(data.somatorioGastos);
-			}
-			else {
-				console.error('Erro ao obter relatório:', response.statusText);
-			}
-		}
-
-		getControleMensal()
-
-	}, [])
-
-	const somaGanhosMensal = somatorioGanhosMensal.toLocaleString('pt-BR', {
-		style: 'currency',
-		currency: 'BRL',
-	});
-
-	const somaGastosMensal = somatorioGastosMensal.toLocaleString('pt-BR', {
-		style: 'currency',
-		currency: 'BRL',
-	});
-
-	const saldoTotalMensal = (somatorioGanhosMensal - somatorioGastosMensal).toLocaleString('pt-BR', {
-		style: 'currency',
-		currency: 'BRL',
-	});
-
-
 	return (
 		<div id='topo'>
 			<Header />
@@ -1075,17 +1136,8 @@ const Home = () => {
 
 								</div>
 
-								{/* <div className="cartao-perfil">
-									<div className="item">
-										<h4 className=''>Experiência<BsStars className='moeda' /></h4>
-										<span className='bg-secondary'>Empresário</span>
-									</div>
-
-								</div> */}
-
 							</Row>
 
-							{/* <WithLabelExample /> */}
 						</div>
 
 					</Container>
@@ -1108,7 +1160,7 @@ const Home = () => {
 
 								<div className="cartao-controle col">
 									<div className="item">
-										<h4>Valor Recebido</h4>
+										<h4>Ganhos</h4>
 										<span className='bg-secondary text-success'>{somaGanhosMensal}</span>
 									</div>
 
@@ -1155,7 +1207,7 @@ const Home = () => {
 															/>
 														</Form.Group>
 														<Form.Group className='mb-4'>
-															<Form.Label>Valor a ser adicionado</Form.Label>
+															<Form.Label>Valor</Form.Label>
 															<div className="input-group">
 																<span className="input-group-text">R$</span>
 																<Form.Control
@@ -1231,7 +1283,7 @@ const Home = () => {
 
 								<div className="cartao-controle col">
 									<div className="item">
-										<h4>Valor Gasto</h4>
+										<h4>Gastos</h4>
 										<span className='bg-secondary text-success'>{somaGastosMensal}</span>
 									</div>
 									<div className="botoes">
@@ -1277,7 +1329,7 @@ const Home = () => {
 															/>
 														</Form.Group>
 														<Form.Group className='mb-4'>
-															<Form.Label>Valor a ser adicionado</Form.Label>
+															<Form.Label>Valor</Form.Label>
 															<div className="input-group">
 																<span className="input-group-text">R$</span>
 																<Form.Control
@@ -1363,7 +1415,7 @@ const Home = () => {
 
 								<div className="cartao-controle col">
 									<div className='item'>
-										<h4>Saldo Atual</h4>
+										<h4>Saldo</h4>
 										<span className='bg-secondary text-success'>{saldoTotalMensal}</span>
 									</div>
 								</div>
@@ -1381,60 +1433,59 @@ const Home = () => {
 								<p className='text-primary'><i>Acompanhe e </i></p>
 							</div>
 							<hr />
-							<br />
-							
-							<div className="table-responsive">
+
 							{contasAgenda.length > 0 ? (
-								<table className="tabela mb-2 text-center text-nowrap">
-									<thead>
-										<tr>
-											<th className='px-3 py-3'><p className='tabela-titulo'>Descrição</p></th>
-											<th className='px-3 py-3'><p className='tabela-titulo'>Vencimento</p></th>
-											<th className='px-3 py-3'><p className='tabela-titulo'>Status</p></th>
-											<th className='px-3 py-3'><p className='tabela-titulo'>Valor</p></th>
-											<th className='px-3 py-3'><p className='tabela-titulo'>Ação</p></th>
-										</tr>
-									</thead>
-									{contasAgenda.map((conta) => {
-										const { mensagem, corFundo } = calcularDiasRestantes(conta.vencimento);
+								<div className="table-responsive">
+									<table className="tabela mb-2 text-center text-nowrap">
+										<thead>
+											<tr>
+												<th className='px-3 py-3'><p className='tabela-titulo'>Descrição</p></th>
+												<th className='px-3 py-3'><p className='tabela-titulo'>Vencimento</p></th>
+												<th className='px-3 py-3'><p className='tabela-titulo'>Status</p></th>
+												<th className='px-3 py-3'><p className='tabela-titulo'>Valor</p></th>
+												<th className='px-3 py-3'><p className='tabela-titulo'>Ação</p></th>
+											</tr>
+										</thead>
+										{contasAgenda.map((conta) => {
+											const { mensagem, corFundo } = calcularDiasRestantes(conta.vencimento);
 
-										return (
-											<tbody key={conta.id}>
-												<tr className='agenda-conta'>
-													<td className="py-3" >
-														{' '}
-														{conta.descricao}
-													</td>
-													<td className='py-3'>
-														<CiCalendar className='icone-conta' />{' '}
-														{conta.vencimento}
-													</td>
-													<td className='py-3'>
-														<span className={`${corFundo}`}>{mensagem}</span>
-													</td>
-													<td className='py-3'>
-														<CiBag1 className='icone-conta' />{' '}
-														{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-													</td>
+											return (
+												<tbody key={conta.id}>
+													<tr className='agenda-conta'>
+														<td className="py-3" >
+															{' '}
+															{conta.descricao}
+														</td>
+														<td className='py-3'>
+															<CiCalendar className='icone-conta' />{' '}
+															{conta.vencimento}
+														</td>
+														<td className='py-3'>
+															<span className={`${corFundo}`}>{mensagem}</span>
+														</td>
+														<td className='py-3'>
+															<CiBag1 className='icone-conta' />{' '}
+															{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+														</td>
 
-													<td className='py-3'>
-														<Button variant='outline-info' title='Editar' onClick={() => handleEditarConta(conta.id)}><MdEdit /></Button>{' '}
-														<Button variant='outline-info' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
-															<FaTrashAlt />
-														</Button>
-													</td>
-												</tr>
+														<td className='py-3'>
+															<Button variant='outline-info' title='Editar' onClick={() => handleEditarConta(conta.id)}><MdEdit /></Button>{' '}
+															<Button variant='outline-info' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
+																<FaTrashAlt />
+															</Button>
+														</td>
+													</tr>
 
 
-											</tbody>
-										);
-									})}
-								</table>
-								): null}
-							</div>
-							 
+												</tbody>
+											);
+										})}
+									</table>
+								</div>
+							) : null}
+
 						</div>
-						
+
 
 						<div className="my-3">
 							<Button className='botao' variant="outline-success" onClick={() => setShowModalContas(true)}><IoAdd className='botao-icone' />Despesa</Button>
@@ -1458,6 +1509,8 @@ const Home = () => {
 										<Form.Control
 											type="text"
 											name='descricao'
+											value={contaEditada.descricao || ''}
+											onChange={(e) => setContaEditada({ ...contaEditada, descricao: e.target.value })}
 										/>
 									</Form.Group>
 
@@ -1470,6 +1523,8 @@ const Home = () => {
 												step="0.01"  // Permita valores fracionados com duas casas decimais
 												name='valor'
 												min="0"
+												value={contaEditada.valor || ''}
+												onChange={(e) => setContaEditada({ ...contaEditada, valor: e.target.value })}
 											/>
 										</div>
 									</Form.Group>
@@ -1479,6 +1534,8 @@ const Home = () => {
 										<Form.Control
 											type="number"
 											name='vencimento'
+											value={contaEditada.diaVencimento || ''}
+											onChange={(e) => setContaEditada({ ...contaEditada, diaVencimento: e.target.value })}
 										/>
 									</Form.Group>
 
@@ -1486,6 +1543,8 @@ const Home = () => {
 										<Form.Label>Recorrência</Form.Label>
 										<Form.Select
 											name='recorrencia'
+											value={contaEditada.recorrencia || ''}
+											onChange={(e) => setContaEditada({ ...contaEditada, recorrencia: e.target.value })}
 										>
 											<option value="MENSAL">Mensal</option>
 											<option value="POR_PERIODO">Por Período</option>
@@ -1499,6 +1558,8 @@ const Home = () => {
 												<Form.Control
 													type="month"
 													name='inicioPeriodo'
+													value={contaEditada.periodo?.inicio || ''}
+													onChange={(e) => setContaEditada({ ...contaEditada, periodo: { ...contaEditada.periodo, inicio: e.target.value } })}
 												/>
 											</Form.Group>
 
@@ -1507,6 +1568,8 @@ const Home = () => {
 												<Form.Control
 													type="month"
 													name='fimPeriodo'
+													value={contaEditada.periodo?.fim || ''}
+													onChange={(e) => setContaEditada({ ...contaEditada, periodo: { ...contaEditada.periodo, fim: e.target.value } })}
 												/>
 											</Form.Group>
 										</>
@@ -1639,56 +1702,50 @@ const Home = () => {
 							)}
 						</Modal>
 
-
 					</Container>
 
-					{/*style={{ backgroundColor: index % 2 === 0 ? '#fff' : '#D3D3D3' }}*/}
-					{/* className={`${categoriasVisivel ? 'visivel' : 'oculto'}`} */}
 
-					<div>
-						{categorias.length > 0 && <Container fluid className="categorias p-3 mb-5">
-							<div className="categorias-titulo">
-								<h1>Gastos por Categoria</h1>
-							</div>
+					<Container fluid className='categorias mt-5 pt-5 pb-5'>
 
-							<div className='cartoes-categoria'>
-								{categorias.map((categoria, index) => (
-									<div className="cartao-categoria" key={index}>
-										<div className="categoria">
-											<h4 className="fs-5">{categoria.categoria}</h4>
-											<p className='valor-categoria bg-secondary'>
-												{parseFloat(categoria.totalGasto).toLocaleString('pt-BR', {
-													style: 'currency',
-													currency: 'BRL',
-												})}
-											</p>
-
-										</div>
-
-										<hr />
-
-										<div>
-											<Button
-												as="button"
-												size=""
-												variant="outline-primary"
-												className="botao"
-												onClick={() => {
-													setCategoriaAtual(categoria.categoria);
-													setGastosCategoriaAtual(categoria.gastos);
-													setShowModalDetalhesCategoria(true);
-												}}
-											>
-												Listar
-											</Button>
-
-										</div>
+						<div className="categorias-titulo">
+							<h1>Gastos por Categoria</h1>
+							<p className='text-primary'><i>Acompanhe aqui seus gastos mensais por categoria. Clicando em "Listar", você obtém a relação dos gastos, podendo edita-los ou exclui-los. Além disso, </i></p>
+						</div>
+						{categorias.length > 0 && <div className='cartoes-categoria'>
+							{categorias.map((categoria, index) => (
+								<div className="cartao-categoria" key={index}>
+									<div className="categoria">
+										<h4 className="fs-5">{categoria.categoria}</h4>
+										<p className='valor-categoria bg-secondary'>
+											{parseFloat(categoria.totalGasto).toLocaleString('pt-BR', {
+												style: 'currency',
+												currency: 'BRL',
+											})}
+										</p>
 
 									</div>
-								))}
 
-							</div>
+									<hr />
 
+									<div>
+										<Button
+											as="button"
+											size="sm"
+											variant="outline-primary"
+											className="botao"
+											onClick={() => {
+												setCategoriaAtual(categoria.categoria);
+												setGastosCategoriaAtual(categoria.gastos);
+												setShowModalDetalhesCategoria(true);
+											}}
+										>
+											Listar
+										</Button>
+
+									</div>
+
+								</div>
+							))}
 
 							<Modal
 								show={showModalDetalhesCategoria}
@@ -1697,16 +1754,15 @@ const Home = () => {
 								aria-labelledby="contained-modal-title-vcenter"
 								centered
 							>
-								<Modal.Header closeButton>
-									<Modal.Title id="contained-modal-title-vcenter">
-										Meus gastos com {categoriaAtual}
-									</Modal.Title>
+								<Modal.Header className='bg-primary' closeButton>
+									<span className="display-6 text-secondary">Gastos: {categoriaAtual}</span>
 								</Modal.Header>
 								<Modal.Body>
 									<div className="row">
 										<div className="col fw-bold">Descrição</div>
 										<div className="col fw-bold">Data</div>
 										<div className="col fw-bold">Valor</div>
+										<div className="col fw-bold">Ação</div>
 									</div>
 									<br />
 									{gastosCategoriaAtual.map((gasto, index) => (
@@ -1719,122 +1775,215 @@ const Home = () => {
 													currency: 'BRL',
 												})}
 											</div>
-										</div>
-									))}
-								</Modal.Body>
-								<Modal.Footer>
-									<Button as="button" variant="secondary" onClick={() => setShowModalDetalhesCategoria(false)}>
-										Fechar
-									</Button>
-								</Modal.Footer>
-							</Modal>
-
-
-						</Container>}
-
-
-						{categoriasLegenda.length > 0 ? (
-							<Container className='grafico text-info'>
-								<h1>Perfil de gastos</h1>
-								<Pie className='grafico-torta'
-									data={dataMyChart}
-									options={options}
-								/>
-							</Container>
-						) : null
-						}
-					</div>
-
-					{/* className={`${fontesVisivel ? 'visivel' : 'oculto'}`} */}
-					<div>
-
-						<Container className="categorias p-5 mb-5">
-							<div className="categorias-titulo">
-								<h1>Ganhos por Fonte de Receita</h1>
-							</div>
-
-							<div className='cartoes-categoria'>
-								{fontes.map((fonte, index) => (
-									<div className="cartao-categoria" key={index}>
-										<div className="categoria">
-											<h4 className="fs-5">{fonte.fonte}</h4>
-											<p className='valor-categoria bg-secondary'>
-												{parseFloat(fonte.totalGanho).toLocaleString('pt-BR', {
-													style: 'currency',
-													currency: 'BRL',
-												})}
-											</p>
-										</div>
-
-										<hr />
-
-										<div>
-											<Button
-												as="button"
-												size=""
-												variant="outline-primary"
-												className="botao"
-												onClick={() => {
-													setFonteAtual(fonte.fonte);
-													setGanhosFonteAtual(fonte.ganhos);
-													setShowModalDetalhesFontes(true);
-												}}
-											>
-												Listar
-											</Button>
-										</div>
-
-									</div>
-								))}
-
-							</div>
-
-
-							<Modal
-								show={showModalDetalhesFontes}
-								onHide={() => setShowModalDetalhesFontes(false)}
-								size="lg"
-								aria-labelledby="contained-modal-title-vcenter"
-								centered
-							>
-								<Modal.Header closeButton>
-									<Modal.Title id="contained-modal-title-vcenter">
-										Ganhos: {fonteAtual}
-									</Modal.Title>
-								</Modal.Header>
-								<Modal.Body>
-									<div className="row">
-										<div className="col fw-bold">Descrição</div>
-										<div className="col fw-bold">Data</div>
-										<div className="col fw-bold">Valor</div>
-									</div>
-									<br />
-									{ganhosFonteAtual.map((ganho, index) => (
-										<div className="row" key={index}>
-											<div className="col">{ganho.descricao}</div>
-											<div className="col">{moment(ganho.data).format('DD/MM/YYYY')}</div>
 											<div className="col">
-												{parseFloat(ganho.valor).toLocaleString('pt-BR', {
-													style: 'currency',
-													currency: 'BRL',
-												})}
+												<Button as='button' onClick={() => handleEditarGasto(gasto.id)}><MdEdit /></Button>{' '}
+												<Button as='button' onClick={() => handleExcluirGasto(gasto.id)}><FaTrashAlt /></Button>
+
+												<Modal
+													show={showModalEditarGasto}
+													onHide={() => {
+														setShowModalEditarGasto(false);
+														setGastoIdParaEditar(null); // Limpar o ID de edição ao fechar o modal
+													}}
+													size="md"
+													aria-labelledby="contained-modal-title-vcenter"
+													centered
+												>
+													<Modal.Header className='bg-primary' closeButton>
+														<span className="display-6 text-secondary">Editar Gasto</span>
+													</Modal.Header>
+													<Modal.Body>
+														<Form onSubmit={handleSubmitEditarGasto}>
+															<Form.Group className="mb-4">
+																<Form.Label>Categoria</Form.Label>
+																<Form.Select
+																	name='categoria'
+																>
+																	<option value="">Selecione</option>
+																	{categoriasCadastradas.map((categoria, index) => (
+																		<option key={index} value={categoria}>
+																			{categoria}
+																		</option>
+																	))}
+																</Form.Select>
+															</Form.Group>
+															<Form.Group className="mb-4">
+																<Form.Label>Descrição</Form.Label>
+																<Form.Control
+																	type="text"
+																	name='descricao' />
+															</Form.Group>
+															<Form.Group className="mb-4">
+																<Form.Label>Data</Form.Label>
+																<Form.Control
+																	type="date"
+																	name='data'
+																/>
+															</Form.Group>
+															<Form.Group className='mb-4'>
+																<Form.Label>Valor</Form.Label>
+																<div className="input-group">
+																	<span className="input-group-text">R$</span>
+																	<Form.Control
+																		type="number"
+																		step="0.01"  // Permita valores fracionados com duas casas decimais
+																		name='valor'
+																		min="0"
+																	/>
+																</div>
+															</Form.Group>
+															<Modal.Footer>
+																<Button as='button' variant="primary" className='modal-button' type='submit'>
+																	Salvar
+																</Button>
+															</Modal.Footer>
+														</Form>
+													</Modal.Body>
+
+													{showConfirmation && (
+														<div className="alert alert-custom" role="alert">
+															{confirmationMessage}
+														</div>
+													)}
+												</Modal>
+
+												<Modal
+													show={showModalExcluirGasto}
+													onHide={() => setShowModalExcluirGasto(false)}
+													size="md"
+													aria-labelledby="contained-modal-title-vcenter"
+													centered
+												>
+													<Modal.Header className='bg-danger' closeButton>
+														<span className="display-6 text-info">Excluir despesa</span>
+													</Modal.Header>
+													<Modal.Body>
+														<Form onSubmit={handleSubmitExcluirGasto}>
+															<h5 className='py-4'>Tem certeza que quer excluir essa despesa?</h5>
+															<Modal.Footer>
+																<Button as='button' type='submit' variant="danger">
+																	Excluir
+																</Button>
+															</Modal.Footer>
+														</Form>
+													</Modal.Body>
+													{showConfirmation && (
+														<div className="alert alert-success alert-custom" role="alert">
+															{confirmationMessage}
+														</div>
+													)}
+												</Modal>
+
+
 											</div>
 										</div>
 									))}
 								</Modal.Body>
 								<Modal.Footer>
-									<Button as="button" variant="secondary" onClick={() => setShowModalDetalhesFontes(false)}>
+									<Button as="button" variant="primary" onClick={() => setShowModalDetalhesCategoria(false)}>
 										Fechar
 									</Button>
 								</Modal.Footer>
 							</Modal>
 
+						</div>}
 
-						</Container>
 
 						{categoriasLegenda.length > 0 ? (
-							<Container className='grafico text-info'>
-								<h1>Perfil de ganhos</h1>
+							<div className='grafico text-info'>
+								<Pie
+									data={dataMyChart}
+									options={options}
+								/>
+							</div>
+						) : null}
+					</Container>
+
+
+
+					<Container fluid className='categorias mt-5 pt-5 pb-5'>
+						<div className="categorias-titulo">
+							<h1>Ganhos por Fonte de Receita</h1>
+						</div>
+
+						<div className='cartoes-categoria'>
+							{fontes.map((fonte, index) => (
+								<div className="cartao-categoria" key={index}>
+									<div className="categoria">
+										<h4 className="fs-5">{fonte.fonte}</h4>
+										<p className='valor-categoria bg-secondary'>
+											{parseFloat(fonte.totalGanho).toLocaleString('pt-BR', {
+												style: 'currency',
+												currency: 'BRL',
+											})}
+										</p>
+									</div>
+
+									<hr />
+
+									<div>
+										<Button
+											as="button"
+											size="sm"
+											variant="outline-primary"
+											className="botao"
+											onClick={() => {
+												setFonteAtual(fonte.fonte);
+												setGanhosFonteAtual(fonte.ganhos);
+												setShowModalDetalhesFontes(true);
+											}}
+										>
+											Listar
+										</Button>
+									</div>
+
+								</div>
+							))}
+
+						</div>
+
+
+						<Modal
+							show={showModalDetalhesFontes}
+							onHide={() => setShowModalDetalhesFontes(false)}
+							size="lg"
+							aria-labelledby="contained-modal-title-vcenter"
+							centered
+						>
+							<Modal.Header closeButton>
+								<Modal.Title id="contained-modal-title-vcenter">
+									Ganhos: {fonteAtual}
+								</Modal.Title>
+							</Modal.Header>
+							<Modal.Body>
+								<div className="row">
+									<div className="col fw-bold">Descrição</div>
+									<div className="col fw-bold">Data</div>
+									<div className="col fw-bold">Valor</div>
+								</div>
+								<br />
+								{ganhosFonteAtual.map((ganho, index) => (
+									<div className="row" key={index}>
+										<div className="col">{ganho.descricao}</div>
+										<div className="col">{moment(ganho.data).format('DD/MM/YYYY')}</div>
+										<div className="col">
+											{parseFloat(ganho.valor).toLocaleString('pt-BR', {
+												style: 'currency',
+												currency: 'BRL',
+											})}
+										</div>
+									</div>
+								))}
+							</Modal.Body>
+							<Modal.Footer>
+								<Button as="button" variant="secondary" onClick={() => setShowModalDetalhesFontes(false)}>
+									Fechar
+								</Button>
+							</Modal.Footer>
+						</Modal>
+
+						{categoriasLegenda.length > 0 ? (
+							<Container className='grafico'>
 								<Pie className='grafico-torta'
 									data={graficoFontes}
 									options={options}
@@ -1842,8 +1991,8 @@ const Home = () => {
 							</Container>
 						) : null
 						}
+					</Container>
 
-					</div>
 					{/* Fim de Fontes de Receita */}
 
 					{/* Início de Relatório*/}
