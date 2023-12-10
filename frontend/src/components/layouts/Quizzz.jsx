@@ -7,6 +7,8 @@ import EmojiPicker from 'emoji-picker-react';
 
 //componente - ícone
 function Quiz() {
+	const token = useUserStore(state => state.userToken);
+
 	const [show, setShow] = useState(false);
 	const [showRes, setShowRes] = useState(false);
 	const [quizRes, setQuizRes] = useState('');
@@ -71,12 +73,8 @@ function Quiz() {
 	};
 
 	function handleQuizSubmit(e) {
-		e.preventDefault();
-
-		console.log("questions: ",questions);
 		const data = new Date();
 		const dataFormatada = `${data.getFullYear()}-${data.getMonth() + 1}-${data.getDate()}`;
-		console.log(dataFormatada);
 
 		questions.map(async question => {
 			const valor = Number(question.answer).toFixed(2)
@@ -92,23 +90,26 @@ function Quiz() {
 				const res = await fetch('http://localhost:3000/gastos', {
 					method: 'POST',
 					headers: {
-						'Content-Type': 'application/json'
+						'Content-Type': 'application/json',
+						'Authorization': `Bearer: ${token}`
 					},
 					body: JSON.stringify(questionData),
 				});
 
 			} else {
+
 				const questionData = {
 					descricao: question.text,
 					fonte: question.tipo,
 					data: dataFormatada,
 					valor
 				}
-
+					console.log("Ganhos:" ,questionData)
 				const res = await fetch('http://localhost:3000/ganhos', {
 					method: 'POST',
 					headers: {
-						'Content-Type': 'application/json'
+						'Content-Type': 'application/json',
+						'Authorization': `Bearer: ${token}`
 					},
 					body: JSON.stringify(questionData),
 				});
@@ -134,7 +135,7 @@ function Quiz() {
 
 
 				<Modal.Body>
-					<Form className="p-3 bg-info">
+					<Form onSubmit={(e) => e.preventDefault()} className="p-3 bg-info">
 						<Form.Group key={questions[currentQuestionIndex].id} controlId={`question${questions[currentQuestionIndex].id}`}>
 							<Form.Label>{`${questions[currentQuestionIndex].text}`}</Form.Label>
 							<Form.Control
@@ -150,11 +151,7 @@ function Quiz() {
 								autoFocus
 							/>
 						</Form.Group>
-						<button onClick={handleNextQuestion} type='button' style={buttonStyle} onKeyPress={(e) => {
-							if (e.key === 'Enter') {
-								handleNextQuestion();
-							}
-						}}>
+						<button onClick={handleNextQuestion} type='button' style={buttonStyle}>
 							{currentQuestionIndex === questions.length - 1 ? 'ENVIAR' : 'PRÓXIMA'}
 						</button>
 					</Form>
