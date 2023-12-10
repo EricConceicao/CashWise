@@ -36,7 +36,7 @@ function Loader() {
 	}, []);
 
 	return (
-		<div className={ checked || session ? 'd-none' : 'd-block bg-secondary w-100 h-100 position-fixed z-2'}>
+		<div style={{zIndex: "9"}} className={ checked || session ? 'd-none' : 'd-block bg-secondary w-100 h-100 position-fixed'}>
 			<span className="spinner-border position-relative text-light" style={{top: '50%', left:'50%'}}></span>
 		</div>
 	);
