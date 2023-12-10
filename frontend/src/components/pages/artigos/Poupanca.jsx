@@ -22,8 +22,6 @@ const Poupanca = () => {
 	const bodyColor = {
         backgroundImage: 'url("img/moldura.png")',
     }
-
-
 	
 	return (
 		<div id="topo">
@@ -45,15 +43,15 @@ const Poupanca = () => {
 										<Card.Img className='w-60' src="img/cofrinho.png" alt="Imagem de uma mulher sorrindo ao colocar moedas em um porquinho porta moedas gigante." />
 
 										<Card.Text style={{ textAlign: "justify" }}>
-											<p><Check size={35} className='text-primary' /> Segurança: <CoinText textId="poup-1">A poupança é garantida pelo Fundo Garantidor de Créditos (FGC)</CoinText> até um determinado valor, proporcionando segurança aos seus fundos.</p>
+											<p><Check size={35} className='text-primary' /> Segurança: A poupança é garantida pelo Fundo Garantidor de Créditos (FGC) até um determinado valor, proporcionando segurança aos seus fundos.</p>
 
 											<p><Check size={35} className='text-primary' /> Acesso Fácil: É fácil abrir uma conta poupança, e a maioria dos bancos oferece serviços online, proporcionando acesso conveniente aos seus fundos.</p>
 
-											<p><Check size={35} className='text-primary' /> Liquidez: <CoinText textId="poup-2">Você pode acessar seu dinheiro a qualquer momento</CoinText>, tornando a poupança uma escolha ideal para emergências e necessidades imediatas.</p>
+											<p><Check size={35} className='text-primary' /> Liquidez: Você pode acessar seu dinheiro a qualquer momento, tornando a poupança uma escolha ideal para emergências e necessidades imediatas.</p>
 
-											<p><Check size={35} className='text-primary' /> Rentabilidade Básica: A poupança <CoinText textId="poup-3">oferece uma taxa de juros básica</CoinText>, permitindo que seu dinheiro cresça, mesmo que em um ritmo moderado.</p>
+											<p><Check size={35} className='text-primary' /> Rentabilidade Básica: <CoinText textId="poup-1">A poupança oferece uma taxa de juros básica</CoinText>, permitindo que seu dinheiro cresça, mesmo que em um ritmo moderado.</p>
 
-											<p><Check size={35} className='text-primary' /> Isenção de Impostos: <CoinText textId="poup-4">Em muitos países, os rendimentos da poupança são isentos de impostos</CoinText>, o que significa que você mantém todo o dinheiro que ganha.</p>
+											<p><Check size={35} className='text-primary' /> Isenção de Impostos: Em muitos países, os rendimentos da poupança são isentos de impostos, o que significa que você mantém todo o dinheiro que ganha.</p>
 										</Card.Text>
 									</Card.Body>
 								</Card>
@@ -68,13 +66,13 @@ const Poupanca = () => {
 										<Card.Img className='w-60' src="img/desvPoup.png" alt="Imagem de uma mulher decepcionada em cima de um porquinho porta moedas quebrado, com várias contas à pagar no fundo." />
 
 										<Card.Text style={{ textAlign: "justify" }}>
-											<p><Nocheck size={35} className='text-danger' /> Baixa Rentabilidade: Comparada a outras opções de investimento, <CoinText textId="poup-5">poupança oferece uma taxa de juros relativamente baixa</CoinText>, muitas vezes não acompanhando a inflação.</p>
+											<p><Nocheck size={35} className='text-danger' /> Baixa Rentabilidade: Comparada a outras opções de investimento, poupança oferece uma taxa de juros relativamente baixa, muitas vezes não acompanhando a inflação.</p>
 
-											<p><Nocheck size={35} className='text-danger' /> Perda para Inflação: Se a taxa de inflação for maior do que a taxa de juros da poupança, o poder de compra do seu dinheiro diminuirá ao longo do tempo.</p>
+											<p><Nocheck size={35} className='text-danger' /> Perda para Inflação: Se a taxa de inflação for maior do que a taxa de juros da poupança, o poder de compra do seu <CoinText textId="poup-2">dinheiro diminuirá</CoinText> ao longo do tempo.</p>
 
-											<p><Nocheck size={35} className='text-danger' /> Limites de Saque: Alguns bancos impõem limites aos saques da poupança, o que pode ser um problema em situações de emergência ou quando você precisa acessar grandes quantias.</p>
+											<p><Nocheck size={35} className='text-danger' /> Limites de Saque: Alguns bancos impõem <CoinText textId="poup-3">limites aos saques</CoinText> da poupança, o que pode ser um problema em situações de emergência ou quando você precisa acessar grandes quantias.</p>
 
-											<p><Nocheck size={35} className='text-danger' /> Opções Limitadas: A poupança não oferece muitas opções de crescimento para seu dinheiro; é uma escolha conservadora, mas limitada em termos de potencial de ganhos.</p>
+											<p><Nocheck size={35} className='text-danger' /> Opções Limitadas: A poupança não oferece muitas opções de crescimento para seu dinheiro; é uma <CoinText textId="poup-4">escolha conservadora</CoinText>, mas limitada em termos de potencial de ganhos.</p>
 
 											<p><Nocheck size={35} className='text-danger' /> Risco de Desvalorização: Em tempos de instabilidade econômica, a moeda pode desvalorizar, afetando indiretamente o valor real do seu dinheiro na poupança.</p>
 										</Card.Text>

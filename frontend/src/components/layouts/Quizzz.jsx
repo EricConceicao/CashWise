@@ -157,9 +157,6 @@ function Quiz() {
 						}}>
 							{currentQuestionIndex === questions.length - 1 ? 'ENVIAR' : 'PRÓXIMA'}
 						</button>
-						{/* <button onClick={() => setShow(false)} type="button" style={buttonStyle}>
-							DESISTIR
-						</button> */}
 					</Form>
 				</Modal.Body>
 

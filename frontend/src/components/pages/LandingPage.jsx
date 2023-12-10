@@ -61,14 +61,14 @@ const LandingPage = () => {
 
 	return (
 		<>
-			<header className="position-sticky z-1 top-0 p-0 bg-primary">
+			<header className="position-sticky z-3 top-0 p-0 bg-primary">
 				<Container fluid className="d-flex justify-content-between align-items-center">
 					<Navbar.Brand className='fs-5 p-1 fw-light'>
 						<img className="my-1 bg-light rounded-pill"
 							src="/img/logo-cashwise.png"
 							alt="Logo marca do CashWise"
 							title="CashWise. Educação Financeira"
-							width="40%"
+							width="36%"
 						/>{' '}
 						CashWise
 					</Navbar.Brand>

@@ -10,7 +10,6 @@ const useUserStore = create((set) => ({
 	wiseCoins: 0,
 	userToken: null,
 	session: false,
-
 	login: (user, token) => set({
 		name: user.name,
 		sname: user.sname,

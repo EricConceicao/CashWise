@@ -72,7 +72,7 @@ export async function coinAdd(req, res) {
         if (!user) throw `user retornou inesperadamente: ${user}`
 
         // Chama a função para depositar as novas moedas para o usuário.
-        const newBalance = await giveCoins(userId, user.wiseCoins, 10);
+        const newBalance = await giveCoins(userId, user.wiseCoins, 50);
          console.log("newBalance: ", newBalance);
         // Marca no banco, que o usuário já achou essa palavra para que então, ele não possa
         // clicar nela de novo e ganhar wisecoins.

@@ -10,7 +10,7 @@ import useUserStore from '../store/UserStore';
 import './Header.css';
 
 function Header() {
-    const name = useUserStore(state => state.name);
+    const session = useUserStore(state => state.session);
     const logout = useUserStore(state => state.logout);
     const navigate = useNavigate();
 
@@ -38,29 +38,48 @@ function Header() {
     }
 
     return (
-        <Navbar expand="md" className="position-sticky z-1 top-0 p-0 bg-primary">
-            <Container fluid>
-                <figure className='d-flex align-items-center py-1 m-0'>
-                    <img className="rounded-pill p-1" 
-                    src="/img/logo-cashwise.png" 
-                    alt="Logo marca do CashWise"
-                    title="CashWise. Educação Financeira"
-                    width="100rem" />
-                    <figcaption className='fs-5 fw-light'>CashWise</figcaption>
-                </figure>               
-
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse className="justify-content-end my-1 px-3" id="basic-navbar-nav">
-                    <Nav className="fw-bold gap-2 m-2" id="header-nav">
-                        <NavLink className="nav-link" to="/home">Home</NavLink>
-                        <NavLink className="nav-link" to="/boletim">Boletim Informativo</NavLink>
-                        <NavLink className="nav-link" to="/simule">SimulePrev</NavLink>
-                    </Nav>    
-                    <Button size="sm" variant="outline-secondary mt-1" onClick={handleLogout}>Logout</Button>               
-                </Navbar.Collapse>
-
-            </Container>
-        </Navbar>
+        <>
+        {session ? (
+            <Navbar expand="md" className="position-sticky z-3 top-0 p-0 bg-primary">
+                <Container fluid>
+                    <NavLink className='nav-link' to="/home">
+                        <figure className='d-flex align-items-center py-1 m-0' title="CashWise. Educação Financeira">
+                            <img className="rounded-pill p-1" 
+                            src="/img/logo-cashwise.png" 
+                            alt="Logo marca do CashWise"
+                            width="36%" />
+                            <figcaption className='fs-5 fw-light'>CashWise</figcaption>
+                        </figure> 
+                    </NavLink>              
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse className="justify-content-end my-1 px-3" id="basic-navbar-nav">
+                        <Nav className="fw-bold gap-2 m-2" id="header-nav">
+                            <NavLink className="nav-link" to="/home">Home</NavLink>
+                            <NavLink className="nav-link" to="/boletim">Boletim Informativo</NavLink>
+                            <NavLink className="nav-link" to="/simule">SimulePrev</NavLink>
+                        </Nav>    
+                        <Button size="sm" variant="outline-secondary mt-1" onClick={handleLogout}>Logout</Button>               
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
+        ) : (
+            <header className="position-sticky z-3 top-0 p-0 bg-primary">
+                <Container fluid className="d-flex justify-content-between align-items-center">
+                    <Navbar.Brand className='fs-5 p-1 fw-light'>
+                        <NavLink to="/">
+                            <img className="my-1 bg-light rounded-pill"
+                                src="/img/logo-cashwise.png"
+                                alt="Logo marca do CashWise"
+                                title="CashWise. Educação Financeira"
+                                width="36%"
+                            />
+                        </NavLink>
+                        CashWise
+                    </Navbar.Brand>
+                </Container>
+            </header>
+        )}
+        </>
     );
 }
 
