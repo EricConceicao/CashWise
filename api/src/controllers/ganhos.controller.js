@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 import moment from 'moment';
 
-export async function verganhos (req, res) {
+export async function verGanhos (req, res) {
   try {
     const userId = req.accessToken.id;
     const ganhos = await prisma.ganho.findMany({
@@ -18,7 +18,7 @@ export async function verganhos (req, res) {
 };
 
 
-export async function adicionarganho (req, res) {
+export async function adicionarGanho (req, res) {
     try {
       const userId = req.accessToken.id;
       const novoGanho = req.body; 
@@ -106,6 +106,26 @@ export async function adicionarganho (req, res) {
     } catch (error) {
       console.error('Erro ao obter fontes e somatório de ganhos:', error);
       res.status(500).json({ error: 'Erro interno do servidor ao obter fontes e somatório de ganhos' });
+    }
+  }
+
+
+  export async function deletarGanho(req, res) {
+    try {
+
+    }
+    catch {
+
+    }
+  }
+
+
+  export async function editarGanho(req, res) {
+    try {
+
+    }
+    catch {
+      
     }
   }
 

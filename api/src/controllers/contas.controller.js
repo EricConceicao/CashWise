@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 
-export async function vercontas(req, res) {
+export async function verContas(req, res) {
   try {
     const userId = req.accessToken.id;
     const contas = await prisma.conta.findMany({
@@ -18,7 +18,7 @@ export async function vercontas(req, res) {
 };
 
 
-export async function criarconta(req, res) {
+export async function criarConta(req, res) {
   try {
     const userId = req.accessToken.id;
     const { descricao, valor, diaVencimento, recorrencia, periodo } = req.body;
@@ -61,7 +61,7 @@ export async function criarconta(req, res) {
 }
 
 
-export async function contasValidas(req, res) {
+export async function contasProgramadas(req, res) {
   try {
     const userId = req.accessToken.id;
     const contas = await prisma.conta.findMany({
@@ -93,7 +93,7 @@ export async function contasValidas(req, res) {
 }
 
 
-export async function deletarconta(req, res) {
+export async function deletarConta(req, res) {
   const userId = req.accessToken.id;
   const contaId = parseInt(req.params.id);
 
@@ -140,7 +140,7 @@ export async function deletarconta(req, res) {
 };
 
 
-export async function editarconta(req, res) {
+export async function editarConta(req, res) {
 
   const userId = req.accessToken.id;
   const contaId = parseInt(req.params.id);
