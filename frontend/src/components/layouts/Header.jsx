@@ -41,7 +41,7 @@ function Header() {
         <>
         {session ? (
             <Navbar expand="md" className="position-sticky z-3 top-0 p-0 bg-primary">
-                <Container fluid>
+                <Container fluid className='p-1'>
                     <NavLink className='nav-link' to="/home">
                         <figure className='d-flex align-items-center py-1 m-0' title="CashWise. Educação Financeira">
                             <img className="rounded-pill p-1" 

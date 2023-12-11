@@ -147,13 +147,9 @@ h5 {
 }
 
 .controle {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
+    
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    padding: 20px 0;
+    padding: 1rem 0;
     border-radius: 5px;
 }
 
@@ -311,22 +307,17 @@ table {
 
 .cartoes-categoria {
     display: grid;
-    grid-template-columns: repeat(4, minmax(200px, 1fr));
-    grid-gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    grid-gap: 1rem;
 }
 
 .cartao-categoria {
     width: 100%;
-    height: 100px;
     border-radius: 10px;
     display: flex;
-    padding: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #fff;
 }
 
 .valor-categoria {
-    width: 200px;
     border-radius: 5px;
     padding-left: 5px;
     font-weight: lighter;
@@ -471,29 +462,12 @@ table {
 
 /* Responsividade para dispositivos menores */
 @media (max-width: 576px) {
-    .cartoes-categoria {
-        grid-template-columns: repeat(1, 1fr);
-    }
-
     .grafico {
         width: 100%;
         height: 300px;
     }
 }
 
-/* Responsividade para dispositivos médios */
-@media (min-width: 576px) and (max-width: 768px) {
-    .cartoes-categoria {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Responsividade para dispositivos grandes e extra grandes */
-@media (min-width: 768px) {
-    .cartoes-categoria {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
 
 @media (max-width: 600px) {
     .agenda-conta {

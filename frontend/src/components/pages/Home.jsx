@@ -1201,31 +1201,14 @@ const Home = () => {
 						<div className="perfil-usuario">
 							<IconShop className="mb-5" />
 
-							<h1 className='text-primary mt-4'><i>{name} {sname}</i></h1>
+							<h1 className='text-primary mt-2'><i>{name} {sname}</i></h1>
 
-							<Row className='justify-content-center mt-3'>
-								<div className="cartao-perfil">
-									<div className="item">
-										<h4 className=''>Idade<HiOutlineCake className='moeda' /></h4>
-										<span className='bg-secondary'>30 anos</span>
-									</div>
-
-								</div>
-
-								<div className="cartao-perfil">
-									<div className="item">
-										<h4 className=''>Perfil<MdOutlineEmojiPeople className='moeda' /></h4>
-										<span className='bg-secondary'>{level}</span>
-									</div>
-
-								</div>
-
+							<Row className='justify-content-center'>
 								<div className="cartao-perfil">
 									<div className="item">
 										<h4 className=''>WiseCoins<BsCoin className='moeda' /></h4>
 										<span className='bg-secondary'>{wiseCoins}</span>
 									</div>
-
 								</div>
 
 							</Row>
@@ -1700,6 +1683,7 @@ const Home = () => {
 											type="number"
 											name='vencimento'
 											value={contaEditada.diaVencimento || ''}
+											min="0"
 											onChange={(e) => setContaEditada({ ...contaEditada, diaVencimento: e.target.value })}
 										/>
 									</Form.Group>
@@ -1819,6 +1803,7 @@ const Home = () => {
 										<Form.Control
 											type="number"
 											name='vencimento'
+											min='0'
 										/>
 									</Form.Group>
 
@@ -2078,28 +2063,26 @@ const Home = () => {
 							<p className='text-primary subtitulo text-center'><i>Acompanhe seus gastos mensais por categoria com um gráfico visual. Clique em "Listar" para ver e gerenciar seus gastos.</i></p>
 							<hr />
 						</div>
-						{categorias.length > 0 && <div className='cartoes-categoria'>
+						{categorias.length > 0 && <div className='w-100 px-5 cartoes-categoria'>
 							{categorias.map((categoria, index) => (
-								<div className="cartao-categoria" key={index}>
-									<div className="categoria">
-										<h4 className="fs-5">{categoria.categoria}</h4>
+								<Row className="cartao-categoria justify-content-center" key={index}>
+									<h4 className="text-capitalize h5 m-0 p-0">{categoria.categoria}</h4>
+									
+									<Col sm={8} className="categoria p-1">
 										<p className='valor-categoria bg-secondary'>
 											{parseFloat(categoria.totalGasto).toLocaleString('pt-BR', {
 												style: 'currency',
 												currency: 'BRL',
 											})}
 										</p>
-
-									</div>
-
-									<hr />
-
-									<div>
+									</Col>
+									
+									<Col sm={4} className="p-1 border-bottom">
 										<Button
 											as="button"
 											size="sm"
 											variant="outline-primary"
-											className="botao"
+											className="botao mb-1"
 											onClick={() => {
 												setCategoriaAtual(categoria.categoria);
 												setGastosCategoriaAtual(categoria.gastos);
@@ -2108,10 +2091,8 @@ const Home = () => {
 										>
 											Listar
 										</Button>
-
-									</div>
-
-								</div>
+									</Col>
+								</Row>
 							))}
 
 							<Modal
