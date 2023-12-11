@@ -127,8 +127,8 @@ function Quiz() {
 
 	return (
 		<>
-			<GiNotebook title="Como anda seu gastos? Faço um teste. 🤔" size={120} onClick={() => setShow(!show)} />
-
+			<GiNotebook className='text-primary border border-warning rounded-pill p-2' style={{cursor: 'pointer'}} title="Como anda seu gastos? Faço um teste. 🤔" size={80} onClick={() => setShow(!show)} />
+			<p className='text-primary'>Clique no ícone para fazer o Quiz!</p>
 			<Modal show={show} onHide={() => setShow(false)} centered>
 				<Modal.Header className="bg-primary " style={{ border: "none" }} closeButton>{`${(questions[currentQuestionIndex].id < 10 ? '0' : '') + questions[currentQuestionIndex].id} de ${questions.length}`}</Modal.Header>
 				<Modal.Title className="text-center h1 ">Quizz</Modal.Title>

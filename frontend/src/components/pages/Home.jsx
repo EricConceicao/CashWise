@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form'
 import Footer from '../layouts/Footer';
 import { Container, ModalFooter, ProgressBar } from 'react-bootstrap';
 import { useEffect, useState } from "react"
+import Quiz from '../layouts/Quizzz';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -1198,7 +1199,8 @@ const Home = () => {
 
 					<Container fluid className='perfil w-100 mt-2'>
 
-						<div className="perfil-usuario">
+						<div className="perfil-usuario position-relative">
+
 							<IconShop className="mb-5" />
 
 							<h1 className='text-primary mt-2'><i>{name} {sname}</i></h1>
@@ -1210,9 +1212,7 @@ const Home = () => {
 										<span className='bg-secondary'>{wiseCoins}</span>
 									</div>
 								</div>
-
 							</Row>
-
 						</div>
 
 					</Container>
@@ -1225,6 +1225,12 @@ const Home = () => {
 								<p className='text-primary text-center'><i>Acompanhe e registre aqui seus ganhos e gastos mensais. Além disso, você pode adicionar novas fontes de receita e categorias de gastos.</i></p>
 							</div>
 							<hr />
+							{ !gastos.length > 0 && (
+								<div className='text-center'>
+									<p>Responda algumas perguntas com nosso mini-quizz. E tenha uma ideia de como começar!</p>
+									<Quiz />
+								</div>
+							)}
 							<Row className='px-3'>
 								<div className="cartao-controle col">
 									<div className='item'>
