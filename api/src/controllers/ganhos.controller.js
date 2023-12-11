@@ -46,7 +46,6 @@ export async function adicionarGanho (req, res) {
       const userId = req.accessToken.id;
       const dataAtual = moment().format('YYYY-MM');
 
-      // Consulta as fontes distintas presentes na coluna 'fonte'
       const fontes = await prisma.ganho.findMany({
         where: {
           userId: userId,
@@ -82,11 +81,11 @@ export async function adicionarGanho (req, res) {
           }
         },
         select: {
+          id: true,
           fonte: true,
           descricao: true,
           data: true,
           valor: true,
-          // Adicione outros campos do gasto que você deseja retornar
         },
       });
   
@@ -112,20 +111,45 @@ export async function adicionarGanho (req, res) {
 
   export async function deletarGanho(req, res) {
     try {
-
-    }
-    catch {
-
+      const userId = req.accessToken.id;
+      const ganhoId = parseInt(req.params.id);
+      await prisma.ganho.delete({
+        where: {
+          id: ganhoId,
+          userId: userId,
+        },
+      });
+      res.status(200).json({
+        success: true,
+        message: "Ganho deletado com sucesso!",
+      });
+    } catch (error) {
+      console.error('Erro ao deletar ganho:', error);
+      res.status(500).json({ error: 'Erro interno do servidor ao deletar ganho' });
     }
   }
 
 
   export async function editarGanho(req, res) {
     try {
-
-    }
-    catch {
-      
+      const userId = req.accessToken.id;
+      const ganhoId = parseInt(req.params.id);
+      const novoDadosGanho = req.body;
+      const ganhoAtualizado = await prisma.ganho.update({
+        where: {
+          id: ganhoId,
+          userId: userId,
+        },
+        data: novoDadosGanho,
+      });
+      res.status(200).json({
+        ganho: ganhoAtualizado,
+        success: true,
+        message: "Ganho atualizado com sucesso!",
+      });
+    } catch (error) {
+      console.error('Erro ao editar ganho:', error);
+      res.status(500).json({ error: 'Erro interno do servidor ao editar ganho' });
     }
   }
 

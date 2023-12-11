@@ -116,7 +116,7 @@ export async function gastosPorCategoria(req, res) {
 export async function deletarGasto(req, res) {
   try {
     const userId = req.accessToken.id;
-    const gastoId = parseInt(req.params.id); // Assumindo que o ID do gasto está nos parâmetros da URL
+    const gastoId = parseInt(req.params.id);
     await prisma.gasto.delete({
       where: {
         id: gastoId,

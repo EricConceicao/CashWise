@@ -137,20 +137,6 @@ h5 {
     margin: 10px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #fff;
-    /* background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)); */
-}
-
-.cartao-controle {
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 20px;
-    margin: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #fff;
-    /* background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0)); */
 }
 
 .cartao-perfil span {
@@ -164,6 +150,7 @@ h5 {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 1rem;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
     padding: 20px 0;
@@ -183,6 +170,23 @@ h5 {
     align-items: center;
     justify-content: center;
     gap: 5px;
+}
+
+.controle-icone {
+    width: 20px;
+    height: 20px;
+}
+
+.cartao-controle {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+    margin: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
 }
 
 .cartao-controle span {
@@ -210,22 +214,24 @@ h5 {
     align-items: center;
     gap: 1rem;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    padding: 20px 0;
+    padding: 0px 0px;
     border-radius: 5px;
 }
 
 table {
     border-collapse: collapse;
-}
-
-.agenda table {
+    border-radius: 5px;
     width: 100%;
 }
 
-.agenda tr {
-    border-radius: 10px;
-    border: 1px solid #ccc;
+.agenda-dado {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
 
+.agenda tr {
+    border: 1px solid #ccc;
 }
 
 .agenda th {
@@ -235,7 +241,6 @@ table {
 
 .agenda td,
 .agenda th {
-    padding: 70px;
     font-size: large;
 }
 
@@ -252,9 +257,8 @@ table {
     letter-spacing: 0.5px;
 }
 
-.tabela-titulo {
-    font-size: 18px;
-    font-weight: lighter;
+.agenda-oculta {
+    text-align: center;
 }
 
 .cartao-conta {
@@ -281,13 +285,28 @@ table {
     border-radius: 5px;
 }
 
-.categorias-titulo,
-.contas-titulo {
+.categorias-dados {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.categorias-titulo {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
+}
+
+.categorias .subtitulo {
+    margin: 0;
+}
+
+.categorias hr {
+    width: 100%;
+    margin: 0;
 }
 
 .cartoes-categoria {
@@ -317,10 +336,11 @@ table {
 .relatorio {
     border-radius: 5px;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    border-bottom: 2px solid #213740;
     display: flex;
     flex-direction: column;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    align-items: center;
+    gap: 1rem;
+    padding: 20px 0;
 }
 
 .relatorio h1 {
@@ -357,8 +377,8 @@ table {
 }
 
 .grafico {
-   width: 600px;
-   height: 600px;
+    width: 550px;
+    height: 550px;
 }
 
 .visivel {
@@ -411,7 +431,6 @@ table {
     border-radius: 10px;
     padding: 1px 5px;
     width: 150px;
-    /* font-style: oblique; */
 }
 
 .form-relatorio,
@@ -438,6 +457,51 @@ table {
     font-size: medium;
     color: #dc3545;
     border-radius: 5px;
+}
+
+.ganho-linha {
+    border-radius: 10px;
+    align-items: center;
+    font-weight: lighter;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+    padding: 5px 0;
+    font-weight: 400;
+}
+
+/* Responsividade para dispositivos menores */
+@media (max-width: 576px) {
+    .cartoes-categoria {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .grafico {
+        width: 100%;
+        height: 300px;
+    }
+}
+
+/* Responsividade para dispositivos médios */
+@media (min-width: 576px) and (max-width: 768px) {
+    .cartoes-categoria {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Responsividade para dispositivos grandes e extra grandes */
+@media (min-width: 768px) {
+    .cartoes-categoria {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .agenda-conta {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 15px;
+    }
 }
 
 /* Fim para estilo da Home */

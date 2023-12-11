@@ -9,12 +9,9 @@ import { useEffect, useState } from "react"
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { AiOutlineAlert } from 'react-icons/ai';
-import { FiEdit } from 'react-icons/fi';
 import { BsCoin } from 'react-icons/bs';
 import { HiOutlineCake } from 'react-icons/hi';
 import { MdOutlineEmojiPeople } from 'react-icons/md';
-import { BsStars } from 'react-icons/bs';
 import useUserStore from '../store/UserStore';
 import {
 	Chart as ChartJS,
@@ -28,7 +25,6 @@ import {
 } from 'chart.js';
 ChartJS.register(ArcElement, Tooltip, Legend);
 import { Pie } from "react-chartjs-2";
-
 import { Bar } from 'react-chartjs-2';
 ChartJS.register(
 	CategoryScale,
@@ -44,7 +40,6 @@ import { FaPiggyBank } from "react-icons/fa";
 import moment from 'moment';
 import 'moment/locale/pt-br';
 moment.locale('pt-br');
-import { IoMdAddCircle } from "react-icons/io";
 import { CiCalendar } from "react-icons/ci";
 import { CiBag1 } from "react-icons/ci";
 import { MdEdit } from "react-icons/md";
@@ -56,30 +51,15 @@ registerLocale('pt', pt);
 import React, { useRef } from 'react';
 import InputComIcone from '../utils/InputComIcone';
 import IconShop from '../utils/IconShop';
-import { GiClick, GiConsoleController } from "react-icons/gi";
-import WithLabelExample from '../utils/ProgressBar';
 import { IoAdd } from "react-icons/io5";
-import Table from 'react-bootstrap/Table';
+import { FcPlus } from "react-icons/fc";
+import { FaPlusCircle } from "react-icons/fa";
 
 
 const Home = () => {
 
-	// Mensagem de sucesso
+	// Dados do store após o login do usuário ///////////////////////////////////////////////////////////////////////////////////////////////
 
-	const [showConfirmation, setShowConfirmation] = useState(false);
-	const [confirmationMessage, setConfirmationMessage] = useState("");
-
-	const showConfirmationMessage = (message) => {
-		setConfirmationMessage(message);
-		setShowConfirmation(true);
-
-		// Defina um temporizador para ocultar a mensagem após alguns segundos (opcional)
-		setTimeout(() => {
-			setShowConfirmation(false);
-		}, 3000); // A mensagem será ocultada após 3 segundos
-	};
-
-	// Dados do store após o login do usuário //
 	const token = useUserStore(state => state.userToken)
 	const name = useUserStore(state => state.name);
 	const sname = useUserStore(state => state.sname);
@@ -88,11 +68,15 @@ const Home = () => {
 	const level = useUserStore(state => state.level);
 	const wiseCoins = useUserStore(state => state.wiseCoins);
 
-	// useStates
-	const [ganhos, setganhos] = useState([])
+	// useStates ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	const [confirmationMessage, setConfirmationMessage] = useState("");
+	const [ganhos, setganhos] = useState([]);
+	const [gastos, setgastos] = useState([]);
 	const [somatorioGanhos, setSomatorioGanhos] = useState(0);
-	const [gastos, setgastos] = useState([])
 	const [somatorioGastos, setSomatorioGastos] = useState(0);
+	const [gastoEditado, setGastoEditado] = useState({});
+	const [ganhoEditado, setGanhoEditado] = useState({});
 	const [somatorioGanhosMensal, setSomatorioGanhosMensal] = useState(0);
 	const [somatorioGastosMensal, setSomatorioGastosMensal] = useState(0);
 	const [fontesCadastradas, setFontesCadastradas] = useState([
@@ -128,19 +112,46 @@ const Home = () => {
 	const [contaEditada, setContaEditada] = useState({});
 	const [gastosCategoriaAtual, setGastosCategoriaAtual] = useState([]);
 	const [categoriaAtual, setCategoriaAtual] = useState("");
+	const [ganhoIdParaEditar, setGanhoIdParaEditar] = useState(null);
+	const [ganhoIdParaExcluir, setGanhoIdParaExcluir] = useState(null);
+	const [gastoIdParaEditar, setGastoIdParaEditar] = useState(null);
+	const [gastoIdParaExcluir, setGastoIdParaExcluir] = useState(null);
+	const [contaIdParaEditar, setContaIdParaEditar] = useState(null);
+	const [contaIdParaExcluir, setContaIdParaExcluir] = useState(null);
+	const [relatorioVisivel, setRelatorioVisivel] = useState(false);
+	const [erroData, setErroData] = useState('');
+	const [dataInput, setDataInput] = useState(null);
+	const [isMobile, setIsMobile] = useState(false);
 
+	// Modais ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-	// Modais
+	const [showConfirmation, setShowConfirmation] = useState(false);
 	const [showModalNovoGanho, setShowModalNovoGanho] = useState(false);
 	const [showModalNovoGasto, setShowModalNovoGasto] = useState(false);
 	const [showModalDetalhesFontes, setShowModalDetalhesFontes] = useState(false);
+	const [showModalDetalhesCategoria, setShowModalDetalhesCategoria] = useState(false);
 	const [showModalNovaFonte, setShowModalNovaFonte] = useState(false);
 	const [showModalCategorias, setShowModalCategorias] = useState(false);
 	const [showModalContas, setShowModalContas] = useState(false);
-	const [showModalDetalhesCategoria, setShowModalDetalhesCategoria] = useState(false);
+	const [showModalEditarGanho, setShowModalEditarGanho] = useState(false);
+	const [showModalExcluirGanho, setShowModalExcluirGanho] = useState(false);
+	const [showModalEditarGasto, setShowModalEditarGasto] = useState(false);
+	const [showModalExcluirGasto, setShowModalExcluirGasto] = useState(false);
+	const [showModalEditarConta, setShowModalEditarConta] = useState(false);
+	const [showModalExcluirConta, setShowModalExcluirConta] = useState(false);
 
-	// Controle mensal	
+	// Mensagem de sucesso //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	const showConfirmationMessage = (message) => {
+		setConfirmationMessage(message);
+		setShowConfirmation(true);
+
+		setTimeout(() => {
+			setShowConfirmation(false);
+		}, 3000);
+	};
+
+	// Controle mensal /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	const MesAno = moment().format('MM/YYYY');
 
@@ -192,7 +203,9 @@ const Home = () => {
 		currency: 'BRL',
 	});
 
-	// Novo ganho
+
+
+	// Ganhos ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	useEffect(() => {
 
@@ -221,7 +234,6 @@ const Home = () => {
 		});
 		const data = await response.json();
 		setFontes(data);
-		console.log("fontes", fontes);
 	};
 
 	const handleSubmitNovoGanho = async (event) => {
@@ -292,9 +304,133 @@ const Home = () => {
 	}, [token]);
 
 
+	const handleEditarGanho = (ganhoId) => {
+		const ganhoAtual = ganhos.find((ganho) => ganho.id === ganhoId);
+		setGanhoEditado(ganhoAtual);
+		setGanhoIdParaEditar(ganhoId);
+		setShowModalEditarGanho(true);
+	}
 
 
-	// Novo gasto
+	const handleSubmitEditarGanho = async (event) => {
+		event.preventDefault();
+
+		if (!token) return
+
+		if (!ganhoIdParaEditar) {
+			console.error('ID do ganho não definido.');
+			return;
+		}
+
+		console.log("id do ganho", ganhoIdParaEditar)
+
+		try {
+
+			const descricao = event.target.descricao.value;
+			const fonte = event.target.fonte.value;
+			const data = event.target.data.value;
+			const valor = event.target.valor.value;
+
+			const ganhoEditado = {};
+
+			if (descricao) {
+				ganhoEditado.descricao = descricao;
+			}
+
+			if (fonte) {
+				ganhoEditado.fonte = fonte;
+			}
+
+			if (data) {
+				ganhoEditado.data = data;
+			}
+
+			if (valor) {
+				ganhoEditado.valor = valor;
+			}
+
+
+			console.log("requisição ganho editado", ganhoEditado)
+
+			const response = await fetch(`http://localhost:3000/ganhos/editar/${ganhoIdParaEditar}`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+					"Authorization": `Bearer: ${token}`
+				},
+				body: JSON.stringify(ganhoEditado),
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				console.log("resposta ganho editado", data)
+
+				showConfirmationMessage("Ganho editado com sucesso!");
+				setTimeout(() => {
+					setShowModalEditarGanho(false);
+				}, 2000);
+				setganhos((prevGanhos) =>
+					prevGanhos.map((g) => (g.id === ganhoIdParaEditar ? data.ganho : g))
+				);
+
+				setGanhosFonteAtual((prevGanhos) =>
+					prevGanhos.map((g) => (g.id === ganhoIdParaEditar ? data.ganho : g))
+				);
+
+				getControleMensal();
+				getGanhosPorFonte();
+
+			} else {
+				console.error('Erro ao editar ganho:', response.statusText);
+			}
+		} catch (error) {
+			console.error('Erro ao editar ganho:', error);
+		}
+	};
+
+
+	const handleExcluirGanho = (ganhoId) => {
+		setGanhoIdParaExcluir(ganhoId);
+		setShowModalExcluirGanho(true);
+	};
+
+	const handleSubmitExcluirGanho = async (event) => {
+		event.preventDefault();
+
+		if (!token) return
+
+		if (!ganhoIdParaExcluir) {
+			console.error('ID do ganho não definido.');
+			return;
+		}
+
+		try {
+			const response = await fetch(`http://localhost:3000/ganhos/deletar/${ganhoIdParaExcluir}`, {
+				method: 'DELETE',
+				headers: {
+					"Authorization": `Bearer: ${token}`
+				}
+			});
+
+			if (response.ok) {
+				showConfirmationMessage("Ganho excluído com sucesso!");
+				setTimeout(() => {
+					setShowModalExcluirGanho(false);
+				}, 2000);
+
+				setganhos((prevGanhos) => prevGanhos.filter((ganho) => ganho.id !== ganhoIdParaExcluir));
+
+				getControleMensal();
+				getGanhosPorFonte();
+			} else {
+				console.error('Erro ao excluir ganho:', response.statusText);
+			}
+		} catch (error) {
+			console.error('Erro ao excluir ganho:', error);
+		}
+	};
+
+	// Gastos ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	useEffect(() => {
 
@@ -315,7 +451,7 @@ const Home = () => {
 
 
 	const getGastosPorCategoria = async () => {
-		if (!token) return 
+		if (!token) return
 
 		const response = await fetch('http://localhost:3000/gastos/categorias', {
 			headers: {
@@ -324,7 +460,6 @@ const Home = () => {
 		});
 		const data = await response.json();
 		setCategorias(data);
-		console.log("categorias", categorias);
 	};
 
 	const handleSubmitNovoGasto = async (event) => {
@@ -394,10 +529,10 @@ const Home = () => {
 		getGastosPorCategoria();
 	}, [token]);
 
-	const [showModalEditarGasto, setShowModalEditarGasto] = useState(false);
-	const [gastoIdParaEditar, setGastoIdParaEditar] = useState(null);
 
 	const handleEditarGasto = (gastoId) => {
+		const gastoAtual = gastos.find((gasto) => gasto.id === gastoId);
+		setGastoEditado(gastoAtual);
 		setGastoIdParaEditar(gastoId);
 		setShowModalEditarGasto(true);
 	}
@@ -422,7 +557,6 @@ const Home = () => {
 			const data = event.target.data.value;
 			const valor = event.target.valor.value;
 
-			// Constroi o objeto contaEditada apenas com os campos preenchidos
 			const gastoEditado = {};
 
 			if (descricao) {
@@ -456,7 +590,7 @@ const Home = () => {
 			if (response.ok) {
 				const data = await response.json();
 				console.log("resposta gasto editado", data)
-				// Atualize o estado ou realize alguma ação após a exclusão bem-sucedida
+
 				showConfirmationMessage("Gasto editado com sucesso!");
 				setTimeout(() => {
 					setShowModalEditarGasto(false);
@@ -479,9 +613,6 @@ const Home = () => {
 			console.error('Erro ao editar gasto:', error);
 		}
 	};
-
-	const [showModalExcluirGasto, setShowModalExcluirGasto] = useState(false);
-	const [gastoIdParaExcluir, setGastoIdParaExcluir] = useState(null);
 
 	const handleExcluirGasto = (gastoId) => {
 		setGastoIdParaExcluir(gastoId);
@@ -511,16 +642,17 @@ const Home = () => {
 				setTimeout(() => {
 					setShowModalExcluirGasto(false);
 				}, 2000);
+				
 
 				setgastos((prevGastos) => prevGastos.filter((gasto) => gasto.id !== gastoIdParaExcluir));
 
 				getControleMensal();
 				getGastosPorCategoria();
 			} else {
-				console.error('Erro ao excluir conta:', response.statusText);
+				console.error('Erro ao excluir gasto:', response.statusText);
 			}
 		} catch (error) {
-			console.error('Erro ao excluir conta:', error);
+			console.error('Erro ao excluir gasto:', error);
 		}
 	};
 
@@ -556,124 +688,8 @@ const Home = () => {
 	};
 
 
-	// Gráfico
 
-	const colors = [
-		'#FF0000',
-		'#FFA500',
-		'#DAA520',
-		'#008000',
-		'#000080',
-		'#9400D3',
-		'#FF69B4',
-		'#A52A2A',
-		'#808080',
-		'#C0C0C0',
-		'#FFD700',
-		'#00FFFF',
-		'#800080',
-		'#FFFF00',
-		'#00FF00',
-		'#FF6347',
-		'#6A5ACD',
-		'#4B0082',
-		'#7CFC00',
-		'#FF4500'
-	];
-
-	const labelsColors = []
-	const valorCategorias = []
-	const categoriasLegenda = []
-
-	categorias.map((categoria, index) => {
-
-		categoriasLegenda.push(categoria.categoria)
-		labelsColors.push(colors[index])
-		valorCategorias.push(categoria.totalGasto)
-
-	})
-
-	const dataMyChart = {
-		labels: categoriasLegenda,
-		datasets: [{
-			label: ' Gastos (R$)',
-			data: valorCategorias,
-			backgroundColor: labelsColors,
-			borderWidth: 2,
-			hoverOffset: 4
-		}]
-	}
-
-	const options = {
-		plugins: {
-			legend: {
-				labels: {
-					color: 'white',
-				},
-				position:
-					'left',
-			}
-		}
-	};
-
-	const valorFontes = []
-	const fontesLegenda = []
-
-	fontes.map((fonte, index) => {
-
-		fontesLegenda.push(fonte.fonte)
-		labelsColors.push(colors[index])
-		valorFontes.push(fonte.totalGanho)
-
-	})
-
-	const graficoFontes = {
-		labels: fontesLegenda,
-		datasets: [{
-			label: ' Ganhos (R$)',
-			data: valorFontes,
-			backgroundColor: labelsColors,
-			borderWidth: 2,
-			hoverOffset: 4
-		}]
-	}
-
-	const valorRelatorio = [somatorioGanhos, somatorioGastos]
-	const relatorioLegenda = ['Ganhos', 'Gastos']
-
-	const graficoRelatorio = {
-		labels: relatorioLegenda,
-		datasets: [{
-			label: ' Valor em Reais ',
-			data: valorRelatorio,
-			backgroundColor: labelsColors,
-			borderColor: '#fff',
-			borderWidth: 2,
-			hoverOffset: 4,
-			labels: {
-				color: labelsColors,
-			},
-		}]
-	}
-
-	const options1 = {
-		plugins: {
-			legend: {
-				labels: {
-					color: 'white',
-				},
-				position:
-					'left',
-			}
-		}
-	};
-
-
-
-
-
-
-	// Contas	
+	// Contas ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Listar as contas
 	useEffect(() => {
@@ -832,7 +848,6 @@ const Home = () => {
 
 		if (response.ok) {
 			const data = await response.json()
-			/*alert(data.success)*/
 			showConfirmationMessage("Nova conta criada com sucesso!");
 			setContas([...contas, data.conta])
 			getContasAgenda();
@@ -868,9 +883,6 @@ const Home = () => {
 
 		return { mensagem, corFundo };
 	};
-
-	const [showModalEditarConta, setShowModalEditarConta] = useState(false);
-	const [contaIdParaEditar, setContaIdParaEditar] = useState(null);
 
 	const handleEditarConta = (contaId) => {
 		const contaAtual = contas.find((conta) => conta.id === contaId);
@@ -942,7 +954,7 @@ const Home = () => {
 			if (response.ok) {
 				const data = await response.json();
 				console.log("conta editada", data)
-				// Atualize o estado ou realize alguma ação após a exclusão bem-sucedida
+
 				showConfirmationMessage("Conta editada com sucesso!");
 				setTimeout(() => {
 					setShowModalEditarConta(false);
@@ -951,7 +963,6 @@ const Home = () => {
 				setContas((prevContas) => prevContas.map((conta) => conta.id === contaIdParaEditar ?
 					{
 						...conta,
-						// Adicione dados específicos da resposta, se necessário
 						dadosAdicionais: data.dadosAdicionais,
 					}
 					: conta));
@@ -966,16 +977,10 @@ const Home = () => {
 		}
 	};
 
-
-	const [showModalExcluirConta, setShowModalExcluirConta] = useState(false);
-	const [contaIdParaExcluir, setContaIdParaExcluir] = useState(null);
-
 	const handleExcluirConta = (contaId) => {
 		setContaIdParaExcluir(contaId);
 		setShowModalExcluirConta(true);
 	};
-
-
 
 	const handleSubmitExcluirConta = async (event) => {
 		event.preventDefault();
@@ -1010,9 +1015,90 @@ const Home = () => {
 		}
 	};
 
-	const [relatorioVisivel, setRelatorioVisivel] = useState(false);
-	const [erroData, setErroData] = useState('');
-	const [dataInput, setDataInput] = useState(null);
+	// Gráficos /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	const colors = [
+		'#FF0000',
+		'#FFA500',
+		'#DAA520',
+		'#008000',
+		'#000080',
+		'#9400D3',
+		'#FF69B4',
+		'#A52A2A',
+		'#808080',
+		'#C0C0C0',
+		'#FFD700',
+		'#00FFFF',
+		'#800080',
+		'#FFFF00',
+		'#00FF00',
+		'#FF6347',
+		'#6A5ACD',
+		'#4B0082',
+		'#7CFC00',
+		'#FF4500'
+	];
+
+	const labelsColors = []
+	const valorCategorias = []
+	const categoriasLegenda = []
+
+	categorias.map((categoria, index) => {
+
+		categoriasLegenda.push(categoria.categoria)
+		labelsColors.push(colors[index])
+		valorCategorias.push(categoria.totalGasto)
+
+	})
+
+	const dataMyChart = {
+		labels: categoriasLegenda,
+		datasets: [{
+			label: ' Gastos (R$)',
+			data: valorCategorias,
+			backgroundColor: labelsColors,
+			borderWidth: 2,
+			hoverOffset: 4
+		}]
+	}
+
+	const options = {
+		plugins: {
+			legend: {
+				labels: {
+					color: 'white',
+				},
+				position:
+					'left',
+			}
+		}
+	};
+
+	const valorFontes = []
+	const fontesLegenda = []
+
+	fontes.map((fonte, index) => {
+
+		fontesLegenda.push(fonte.fonte)
+		labelsColors.push(colors[index])
+		valorFontes.push(fonte.totalGanho)
+
+	})
+
+	const graficoFontes = {
+		labels: fontesLegenda,
+		datasets: [{
+			label: ' Ganhos (R$)',
+			data: valorFontes,
+			backgroundColor: labelsColors,
+			borderWidth: 2,
+			hoverOffset: 4
+		}]
+	}
+
+	//Relatório /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	const inputRef = useRef();
 
 	const abrirdivRelatorio = () => {
@@ -1023,7 +1109,6 @@ const Home = () => {
 		}
 	}
 
-
 	const handleSubmitRelatorio = async (event) => {
 		event.preventDefault()
 
@@ -1031,14 +1116,12 @@ const Home = () => {
 
 		setRelatorioVisivel(false);
 
-		// Lógica de validação
 		if (!dataInput) {
 			console.log('Erro: Por favor, selecione uma data.');
 			setErroData('Por favor, selecione uma data.');
 			return;
 		}
 
-		// Validar se a data escolhida é maior que a data atual
 		const dataAtual = new Date();
 
 		if (dataInput > dataAtual) {
@@ -1047,15 +1130,11 @@ const Home = () => {
 			return;
 		}
 
-		// Se a data for válida, limpar qualquer mensagem de erro existente
 		setErroData('');
-
 
 		const dataRelatorio = {
 			data: moment(dataInput).format('YYYY-MM'),
 		};
-
-		// console.log("dataInput:", dataRelatorio)
 
 		const response = await fetch(`http://localhost:3000/relatorio?data=${dataRelatorio.data}`, {
 			method: 'GET',
@@ -1068,16 +1147,12 @@ const Home = () => {
 
 		if (response.ok) {
 			const data = await response.json()
-			// alert(data.success)
-			// console.log('Somatório de Gastos:', data.somatorioGastos);
-			// console.log('Somatório de Ganhos:', data.somatorioGanhos);
 			setSomatorioGanhos(data.somatorioGanhos);
 			setSomatorioGastos(data.somatorioGastos);
 			abrirdivRelatorio();
 		}
 		else {
 			console.error('Erro ao obter relatório:', response.statusText);
-			// Lógica de tratamento de erro, se necessário
 			setRelatorioVisivel(false);
 		}
 	}
@@ -1096,6 +1171,22 @@ const Home = () => {
 		style: 'currency',
 		currency: 'BRL',
 	});
+
+	// Responsividade ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	useEffect(() => {
+		const handleResize = () => {
+			setIsMobile(window.innerWidth <= 600);
+		};
+
+		// Adiciona o ouvinte de redimensionamento quando o componente é montado
+		window.addEventListener('resize', handleResize);
+
+		// Remove o ouvinte de redimensionamento quando o componente é desmontado
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
+	}, []);
 
 
 	return (
@@ -1148,26 +1239,26 @@ const Home = () => {
 						<div>
 							<div className="controle-titulo">
 								<h1>Controle Mensal</h1>
-								<p className='text-primary'><i>Acompanhe e registre aqui seus ganhos e gastos mensais. Além disso, você pode adicionar novas fontes de receita e categorias de gastos.</i></p>
+								<p className='text-primary text-center'><i>Acompanhe e registre aqui seus ganhos e gastos mensais. Além disso, você pode adicionar novas fontes de receita e categorias de gastos.</i></p>
 							</div>
 							<hr />
 							<Row className='px-3'>
 								<div className="cartao-controle col">
 									<div className='item'>
 										<h4>Mês/Ano</h4>
-										<span className='bg-secondary text-success'>{MesAno}</span>
+										<span className='bg-secondary text-primary'>{MesAno}</span>
 									</div>
 								</div>
 
 								<div className="cartao-controle col">
 									<div className="item">
 										<h4>Ganhos</h4>
-										<span className='bg-secondary text-success'>{somaGanhosMensal}</span>
+										<span className='bg-secondary text-primary'>{somaGanhosMensal}</span>
 									</div>
 
 									<div className="botoes">
 										<div>
-											<Button as="button" variant="outline-success" className='botao' onClick={() => setShowModalNovoGanho(true)}><IoAdd className='botao-icone' /> Ganho</Button>
+											<Button as="button" variant="" title='Novo ganho' className='botao border-0 text-info' onClick={() => setShowModalNovoGanho(true)}><FcPlus className='controle-icone' />Ganho</Button>
 
 											<Modal
 												show={showModalNovoGanho}
@@ -1235,7 +1326,7 @@ const Home = () => {
 										</div>
 
 										<div>
-											<Button as="button" variant="outline-success" className='botao' onClick={() => setShowModalNovaFonte(true)}><IoAdd className='botao-icone' /> Fonte</Button>
+											<Button as="button" variant="" className='botao text-info' onClick={() => setShowModalNovaFonte(true)}><FcPlus className='botao-icone' />Fonte</Button>
 											<Modal
 												show={showModalNovaFonte}
 												onHide={() => setShowModalNovaFonte(false)}
@@ -1285,11 +1376,11 @@ const Home = () => {
 								<div className="cartao-controle col">
 									<div className="item">
 										<h4>Gastos</h4>
-										<span className='bg-secondary text-success'>{somaGastosMensal}</span>
+										<span className='bg-secondary text-primary'>{somaGastosMensal}</span>
 									</div>
 									<div className="botoes">
 										<div>
-											<Button as="button" variant="outline-success" className='botao' onClick={() => setShowModalNovoGasto(true)}><IoAdd className='botao-icone' /> Gasto</Button>
+											<Button as="button" variant="" className='botao border-0 text-info' onClick={() => setShowModalNovoGasto(true)}><FcPlus className='controle-icone' />Gasto</Button>
 
 											<Modal
 												show={showModalNovoGasto}
@@ -1358,7 +1449,7 @@ const Home = () => {
 										</div>
 
 										<div>
-											<Button className='botao' as="button" variant="outline-success" onClick={() => setShowModalCategorias(true)}><IoAdd className='botao-icone' />Categoria</Button>
+											<Button className='botao text-info' as="button" variant="" onClick={() => setShowModalCategorias(true)}><FcPlus className='botao-icone' />Categoria</Button>
 											<Modal
 												show={showModalCategorias}
 												onHide={() => setShowModalCategorias(false)}
@@ -1417,7 +1508,7 @@ const Home = () => {
 								<div className="cartao-controle col">
 									<div className='item'>
 										<h4>Saldo</h4>
-										<span className='bg-secondary text-success'>{saldoTotalMensal}</span>
+										<span className='bg-secondary text-primary'>{saldoTotalMensal}</span>
 									</div>
 								</div>
 
@@ -1431,49 +1522,120 @@ const Home = () => {
 						<div className='agenda-tabela'>
 							<div className="controle-titulo">
 								<h1>Agenda Financeira</h1>
-								<p className='text-primary'><i>Acompanhe e </i></p>
+								<p className='text-primary text-center'><i>Cadastre suas despesas mensais ou temporárias (por periodo) aqui. A coluna "Status" fornece mensagens personalizadas para lembrar você sobre vencimentos próximos.</i></p>
 							</div>
 							<hr />
 
 							{contasAgenda.length > 0 ? (
-								<div className="table-responsive">
+								<div className='table-responsive'>
 									<table className="tabela mb-2 text-center text-nowrap">
-										<thead>
-											<tr>
-												<th className='px-3 py-3'><p className='tabela-titulo'>Descrição</p></th>
-												<th className='px-3 py-3'><p className='tabela-titulo'>Vencimento</p></th>
-												<th className='px-3 py-3'><p className='tabela-titulo'>Status</p></th>
-												<th className='px-3 py-3'><p className='tabela-titulo'>Valor</p></th>
-												<th className='px-3 py-3'><p className='tabela-titulo'>Ação</p></th>
-											</tr>
-										</thead>
+										{isMobile ? null : (
+											<thead>
+												<tr>
+													<th className='px-3 py-3'>
+														<p className='tabela-titulo'>Descrição</p>
+													</th>
+													<th className='px-3 py-3'>
+														<p className='tabela-titulo'>Vencimento</p>
+													</th>
+													<th className='px-3 py-3'>
+														<p className='tabela-titulo'>Status</p>
+													</th>
+													<th className='px-3 py-3'>
+														<p className='tabela-titulo'>Valor</p>
+													</th>
+													<th className='px-3 py-3'>
+														<p className='tabela-titulo'>Ação</p>
+													</th>
+												</tr>
+											</thead>
+										)}
 										{contasAgenda.map((conta) => {
 											const { mensagem, corFundo } = calcularDiasRestantes(conta.vencimento);
 
 											return (
 												<tbody key={conta.id}>
-													<tr className='agenda-conta'>
-														<td className="py-3" >
-															{' '}
-															{conta.descricao}
+													<tr className={`agenda-conta ${isMobile ? 'flex-column' : ''}`}>
+														<td className={isMobile ? 'py-3' : 'py-3'}>
+															<div className="agenda-dado">
+																{!isMobile ? (
+																	<>
+																		<FaPiggyBank className='icone-conta text-warning' />
+																		{' '}
+																		<p>{conta.descricao}</p>
+																	</>
+																) : (
+																	<>
+																		<FaPiggyBank className='icone-conta text-warning' />
+																		{' '}
+																		<p>Descrição: {conta.descricao}</p>
+																	</>
+																)}
+															</div>
 														</td>
-														<td className='py-3'>
-															<CiCalendar className='icone-conta' />{' '}
-															{conta.vencimento}
+														<td className={isMobile ? 'py-3' : 'py-3'}>
+															<div className="agenda-dado">
+																{!isMobile ? (
+																	<>
+																		<CiCalendar className='icone-conta' />
+																		{' '}
+																		<p>{conta.vencimento}</p>
+																	</>
+																) : (
+																	<>
+																		<CiCalendar className='icone-conta' />
+																		{' '}
+																		<p>Vencimento: {conta.vencimento}</p>
+																	</>
+																)}
+															</div>
 														</td>
-														<td className='py-3'>
-															<span className={`${corFundo}`}>{mensagem}</span>
+														<td className={isMobile ? 'py-3' : 'py-3'}>
+															<div className="agenda-dado">
+																{!isMobile ? (
+																	<>
+																		<span className={`${corFundo}`}>{mensagem}</span>
+																	</>
+																) : (
+																	<>
+																		<p>Status: <span className={`${corFundo}`}>{mensagem}</span></p>
+																	</>
+																)}
+															</div>
 														</td>
-														<td className='py-3'>
-															<CiBag1 className='icone-conta' />{' '}
-															{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+														<td className={isMobile ? 'py-3' : 'py-3'}>
+															<div className="agenda-dado">
+																{!isMobile ? (
+																	<>																			<CiBag1 className='icone-conta' />{' '}
+																		<p>{Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+																	</>
+																) : (
+																	<>
+																		<CiBag1 className='icone-conta' />{' '}
+																		<p>Valor: {Number(conta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+																	</>
+																)}
+															</div>
 														</td>
 
-														<td className='py-3'>
-															<Button variant='outline-info' title='Editar' onClick={() => handleEditarConta(conta.id)}><MdEdit /></Button>{' '}
-															<Button variant='outline-info' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
-																<FaTrashAlt />
-															</Button>
+														<td className={isMobile ? 'py-3' : 'py-3'}>
+															<div className="agenda-dado">
+																{!isMobile ? (
+																	<>
+																		<Button variant='outline-info' title='Editar' onClick={() => handleEditarConta(conta.id)}><MdEdit /></Button>{' '}
+																		<Button variant='outline-info' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
+																			<FaTrashAlt />
+																		</Button>
+																	</>
+																) : (
+																	<>
+																		<p>Ação:</p><Button variant='outline-info' title='Editar' onClick={() => handleEditarConta(conta.id)}><MdEdit /></Button>{' '}
+																		<Button variant='outline-info' title='Excluir' onClick={() => handleExcluirConta(conta.id)}>
+																			<FaTrashAlt />
+																		</Button>
+																	</>
+																)}
+															</div>
 														</td>
 													</tr>
 
@@ -1483,13 +1645,15 @@ const Home = () => {
 										})}
 									</table>
 								</div>
-							) : null}
+							) : (
+								<p className='agenda-oculta'><i>Nenhuma despesa informada.</i></p>
+							)}
 
 						</div>
 
 
 						<div className="my-3">
-							<Button className='botao' variant="outline-success" onClick={() => setShowModalContas(true)}><IoAdd className='botao-icone' />Despesa</Button>
+							<Button className='botao text-info' variant="" onClick={() => setShowModalContas(true)}><FcPlus className='botao-icone' />Despesa</Button>
 						</div>
 
 						<Modal
@@ -1707,10 +1871,212 @@ const Home = () => {
 
 
 					<Container fluid className='categorias mt-5 pt-5 pb-5'>
+						<div className="categorias-titulo">
+							<h1 className='text-center'>Ganhos por Fonte de Receita</h1>
+							<p className='text-primary subtitulo text-center'><i>Acompanhe seus ganhos mensais por fonte de receita com um gráfico visual. Clique em "Listar" para ver e gerenciar seus ganhos.</i></p>
+							<hr />
+						</div>
 
+						{fontes.length > 0 && <div className='cartoes-categoria'>
+							{fontes.map((fonte, index) => (
+								<div className="cartao-categoria" key={index}>
+									<div className="categoria">
+										<h4 className="fs-5">{fonte.fonte}</h4>
+										<p className='valor-categoria bg-secondary'>
+											{parseFloat(fonte.totalGanho).toLocaleString('pt-BR', {
+												style: 'currency',
+												currency: 'BRL',
+											})}
+										</p>
+									</div>
+
+									<hr />
+
+									<div>
+										<Button
+											as="button"
+											size="sm"
+											variant="outline-primary"
+											className="botao"
+											onClick={() => {
+												setFonteAtual(fonte.fonte);
+												setGanhosFonteAtual(fonte.ganhos);
+												setShowModalDetalhesFontes(true);
+											}}
+										>
+											Listar
+										</Button>
+									</div>
+
+								</div>
+							))}
+
+							<Modal
+								show={showModalDetalhesFontes}
+								onHide={() => setShowModalDetalhesFontes(false)}
+								size="lg"
+								aria-labelledby="contained-modal-title-vcenter"
+								centered
+							>
+								<Modal.Header className='bg-info' closeButton>
+									<span className="display-6 text-secondary">Ganhos: {fonteAtual}</span>
+								</Modal.Header>
+								<Modal.Body>
+									<div className="row bg-info text-secondary ganho-linha">
+										<div className="col">Descrição</div>
+										<div className="col">Data</div>
+										<div className="col">Valor</div>
+										<div className="col">Ação</div>
+									</div>
+									{ganhosFonteAtual.map((ganho, index) => (
+										<div className="row bg-info text-secondary ganho-linha" key={index}>
+											<div className="col">{ganho.descricao}</div>
+											<div className="col">{moment(ganho.data).format('DD/MM/YYYY')}</div>
+											<div className="col">
+												{parseFloat(ganho.valor).toLocaleString('pt-BR', {
+													style: 'currency',
+													currency: 'BRL',
+												})}
+											</div>
+											<div className="col">
+												<Button as='button' size='sm' variant='outline-secondary' onClick={() => handleEditarGanho(ganho.id)}><MdEdit /></Button>{' '}
+												<Button as='button' size='sm' variant='outline-secondary' onClick={() => handleExcluirGanho(ganho.id)}><FaTrashAlt /></Button>
+
+												<Modal
+													show={showModalEditarGanho}
+													onHide={() => {
+														setShowModalEditarGanho(false);
+														setGanhoIdParaEditar(null);
+													}}
+													size="md"
+													aria-labelledby="contained-modal-title-vcenter"
+													centered
+												>
+													<Modal.Header className='bg-primary' closeButton>
+														<span className="display-6 text-secondary">Editar Ganho</span>
+													</Modal.Header>
+													<Modal.Body>
+														<Form onSubmit={handleSubmitEditarGanho}>
+															<Form.Group className="mb-4">
+																<Form.Label>Fonte de Receita</Form.Label>
+																<Form.Select
+																	name='fonte'
+																	value={ganhoEditado.fonte || ''}
+																	onChange={(e) => setGanhoEditado({ ...ganhoEditado, fonte: e.target.value })}
+																>
+																	<option value="">Selecione</option>
+																	{fontesCadastradas.map((fonte, index) => (
+																		<option key={index} value={fonte}>
+																			{fonte}
+																		</option>
+																	))}
+																</Form.Select>
+															</Form.Group>
+															<Form.Group className="mb-4">
+																<Form.Label>Descrição</Form.Label>
+																<Form.Control
+																	type="text"
+																	name='descricao'
+																	value={ganhoEditado.descricao || ''}
+																	onChange={(e) => setGanhoEditado({ ...ganhoEditado, descricao: e.target.value })}
+																/>
+															</Form.Group>
+															<Form.Group className="mb-4">
+																<Form.Label>Data</Form.Label>
+																<Form.Control
+																	type="date"
+																	name='data'
+																	value={ganhoEditado.data || ''}
+																	onChange={(e) => setGanhoEditado({ ...ganhoEditado, data: e.target.value })}
+																/>
+															</Form.Group>
+															<Form.Group className='mb-4'>
+																<Form.Label>Valor</Form.Label>
+																<div className="input-group">
+																	<span className="input-group-text">R$</span>
+																	<Form.Control
+																		type="number"
+																		step="0.01"  // Permita valores fracionados com duas casas decimais
+																		name='valor'
+																		min="0"
+																		value={ganhoEditado.valor || ''}
+																		onChange={(e) => setGanhoEditado({ ...ganhoEditado, valor: e.target.value })}
+																	/>
+																</div>
+															</Form.Group>
+															<Modal.Footer>
+																<Button as='button' variant="primary" className='modal-button' type='submit'>
+																	Salvar
+																</Button>
+															</Modal.Footer>
+														</Form>
+													</Modal.Body>
+
+													{showConfirmation && (
+														<div className="alert alert-custom" role="alert">
+															{confirmationMessage}
+														</div>
+													)}
+												</Modal>
+
+												<Modal
+													show={showModalExcluirGanho}
+													onHide={() => setShowModalExcluirGanho(false)}
+													size="md"
+													aria-labelledby="contained-modal-title-vcenter"
+													centered
+												>
+													<Modal.Header className='bg-danger' closeButton>
+														<span className="display-6 text-info">Excluir ganho</span>
+													</Modal.Header>
+													<Modal.Body>
+														<Form onSubmit={handleSubmitExcluirGanho}>
+															<h5 className='py-4'>Tem certeza que quer excluir esse ganho?</h5>
+															<Modal.Footer>
+																<Button as='button' type='submit' variant="danger">
+																	Excluir
+																</Button>
+															</Modal.Footer>
+														</Form>
+													</Modal.Body>
+													{showConfirmation && (
+														<div className="alert alert-success alert-custom" role="alert">
+															{confirmationMessage}
+														</div>
+													)}
+												</Modal>
+											</div>
+										</div>
+									))}
+								</Modal.Body>
+								<Modal.Footer>
+									<Button as="button" variant="primary" onClick={() => setShowModalDetalhesFontes(false)}>
+										Fechar
+									</Button>
+								</Modal.Footer>
+							</Modal>
+
+						</div>}
+
+						{fontesLegenda.length > 0 ? (
+							<Container className='grafico'>
+								<Pie
+									data={graficoFontes}
+									options={options}
+								/>
+							</Container>
+						) : (
+							<p><i>Nenhum ganho informado.</i></p>
+						)
+						}
+					</Container>
+
+
+					<Container fluid className='categorias mt-5 pt-5 pb-5'>
 						<div className="categorias-titulo">
 							<h1>Gastos por Categoria</h1>
-							<p className='text-primary'><i>Acompanhe aqui seus gastos mensais por categoria. Clicando em "Listar", você obtém a relação dos gastos, podendo edita-los ou exclui-los. Além disso, </i></p>
+							<p className='text-primary subtitulo text-center'><i>Acompanhe seus gastos mensais por categoria com um gráfico visual. Clique em "Listar" para ver e gerenciar seus gastos.</i></p>
+							<hr />
 						</div>
 						{categorias.length > 0 && <div className='cartoes-categoria'>
 							{categorias.map((categoria, index) => (
@@ -1755,19 +2121,18 @@ const Home = () => {
 								aria-labelledby="contained-modal-title-vcenter"
 								centered
 							>
-								<Modal.Header className='bg-primary' closeButton>
+								<Modal.Header className='bg-info' closeButton>
 									<span className="display-6 text-secondary">Gastos: {categoriaAtual}</span>
 								</Modal.Header>
 								<Modal.Body>
-									<div className="row">
-										<div className="col fw-bold">Descrição</div>
-										<div className="col fw-bold">Data</div>
-										<div className="col fw-bold">Valor</div>
-										<div className="col fw-bold">Ação</div>
+									<div className="row bg-info text-secondary ganho-linha">
+										<div className="col">Descrição</div>
+										<div className="col">Data</div>
+										<div className="col">Valor</div>
+										<div className="col">Ação</div>
 									</div>
-									<br />
 									{gastosCategoriaAtual.map((gasto, index) => (
-										<div className="row" key={index}>
+										<div className="row bg-info text-secondary ganho-linha" key={index}>
 											<div className="col">{gasto.descricao}</div>
 											<div className="col">{moment(gasto.data).format('DD/MM/YYYY')}</div>
 											<div className="col">
@@ -1777,14 +2142,14 @@ const Home = () => {
 												})}
 											</div>
 											<div className="col">
-												<Button as='button' onClick={() => handleEditarGasto(gasto.id)}><MdEdit /></Button>{' '}
-												<Button as='button' onClick={() => handleExcluirGasto(gasto.id)}><FaTrashAlt /></Button>
+												<Button as='button' size='sm' variant='outline-secondary' onClick={() => handleEditarGasto(gasto.id)}><MdEdit /></Button>{' '}
+												<Button as='button' size='sm' variant='outline-secondary' onClick={() => handleExcluirGasto(gasto.id)}><FaTrashAlt /></Button>
 
 												<Modal
 													show={showModalEditarGasto}
 													onHide={() => {
 														setShowModalEditarGasto(false);
-														setGastoIdParaEditar(null); // Limpar o ID de edição ao fechar o modal
+														setGastoIdParaEditar(null);
 													}}
 													size="md"
 													aria-labelledby="contained-modal-title-vcenter"
@@ -1799,6 +2164,8 @@ const Home = () => {
 																<Form.Label>Categoria</Form.Label>
 																<Form.Select
 																	name='categoria'
+																	value={gastoEditado.categoria || ''}
+																	onChange={(e) => setGastoEditado({ ...gastoEditado, categoria: e.target.value })}
 																>
 																	<option value="">Selecione</option>
 																	{categoriasCadastradas.map((categoria, index) => (
@@ -1812,13 +2179,18 @@ const Home = () => {
 																<Form.Label>Descrição</Form.Label>
 																<Form.Control
 																	type="text"
-																	name='descricao' />
+																	name='descricao'
+																	value={gastoEditado.descricao || ''}
+																	onChange={(e) => setGastoEditado({ ...gastoEditado, descricao: e.target.value })}
+																/>
 															</Form.Group>
 															<Form.Group className="mb-4">
 																<Form.Label>Data</Form.Label>
 																<Form.Control
 																	type="date"
 																	name='data'
+																	value={gastoEditado.data || ''}
+																	onChange={(e) => setGastoEditado({ ...gastoEditado, data: e.target.value })}
 																/>
 															</Form.Group>
 															<Form.Group className='mb-4'>
@@ -1830,6 +2202,8 @@ const Home = () => {
 																		step="0.01"  // Permita valores fracionados com duas casas decimais
 																		name='valor'
 																		min="0"
+																		value={gastoEditado.valor || ''}
+																		onChange={(e) => setGastoEditado({ ...gastoEditado, valor: e.target.value })}
 																	/>
 																</div>
 															</Form.Group>
@@ -1856,11 +2230,11 @@ const Home = () => {
 													centered
 												>
 													<Modal.Header className='bg-danger' closeButton>
-														<span className="display-6 text-info">Excluir despesa</span>
+														<span className="display-6 text-info">Excluir gasto</span>
 													</Modal.Header>
 													<Modal.Body>
 														<Form onSubmit={handleSubmitExcluirGasto}>
-															<h5 className='py-4'>Tem certeza que quer excluir essa despesa?</h5>
+															<h5 className='py-4'>Tem certeza que quer excluir esse gasto?</h5>
 															<Modal.Footer>
 																<Button as='button' type='submit' variant="danger">
 																	Excluir
@@ -1877,6 +2251,7 @@ const Home = () => {
 
 
 											</div>
+											
 										</div>
 									))}
 								</Modal.Body>
@@ -1897,111 +2272,18 @@ const Home = () => {
 									options={options}
 								/>
 							</div>
-						) : null}
-					</Container>
-
-
-
-					<Container fluid className='categorias mt-5 pt-5 pb-5'>
-						<div className="categorias-titulo">
-							<h1>Ganhos por Fonte de Receita</h1>
-						</div>
-
-						<div className='cartoes-categoria'>
-							{fontes.map((fonte, index) => (
-								<div className="cartao-categoria" key={index}>
-									<div className="categoria">
-										<h4 className="fs-5">{fonte.fonte}</h4>
-										<p className='valor-categoria bg-secondary'>
-											{parseFloat(fonte.totalGanho).toLocaleString('pt-BR', {
-												style: 'currency',
-												currency: 'BRL',
-											})}
-										</p>
-									</div>
-
-									<hr />
-
-									<div>
-										<Button
-											as="button"
-											size="sm"
-											variant="outline-primary"
-											className="botao"
-											onClick={() => {
-												setFonteAtual(fonte.fonte);
-												setGanhosFonteAtual(fonte.ganhos);
-												setShowModalDetalhesFontes(true);
-											}}
-										>
-											Listar
-										</Button>
-									</div>
-
-								</div>
-							))}
-
-						</div>
-
-
-						<Modal
-							show={showModalDetalhesFontes}
-							onHide={() => setShowModalDetalhesFontes(false)}
-							size="lg"
-							aria-labelledby="contained-modal-title-vcenter"
-							centered
-						>
-							<Modal.Header closeButton>
-								<Modal.Title id="contained-modal-title-vcenter">
-									Ganhos: {fonteAtual}
-								</Modal.Title>
-							</Modal.Header>
-							<Modal.Body>
-								<div className="row">
-									<div className="col fw-bold">Descrição</div>
-									<div className="col fw-bold">Data</div>
-									<div className="col fw-bold">Valor</div>
-								</div>
-								<br />
-								{ganhosFonteAtual.map((ganho, index) => (
-									<div className="row" key={index}>
-										<div className="col">{ganho.descricao}</div>
-										<div className="col">{moment(ganho.data).format('DD/MM/YYYY')}</div>
-										<div className="col">
-											{parseFloat(ganho.valor).toLocaleString('pt-BR', {
-												style: 'currency',
-												currency: 'BRL',
-											})}
-										</div>
-									</div>
-								))}
-							</Modal.Body>
-							<Modal.Footer>
-								<Button as="button" variant="secondary" onClick={() => setShowModalDetalhesFontes(false)}>
-									Fechar
-								</Button>
-							</Modal.Footer>
-						</Modal>
-
-						{categoriasLegenda.length > 0 ? (
-							<Container className='grafico'>
-								<Pie className='grafico-torta'
-									data={graficoFontes}
-									options={options}
-								/>
-							</Container>
-						) : null
+						) : (
+							<p><i>Nenhum gasto informado.</i></p>
+						)
 						}
 					</Container>
 
-					{/* Fim de Fontes de Receita */}
-
 					{/* Início de Relatório*/}
-					<Container className='relatorio'>
+					<Container fluid className='relatorio mt-5 mb-5 pt-5 pb-5'>
 						<div >
 							<h1>Relatório</h1>
 							<hr />
-							<p className='text-primary'><i>Selecione o mês e o ano e clique em "consultar" para obter um resumo dos valores totais dos seus gastos e ganhos.</i></p>
+							<p className='text-primary text-center'><i>Selecione o mês e o ano e clique em "consultar" para obter um resumo dos valores totais dos seus gastos e ganhos.</i></p>
 							<br />
 							<Form onSubmit={handleSubmitRelatorio}>
 								<div className="form-relatorio">

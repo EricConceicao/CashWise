@@ -12,7 +12,7 @@ const router = express.Router();
 router.get('/listar', authenticate, verGanhos)
 router.post('/', authenticate, adicionarGanho)
 router.get('/fontes', authenticate, ganhosPorFonte)
-router.delete('/delete/:id', authenticate, deletarGanho)
+router.delete('/deletar/:id', authenticate, deletarGanho)
 router.patch('/editar/:id', authenticate, editarGanho)
 
 export default router
