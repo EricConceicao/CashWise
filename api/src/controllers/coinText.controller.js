@@ -6,7 +6,7 @@ import { giveCoins } from './wiseCoins.controller.js';
 export async function getTextList(req, res) {
     try {
         const userId = req.accessToken.id;
-        console.log("userId: ", userId);
+
         // Acessa a lista de palavras que o usuário achou, caso tenha.
         const list = await prisma.CoinText.findMany({
             where: { userId },
@@ -15,7 +15,6 @@ export async function getTextList(req, res) {
                 found: true
             }
         });
-        console.log("Retorno da list: ", list);
 
         if (list.length > 0) {
             return res.status(200).json({

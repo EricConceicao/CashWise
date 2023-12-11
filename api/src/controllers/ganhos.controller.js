@@ -28,7 +28,6 @@ export async function adicionarGanho (req, res) {
           userId,
         },
       });
-      
       res.status(200).json({
         ganho: despesaCriada,
         success: true, 
